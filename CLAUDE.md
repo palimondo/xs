@@ -340,16 +340,32 @@ blockers: []
 ## Pass Details
 
 ### Pass 1: Structure Bootstrap
-**Goal**: Create skeleton from known information (no session mining yet)
+**Goal**: Analyze existing implementation to derive themes and epics
 
 **Method**:
-1. Create directory structure
-2. Themes from the four use cases
-3. Epics from filtering pipeline architecture
-4. Story stubs from existing characterization spec names
-5. Initialize tracker
+1. Create directory structure (empty skeleton)
+2. Initialize tracker
+3. Analyze sources (can parallelize with Opus subagents if thorough analysis needed):
+   - CLI interface (`xs --help`) - the contract to preserve
+   - Implementation structure (`explore_session.py`, 73K)
+   - Design docs in `BookMinder/claude-dev-log-diary/tools/*.md`
+   - Characterization specs (LOW TRUST - structure hints, catalog golden files)
+4. Derive and write themes (from use cases + CLI capabilities)
+5. Derive and write epics (from implementation modules + CLI flag groups)
+6. Create tentative story stubs (refined in Pass 2)
 
-**Output**: Skeleton with ~50 empty story stubs
+**Source locations**:
+```
+~/Developer/BookMinder/claude-dev-log-diary/tools/
+├── explore_session.py          # Main implementation (73K)
+├── *.md                        # Design docs (design_decisions.md, filtering_pipeline_design.md, etc.)
+└── specs/
+    ├── *_spec.py               # 17 characterization specs
+    ├── fixtures/*.jsonl        # Test fixtures
+    └── golden_outputs/         # Expected outputs (valuable for Pass 3)
+```
+
+**Output**: Skeleton with themes, epics, ~50 story stubs
 **Checkpoint**: User confirms structure
 
 ### Pass 2: Story Mining (Per Epic)
@@ -357,35 +373,49 @@ blockers: []
 
 **Parallelization**: Safe to parallelize search phase.
 
+**Workflow** (Opus coordinates, per epic):
+1. **PARALLEL**: Spawn Haiku subagents for search
+   - Haiku A: `rg "{epic}"` day-015..day-018
+   - Haiku B: `rg "{epic}"` day-019..day-022
+   - Haiku C: xs sessions from that period
+   - Each writes findings to `xs-requirements/findings/{epic}-{source}.yaml`
+   - Each returns summary to Opus (count, ambiguities, gaps)
+2. **SERIAL**: Opus synthesizes findings into stories
+   - Aggregate and deduplicate findings
+   - Resolve ambiguities (delegate to Sonnet for complex cases)
+   - Add cross-references between stories
+   - Write coherent YAML
+3. **CHECKPOINT**: User validates epic before proceeding
+
+**Model selection**:
+
+| Task | Model | Rationale |
+|------|-------|-----------|
+| Session search, day log grep | Haiku | Fast, cheap, good at extraction |
+| Ambiguity resolution | Sonnet | Needs more reasoning |
+| Synthesis, cross-references | Opus | Coherence-critical |
+
+**Subagent instructions template**:
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ OPUS (Coordinator)                                          │
-│                                                             │
-│  For each epic:                                             │
-│    ┌─────────────────────────────────────────────────────┐ │
-│    │ PARALLEL: Spawn Haiku subagents for search          │ │
-│    │                                                     │ │
-│    │  Haiku A: rg "{epic}" day-015..day-018             │ │
-│    │  Haiku B: rg "{epic}" day-019..day-022             │ │
-│    │  Haiku C: xs sessions from that period              │ │
-│    │                                                     │ │
-│    │  Returns: FINDINGS (raw extracts + citations)       │ │
-│    └─────────────────────────────────────────────────────┘ │
-│                          │                                  │
-│                          ▼                                  │
-│    ┌─────────────────────────────────────────────────────┐ │
-│    │ SERIAL: Opus synthesizes findings into stories      │ │
-│    │                                                     │ │
-│    │  - Deduplicate overlapping findings                 │ │
-│    │  - Resolve contradictions                           │ │
-│    │  - Add cross-references                             │ │
-│    │  - Write coherent YAML                              │ │
-│    └─────────────────────────────────────────────────────┘ │
-│                          │                                  │
-│                          ▼                                  │
-│    User validates epic before proceeding                    │
-└─────────────────────────────────────────────────────────────┘
+Read @xs-requirements/epics/{epic}.yaml for search methodology.
+Search assigned sources for user requirements related to {epic}.
+Write findings to xs-requirements/findings/{epic}-{source}.yaml
+Return summary: finding count, ambiguities, coverage gaps.
+Do NOT create stories - only extract raw findings.
 ```
+
+**@file notation**: Subagents can be instructed to read files (they will use Read tool). Store search methodology in epic files to ensure consistency across subagents working on the same epic.
+
+**Findings file naming**: `{epic}-{source}.yaml` where source identifies what was searched:
+- `filtering-day016-018.yaml` - Day log range
+- `filtering-session-abc123.yaml` - Single session
+- `filtering-day020-L1-50000.yaml` - Large file chunk
+
+**Finding types** (core types, extensions allowed):
+- `user_request` - User asking for feature/behavior
+- `user_correction` - User refining/correcting previous statement (use `supersedes`)
+- `design_rationale` - Explanation of why something is done a certain way
+- `bug_report` - User reporting broken behavior
 
 **Subagent output format** (findings, NOT stories):
 
@@ -403,13 +433,25 @@ findings:
     type: user_request
     quote: "I want to filter to show only user messages"
     tags: [filter, shortcut, user-messages]
-    
+
   - id: F002
     source: abc123:89-93
     type: user_correction
     quote: "no, exclude should work with glob patterns"
     supersedes: F001
     tags: [filter, exclude, patterns]
+
+  - id: F003
+    source: day-017:L892-L905
+    type: design_rationale
+    quote: "using glob patterns because they're familiar from shell"
+    tags: [filter, patterns, design-decision]
+
+  - id: F004
+    source: day-017:L1203-L1210
+    type: user_request
+    quote: "need to exclude tools from the timeline"
+    tags: [filter, exclude, tools]
 
 ambiguities:
   - "Conflicting statements about -x accepting multiple args"
@@ -418,10 +460,25 @@ coverage_gaps:
   - "No findings about error handling for invalid patterns"
 ```
 
-**Model selection**:
-- Haiku: Session search, day log grep (fast, cheap, extraction)
-- Sonnet: Ambiguity resolution (needs reasoning)
-- Opus: Synthesis, cross-references (coherence-critical)
+**Risk mitigations**:
+- **Bounded scope**: Each subagent gets explicit session range + epic focus
+- **Findings persist**: Subagents write to `xs-requirements/findings/`, return summary to Opus
+- **Deduplication**: Opus handles overlapping session ranges
+- **Checkpoint per epic**: User catches drift before it compounds
+- **Ambiguity surfacing**: Subagents flag uncertainty rather than guessing
+
+**Chronology for conflict resolution**:
+- Day logs: `day-###.md` numbered sequentially (day-016 < day-017 < day-018)
+- Sessions: UUIDs are random; use file dates or `xs session --summary` for time range
+- Later sources generally supersede earlier (unless explicitly corrected)
+- When findings conflict, prefer the more recent + more specific
+
+**Scope granularity**:
+- Day logs can be huge (day-020.md is 2.6MB) - chunk by line range if needed
+- Sessions can exceed 8MB - chunk by event range using `xs session -t {range}`
+- Start conservative: max ~5000 lines or ~500 events per subagent
+- If subagent reports truncation or incomplete coverage, split further
+- Failure modes: context overflow → missed findings; too granular → coordination overhead
 
 **Checkpoint**: User reviews each epic before next
 
@@ -516,3 +573,11 @@ coverage_gaps:
 - Do NOT add features not in recovered requirements
 - Do NOT interleave requirements gathering with implementation
 - Do NOT load entire day log files into context (use ripgrep)
+
+---
+
+## Known Risks
+
+**Session directory cleanup**: Claude Code may proactively clean up `~/.claude/projects/` directories. The BookMinder sessions were recovered from backup (Oct 2025). If this directory is cleaned mid-session:
+- **Stop all work immediately**
+- **Request user help** to restore from backup
