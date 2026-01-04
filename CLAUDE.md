@@ -482,50 +482,6 @@ coverage_gaps:
 
 ---
 
-## Phase 2: TDD Implementation
-
-Begins only after all six passes complete and user validates requirements.
-
-### TDD Rules (Strictly Enforced)
-
-1. **Red Phase**: Write a failing spec FIRST
-   - Spec must fail for the right reason
-   - Spec expresses a requirement from gathered stories
-   - Commit: `spec: [description] (red)`
-
-2. **Green Phase**: Write MINIMAL code to pass
-   - Only enough to make the spec pass
-   - No extra features
-   - Commit: `feat: [description] (green)`
-
-3. **Refactor Phase**: Improve code quality
-   - Only when specs are green
-   - Commit: `refactor: [description]`
-
-4. **Cycle Discipline**:
-   - Never write production code without a failing spec
-   - Never more than one failing spec at a time
-   - Each commit = one Red-Green-Refactor cycle
-
-### Implementation Order (from Pass 6)
-
-Typical priority based on use case dependencies:
-
-1. **JSONL Parsing** - Load sessions with format tolerance
-2. **Console Reconstruction** - Faithful Claude Code output
-3. **Filtering** - Include/exclude, search, virtual entities
-4. **Range Selection** - Timeline slicing
-5. **Display Modes** - Compact, truncated, full
-6. **CLI Interface** - User-facing commands
-7. **GitHub Fetch** - Recover sessions from Actions
-8. **Export** - JSON/JSONL output modes
-
-### Specs Come From Requirements
-
-Specs express requirements from gathered stories. Do NOT copy existing characterization specs - they may encode bugs.
-
----
-
 ## Tech Stack (from BookMinder)
 
 - Python environment and dependency management matching BookMinder
@@ -556,9 +512,7 @@ Specs express requirements from gathered stories. Do NOT copy existing character
 ## What NOT To Do
 
 - Do NOT trust existing implementation or specs as authoritative
-- Do NOT skip the failing spec step
 - Do NOT copy code (understand requirements → implement fresh)
 - Do NOT add features not in recovered requirements
-- Do NOT break TDD discipline under time pressure
 - Do NOT interleave requirements gathering with implementation
 - Do NOT load entire day log files into context (use ripgrep)
