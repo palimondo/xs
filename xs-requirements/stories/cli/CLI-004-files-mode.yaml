@@ -1,0 +1,22 @@
+# Story: File Changes Mode
+
+id: CLI-004
+title: File changes mode (-f/--files)
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to see a summary of file changes
+so_that: I know what was modified
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: should
+status: draft
+validation_notes: null

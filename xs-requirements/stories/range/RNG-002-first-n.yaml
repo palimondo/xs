@@ -1,0 +1,22 @@
+# Story: First N Items
+
+id: RNG-002
+title: Select first N items with +N syntax
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to view the first N items
+so_that: I can see how the session started
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

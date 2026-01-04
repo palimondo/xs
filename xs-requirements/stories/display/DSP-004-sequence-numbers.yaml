@@ -1,0 +1,22 @@
+# Story: Sequence Numbers
+
+id: DSP-004
+title: Sequence number display control
+epic: display-modes
+theme: local-exploration
+
+as_a: developer exploring filtered results
+i_want: sequence numbers shown for discontinuous fragments
+so_that: I know which events I'm looking at
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - DSP-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

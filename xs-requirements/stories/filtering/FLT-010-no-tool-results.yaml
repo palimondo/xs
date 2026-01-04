@@ -1,0 +1,22 @@
+# Story: Exclude Tool Results
+
+id: FLT-010
+title: --no-tool-results flag
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to see tool calls without their output
+so_that: I can get a compact view of actions
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FLT-004
+related: []
+
+priority: should
+status: draft
+validation_notes: null

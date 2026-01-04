@@ -1,0 +1,23 @@
+# Story: Virtual Entity - Tool
+
+id: FLT-004
+title: Filter by Tool virtual entity
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to show all tool calls
+so_that: I can see what actions were taken
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - FLT-009  # -T shortcut
+
+priority: must
+status: draft
+validation_notes: null

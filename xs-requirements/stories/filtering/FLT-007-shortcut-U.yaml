@@ -1,0 +1,22 @@
+# Story: Shortcut -U
+
+id: FLT-007
+title: -U shortcut for user messages
+epic: filtering
+theme: local-exploration
+
+as_a: power user
+i_want: -U as shortcut for -i User
+so_that: I can quickly see what the user asked
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FLT-003
+related: []
+
+priority: should
+status: draft
+validation_notes: null

@@ -1,0 +1,23 @@
+# Story: Full Mode
+
+id: DSP-003
+title: Full display mode (no truncation)
+epic: display-modes
+theme: local-exploration
+
+as_a: developer debugging a session
+i_want: complete output without truncation
+so_that: I can see all details
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FMT-001
+  - FMT-002
+related: []
+
+priority: must
+status: draft
+validation_notes: null

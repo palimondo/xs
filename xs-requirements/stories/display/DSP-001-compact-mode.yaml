@@ -1,0 +1,23 @@
+# Story: Compact Mode
+
+id: DSP-001
+title: Compact display mode (one line per event)
+epic: display-modes
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: one line per event in compact mode
+so_that: I can scan the session quickly
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FMT-001
+  - FMT-002
+related: []
+
+priority: must
+status: draft
+validation_notes: null

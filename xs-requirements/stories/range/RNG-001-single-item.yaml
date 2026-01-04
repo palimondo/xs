@@ -1,0 +1,22 @@
+# Story: Single Item Selection
+
+id: RNG-001
+title: Select single item by index
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to view a single item by its index
+so_that: I can focus on one specific event
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

@@ -1,0 +1,23 @@
+# Story: Virtual Entity - Message
+
+id: FLT-003
+title: Filter by Message virtual entity
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to show all messages (user + assistant)
+so_that: I can see the conversation without tools
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - FLT-006  # -M shortcut
+
+priority: must
+status: draft
+validation_notes: null

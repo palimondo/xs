@@ -1,0 +1,22 @@
+# Story: Range Selection
+
+id: RNG-004
+title: Select range with N-M syntax
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to view items in a range
+so_that: I can focus on a specific section
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

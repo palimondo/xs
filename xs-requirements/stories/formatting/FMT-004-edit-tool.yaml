@@ -1,0 +1,23 @@
+# Story: Edit Tool Formatting
+
+id: FMT-004
+title: Format Edit tool calls with file path
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: Edit tool calls displayed with file path
+so_that: I can see what files were modified
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - PRIN-001
+
+priority: must
+status: draft
+validation_notes: null

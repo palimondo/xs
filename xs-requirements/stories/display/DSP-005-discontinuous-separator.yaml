@@ -1,0 +1,22 @@
+# Story: Discontinuous Section Separator
+
+id: DSP-005
+title: Show separator between non-contiguous sections
+epic: display-modes
+theme: local-exploration
+
+as_a: developer exploring filtered results
+i_want: visual separator between gaps
+so_that: I know when events are non-contiguous
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - DSP-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

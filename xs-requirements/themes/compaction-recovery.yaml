@@ -1,0 +1,39 @@
+# Theme: Compaction Recovery
+
+id: compaction-recovery
+name: Context Recovery After Compaction
+description: |
+  When Claude Code compacts context (automatically or via /compact),
+  crucial details are lost in the summary. xs recovers full details
+  from the raw transcript.
+
+motivation: |
+  Compaction summaries lose:
+  - Exact file paths and line numbers edited
+  - Specific error messages and stack traces
+  - Design rationale discussed during implementation
+  - User corrections and clarifications
+
+  For continued work, these details are often critical.
+
+primary_use_cases:
+  - Recover context after automatic compaction mid-session
+  - Find compaction point in transcript
+  - Extract full context from before compaction
+  - Automate recovery via hooks
+
+key_capabilities:
+  - Search for compaction markers ("This session is being continued")
+  - Extract context around compaction point
+  - Show full message content (not truncated)
+  - Support context lines before/after matches
+
+workflow:
+  trigger: Compaction occurs (automatic or /compact)
+  steps:
+    - Hook triggers xs
+    - xs finds compaction point in transcript
+    - xs extracts critical context
+    - Context fed back to Claude Code
+
+status: draft

@@ -1,0 +1,33 @@
+# Theme: Console Replay
+
+id: console-replay
+name: Session Replay and Reconstruction
+description: |
+  Reproduce Claude Code console output faithfully so it can be fed to
+  other LLMs (like Gemini) for summarization. Console fidelity is critical
+  because the output must be parseable by another AI.
+
+motivation: |
+  Cross-LLM workflow: Run Claude Code -> Use xs to fetch/replay session ->
+  Feed output to Gemini -> Get high-level summary stored in claude-dev-log-diary/.
+
+  The output must match Claude Code's console appearance closely enough that
+  another LLM can understand the session content, tool usage, and conversation flow.
+
+primary_use_cases:
+  - Generate session transcript for Gemini summarization
+  - Document what happened in a session for future reference
+  - Share session output with collaborators
+
+key_capabilities:
+  - Match Claude Code console symbols exactly
+  - Preserve message ordering and tool execution flow
+  - Support multiple display modes (compact, truncated, full)
+  - Remove interactive-only elements (not meaningful in transcript)
+
+quality_attributes:
+  - Fidelity to Claude Code console appearance
+  - Parseability by other LLMs
+  - Human readability
+
+status: draft

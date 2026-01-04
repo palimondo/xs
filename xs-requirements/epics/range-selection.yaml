@@ -1,0 +1,63 @@
+# Epic: Range Selection
+
+id: range-selection
+name: Timeline Range Selection
+themes: [local-exploration]
+
+description: |
+  Select subsets of the timeline by index, range, or position.
+  Support first N, last N, specific ranges, and from-N-onwards.
+
+cli_flags:
+  - "indices (positional): 5, +10, -20, 10-30, 60+"
+
+design_doc_refs:
+  - design_decisions.md: Free Parameters for Ranges, Range Filtering Order
+  - filtering_pipeline_design.md: Slice Phase
+
+spec_files:
+  - range_formats_spec.py
+
+capabilities:
+  - Single item selection (5)
+  - First N items (+10)
+  - Last N items (-20)
+  - Range selection (10-30)
+  - From N onwards (60+)
+  - Multiple range arguments
+
+range_syntax:
+  - "5" - single item at index 5
+  - "+10" - first 10 items
+  - "-20" - last 20 items
+  - "10-30" - items 10 through 30
+  - "60+" - items from 60 to end
+
+pipeline_position: |
+  Per filtering_pipeline_design.md:
+  Load -> Filter -> Order -> Slice -> Display
+
+  Positional ranges operate on timeline BEFORE filtering.
+  Proposed --head/--tail would operate AFTER filtering.
+
+story_areas:
+  - Select single item by index
+  - Select first N items (+N)
+  - Select last N items (-N)
+  - Select range (N-M)
+  - Select from N onwards (N+)
+  - Multiple range arguments
+  - Range with filtering interaction
+  - Out-of-bounds handling
+  - Empty range handling
+
+search_methodology: |
+  Search day logs for:
+  - "range", "index", "indices"
+  - "+10", "-20", "10-30"
+  - "first", "last", "slice"
+  - "head", "tail"
+
+  Focus on discussions about range-filter interaction.
+
+status: draft

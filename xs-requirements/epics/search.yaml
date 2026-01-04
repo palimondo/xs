@@ -1,0 +1,69 @@
+# Epic: Search
+
+id: search
+name: Full-Text Search
+themes: [local-exploration, compaction-recovery]
+
+description: |
+  Search across all timeline content with context lines.
+  Essential for finding specific content in large sessions.
+
+cli_flags:
+  - "-S, --search SEARCH"
+  - "-A, --after-context NUM"
+  - "-B, --before-context NUM"
+  - "-C, --context NUM"
+
+design_doc_refs:
+  - design_decisions.md: (no dedicated section)
+  - README.md: Full Text Search
+
+spec_files:
+  - context_options_spec.py
+  - search_bugs_spec.py
+
+capabilities:
+  - Simple substring search
+  - Context lines before match
+  - Context lines after match
+  - Combined context
+  - Search with display modes
+
+search_semantics:
+  type: "Simple substring match"
+  scope: "All content in timeline"
+  case_sensitivity: "TBD - needs mining"
+
+context_options:
+  "-A NUM": "Show NUM lines after each match"
+  "-B NUM": "Show NUM lines before each match"
+  "-C NUM": "Show NUM lines before AND after"
+
+special_cases:
+  - "Patterns starting with -- need -S=pattern or --search=pattern"
+  - "Search with filters"
+  - "Search with range selection"
+
+story_areas:
+  - Basic substring search
+  - Case sensitivity behavior
+  - After context (-A)
+  - Before context (-B)
+  - Combined context (-C)
+  - Search with filtering
+  - Search with ranges
+  - Search with display modes
+  - Patterns starting with --
+  - No matches handling
+  - Search in tool results
+  - Search in messages
+
+search_methodology: |
+  Search day logs for:
+  - "search", "-S", "--search"
+  - "context", "-A", "-B", "-C"
+  - "grep", "match", "find"
+
+  Check search_bugs_spec.py for known issues and edge cases.
+
+status: draft

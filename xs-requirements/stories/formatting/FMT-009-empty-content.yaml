@@ -1,0 +1,22 @@
+# Story: Empty Content Display
+
+id: FMT-009
+title: Show "(No content)" for empty results
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: empty tool results shown as "(No content)"
+so_that: I know the tool ran but returned nothing
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: should
+status: draft
+validation_notes: null

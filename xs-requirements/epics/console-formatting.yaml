@@ -1,0 +1,62 @@
+# Epic: Console Formatting
+
+id: console-formatting
+name: Console Output Formatting
+themes: [console-replay]
+
+description: |
+  Format session content to match Claude Code console appearance.
+  Use correct symbols, indentation, and truncation patterns.
+  Critical for LLM parseability.
+
+cli_flags: []  # Formatting is implicit in all display modes
+
+design_doc_refs:
+  - design_decisions.md: Display Symbols, Parameter Display
+  - formatting_fidelity_summary.md
+  - truncated_mode_design.md
+
+spec_files:
+  - format_fidelity_spec.py
+  - tool_formatting_spec.py
+  - truncation_consistency_spec.py
+
+capabilities:
+  - Display symbols matching Claude Code
+  - Tool-specific formatting (Bash, Edit, Read, etc.)
+  - Message formatting (user, assistant)
+  - Thinking block formatting
+  - Truncation patterns ([...], "... +N lines")
+  - Empty content handling
+
+symbol_reference:
+  assistant_message: ">"  # Note: design doc says user is >, assistant is play button
+  user_message: ">"
+  thinking: "Thinking..."
+  bash: "$"
+  edit_write: "->"
+  read: "<-"
+
+story_areas:
+  - User message formatting
+  - Assistant message formatting
+  - Bash tool formatting
+  - Edit/Write tool formatting
+  - Read tool formatting
+  - Task/subagent tool formatting
+  - Thinking block formatting
+  - Tool result formatting
+  - Multiline parameter truncation
+  - Empty content display
+  - Sequence number display
+
+search_methodology: |
+  Search day logs for:
+  - "symbol", "format", "formatting"
+  - "truncat", "ellipsis", "[...]"
+  - Specific symbols: "play button", "arrow"
+  - Tool names: "Bash", "Edit", "Read"
+
+  Pay special attention to user corrections about formatting.
+
+status: draft

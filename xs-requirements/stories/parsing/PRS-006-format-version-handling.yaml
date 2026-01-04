@@ -1,0 +1,23 @@
+# Story: Format Version Handling
+
+id: PRS-006
+title: Handle Claude Code format versions (1.x vs 2.x)
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer
+i_want: both old and new Claude Code session formats to work
+so_that: I can explore historical sessions
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related:
+  - CONF-001  # Format version conflict
+
+priority: must
+status: draft
+validation_notes: null

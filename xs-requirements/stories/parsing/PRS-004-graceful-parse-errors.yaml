@@ -1,0 +1,23 @@
+# Story: Graceful Parse Error Handling
+
+id: PRS-004
+title: Continue processing despite parse errors
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer
+i_want: partial results when some entries fail to parse
+so_that: I can still extract useful information from corrupted sessions
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related:
+  - PRIN-003  # Graceful degradation principle
+
+priority: should
+status: draft
+validation_notes: null

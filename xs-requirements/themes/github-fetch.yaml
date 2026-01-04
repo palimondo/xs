@@ -1,0 +1,27 @@
+# Theme: GitHub Fetch
+
+id: github-fetch
+name: GitHub Actions Session Recovery
+description: |
+  Recover Claude Code session transcripts from GitHub Actions CI runs
+  where you cannot copy from terminal. Original raison d'etre for xs.
+
+motivation: |
+  When Claude Code runs in GitHub Actions (via claude-code-action), the
+  session transcript is embedded in workflow logs. Users need to extract
+  these sessions for debugging, analysis, or replay.
+
+primary_use_cases:
+  - Fetch session from failed CI run to debug what went wrong
+  - Recover session from successful run for documentation
+  - Extract multiple sessions from a workflow for comparison
+
+key_capabilities:
+  - Discover sessions by run ID, issue number, PR number, or date
+  - Download and parse sessions from workflow logs
+  - Handle structured filenames with metadata
+
+related_tools:
+  - fetch_logs.py (separate tool, not part of xs core)
+
+status: draft

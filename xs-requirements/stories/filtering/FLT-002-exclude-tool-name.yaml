@@ -1,0 +1,23 @@
+# Story: Exclude Filter by Tool Name
+
+id: FLT-002
+title: Filter to exclude specific tools by name
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to hide specific tool types
+so_that: I can reduce noise
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - FLT-001
+
+priority: must
+status: draft
+validation_notes: null

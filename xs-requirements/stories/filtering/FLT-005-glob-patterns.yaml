@@ -1,0 +1,22 @@
+# Story: Glob Pattern Filtering
+
+id: FLT-005
+title: Support glob patterns in tool filters
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to filter tools by pattern like "Bash(git *)"
+so_that: I can find specific commands
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FLT-001
+related: []
+
+priority: must
+status: draft
+validation_notes: null

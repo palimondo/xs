@@ -1,0 +1,65 @@
+# Epic: Export
+
+id: export
+name: Export Formats
+themes: [console-replay, local-exploration]
+
+description: |
+  Export session data in machine-readable formats for
+  further processing or session replay.
+
+cli_flags:
+  - "--json"
+  - "--jsonl"
+  - "--export-json RANGE OUTPUT"
+
+design_doc_refs:
+  - design_decisions.md: Export Formats
+
+spec_files:
+  - export_formats_spec.py
+
+capabilities:
+  - JSON array output to stdout
+  - JSONL output to stdout
+  - Export range to file
+  - Preserve original JSONL structure
+
+export_modes:
+  json:
+    output: stdout
+    format: "JSON array of objects"
+    use_case: "jq processing, programmatic access"
+  jsonl:
+    output: stdout
+    format: "Newline-delimited JSON"
+    use_case: "Streaming, grep-friendly"
+  export_json:
+    output: file
+    format: "JSON array"
+    args: "RANGE OUTPUT"
+    use_case: "Save filtered subset for replay"
+
+raw_preservation: |
+  Export includes complete original JSONL objects to enable:
+  - Session replay in Claude Code
+  - Preserves all metadata and fields
+  - No information loss
+
+story_areas:
+  - JSON output to stdout
+  - JSONL output to stdout
+  - Export range to file
+  - Export with filters
+  - Export with ranges
+  - Raw object preservation
+  - Error handling (invalid range, write failure)
+
+search_methodology: |
+  Search day logs for:
+  - "export", "json", "jsonl"
+  - "stdout", "output"
+  - "replay", "preserve"
+  - "--json", "--jsonl", "--export-json"
+
+status: draft

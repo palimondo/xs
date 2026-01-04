@@ -1,0 +1,22 @@
+# Story: JSON Output
+
+id: EXP-001
+title: JSON array output to stdout
+epic: export
+theme: local-exploration
+
+as_a: developer processing session data
+i_want: to export as JSON array
+so_that: I can use jq for further processing
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

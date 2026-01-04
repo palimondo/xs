@@ -1,0 +1,22 @@
+# Story: Combined Context
+
+id: SRC-004
+title: Show lines before and after match (-C)
+epic: search
+theme: local-exploration
+
+as_a: developer searching a session
+i_want: to see lines around each match
+so_that: I get full context
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SRC-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

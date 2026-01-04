@@ -1,0 +1,22 @@
+# Story: Before Context
+
+id: SRC-003
+title: Show lines before match (-B)
+epic: search
+theme: local-exploration
+
+as_a: developer searching a session
+i_want: to see lines before each match
+so_that: I get context about what preceded
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SRC-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

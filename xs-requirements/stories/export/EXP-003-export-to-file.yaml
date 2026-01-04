@@ -1,0 +1,23 @@
+# Story: Export Range to File
+
+id: EXP-003
+title: Export range to JSON file
+epic: export
+theme: console-replay
+
+as_a: developer replaying sessions
+i_want: to export a range to a file
+so_that: I can replay specific parts
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+  - RNG-004
+related: []
+
+priority: should
+status: draft
+validation_notes: null

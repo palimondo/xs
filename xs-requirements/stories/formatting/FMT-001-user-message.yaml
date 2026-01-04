@@ -1,0 +1,23 @@
+# Story: User Message Formatting
+
+id: FMT-001
+title: Format user messages with > prefix
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: user messages displayed with > prefix
+so_that: they match Claude Code console and are recognizable
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - PRIN-001  # Console fidelity
+
+priority: must
+status: draft
+validation_notes: null

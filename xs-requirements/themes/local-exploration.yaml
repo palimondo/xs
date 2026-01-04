@@ -1,0 +1,37 @@
+# Theme: Local Session Exploration
+
+id: local-exploration
+name: Local Session Exploration
+description: |
+  Search, filter, and analyze session transcripts for debugging,
+  context recovery, and understanding what happened in past sessions.
+
+motivation: |
+  Local Claude Code sessions are stored as JSONL files but are difficult
+  to read directly. xs provides a CLI interface for interactive exploration
+  with filtering, searching, and multiple display modes.
+
+primary_use_cases:
+  - Debug why a session went wrong
+  - Find specific tool calls or messages
+  - Understand conversation flow
+  - Extract specific parts of a session
+  - Analyze tool usage patterns
+
+key_capabilities:
+  - Session discovery by fuzzy matching
+  - Timeline view with chronological ordering
+  - Filtering by tool type, message type, patterns
+  - Full-text search with context
+  - Range selection (first N, last N, specific ranges)
+  - Multiple display modes
+  - Export to JSON/JSONL for further processing
+
+common_queries:
+  - "What did the user actually ask for?"
+  - "What tools did Claude use?"
+  - "Show the conversation around this error"
+  - "What files were modified?"
+  - "Find all git operations"
+
+status: draft

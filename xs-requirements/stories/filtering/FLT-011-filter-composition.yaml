@@ -1,0 +1,23 @@
+# Story: Filter Composition
+
+id: FLT-011
+title: Compose multiple filters with AND semantics
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: multiple filters to combine
+so_that: I can create precise queries
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FLT-001
+  - FLT-002
+related: []
+
+priority: must
+status: draft
+validation_notes: null

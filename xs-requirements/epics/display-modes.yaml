@@ -1,0 +1,70 @@
+# Epic: Display Modes
+
+id: display-modes
+name: Display Modes
+themes: [console-replay, local-exploration]
+
+description: |
+  Support multiple display modes for different use cases:
+  compact (default), truncated (console-like), and full.
+
+cli_flags:
+  - "--truncated"
+  - "--full"
+  - "--show-numbers"
+  - "(default: compact)"
+
+design_doc_refs:
+  - design_decisions.md: Display Modes
+  - truncated_mode_design.md
+
+spec_files:
+  - display_modes_spec.py
+  - truncation_consistency_spec.py
+
+capabilities:
+  - Compact mode (one line per event)
+  - Truncated mode (3-line preview, console-like)
+  - Full mode (complete output)
+  - Sequence number display control
+
+mode_descriptions:
+  compact:
+    lines_per_event: 1
+    use_case: "Quick overview, scanning"
+    analogy: "git log --oneline"
+  truncated:
+    lines_per_event: "3-6 before truncation"
+    use_case: "Console fidelity, LLM consumption"
+    truncation: '"... +N lines" for long content'
+  full:
+    lines_per_event: unlimited
+    use_case: "Detailed analysis, debugging"
+
+sequence_numbers:
+  default_behavior: "Show only when filtering (discontinuous fragments)"
+  override: "--show-numbers forces display"
+
+discontinuous_sections:
+  separator: "--"  # Like grep
+  when: "Filtering or context (-A/-B/-C) creates gaps"
+
+story_areas:
+  - Compact mode formatting
+  - Truncated mode formatting
+  - Full mode formatting
+  - Sequence number display logic
+  - --show-numbers override
+  - Discontinuous section separators
+  - Mode interaction with filtering
+  - Mode interaction with search context
+
+search_methodology: |
+  Search day logs for:
+  - "compact", "truncated", "full"
+  - "display mode", "mode"
+  - "one line", "3 line", "preview"
+  - "sequence number", "show-numbers"
+  - "discontinuous", "separator", "--"
+
+status: draft

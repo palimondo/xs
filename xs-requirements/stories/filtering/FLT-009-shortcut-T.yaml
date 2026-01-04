@@ -1,0 +1,22 @@
+# Story: Shortcut -T
+
+id: FLT-009
+title: -T shortcut for all tools
+epic: filtering
+theme: local-exploration
+
+as_a: power user
+i_want: -T as shortcut for -i Tool
+so_that: I can quickly see all tool calls
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FLT-004
+related: []
+
+priority: should
+status: draft
+validation_notes: null

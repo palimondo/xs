@@ -1,0 +1,22 @@
+# Story: Timeline Mode
+
+id: CLI-002
+title: Timeline mode (-t/--timeline)
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to see the full timeline
+so_that: I can review all events
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

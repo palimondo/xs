@@ -1,0 +1,22 @@
+# Story: Multi-line JSON Parsing
+
+id: PRS-003
+title: Parse multi-line JSON objects in JSONL
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer
+i_want: JSONL files with multi-line JSON objects to parse correctly
+so_that: Claude Code sessions (which use multi-line JSON) load properly
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related: []
+
+priority: must
+status: draft
+validation_notes: null

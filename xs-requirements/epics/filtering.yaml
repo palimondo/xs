@@ -1,0 +1,72 @@
+# Epic: Filtering
+
+id: filtering
+name: Content Filtering
+themes: [local-exploration, compaction-recovery]
+
+description: |
+  Filter timeline content by tool type, message type, and patterns.
+  Support include/exclude semantics with glob patterns.
+
+cli_flags:
+  - "-i, --include FILTERS"
+  - "-x, --exclude FILTERS"
+  - "--no-tool-results"
+  - "-M (shortcut for -i Message)"
+  - "-U (shortcut for -i User)"
+  - "-a (shortcut for -i Assistant)"
+  - "-T (shortcut for -i Tool)"
+
+design_doc_refs:
+  - design_decisions.md: Filtering System
+  - filtering_pipeline_design.md
+
+spec_files:
+  - filter_patterns_spec.py
+  - shortcut_flags_spec.py
+
+capabilities:
+  - Include specific tools by name
+  - Exclude specific tools by name
+  - Virtual entities (Message, Tool, User, Assistant)
+  - Glob patterns in tool filters
+  - Tool result inclusion/exclusion
+  - Filter composition (AND semantics)
+
+virtual_entities:
+  Message: "All messages (user + assistant)"
+  Tool: "All tool calls"
+  User: "User messages only"
+  Assistant: "Assistant messages only"
+
+pattern_syntax:
+  - "Bash" - exact tool name
+  - "Bash(git *)" - tool with command pattern
+  - "Edit(*.py)" - tool with file pattern
+  - "Tool(mcp__*)" - MCP tool pattern
+
+story_areas:
+  - Include filter by tool name
+  - Exclude filter by tool name
+  - Include filter by virtual entity
+  - Exclude filter by virtual entity
+  - Glob pattern matching in filters
+  - Tool result inclusion with tool_use
+  - Tool result exclusion (--no-tool-results)
+  - Shortcut flag -M
+  - Shortcut flag -U
+  - Shortcut flag -a
+  - Shortcut flag -T
+  - Filter composition (multiple filters)
+  - Filter interaction with ranges
+
+search_methodology: |
+  Search day logs for:
+  - "filter", "include", "exclude"
+  - "pattern", "glob", "wildcard"
+  - "-i", "-x", "-M", "-U", "-a", "-T"
+  - "virtual entity", "Message", "Tool"
+
+  Session search: Find discussions about filter behavior edge cases.
+
+status: draft

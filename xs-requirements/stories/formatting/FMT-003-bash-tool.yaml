@@ -1,0 +1,23 @@
+# Story: Bash Tool Formatting
+
+id: FMT-003
+title: Format Bash tool calls with command
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: Bash tool calls displayed as "Bash(command)"
+so_that: I can see what commands were executed
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - PRIN-001  # Console fidelity
+
+priority: must
+status: draft
+validation_notes: null

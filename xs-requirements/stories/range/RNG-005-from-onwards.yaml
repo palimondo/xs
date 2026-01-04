@@ -1,0 +1,22 @@
+# Story: From N Onwards
+
+id: RNG-005
+title: Select from N onwards with N+ syntax
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to view items from a point to the end
+so_that: I can see everything after an event
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

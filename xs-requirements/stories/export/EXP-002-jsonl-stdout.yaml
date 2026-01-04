@@ -1,0 +1,22 @@
+# Story: JSONL Output
+
+id: EXP-002
+title: JSONL output to stdout
+epic: export
+theme: local-exploration
+
+as_a: developer processing session data
+i_want: to export as JSONL stream
+so_that: I can grep or stream-process
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

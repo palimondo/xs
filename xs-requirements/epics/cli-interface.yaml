@@ -1,0 +1,72 @@
+# Epic: CLI Interface
+
+id: cli-interface
+name: Command Line Interface
+themes: [local-exploration, github-fetch]
+
+description: |
+  Command line argument parsing, session discovery,
+  and high-level command modes (summary, timeline, git, files).
+
+cli_flags:
+  - "session (positional): file path or fuzzy match"
+  - "-s, --summary"
+  - "-t, --timeline"
+  - "-g, --git"
+  - "-f, --files"
+  - "-c, --created"
+  - "-h, --help"
+
+design_doc_refs:
+  - design_decisions.md: Command Line Interface
+  - README.md: Session Discovery
+
+spec_files:
+  - argument_parsing_spec.py
+  - summary_and_defaults_spec.py
+
+capabilities:
+  - Session discovery by substring
+  - Multiple command modes
+  - Argument ordering rules
+  - Help text generation
+
+session_discovery:
+  - Full path to JSONL file
+  - Unique substring match (issue-13, run-1648, date)
+  - Search in configured directories
+
+command_modes:
+  summary: "Default - statistics about session"
+  timeline: "Chronological event list"
+  git: "Git operations only"
+  files: "File change summary"
+  created: "Created files only"
+
+argument_ordering:
+  rule: "Options before positional arguments"
+  working: "xs -U -a session.jsonl +14"
+  not_working: "xs session.jsonl -U -a +14"
+
+story_areas:
+  - Session file path resolution
+  - Session fuzzy discovery
+  - Summary mode output
+  - Timeline mode activation
+  - Git operations mode
+  - File changes mode
+  - Created files mode
+  - Argument parsing order
+  - Help text
+  - Error messages for invalid args
+  - Default behavior (no flags)
+
+search_methodology: |
+  Search day logs for:
+  - "argument", "argparse", "parsing"
+  - "session", "discovery", "fuzzy"
+  - "summary", "default"
+  - "-s", "-t", "-g", "-f"
+  - "ordering", "positional"
+
+status: draft

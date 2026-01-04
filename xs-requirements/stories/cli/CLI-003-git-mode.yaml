@@ -1,0 +1,23 @@
+# Story: Git Operations Mode
+
+id: CLI-003
+title: Git operations mode (-g/--git)
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to see only git operations
+so_that: I can review version control activity
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+  - FLT-005  # Glob patterns
+related: []
+
+priority: should
+status: draft
+validation_notes: null

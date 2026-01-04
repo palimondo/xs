@@ -1,0 +1,22 @@
+# Story: Substring Search
+
+id: SRC-001
+title: Basic substring search
+epic: search
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to search for text in the session
+so_that: I can find specific content
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

@@ -1,0 +1,24 @@
+# Story: Truncated Mode
+
+id: DSP-002
+title: Truncated display mode (console-like)
+epic: display-modes
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: console-like output with 3-line preview
+so_that: output matches Claude Code and is LLM-parseable
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FMT-001
+  - FMT-002
+related:
+  - PRIN-001  # Console fidelity
+
+priority: must
+status: draft
+validation_notes: null

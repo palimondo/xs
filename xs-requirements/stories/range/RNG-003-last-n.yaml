@@ -1,0 +1,22 @@
+# Story: Last N Items
+
+id: RNG-003
+title: Select last N items with -N syntax
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to view the last N items
+so_that: I can see recent activity
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: must
+status: draft
+validation_notes: null

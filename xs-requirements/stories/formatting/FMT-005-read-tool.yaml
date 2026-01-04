@@ -1,0 +1,23 @@
+# Story: Read Tool Formatting
+
+id: FMT-005
+title: Format Read tool calls with file path
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: Read tool calls displayed with file path
+so_that: I can see what files were read
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - PRIN-001
+
+priority: must
+status: draft
+validation_notes: null

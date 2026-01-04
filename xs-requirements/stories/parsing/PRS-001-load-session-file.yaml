@@ -1,0 +1,21 @@
+# Story: Load Session File
+
+id: PRS-001
+title: Load session file by path
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer
+i_want: to load a session file by its path
+so_that: I can explore its contents
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on: []
+related: []
+
+priority: must
+status: draft
+validation_notes: null

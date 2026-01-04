@@ -1,0 +1,22 @@
+# Story: Created Files Mode
+
+id: CLI-005
+title: Created files mode (-c/--created)
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to see only created files
+so_that: I know what new files were added
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: could
+status: draft
+validation_notes: null

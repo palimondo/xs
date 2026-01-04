@@ -1,0 +1,23 @@
+# Story: Multiline Content Truncation
+
+id: FMT-008
+title: Truncate multiline content with [...]
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: long content truncated with first/last line pattern
+so_that: I get overview without overwhelming output
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - DSP-002  # Truncated mode
+
+priority: should
+status: draft
+validation_notes: null

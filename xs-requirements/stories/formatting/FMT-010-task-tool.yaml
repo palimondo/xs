@@ -1,0 +1,22 @@
+# Story: Task/Subagent Tool Formatting
+
+id: FMT-010
+title: Format Task tool calls (subagents)
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: Task tool calls displayed showing subagent info
+so_that: I can see when subagents were spawned
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related: []
+
+priority: should
+status: draft
+validation_notes: null

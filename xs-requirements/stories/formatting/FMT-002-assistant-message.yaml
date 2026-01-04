@@ -1,0 +1,23 @@
+# Story: Assistant Message Formatting
+
+id: FMT-002
+title: Format assistant messages with play button
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: assistant messages displayed matching Claude Code console
+so_that: output is recognizable and parseable by other LLMs
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - PRIN-001  # Console fidelity
+
+priority: must
+status: draft
+validation_notes: null

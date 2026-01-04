@@ -1,0 +1,22 @@
+# Story: Fuzzy Session Discovery
+
+id: PRS-002
+title: Discover session by substring match
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer
+i_want: to find a session by typing any unique substring
+so_that: I don't need to remember or type full paths
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related: []
+
+priority: must
+status: draft
+validation_notes: null

@@ -1,0 +1,48 @@
+# Epic: JSONL Parsing
+
+id: jsonl-parsing
+name: JSONL Parsing and Session Loading
+themes: [console-replay, local-exploration, compaction-recovery]
+
+description: |
+  Load and parse Claude Code session files in JSONL format.
+  Handle multi-line JSON objects, format versions (1.x, 2.x),
+  and graceful degradation for malformed content.
+
+cli_flags: []  # No direct CLI flags, foundation for all other features
+
+design_doc_refs:
+  - parse_claude_jsonl.py (separate parser module)
+  - design_decisions.md: Lazy Loading, Timeline Building
+
+spec_files:
+  - unit_tests_spec.py
+  - edge_cases_spec.py
+
+capabilities:
+  - Parse JSONL with multi-line JSON objects
+  - Assign sequence numbers to entries
+  - Handle format version differences (1.x vs 2.x)
+  - Graceful degradation for parse errors
+  - Support both local files and stdin
+
+story_areas:
+  - Load session file by path
+  - Fuzzy session discovery by substring
+  - Parse multi-line JSON objects
+  - Handle malformed entries
+  - Extract message entries
+  - Extract tool_use entries
+  - Extract tool_result entries
+  - Build unified timeline
+
+search_methodology: |
+  Search day logs for:
+  - "parse", "parsing", "JSONL", "JSON"
+  - "multi-line", "multiline"
+  - "format version", "1.x", "2.x"
+  - "malformed", "error", "graceful"
+
+  Search sessions for tool_use/tool_result handling discussions.
+
+status: draft

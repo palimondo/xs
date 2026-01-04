@@ -1,0 +1,23 @@
+# Story: Thinking Block Formatting
+
+id: FMT-006
+title: Format thinking blocks
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: thinking blocks displayed with "Thinking..." prefix
+so_that: I can distinguish reasoning from output
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - PRIN-001
+
+priority: should
+status: draft
+validation_notes: null

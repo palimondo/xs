@@ -1,0 +1,22 @@
+# Story: After Context
+
+id: SRC-002
+title: Show lines after match (-A)
+epic: search
+theme: local-exploration
+
+as_a: developer searching a session
+i_want: to see lines after each match
+so_that: I get context about what followed
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SRC-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

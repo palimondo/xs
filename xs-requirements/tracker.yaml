@@ -1,0 +1,69 @@
+# xs Requirements Recovery Tracker
+
+meta:
+  last_updated: 2026-01-04T22:25:50Z
+  current_pass: 1_structure_bootstrap
+  current_epic: null
+
+passes:
+  1_structure_bootstrap:
+    status: complete
+    started_at: 2026-01-04T22:17:33Z
+    completed_at: 2026-01-04T22:25:50Z
+
+  2_story_mining:
+    status: pending
+    epics:
+      jsonl-parsing: pending
+      console-formatting: pending
+      filtering: pending
+      range-selection: pending
+      display-modes: pending
+      cli-interface: pending
+      search: pending
+      export: pending
+
+  3_golden_files:
+    status: pending
+
+  4_principles:
+    status: pending
+
+  5_conflicts:
+    status: pending
+
+  6_slicing:
+    status: pending
+
+counts:
+  themes: 4
+  epics: 8
+  stories:
+    total: 49
+    draft: 49
+    mined: 0
+    reviewed: 0
+    validated: 0
+  conflicts:
+    pending: 0
+    resolved: 0
+
+sources_cataloged:
+  cli_help: true
+  design_docs:
+    - design_decisions.md
+    - filtering_pipeline_design.md
+    - README.md
+    - truncated_mode_design.md
+    - formatting_fidelity_summary.md
+    - conversation_mode_notes.md
+    - context_recovery_pattern.md
+    - compaction_recovery_hooks_setup.md
+  spec_files: 18
+  golden_files: 14
+
+next_action: |
+  Begin Pass 2: Story Mining. Start with jsonl-parsing epic.
+  Spawn Haiku subagents to search day logs and sessions.
+
+blockers: []
