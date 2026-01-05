@@ -45,14 +45,18 @@ counts:
   themes: 4
   epics: 12
   stories:
-    total: 87
-    draft: 87
+    total: 88
+    draft: 88
     mined: 0
     reviewed: 0
     validated: 0
   conflicts:
     pending: 0
     resolved: 0
+  bugs_found:
+    total: 2
+    with_workaround: 2
+    need_story: 1  # SRC-005 added
 
 sources_cataloged:
   cli_help: true

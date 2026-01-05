@@ -1,0 +1,47 @@
+# Story: Search and Timeline Flag Interaction
+
+id: SRC-005
+title: Search results displayed in timeline mode
+epic: search
+theme: local-exploration
+
+as_a: developer searching session content
+i_want: search results shown in timeline format when -t is specified
+so_that: I can see matches in chronological context
+
+sources:
+  - file: xs-requirements/findings/xs-usage-best-practices.md
+    section: BUG-002
+    context: "Current implementation ignores -S when -t is present"
+
+acceptance_criteria:
+  - id: SRC-005-AC1
+    given: search term and -t flag
+    when: running `xs session -S "term" -t`
+    then: shows ONLY matching entries in timeline format
+
+  - id: SRC-005-AC2
+    given: search term with -t and range
+    when: running `xs session -S "term" -t 1-500`
+    then: shows matching entries within range in timeline format
+
+  - id: SRC-005-AC3
+    given: search term with -t and context
+    when: running `xs session -S "term" -t -C 2`
+    then: shows matching entries with N lines context before/after
+
+current_behavior: |
+  BUG: -t flag completely overrides -S flag.
+  xs e583 -S "filter" -t shows ALL timeline entries, not filtered.
+
+  Workaround: Use -S without -t, optionally with range.
+  xs e583 -S "filter" 1-500 correctly limits search to range.
+
+depends_on:
+  - SRC-001
+related:
+  - CLI-002
+
+priority: should
+status: draft
+validation_notes: "Bug discovered during Pass 1 validation testing"
