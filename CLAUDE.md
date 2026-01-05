@@ -387,13 +387,16 @@ blockers: []
    - Write coherent YAML
 3. **CHECKPOINT**: User validates epic before proceeding
 
-**Model selection**:
+**Model selection** (validated 2026-01-05):
 
-| Task | Model | Rationale |
-|------|-------|-----------|
-| Session search, day log grep | Haiku | Fast, cheap, good at extraction |
-| Ambiguity resolution | Sonnet | Needs more reasoning |
-| Synthesis, cross-references | Opus | Coherence-critical |
+| Task | Model | Status | Notes |
+|------|-------|--------|-------|
+| Session search | Haiku | ✓ Validated | Focused extraction, good structure |
+| Day log grep | Haiku | ✓ Validated | Via ripgrep subprocess |
+| Ambiguity resolution | Sonnet | Untested | |
+| Synthesis, cross-references | Opus | ✓ Validated | More verbose but thorough |
+
+Haiku preferred for mining: cheaper, faster, equally accurate for extraction tasks.
 
 **Subagent instructions template**:
 ```
@@ -473,12 +476,22 @@ coverage_gaps:
 - Later sources generally supersede earlier (unless explicitly corrected)
 - When findings conflict, prefer the more recent + more specific
 
-**Scope granularity**:
-- Day logs can be huge (day-020.md is 2.6MB) - chunk by line range if needed
-- Sessions can exceed 8MB - chunk by event range using `xs session -t {range}`
-- Start conservative: max ~5000 lines or ~500 events per subagent
-- If subagent reports truncation or incomplete coverage, split further
-- Failure modes: context overflow → missed findings; too granular → coordination overhead
+**Scope granularity** (validated 2026-01-05):
+- Day logs can be huge (day-020.md is 2.6MB) - use ripgrep, never load full file
+- Sessions can exceed 8MB - approach depends on mode:
+
+| Mode | Max Events | Notes |
+|------|------------|-------|
+| Search (`-S`) | Full session OK | Only returns matches |
+| Truncated | ~500 | ~78KB output, ~20K tokens |
+| Full (`--full`) | 50-100 | ~50-78KB output |
+
+- **Search mode preferred**: Full sessions work, no chunking needed
+- **Full mode**: Chunk by event range (`-t 1-50`, `-t 51-100`, etc.)
+- If subagent reports truncation, split further
+- Edge case: `-S "-x"` fails (argparse); use `-S "exclude"` instead
+
+**Validation reference**: `xs-requirements/findings/subagent-validation-test.md`
 
 **Checkpoint**: User reviews each epic before next
 
