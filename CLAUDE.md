@@ -92,6 +92,27 @@ git log --oneline --after="2024-12-15" --before="2024-12-20" -- "*explore*"
 ls -la ~/.claude/projects/-Users-*/  # Check timestamps
 ```
 
+### Session Timeline Discovery
+
+Get chronological list of sessions with dates and sizes:
+
+```bash
+tree -D -t -h ~/.claude/projects/-Users-palimondo-Developer-BookMinder
+```
+
+Output shows sessions sorted by modification time with size:
+```
+[1.6M Oct 22 01:27]  760a9954-...jsonl
+[4.1M Aug  2 22:27]  e5837401-...jsonl
+[2.9M Aug  1 23:06]  1e835dcf-...jsonl
+```
+
+**Session ID abbreviation**: All session files have unique 4-char prefixes:
+- `84db` → `84db4cae-3072-4403-ab85-598cce191a41.jsonl`
+- `e583` → `e5837401-4f84-46e0-932f-eead7c00c678.jsonl`
+
+Use abbreviated IDs with xs: `xs e583 -t +50`
+
 ---
 
 ## Requirements Gathering: Six-Pass Process

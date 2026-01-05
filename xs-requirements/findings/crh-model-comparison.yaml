@@ -1,0 +1,173 @@
+# Context Recovery Research - Model Comparison
+# Task: Search session e583 for context recovery requirements
+# Date: 2026-01-05
+
+test_methodology:
+  identical_prompt: true
+  target_session: e583 (4.1M, Aug 2, 2025)
+  search_terms: [compaction, recovery, context, hook, compact]
+
+models_tested:
+  - haiku
+  - sonnet
+  - opus
+
+# ============================================================
+# MODEL COMPARISON
+# ============================================================
+
+haiku:
+  agent_id: a6f5d58
+  commands_executed: 8
+  findings_count: 7
+  xs_usage_correctness:
+    avoided_S_with_t: true
+    used_full_for_extraction: true
+    used_native_ranges: true
+    reported_command_history: true
+  quality_assessment: |
+    Good efficiency. Followed all xs usage rules correctly.
+    Less comprehensive than larger models but adequate for extraction.
+
+sonnet:
+  agent_id: a151421
+  commands_executed: 10
+  findings_count: 12
+  xs_usage_correctness:
+    avoided_S_with_t: true
+    used_full_for_extraction: true
+    used_native_ranges: true
+    reported_command_history: true
+  quality_assessment: |
+    Most structured output. Clear YAML format.
+    Identified coverage gaps explicitly.
+    Good balance of thoroughness and efficiency.
+
+opus:
+  agent_id: aa6888c
+  commands_executed: 19
+  findings_count: 11
+  xs_usage_correctness:
+    avoided_S_with_t: true
+    used_full_for_extraction: true
+    used_native_ranges: true
+    reported_command_history: true
+  quality_assessment: |
+    Most thorough searching (19 commands).
+    Excellent citations with event numbers.
+    Comprehensive theming of findings.
+    Most detailed quotes.
+
+# ============================================================
+# CONSOLIDATED FINDINGS FOR CRH-* STORIES
+# ============================================================
+
+findings:
+  # Core requirement: Why context recovery is needed
+  - id: CRH-F001
+    event: 58
+    quote: "We are building this tool to enhance your and mine abilities to reason over a long running project. The frustration that I often run into is that your limited context length and lack of long-term memory force me to repeat and re-state things"
+    type: design_rationale
+    source: opus
+    applies_to: [CRH-001, theme:compaction-recovery]
+
+  # Task delegation as context preservation mechanism
+  - id: CRH-F002
+    event: 61
+    quote: "You do have your native Task tool, which delegates work to sub-agent to preserve your own context. We should probably try testing it on you to retrieve the context."
+    type: user_request
+    source: opus
+    applies_to: [CRH-002, CRH-003]
+
+  # Critical failure mode
+  - id: CRH-F003
+    event: 585
+    quote: "I'm noticing a repeated failure mode, where after a forced compaction (we ran out of context) the model picks up a first Todo item from our list and just runs away with implementation"
+    type: user_correction
+    source: all_three
+    applies_to: [CRH-001, CRH-007]
+
+  # Task delegation strategy
+  - id: CRH-F004
+    event: 591
+    quote: "Task is as smart as you, just with a fresh context, it will do the hard work of sifting through the sand and hand you the golden nuggets if you prompt it right"
+    type: design_rationale
+    source: haiku, sonnet, opus
+    applies_to: [CRH-002, CRH-003]
+
+  # Less prescriptive prompting
+  - id: CRH-F005
+    event: 687
+    quote: "ask the Task again, but this time don't suggest any specific searches to perform, ask it to first scan the timeline"
+    type: user_correction
+    source: sonnet, opus
+    applies_to: [CRH-003]
+
+  # Hook-based detection
+  - id: CRH-F006
+    event: 1063
+    quote: "We should try to prepare a hook that would detect the automatic compaction message and would trigger our context recovery prompt"
+    type: user_request
+    source: all_three
+    applies_to: [CRH-004, CRH-005]
+
+  # Two-hook architecture
+  - id: CRH-F007
+    event: 1396-1403
+    quote: "there is PreCompact event hook. But we want to run after it completes...need two-hook system"
+    type: design_rationale
+    source: haiku, sonnet
+    applies_to: [CRH-004, CRH-005, CRH-006]
+
+  # Todo state recovery
+  - id: CRH-F008
+    event: 1367
+    quote: "check the state of Todos. That might be helpful for the context recovery sub-agent"
+    type: user_request
+    source: all_three
+    applies_to: [CRH-003, CRH-006]
+
+  # Citation format
+  - id: CRH-F009
+    event: 281
+    quote: "Regarding reporting context back, I was thinking about citation format, that should be used if it finds specific information, so that you can look up the specific conversation events"
+    type: user_request
+    source: opus
+    applies_to: [CRH-003]
+
+  # Session identifier feature request
+  - id: CRH-F010
+    event: 591
+    quote: "xs could offer virtual session identifier like `now`, `this`, or `latest`"
+    type: user_request
+    source: sonnet, opus
+    applies_to: [CLI-*]  # Future CLI feature
+
+# ============================================================
+# VALIDATION CONCLUSIONS
+# ============================================================
+
+xs_usage_validation:
+  all_models_followed_rules: true
+  critical_bugs_avoided:
+    - BUG-002 (S with t): All models correctly used -S without -t
+  native_features_used:
+    - Range syntax for full extraction (N --full)
+    - Search with context (-S "term" -C 2)
+    - No pipe chaining to head/tail/grep
+
+model_recommendation: |
+  All three models successfully completed the task.
+  - Haiku: Adequate for focused extraction tasks
+  - Sonnet: Best balance of structure and thoroughness
+  - Opus: Most comprehensive but may be overkill for simple tasks
+
+  Recommendation: Use Haiku for mining with clear search terms.
+  Use Sonnet for ambiguous or complex extraction.
+  Reserve Opus for synthesis and cross-referencing.
+
+coverage_gaps_identified:
+  - Exact JSONL field for detecting compaction (isCompactSummary mentioned)
+  - Hook debugging mechanism
+  - Whether hooks run in Task subagents
+  - Automatic vs manual trigger decision

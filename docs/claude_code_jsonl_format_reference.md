@@ -43,7 +43,8 @@ Every JSONL line shares these base fields:
 | `uuid` | Yes | Unique message identifier |
 | `parentUuid` | Yes | null for first message, links conversation |
 | `timestamp` | Yes | ISO 8601 with milliseconds |
-| `type` | Yes | `"user"`, `"assistant"`, `"summary"`, `"file-history-snapshot"` |
+| `type` | Yes | `"user"`, `"assistant"`, `"summary"`, `"file-history-snapshot"`, `"system"`, `"queue-operation"` |
+| `slug` | No | Human-readable session name (e.g., "curious-hatching-cherny") |
 | `sessionId` | Yes | Matches filename |
 | `version` | No | Claude Code version (e.g., "1.0.58", "2.0.76") |
 | `cwd` | No | Working directory |
@@ -115,7 +116,16 @@ Content can be string OR array of content blocks (for tool results).
     "bytes": 293809,
     "code": 200,
     "result": "...",
-    "durationMs": 3079
+    "durationMs": 3079,
+    "interrupted": false,       // Was tool execution interrupted?
+    "isImage": false,           // Is result an image?
+    "stdout": "...",            // For Bash: stdout content
+    "stderr": "...",            // For Bash: stderr content
+    // For Task tool:
+    "status": "completed",
+    "prompt": "...",
+    "agentId": "a58bce3",
+    "content": [...]
   }
 }
 ```
@@ -133,6 +143,49 @@ Content can be string OR array of content blocks (for tool results).
 ```json
 {"type": "thinking", "thinking": "Let me analyze..."}
 ```
+
+### System Entry
+```json
+{
+  "type": "system",
+  "subtype": "stop_hook_summary",
+  "hookCount": 1,
+  "hookInfos": [{"command": "/path/to/hook.sh"}],
+  "hookErrors": [],
+  "preventedContinuation": false,
+  "stopReason": "",
+  "hasOutput": false,
+  "level": "suggestion",
+  "toolUseID": "uuid-here"
+}
+```
+
+### Queue Operation Entry
+```json
+{
+  "type": "queue-operation",
+  "operation": "dequeue",
+  "timestamp": "2026-01-04T13:34:31.250Z",
+  "sessionId": "session-uuid"
+}
+```
+
+### Meta/Caveat Message (isMeta flag)
+```json
+{
+  "type": "user",
+  "isMeta": true,
+  "sourceToolUseID": "toolu_01XYZ",
+  "message": {"role": "user", "content": "Caveat: ..."}
+}
+```
+
+### User Interruption
+When user interrupts a response, the message content is:
+```json
+{"type": "user", "message": {"content": [{"type": "text", "text": "[Request interrupted by user]"}]}}
+```
+**Note**: User-provided reason for interruption is NOT captured in the JSONL (BUG-004).
 
 ## Content Block Types
 

@@ -1,0 +1,42 @@
+# Story: Display user's interruption reason
+
+id: FMT-021
+title: Display user interruption reason in timeline
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session history
+i_want: to see the user's reason for interrupting a response
+so_that: I understand why Claude was stopped mid-response
+
+sources:
+  - file: xs-requirements/bugs/BUG-004-interrupted-reason.md
+    context: "Currently only shows '[Request interrupted by user]'"
+
+acceptance_criteria:
+  - id: FMT-021-AC1
+    given: user interruption with reason provided
+    when: reason is captured in JSONL (future Claude Code feature)
+    then: display reason text after "[Request interrupted by user]"
+
+  - id: FMT-021-AC2
+    given: user interruption without reason
+    when: no reason in JSONL
+    then: display only "[Request interrupted by user]"
+
+current_behavior: |
+  Claude Code does not capture the user's interruption reason in JSONL.
+  The text "[Request interrupted by user]" is stored but not the reason.
+  This story is contingent on Claude Code adding this data.
+
+workaround: |
+  Look at the NEXT user message after an interruption - it typically
+  contains the correction or reason for interrupting.
+
+depends_on: []
+related:
+  - PRS-009  # User interruption detection
+
+priority: could
+status: draft
+validation_notes: "Blocked on Claude Code adding reason to JSONL"

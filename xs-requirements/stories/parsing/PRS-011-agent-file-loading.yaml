@@ -1,0 +1,66 @@
+# Story: Parse agent-*.jsonl subagent transcript files
+
+id: PRS-011
+title: Load and parse agent transcript files
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer exploring session history
+i_want: xs to parse agent-*.jsonl subagent transcript files
+so_that: I can search and view subagent activity
+
+sources:
+  - file: xs-requirements/bugs/BUG-003-no-agent-files.md
+    context: "xs currently only supports main session files"
+  - file: docs/claude_code_jsonl_format_reference.md
+    section: "Subagent and Sidechain Behavior"
+
+acceptance_criteria:
+  - id: PRS-011-AC1
+    given: session with associated agent-*.jsonl files
+    when: exploring the session
+    then: agent files are automatically discovered and loaded
+
+  - id: PRS-011-AC2
+    given: agent-*.jsonl file path directly
+    when: passed to xs
+    then: agent transcript is parsed and displayed
+
+  - id: PRS-011-AC3
+    given: search across session
+    when: using -S flag
+    then: search includes content from agent files
+
+  - id: PRS-011-AC4
+    given: agent transcript
+    when: displayed in timeline
+    then: agent entries are marked with agentId
+
+current_behavior: |
+  xs only parses main session JSONL files (UUID-based names).
+  Agent files (agent-{agentId}.jsonl) are not discovered or parsed.
+  This is a Claude Code 2.x feature gap.
+
+file_patterns:
+  - "agent-{7-char-id}.jsonl" - Subagent transcript files
+  - "UUID.jsonl" - Main session files (currently supported)
+
+agent_file_fields:
+  - agentId: identifies the subagent type
+  - slug: session slug (shared with main session)
+
+discovery_method: |
+  Agent files can be discovered by:
+  1. Scanning directory for agent-*.jsonl pattern
+  2. Matching sessionId field to main session
+  3. Following agent_transcript_path field (v2.0.28+)
+
+depends_on:
+  - PRS-001  # Basic JSONL loading
+related:
+  - SID-001  # Display sidechain events
+  - SID-002  # Search includes sidechain content
+
+priority: should
+status: draft
+validation_notes: "Required for sidechain stories to work"

@@ -1,9 +1,10 @@
 # xs Requirements Recovery Tracker
 
 meta:
-  last_updated: 2026-01-05T11:00:00Z
+  last_updated: 2026-01-05T14:00:00Z
   current_pass: 2_story_mining
   current_epic: null
+  pre_pass2_validation: complete
 
 passes:
   1_structure_bootstrap:
@@ -14,7 +15,7 @@ passes:
     note: "Validation found 38 additional stories; added 4 new epics"
 
   2_story_mining:
-    status: pending
+    status: pending  # Unblocked - subagent validation complete
     epics:
       jsonl-parsing: pending
       console-formatting: pending
@@ -45,18 +46,22 @@ counts:
   themes: 4
   epics: 12
   stories:
-    total: 88
-    draft: 88
+    total: 90
+    draft: 90
     mined: 0
     reviewed: 0
     validated: 0
   conflicts:
     pending: 0
     resolved: 0
-  bugs_found:
-    total: 2
-    with_workaround: 2
-    need_story: 1  # SRC-005 added
+  bugs_documented:
+    total: 4
+    with_workaround: 4
+    files:
+      - bugs/BUG-001-search-pattern-dash.md
+      - bugs/BUG-002-search-timeline-ignored.md
+      - bugs/BUG-003-no-agent-files.md
+      - bugs/BUG-004-interrupted-reason.md
 
 sources_cataloged:
   cli_help: true
@@ -76,10 +81,21 @@ sources_cataloged:
     - precompact_flag_hook.py (analyzed for CRH-* stories)
     - pretooluse_context_recovery_hook.py (analyzed for CRH-* stories)
 
+subagent_validation:
+  date: 2026-01-05
+  session_tested: e583
+  models_validated: [haiku, sonnet, opus]
+  xs_usage_compliance: 100%  # All models avoided BUG-002, used --full
+  findings_file: findings/crh-model-comparison.yaml
+  recommendation: |
+    Use Haiku for focused mining tasks.
+    Use Sonnet for complex extraction.
+    Reserve Opus for synthesis.
+
 next_action: |
   Begin Pass 2: Story Mining. Start with jsonl-parsing epic.
   Spawn Haiku subagents to search day logs and sessions.
-  Note: fetch and context epics already have acceptance criteria
-  from Phase 4 analysis - may need less mining.
+  Reference xs-usage-best-practices.md for agent prompts.
+  Note: context epic already has findings from validation test.
 
 blockers: []
