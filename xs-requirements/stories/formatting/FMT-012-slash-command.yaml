@@ -1,0 +1,22 @@
+# Story: Slash Command Display Format
+
+id: FMT-012
+title: Format slash commands distinctively
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: slash commands displayed with their characteristic format
+so_that: I can identify user-invoked commands
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-007
+related: []
+
+priority: should
+status: draft
+validation_notes: null

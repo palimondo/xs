@@ -21,7 +21,24 @@ key_capabilities:
   - Download and parse sessions from workflow logs
   - Handle structured filenames with metadata
 
+integration_status: |
+  Currently: fetch_logs.py is a separate prerequisite tool in BookMinder.
+  It fetches JSONL from GitHub Actions before xs can explore them.
+
+  Future potential: Could integrate as `xs fetch` subcommand,
+  making xs a complete solution for GitHub-based session recovery.
+
 related_tools:
-  - fetch_logs.py (separate tool, not part of xs core)
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    description: Separate tool for fetching workflow logs (440 lines)
+    capabilities:
+      - Fetch from claude.yml and claude-code-review.yml workflows
+      - Extract JSONL via AWK parsing
+      - Set file timestamps from session times
+      - Deduplicate already-fetched runs
+
+related_epic: fetch
+related_stories:
+  - GFH-001 through GFH-008 (8 stories derived from fetch_logs.py analysis)
 
 status: draft

@@ -1,0 +1,24 @@
+# Story: Conversation Mode and Exclude Interaction
+
+id: FLT-012
+title: Handle -M -x Tool interaction correctly
+epic: filtering
+theme: local-exploration
+
+as_a: developer filtering to conversation mode
+i_want: -M combined with -x Tool to work correctly
+so_that: I can exclude tools while keeping messages
+
+sources: []  # To be mined in Pass 2 - conversation_mode_bug_spec.py
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FLT-006
+  - FLT-002
+related:
+  - FLT-011
+
+priority: must
+status: draft
+validation_notes: "Known bug - spec exists in conversation_mode_bug_spec.py"

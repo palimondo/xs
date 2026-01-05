@@ -1,0 +1,23 @@
+# Story: Thinking Block Display in Truncated Mode
+
+id: FMT-011
+title: Display thinking blocks in truncated mode
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: thinking blocks shown appropriately in truncated mode
+so_that: I can see when Claude was thinking without verbose output
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FMT-006
+  - DSP-002
+related: []
+
+priority: should
+status: draft
+validation_notes: null

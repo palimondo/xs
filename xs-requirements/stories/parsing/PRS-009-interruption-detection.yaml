@@ -1,0 +1,22 @@
+# Story: User Interruption Detection
+
+id: PRS-009
+title: Detect user interruptions in session
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer exploring sessions
+i_want: user interruptions detected
+so_that: I can see where work was interrupted
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related: []
+
+priority: could
+status: draft
+validation_notes: null

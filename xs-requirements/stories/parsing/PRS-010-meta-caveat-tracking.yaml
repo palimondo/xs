@@ -1,0 +1,23 @@
+# Story: isMeta and Caveat Message Tracking
+
+id: PRS-010
+title: Track isMeta and caveat message flags
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer exploring sessions
+i_want: isMeta and caveat flags tracked
+so_that: system messages can be formatted differently
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related:
+  - FMT-019
+
+priority: should
+status: draft
+validation_notes: null

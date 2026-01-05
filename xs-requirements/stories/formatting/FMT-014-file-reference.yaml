@@ -1,0 +1,22 @@
+# Story: File Reference Display
+
+id: FMT-014
+title: Display file references with @ prefix
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: file references shown with @ prefix
+so_that: I can see which files were referenced
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on: []
+related:
+  - FMT-001
+
+priority: should
+status: draft
+validation_notes: null

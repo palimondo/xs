@@ -1,0 +1,22 @@
+# Story: Sequence Number Display Logic
+
+id: FMT-017
+title: Display sequence numbers appropriately
+epic: console-formatting
+theme: console-replay
+
+as_a: developer exploring sessions
+i_want: sequence numbers displayed with clear logic
+so_that: I can reference specific events
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - DSP-004
+related: []
+
+priority: must
+status: draft
+validation_notes: null

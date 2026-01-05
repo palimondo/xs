@@ -31,9 +31,39 @@ key_capabilities:
 workflow:
   trigger: Compaction occurs (automatic or /compact)
   steps:
-    - Hook triggers xs
-    - xs finds compaction point in transcript
-    - xs extracts critical context
-    - Context fed back to Claude Code
+    - PreCompact hook writes flag file
+    - PreToolUse hook detects flag on first tool use
+    - Hook blocks tool and injects recovery prompt
+    - Prompt includes xs commands for context recovery
+    - User or Claude uses xs to recover context
+    - Flag deleted to prevent repeated triggers
+
+integration_status: |
+  Hooks are BookMinder infrastructure (WIP, not fully tested).
+  xs provides the data access operations; hooks orchestrate the flow.
+
+  The context_recovery_pattern.md documents the methodology:
+  - Find compaction summary via search
+  - Read full context at compaction point
+  - Check last todo state
+  - Focus on WHY behind decisions
+
+related_tools:
+  - file: ~/Developer/BookMinder/.claude/hooks/precompact_flag_hook.py
+    description: Sets flag when compaction is imminent
+  - file: ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
+    description: Detects flag and injects recovery prompt
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/context_recovery_pattern.md
+    description: Methodology for effective context recovery
+
+related_epic: context
+related_stories:
+  - CRH-001 through CRH-007 (7 stories derived from hook analysis)
+
+test_findings: |
+  Session 84db provided unplanned real-world test:
+  - Exploratory recovery (hook pattern) vs targeted recovery compared
+  - Pending questions need fresh responses after compaction
+  - Plan files prevent needing full context recovery
 
 status: draft

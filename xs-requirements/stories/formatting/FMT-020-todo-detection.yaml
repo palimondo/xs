@@ -1,0 +1,22 @@
+# Story: Todo Detection and Formatting
+
+id: FMT-020
+title: Detect and format todo-related content
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: TodoWrite tool calls formatted distinctively
+so_that: I can quickly identify task management
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FMT-010
+related: []
+
+priority: should
+status: draft
+validation_notes: null

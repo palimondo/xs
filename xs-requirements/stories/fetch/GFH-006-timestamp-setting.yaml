@@ -1,0 +1,39 @@
+# Story: File Timestamp Setting
+
+id: GFH-006
+title: Set file timestamps to session times
+epic: fetch
+theme: github-fetch
+
+as_a: developer organizing fetched sessions
+i_want: file timestamps reflecting actual session times
+so_that: files sort by when sessions occurred
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: set_file_timestamps
+    lines: 259-294
+
+acceptance_criteria:
+  - id: GFH-006-AC1
+    given: start and end timestamps from extraction
+    when: setting timestamps
+    then: access time = start, modification time = end
+
+  - id: GFH-006-AC2
+    given: macOS platform
+    when: setting timestamps
+    then: uses SetFile for creation time if available
+
+  - id: GFH-006-AC3
+    given: successful timestamp setting
+    when: complete
+    then: logs session duration
+
+depends_on:
+  - GFH-003
+related: []
+
+priority: should
+status: draft
+validation_notes: "Platform-specific: macOS uses SetFile for creation time"

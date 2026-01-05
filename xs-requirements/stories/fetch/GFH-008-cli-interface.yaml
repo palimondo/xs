@@ -1,0 +1,39 @@
+# Story: Fetch CLI Interface
+
+id: GFH-008
+title: Command-line interface for fetch
+epic: fetch
+theme: github-fetch
+
+as_a: developer running fetch
+i_want: clear CLI with useful options
+so_that: I can control fetch behavior
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: main
+    lines: 360-386
+
+acceptance_criteria:
+  - id: GFH-008-AC1
+    given: CLI invocation
+    when: using --limit N
+    then: fetches up to N recent runs (default: 20)
+
+  - id: GFH-008-AC2
+    given: CLI invocation
+    when: using --run-id ID
+    then: fetches only the specific run
+
+  - id: GFH-008-AC3
+    given: CLI invocation
+    when: using --save-raw-logs
+    then: saves raw logs for failed extractions
+
+depends_on: []
+related:
+  - GFH-001
+
+priority: must
+status: draft
+validation_notes: null

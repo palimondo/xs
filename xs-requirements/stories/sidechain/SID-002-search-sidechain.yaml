@@ -1,0 +1,23 @@
+# Story: Search Includes Sidechain Content
+
+id: SID-002
+title: Search includes sidechain content
+epic: sidechain-handling
+theme: local-exploration
+
+as_a: developer searching session content
+i_want: searches to include sidechain event content
+so_that: I can find information from delegated work
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SID-001
+  - SRC-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

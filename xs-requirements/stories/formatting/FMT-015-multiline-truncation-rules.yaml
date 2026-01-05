@@ -1,0 +1,23 @@
+# Story: Multi-line Truncation Rules
+
+id: FMT-015
+title: Apply consistent multi-line truncation rules
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: consistent truncation rules for multi-line content
+so_that: output is readable and predictable
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - FMT-008
+related:
+  - DSP-002
+
+priority: must
+status: draft
+validation_notes: null

@@ -1,0 +1,39 @@
+# Epic: GitHub Fetch Integration
+
+id: fetch
+name: GitHub Workflow Log Fetching
+themes: [github-fetch]
+
+description: |
+  Fetch Claude Code session transcripts from GitHub Actions workflow logs.
+  Currently implemented as separate fetch_logs.py tool in BookMinder.
+  Potential future integration as xs subcommand (xs fetch).
+
+cli_flags: []  # Not yet integrated into xs CLI
+
+design_doc_refs:
+  - ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+
+spec_files: []  # No specs yet; characterize from implementation
+
+capabilities:
+  - Fetch workflow runs from GitHub Actions
+  - Extract JSONL from Claude execution logs
+  - Set file timestamps from session times
+  - Deduplicate already-fetched runs
+  - Parse metadata (issue/PR number, session ID)
+
+story_areas:
+  - Workflow run listing
+  - Log fetching via gh CLI
+  - JSONL extraction (AWK parsing)
+  - Metadata extraction (issue/PR, timestamps)
+  - Deduplication logic
+  - Timestamp setting
+
+search_methodology: |
+  Analyze fetch_logs.py implementation directly.
+  Stories derived from actual implementation behavior,
+  not speculated future features.
+
+status: draft

@@ -1,0 +1,43 @@
+# Epic: Context Recovery
+
+id: context
+name: Context Recovery Post-Compaction
+themes: [compaction-recovery]
+
+description: |
+  Support automated context recovery after compaction events.
+  Hooks in BookMinder detect compaction and invoke xs operations.
+  xs provides the data access; hooks orchestrate the recovery flow.
+
+cli_flags:
+  - "-S" (search for compaction markers)
+  - "-i TodoWrite" (find last todo state)
+  - "--full" (read complete context)
+
+design_doc_refs:
+  - ~/Developer/BookMinder/claude-dev-log-diary/tools/context_recovery_pattern.md
+  - ~/Developer/BookMinder/.claude/hooks/precompact_flag_hook.py
+  - ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
+  - compaction_recovery_hooks_setup.md
+
+spec_files: []  # Hooks are in BookMinder, not xs
+
+capabilities:
+  - Find compaction summaries via search
+  - Retrieve full compaction context
+  - Locate last todo state
+  - Support targeted event range queries
+
+story_areas:
+  - Compaction detection patterns
+  - Flag file mechanism
+  - Tool blocking for recovery
+  - Recovery prompt generation
+  - xs operations for recovery
+
+search_methodology: |
+  Analyze compaction hooks implementation directly.
+  Reference context_recovery_pattern.md methodology.
+  Stories derived from actual hook behavior.
+
+status: draft

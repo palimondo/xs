@@ -1,0 +1,22 @@
+# Story: MCP Tool Grouping in Summary
+
+id: SUM-002
+title: Group MCP tools in summary display
+epic: summary
+theme: local-exploration
+
+as_a: developer reviewing a session
+i_want: MCP tools grouped separately in summary
+so_that: I can distinguish MCP from built-in tools
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SUM-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

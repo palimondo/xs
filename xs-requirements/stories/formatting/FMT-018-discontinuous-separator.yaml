@@ -1,0 +1,22 @@
+# Story: Discontinuous Section Separator
+
+id: FMT-018
+title: Show -- separator for discontinuous sections
+epic: console-formatting
+theme: console-replay
+
+as_a: developer viewing filtered output
+i_want: discontinuous sections separated by --
+so_that: I can see where content was filtered out
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - DSP-005
+related: []
+
+priority: should
+status: draft
+validation_notes: null

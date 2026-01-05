@@ -1,0 +1,35 @@
+# Story: Output File Naming Convention
+
+id: GFH-007
+title: Name output files with structured convention
+epic: fetch
+theme: github-fetch
+
+as_a: developer organizing fetched sessions
+i_want: consistent file naming with metadata
+so_that: I can identify sessions by name
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: save_workflow_data
+    lines: 341-343
+
+acceptance_criteria:
+  - id: GFH-007-AC1
+    given: extracted metadata
+    when: naming file
+    then: format is {date}-{time}-{type}-{number}_run-{id}_session-{uuid}.jsonl
+
+  - id: GFH-007-AC2
+    given: date_str and time_str from extraction
+    when: naming file
+    then: date is YYYYMMDD, time is HHMM
+
+depends_on:
+  - GFH-003
+  - GFH-004
+related: []
+
+priority: should
+status: draft
+validation_notes: null

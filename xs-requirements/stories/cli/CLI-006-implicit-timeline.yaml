@@ -1,0 +1,22 @@
+# Story: Implicit Timeline Behavior
+
+id: CLI-006
+title: Implicit timeline mode activation
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer using xs
+i_want: timeline mode activated implicitly by certain flags
+so_that: I don't need to specify -t explicitly
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - CLI-002
+related: []
+
+priority: should
+status: draft
+validation_notes: null

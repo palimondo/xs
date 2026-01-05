@@ -1,0 +1,41 @@
+# Epic: Summary Mode
+
+id: summary
+name: Summary Mode Display
+themes: [local-exploration]
+
+description: |
+  Default display mode showing session statistics.
+  Aggregates tool usage, message counts, and notable events
+  without showing individual entries.
+
+cli_flags: []  # Default mode when no -t flag
+
+design_doc_refs:
+  - explore_session.py (generate_summary method)
+
+spec_files:
+  - summary_mode_spec.py (if exists)
+
+capabilities:
+  - Session statistics (message counts, duration)
+  - Tool usage aggregation
+  - MCP tool grouping
+  - Git commit detection
+  - Error/warning summaries
+
+story_areas:
+  - Summary statistics generation
+  - MCP tool grouping logic
+  - Git commit detection in summary
+  - Tool usage breakdown
+
+search_methodology: |
+  Search day logs for:
+  - "summary", "statistics"
+  - "MCP", "tool group"
+  - "git commit"
+
+  Analyze generate_summary method in explore_session.py.
+
+status: draft

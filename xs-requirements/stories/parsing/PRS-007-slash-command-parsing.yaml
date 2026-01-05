@@ -1,0 +1,23 @@
+# Story: Slash Command Parsing
+
+id: PRS-007
+title: Parse slash commands from XML tags
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer exploring sessions
+i_want: slash commands parsed from XML structure
+so_that: they can be displayed distinctively
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related:
+  - FMT-012
+
+priority: should
+status: draft
+validation_notes: null

@@ -1,0 +1,40 @@
+# Story: Issue/PR Metadata Extraction
+
+id: GFH-004
+title: Extract issue or PR number from log XML
+epic: fetch
+theme: github-fetch
+
+as_a: developer fetching session logs
+i_want: issue/PR metadata extracted from logs
+so_that: files are named with context (issue-123 or pr-456)
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: extract_issue_or_pr_from_log
+    lines: 83-104
+
+acceptance_criteria:
+  - id: GFH-004-AC1
+    given: log with <is_pr>true</is_pr>
+    when: extracting metadata
+    then: returns ('pr', number) from <pr_number> tag
+
+  - id: GFH-004-AC2
+    given: log with <is_pr>false</is_pr> or no is_pr tag
+    when: extracting metadata
+    then: returns ('issue', number) from <issue_number> tag
+
+  - id: GFH-004-AC3
+    given: log without recognizable tags
+    when: extracting metadata
+    then: returns (None, None)
+
+depends_on:
+  - GFH-002
+related:
+  - GFH-006
+
+priority: should
+status: draft
+validation_notes: null

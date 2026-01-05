@@ -1,0 +1,23 @@
+# Story: Summary Mode Statistics
+
+id: SUM-001
+title: Summary mode shows session statistics
+epic: summary
+theme: local-exploration
+
+as_a: developer reviewing a session
+i_want: to see session statistics in summary mode
+so_that: I get a quick overview without reading entries
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - CLI-001
+
+priority: must
+status: draft
+validation_notes: null

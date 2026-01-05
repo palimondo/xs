@@ -1,0 +1,23 @@
+# Story: Git Commit Detection in Summary
+
+id: SUM-003
+title: Detect and show git commits in summary
+epic: summary
+theme: local-exploration
+
+as_a: developer reviewing a session
+i_want: git commits detected and shown in summary
+so_that: I can see what was committed during the session
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SUM-001
+related:
+  - CLI-003
+
+priority: should
+status: draft
+validation_notes: null

@@ -1,0 +1,38 @@
+# Epic: Sidechain Handling
+
+id: sidechain-handling
+name: Sidechain Event Handling
+themes: [local-exploration]
+
+description: |
+  Handle sidechain events from Task subagent sessions.
+  Events with isSidechain: true come from delegated work
+  and need special treatment in timeline, search, and filtering.
+
+cli_flags: []  # No dedicated flags yet; affects -t, -S behavior
+
+design_doc_refs:
+  - sidechain_visibility_spec.py (characterization)
+
+spec_files:
+  - sidechain_visibility_spec.py
+
+capabilities:
+  - Display sidechain events in timeline
+  - Include sidechain content in search
+  - (Future) Filter sidechain events with dedicated flag
+
+story_areas:
+  - Display sidechain events in timeline
+  - Search includes sidechain content
+  - Filter sidechain events
+
+search_methodology: |
+  Search day logs for:
+  - "sidechain", "isSidechain"
+  - "Task", "subagent"
+  - "delegated", "spawned"
+
+  Search sessions for Task tool_use patterns.
+
+status: draft

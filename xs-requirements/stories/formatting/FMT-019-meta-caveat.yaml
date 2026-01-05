@@ -1,0 +1,22 @@
+# Story: Meta/Caveat Message Handling
+
+id: FMT-019
+title: Handle isMeta and caveat messages
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: meta and caveat messages handled appropriately
+so_that: system messages are distinguishable
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-010
+related: []
+
+priority: should
+status: draft
+validation_notes: null

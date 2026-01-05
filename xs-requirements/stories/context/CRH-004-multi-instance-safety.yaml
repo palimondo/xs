@@ -1,0 +1,40 @@
+# Story: Multi-Instance Safety
+
+id: CRH-004
+title: Handle multiple Claude instances safely
+epic: context
+theme: compaction-recovery
+
+as_a: developer running multiple sessions
+i_want: flag files scoped to sessions
+so_that: each session recovers independently
+
+sources:
+  - file: ~/Developer/BookMinder/.claude/hooks/precompact_flag_hook.py
+    function: get_flag_file
+    lines: 9-11
+
+acceptance_criteria:
+  - id: CRH-004-AC1
+    given: flag file naming
+    when: creating flag
+    then: includes session_id[:8] in filename
+
+  - id: CRH-004-AC2
+    given: multiple concurrent sessions
+    when: one compacts
+    then: only that session's flag is created
+
+  - id: CRH-004-AC3
+    given: flag detection
+    when: processing first flag found
+    then: processes only one flag per hook invocation
+
+depends_on: []
+related:
+  - CRH-001
+  - CRH-002
+
+priority: should
+status: draft
+validation_notes: null

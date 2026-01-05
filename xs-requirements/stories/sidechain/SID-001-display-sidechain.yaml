@@ -1,0 +1,23 @@
+# Story: Display Sidechain Events in Timeline
+
+id: SID-001
+title: Display sidechain events in timeline
+epic: sidechain-handling
+theme: local-exploration
+
+as_a: developer exploring sessions with Task subagents
+i_want: sidechain events visible in timeline
+so_that: I can see what delegated work was performed
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-005
+related:
+  - SID-002
+
+priority: should
+status: draft
+validation_notes: null

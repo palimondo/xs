@@ -1,0 +1,39 @@
+# Story: Run Deduplication
+
+id: GFH-005
+title: Skip already-downloaded workflow runs
+epic: fetch
+theme: github-fetch
+
+as_a: developer running fetch regularly
+i_want: already-downloaded runs skipped
+so_that: I don't re-download existing data
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: get_existing_run_ids
+    lines: 241-256
+
+acceptance_criteria:
+  - id: GFH-005-AC1
+    given: github/ directory with existing JSONL files
+    when: listing runs
+    then: extracts run IDs from filenames
+
+  - id: GFH-005-AC2
+    given: filename pattern *_run-{run_id}_session-*.jsonl
+    when: parsing
+    then: correctly extracts run_id
+
+  - id: GFH-005-AC3
+    given: existing run IDs
+    when: fetching
+    then: skips runs already in set
+
+depends_on:
+  - GFH-001
+related: []
+
+priority: should
+status: draft
+validation_notes: null

@@ -1,0 +1,39 @@
+# Story: Compaction Flag Creation
+
+id: CRH-001
+title: Create flag file when compaction occurs
+epic: context
+theme: compaction-recovery
+
+as_a: developer using auto-accept mode
+i_want: a flag created when compaction occurs
+so_that: post-compaction recovery can be triggered
+
+sources:
+  - file: ~/Developer/BookMinder/.claude/hooks/precompact_flag_hook.py
+    lines: 1-36
+
+acceptance_criteria:
+  - id: CRH-001-AC1
+    given: PreCompact hook triggered
+    when: trigger is "auto" or "manual"
+    then: creates flag at /tmp/.claude_compaction_{session_id[:8]}.json
+
+  - id: CRH-001-AC2
+    given: flag file creation
+    when: writing flag
+    then: contains trigger type, session_id, timestamp
+
+  - id: CRH-001-AC3
+    given: any trigger condition
+    when: hook completes
+    then: exits cleanly (exit 0)
+
+depends_on: []
+related:
+  - CRH-002
+  - CRH-004
+
+priority: must
+status: draft
+validation_notes: null

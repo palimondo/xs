@@ -1,0 +1,22 @@
+# Story: Indentation Consistency
+
+id: FMT-016
+title: Use 2-space indentation consistently
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: consistent 2-space indentation
+so_that: output matches Claude Code console style
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on: []
+related:
+  - PRIN-001
+
+priority: must
+status: draft
+validation_notes: null

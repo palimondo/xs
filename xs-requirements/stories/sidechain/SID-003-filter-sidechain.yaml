@@ -1,0 +1,24 @@
+# Story: Filter Sidechain Events
+
+id: SID-003
+title: Filter sidechain events with dedicated flag
+epic: sidechain-handling
+theme: local-exploration
+
+as_a: developer exploring sessions
+i_want: to include or exclude sidechain events
+so_that: I can focus on main conversation or delegated work
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - SID-001
+related:
+  - FLT-001
+  - FLT-002
+
+priority: could
+status: draft
+validation_notes: "Future feature - not in current implementation"

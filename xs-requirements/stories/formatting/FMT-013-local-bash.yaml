@@ -1,0 +1,23 @@
+# Story: Local Bash Command Display
+
+id: FMT-013
+title: Display local bash commands with ! prefix
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: local bash commands shown with ! prefix
+so_that: I can distinguish user-executed commands from Claude's
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-008
+related:
+  - FMT-003
+
+priority: should
+status: draft
+validation_notes: null

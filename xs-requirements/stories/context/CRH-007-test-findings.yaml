@@ -1,0 +1,40 @@
+# Story: Context Recovery Test Findings
+
+id: CRH-007
+title: Apply lessons from real-world recovery test
+epic: context
+theme: compaction-recovery
+
+as_a: developer improving recovery system
+i_want: test findings incorporated
+so_that: recovery approach evolves with experience
+
+sources:
+  - file: ~/.claude/plans/curious-hatching-cherny.md
+    section: "CRH Test Findings"
+  - session: 84db
+    context: "Unplanned real-world test during Pass 1 completion"
+
+acceptance_criteria:
+  - id: CRH-007-AC1
+    given: pending vs answered questions
+    when: compaction occurs
+    then: recognize that unanswered questions need fresh responses
+
+  - id: CRH-007-AC2
+    given: recovery approach selection
+    when: choosing method
+    then: targeted recovery preferred for specific questions
+
+  - id: CRH-007-AC3
+    given: context preservation
+    when: working on tasks
+    then: plan files prevent needing full recovery
+
+depends_on:
+  - CRH-006
+related: []
+
+priority: could
+status: draft
+validation_notes: "Derived from session 84db auto-compaction at event 919"

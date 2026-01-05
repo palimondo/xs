@@ -1,0 +1,35 @@
+# Story: Workflow Log Fetching
+
+id: GFH-002
+title: Fetch logs for specific workflow run
+epic: fetch
+theme: github-fetch
+
+as_a: developer fetching session logs
+i_want: to download logs for a specific run
+so_that: I can extract session JSONL
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: get_workflow_logs
+    lines: 56-64
+
+acceptance_criteria:
+  - id: GFH-002-AC1
+    given: valid run ID
+    when: fetching logs
+    then: returns log content via `gh run view --log`
+
+  - id: GFH-002-AC2
+    given: expired or invalid run ID
+    when: fetching logs
+    then: returns empty string with warning
+
+depends_on:
+  - GFH-001
+related:
+  - GFH-003
+
+priority: must
+status: draft
+validation_notes: null

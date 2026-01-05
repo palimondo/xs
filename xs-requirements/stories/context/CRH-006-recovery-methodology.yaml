@@ -1,0 +1,43 @@
+# Story: Context Recovery Methodology
+
+id: CRH-006
+title: Deep context recovery methodology
+epic: context
+theme: compaction-recovery
+
+as_a: developer recovering context
+i_want: a structured methodology for recovery
+so_that: I extract meaningful context not just surface matches
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/context_recovery_pattern.md
+    lines: 1-121
+
+acceptance_criteria:
+  - id: CRH-006-AC1
+    given: recovery methodology
+    when: starting
+    then: scan timeline to understand session flow first
+
+  - id: CRH-006-AC2
+    given: recovery methodology
+    when: extracting context
+    then: focus on WHY behind decisions, not just WHAT
+
+  - id: CRH-006-AC3
+    given: recovery methodology
+    when: searching
+    then: avoid over-specification, let patterns emerge
+
+  - id: CRH-006-AC4
+    given: recovery methodology
+    when: using Task delegation
+    then: emphasize thinking between tool uses
+
+depends_on:
+  - CRH-005
+related: []
+
+priority: should
+status: draft
+validation_notes: "Documented from session 84db real-world test"

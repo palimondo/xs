@@ -1,0 +1,23 @@
+# Story: Bash Content Extraction from XML
+
+id: PRS-008
+title: Extract bash content from XML tags
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer exploring sessions
+i_want: bash commands extracted from XML structure
+so_that: local commands are identifiable
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - PRS-001
+related:
+  - FMT-013
+
+priority: should
+status: draft
+validation_notes: null

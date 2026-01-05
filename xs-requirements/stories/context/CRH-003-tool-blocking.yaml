@@ -1,0 +1,39 @@
+# Story: Tool Blocking with Recovery Prompt
+
+id: CRH-003
+title: Block tool use and inject recovery prompt
+epic: context
+theme: compaction-recovery
+
+as_a: developer after compaction
+i_want: tool blocked with recovery instructions
+so_that: I recover context before wrong work
+
+sources:
+  - file: ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
+    lines: 31-53
+
+acceptance_criteria:
+  - id: CRH-003-AC1
+    given: flag detected
+    when: generating response
+    then: returns {"decision": "block", "reason": context_prompt}
+
+  - id: CRH-003-AC2
+    given: context prompt
+    when: included
+    then: contains xs commands for recovery
+
+  - id: CRH-003-AC3
+    given: recovery prompt
+    when: displayed
+    then: includes session ID for xs commands
+
+depends_on:
+  - CRH-002
+related:
+  - CRH-005
+
+priority: must
+status: draft
+validation_notes: null

@@ -1,15 +1,17 @@
 # xs Requirements Recovery Tracker
 
 meta:
-  last_updated: 2026-01-04T22:25:50Z
-  current_pass: 1_structure_bootstrap
+  last_updated: 2026-01-05T11:00:00Z
+  current_pass: 2_story_mining
   current_epic: null
 
 passes:
   1_structure_bootstrap:
     status: complete
     started_at: 2026-01-04T22:17:33Z
-    completed_at: 2026-01-04T22:25:50Z
+    resumed_at: 2026-01-05T10:30:00Z
+    completed_at: 2026-01-05T11:00:00Z
+    note: "Validation found 38 additional stories; added 4 new epics"
 
   2_story_mining:
     status: pending
@@ -22,6 +24,10 @@ passes:
       cli-interface: pending
       search: pending
       export: pending
+      sidechain-handling: pending
+      fetch: pending
+      context: pending
+      summary: pending
 
   3_golden_files:
     status: pending
@@ -37,10 +43,10 @@ passes:
 
 counts:
   themes: 4
-  epics: 8
+  epics: 12
   stories:
-    total: 49
-    draft: 49
+    total: 87
+    draft: 87
     mined: 0
     reviewed: 0
     validated: 0
@@ -61,9 +67,15 @@ sources_cataloged:
     - compaction_recovery_hooks_setup.md
   spec_files: 18
   golden_files: 14
+  integration_sources:
+    - fetch_logs.py (analyzed for GFH-* stories)
+    - precompact_flag_hook.py (analyzed for CRH-* stories)
+    - pretooluse_context_recovery_hook.py (analyzed for CRH-* stories)
 
 next_action: |
   Begin Pass 2: Story Mining. Start with jsonl-parsing epic.
   Spawn Haiku subagents to search day logs and sessions.
+  Note: fetch and context epics already have acceptance criteria
+  from Phase 4 analysis - may need less mining.
 
 blockers: []

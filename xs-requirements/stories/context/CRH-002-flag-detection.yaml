@@ -1,0 +1,39 @@
+# Story: Compaction Flag Detection
+
+id: CRH-002
+title: Detect compaction flag on tool use
+epic: context
+theme: compaction-recovery
+
+as_a: developer after compaction
+i_want: flag detected before first tool use
+so_that: recovery is triggered immediately
+
+sources:
+  - file: ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
+    lines: 17-28
+
+acceptance_criteria:
+  - id: CRH-002-AC1
+    given: PreToolUse hook triggered
+    when: checking for flags
+    then: searches for /tmp/.claude_compaction_*.json pattern
+
+  - id: CRH-002-AC2
+    given: flag file found
+    when: processing
+    then: reads session_id from flag data
+
+  - id: CRH-002-AC3
+    given: flag file processed
+    when: complete
+    then: deletes flag to prevent repeated triggers
+
+depends_on:
+  - CRH-001
+related:
+  - CRH-003
+
+priority: must
+status: draft
+validation_notes: null

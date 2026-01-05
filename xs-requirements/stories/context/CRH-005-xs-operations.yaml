@@ -1,0 +1,47 @@
+# Story: xs Operations for Recovery
+
+id: CRH-005
+title: xs operations used by recovery prompt
+epic: context
+theme: compaction-recovery
+
+as_a: developer recovering context
+i_want: specific xs commands in recovery prompt
+so_that: I can find relevant context efficiently
+
+sources:
+  - file: ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
+    lines: 31-46
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/context_recovery_pattern.md
+    lines: 67-78
+
+acceptance_criteria:
+  - id: CRH-005-AC1
+    given: recovery prompt
+    when: searching for compaction
+    then: uses `xs session -S "This session is being continued"`
+
+  - id: CRH-005-AC2
+    given: recovery prompt
+    when: reading compaction summary
+    then: uses `xs session <event> --full`
+
+  - id: CRH-005-AC3
+    given: recovery prompt
+    when: checking todo state
+    then: uses `xs session -i TodoWrite`
+
+  - id: CRH-005-AC4
+    given: recovery prompt
+    when: searching decisions
+    then: uses `xs session -S "decision|approach|should"`
+
+depends_on:
+  - CRH-003
+related:
+  - SRC-001
+  - DSP-003
+
+priority: should
+status: draft
+validation_notes: null

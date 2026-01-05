@@ -1,0 +1,45 @@
+# Story: JSONL Extraction from Logs
+
+id: GFH-003
+title: Extract JSONL content from Claude execution logs
+epic: fetch
+theme: github-fetch
+
+as_a: developer fetching session logs
+i_want: JSONL extracted from raw workflow logs
+so_that: I have session files in standard format
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: extract_jsonl_from_logs
+    lines: 107-233
+
+acceptance_criteria:
+  - id: GFH-003-AC1
+    given: log with Claude execution output
+    when: extracting JSONL
+    then: uses AWK to parse log prefix format
+
+  - id: GFH-003-AC2
+    given: log content
+    when: parsing
+    then: identifies start by "Running Claude with prompt from file"
+
+  - id: GFH-003-AC3
+    given: log content
+    when: parsing
+    then: identifies end by "Log saved to...claude-execution-output.json"
+
+  - id: GFH-003-AC4
+    given: valid extraction
+    when: complete
+    then: returns jsonl_content, session_id, start_timestamp, end_timestamp
+
+depends_on:
+  - GFH-002
+related:
+  - GFH-005
+
+priority: must
+status: draft
+validation_notes: "Uses optimized AWK script for single-pass extraction"

@@ -13,16 +13,20 @@ This directory contains requirements recovered from session history for the xs t
 xs-requirements/
 ├── tracker.yaml          # Central status tracking
 ├── themes/               # 4 high-level use case themes
-├── epics/                # 8 functional area epics
-├── stories/              # 49 story stubs by epic
-│   ├── parsing/          # PRS-* (6 stories)
-│   ├── formatting/       # FMT-* (10 stories)
-│   ├── filtering/        # FLT-* (11 stories)
+├── epics/                # 12 functional area epics
+├── stories/              # 87 story stubs by epic
+│   ├── parsing/          # PRS-* (10 stories)
+│   ├── formatting/       # FMT-* (20 stories)
+│   ├── filtering/        # FLT-* (12 stories)
 │   ├── range/            # RNG-* (5 stories)
 │   ├── display/          # DSP-* (5 stories)
-│   ├── cli/              # CLI-* (5 stories)
+│   ├── cli/              # CLI-* (7 stories)
 │   ├── search/           # SRC-* (4 stories)
-│   └── export/           # EXP-* (3 stories)
+│   ├── export/           # EXP-* (3 stories)
+│   ├── sidechain/        # SID-* (3 stories)
+│   ├── summary/          # SUM-* (3 stories)
+│   ├── fetch/            # GFH-* (8 stories)
+│   └── context/          # CRH-* (7 stories)
 ├── principles/           # Cross-cutting concerns (Pass 4)
 ├── constraints/          # Tech stack constraints (Pass 4)
 ├── conflicts/            # Design conflicts (Pass 5)
@@ -45,14 +49,18 @@ xs-requirements/
 
 | ID | Name | Stories | Status |
 |----|------|---------|--------|
-| jsonl-parsing | JSONL Parsing and Session Loading | 6 | draft |
-| console-formatting | Console Output Formatting | 10 | draft |
-| filtering | Content Filtering | 11 | draft |
+| jsonl-parsing | JSONL Parsing and Session Loading | 10 | draft |
+| console-formatting | Console Output Formatting | 20 | draft |
+| filtering | Content Filtering | 12 | draft |
 | range-selection | Timeline Range Selection | 5 | draft |
 | display-modes | Display Modes | 5 | draft |
-| cli-interface | Command Line Interface | 5 | draft |
+| cli-interface | Command Line Interface | 7 | draft |
 | search | Full-Text Search | 4 | draft |
 | export | Export Formats | 3 | draft |
+| sidechain-handling | Sidechain Event Handling | 3 | draft |
+| summary | Summary Mode Display | 3 | draft |
+| fetch | GitHub Workflow Log Fetching | 8 | draft |
+| context | Context Recovery Post-Compaction | 7 | draft |
 
 ## Story Prefixes
 
@@ -66,6 +74,18 @@ xs-requirements/
 | CLI | cli-interface |
 | SRC | search |
 | EXP | export |
+| SID | sidechain-handling |
+| SUM | summary |
+| GFH | fetch (GitHub Fetch) |
+| CRH | context (Context Recovery Hooks) |
+
+## Pass 1 Completion Notes
+
+Pass 1 was validated and found gaps. Additional work included:
+- 4 new epics (sidechain-handling, fetch, context, summary)
+- 38 new stories (87 total, up from 49)
+- GFH-* and CRH-* stories derived from actual implementation analysis
+- Themes updated to reference integration points and stories
 
 ## Next Steps
 
@@ -73,6 +93,7 @@ xs-requirements/
    - Spawn Haiku subagents to search day logs and sessions
    - Synthesize findings into coherent stories
    - Checkpoint per epic for user validation
+   - Note: fetch and context epics already have acceptance criteria from implementation analysis
 
 2. **Pass 3: Golden Files** - Assemble test input/output pairs
 

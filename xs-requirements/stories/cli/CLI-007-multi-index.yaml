@@ -1,0 +1,23 @@
+# Story: Multi-Index Selection
+
+id: CLI-007
+title: Support multiple index selection
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer exploring sessions
+i_want: to select multiple specific indices
+so_that: I can view non-contiguous events
+
+sources: []  # To be mined in Pass 2
+
+acceptance_criteria: []  # To be mined in Pass 2
+
+depends_on:
+  - RNG-001
+related:
+  - RNG-004
+
+priority: could
+status: draft
+validation_notes: null

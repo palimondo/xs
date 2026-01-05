@@ -1,0 +1,39 @@
+# Story: Workflow Run Listing
+
+id: GFH-001
+title: List workflow runs from GitHub Actions
+epic: fetch
+theme: github-fetch
+
+as_a: developer fetching session logs
+i_want: to list recent workflow runs from Claude workflows
+so_that: I can identify which runs to download
+
+sources:
+  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
+    function: get_workflow_runs
+    lines: 32-53
+
+acceptance_criteria:
+  - id: GFH-001-AC1
+    given: GitHub repo with Claude workflows
+    when: listing runs with --limit N
+    then: returns up to N recent successful runs
+
+  - id: GFH-001-AC2
+    given: both claude.yml and claude-code-review.yml workflows
+    when: listing runs
+    then: combines runs from both workflows
+
+  - id: GFH-001-AC3
+    given: combined run list
+    when: sorting
+    then: sorts by createdAt descending
+
+depends_on: []
+related:
+  - GFH-002
+
+priority: must
+status: draft
+validation_notes: "Workflow names hardcoded: claude.yml, claude-code-review.yml"
