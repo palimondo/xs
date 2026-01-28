@@ -37,9 +37,31 @@ The current xs implementation in BookMinder:
 
 Two types of sources exist with different access patterns:
 
-### Day Logs (claude-dev-log-diary/)
+### Day Logs (~/Developer/BookMinder/claude-dev-log-diary/)
 
-Large markdown files capturing full session output. **Very large** (day-020.md is 2.6MB, day-021.md is 713KB).
+Large markdown files capturing full session output. Access via ripgrep.
+
+**Day Log Inventory** (xs-relevant: day-016 through day-025):
+```
+[1.0M Jul  4  2025]  day-016.md    # xs precursor work begins
+[137K Jul  4  2025]  day-017.md
+[359K Jul  6  2025]  day-018.md
+[256K Jul  6  2025]  day-019.md
+[2.5M Jul 12  2025]  day-020.md    # reconstruct.jq genesis (PRIMARY)
+[696K Jul 12  2025]  day-021.md    # reconstruct.jq refinement (PRIMARY)
+[232K Jul 13  2025]  day-022.md
+[361K Jul 21  2025]  day-023.md
+[2.4M Jul 23  2025]  day-024.md
+[287K Jul 26 14:42]  day-025.md
+```
+
+**Gemini summaries** (for high-level orientation):
+```
+[ 11K Jul  4  2025]  gemini-summary-day-016-017.md
+[ 12K Jul  7  2025]  gemini-summary-day-018-019.md
+[ 13K Jul 12  2025]  gemini-summary-day-020-021.md  # Key summary
+[5.7K Jul 13  2025]  gemini-summary-day-022.md
+```
 
 **Access method**: Use `rg` (ripgrep) with context, never load entire file.
 
@@ -50,68 +72,98 @@ rg -n "formatting" day-021.md -B 2 -A 5
 
 **Reference format**: `day-###:L{start}-L{end}`
 
-```yaml
-sources:
-  - file: day-020:L1234-L1256
-    quote: "should show Bash(command) not Bash: $ command"
-    context: "user correcting tool output format"
+### Session Transcripts (bookminder-sessions/)
+
+⚠️ **IMPORTANT**: Session files have been moved to `bookminder-sessions/` inside this repo
+to protect them from Claude Code's aggressive pruning of `~/.claude/projects/`.
+
+**DO NOT commit this folder** (may contain PII). It is in `.gitignore` and backed up externally.
+
+**Session Inventory** (60 files, 30,701 lines total):
+
+Key xs development sessions (sorted by relevance):
+```
+Lines  Date        UUID prefix  Notes
+─────  ──────────  ───────────  ─────────────────────────────────────
+2477   Jul 27      b475         Main xs development (11MB) - CRITICAL
+1919   Jul 31      a40c         Testing phase (5.6MB)
+1785   Aug  2      e583         Quality/integration (4.1MB)
+967    Aug  1      1e83         Format validation (2.9MB)
+2532   Jul 23      fa0d         Early exploration (5.6MB)
+2382   Jul 25      f9c7         Pre-xs work (4.6MB)
+1902   Jul  9      7f7d         reconstruct.jq era? (2.9MB)
+1600   Jul 12      3854         day-020 era (3.1MB)
+1505   Jul 27      0841         Same day as b475 (3.7M)
 ```
 
-### Session Transcripts (~/.claude/projects/)
+Smaller sessions (< 500 lines, for focused exploration):
+```
+Lines  Date        UUID prefix
+─────  ──────────  ───────────
+421    Jul  5      f1d0
+312    Jul 14      e1e3
+258    Jul  9      9193
+204    Jul  5      184e
+201    Jul 25      8a7f
+195    Jul 25      31c4
+181    Jul 25      2eee
+161    Jul 25      6fda
+156    Jul  5      7384
+```
 
-JSONL files containing raw session data. Explore with xs tool.
+**Access method**: Use `jq` directly (xs tool cannot access these files).
 
 ```bash
-xs abc123 -S "formatting" -C 5
-xs abc123 -U  # User messages only
-xs abc123 -t 45-60 --full
+# Select line range (events 1-100)
+jq -c 'select(input_line_number >= 1 and input_line_number <= 100)' bookminder-sessions/b475*.jsonl
+
+# Extract user messages only
+jq -c 'select(.type == "user")' bookminder-sessions/b475*.jsonl
+
+# Search for keyword in messages
+jq -c 'select(.message.content[]?.text? | contains("formatting"))' bookminder-sessions/b475*.jsonl
 ```
 
-**Reference format**: `{uuid-prefix}:{event-range}`
+**Reference format**: `{uuid-prefix}:{line-range}`
 
 ```yaml
 sources:
-  - session: e583f2a1:45-52
+  - session: b475:1-100
     quote: "I want to filter to show only user messages"
     context: "user requesting -U flag"
-    
-  - session: 7d2b91c4:120
-    type: user_correction
-    quote: "no, exclude should work with glob patterns"
 ```
 
-### Cross-Reference Between Sources
+### Tool Evolution Timeline
 
-Day logs and session transcripts cover the same work from different angles. Correlate via timestamps:
-
-```bash
-# Find commit from xs development
-git log --oneline --after="2024-12-15" --before="2024-12-20" -- "*explore*"
-
-# Find corresponding session by date
-ls -la ~/.claude/projects/-Users-*/  # Check timestamps
+```
+reconstruct.jq (JQ script precursor, day-020/021)
+    ↓
+fetch_logs.sh/py (GitHub Actions log retrieval)
+    ↓
+explore_session.py (1,625 lines, 55 commits)
+    ↓
+xs (symlink interface)
 ```
 
-### Session Timeline Discovery
+**Key commits** (July 27, 2025):
+- **926df62** – Unified timeline data structure (marked "critical")
+- **f2e7efe** – CLI redesign
+- **5e9151f** – Truncated mode
+- **143e113** – Range parsing
 
-Get chronological list of sessions with dates and sizes:
+### Cross-Reference: Sessions ↔ Day Logs
 
-```bash
-tree -D -t -h ~/.claude/projects/-Users-palimondo-Developer-BookMinder
-```
-
-Output shows sessions sorted by modification time with size:
-```
-[1.6M Oct 22 01:27]  760a9954-...jsonl
-[4.1M Aug  2 22:27]  e5837401-...jsonl
-[2.9M Aug  1 23:06]  1e835dcf-...jsonl
-```
-
-**Session ID abbreviation**: All session files have unique 4-char prefixes:
-- `84db` → `84db4cae-3072-4403-ab85-598cce191a41.jsonl`
-- `e583` → `e5837401-4f84-46e0-932f-eead7c00c678.jsonl`
-
-Use abbreviated IDs with xs: `xs e583 -t +50`
+| Date | Day Log | Key Sessions | Focus |
+|------|---------|--------------|-------|
+| Jul 4-5 | day-016, day-017 | 50fa, 1a53, f1d0 | Early xs precursor |
+| Jul 6 | day-018, day-019 | 1b5b, 8cfa, 6129 | Development continues |
+| Jul 9 | day-020 | 7f7d, 9193 | reconstruct.jq genesis |
+| Jul 12 | day-020, day-021 | 3854, 06a0, 9a38 | Core development |
+| Jul 13 | day-022 | 943d, 9576, 005 | Refinement |
+| Jul 23-25 | day-024 | fa0d, f9c7, 4114 | Major work |
+| Jul 26-27 | day-025 | fa1a, b722, b475, 0841 | **Critical xs sessions** |
+| Jul 28-31 | - | caf2, 3636, 02e2, a40c | Testing phase |
+| Aug 1-2 | - | 1e83, e583 | Quality/integration |
 
 ---
 
@@ -389,130 +441,161 @@ blockers: []
 **Output**: Skeleton with themes, epics, ~50 story stubs
 **Checkpoint**: User confirms structure
 
-### Pass 2: Story Mining (Per Epic)
+### Pass 2: Story Mining (Per Epic) — Sequential Reading Approach
+
 **Goal**: Fill in stories with sources and acceptance criteria
 
-**Parallelization**: Safe to parallelize search phase.
+#### Methodology: Sequential Reading with Lenses
 
-**Workflow** (Opus coordinates, per epic):
-1. **PARALLEL**: Spawn Haiku subagents for search
-   - Haiku A: `rg "{epic}"` day-015..day-018
-   - Haiku B: `rg "{epic}"` day-019..day-022
-   - Haiku C: xs sessions from that period
-   - Each writes findings to `xs-requirements/findings/{epic}-{source}.yaml`
-   - Each returns summary to Opus (count, ambiguities, gaps)
-2. **SERIAL**: Opus synthesizes findings into stories
-   - Aggregate and deduplicate findings
-   - Resolve ambiguities (delegate to Sonnet for complex cases)
-   - Add cross-references between stories
-   - Write coherent YAML
-3. **CHECKPOINT**: User validates epic before proceeding
+Instead of searching for keywords, **read session chunks sequentially** and let requirements emerge.
 
-**Model selection** (validated 2026-01-05):
+**Multi-pass lenses** (apply one lens per read-through):
+- **Lens A**: What did the user explicitly request?
+- **Lens B**: What did the user correct/reject?
+- **Lens C**: What did Claude misunderstand?
+- **Lens D**: What was discussed but never resolved?
 
-| Task | Model | Status | Notes |
-|------|-------|--------|-------|
-| Session search | Haiku | ✓ Validated | Focused extraction, good structure |
-| Day log grep | Haiku | ✓ Validated | Via ripgrep subprocess |
-| Ambiguity resolution | Sonnet | Untested | |
-| Synthesis, cross-references | Opus | ✓ Validated | More verbose but thorough |
+**Thread tracking**:
+- Assign IDs to topics when they emerge
+- Track lifecycle: introduced → discussed → resolved/abandoned/transformed
+- This is essentially **qualitative research coding** (grounded theory)
 
-Haiku preferred for mining: cheaper, faster, equally accurate for extraction tasks.
+#### Workflow (Opus coordinates, per epic)
 
-**Subagent instructions template**:
+1. **SELECT CHUNK**: Pick bounded scope (100-200 lines) from relevant session
+   - Use session inventory above to identify relevant sessions for epic
+   - Start with smaller sessions for pilot testing
+
+2. **PARALLEL**: Spawn Haiku subagents for sequential reading
+   - Haiku A: Read session chunk with Lens A (user requests)
+   - Haiku B: Read session chunk with Lens B (user corrections)
+   - Each writes findings to `xs-requirements/findings/{epic}-{source}-{lens}.yaml`
+
+   **Filename encoding for source**:
+   - Use `b475-L1-200` format in filenames (colons are illegal in macOS filenames)
+   - Inside YAML, use `b475:1-200` format for the `source:` field
+   - Example: `filtering-b475-L1-200-lensA.yaml` contains `source: b475:1-200`
+
+3. **SERIAL**: Opus synthesizes findings into stories
+   - Merge findings across lenses
+   - Track thread evolution (request → correction → resolution)
+   - Write coherent YAML with full provenance
+
+4. **CHECKPOINT**: User validates epic before proceeding
+
+#### Session Access via jq
+
+Since xs tool cannot access `bookminder-sessions/`, use jq directly:
+
+```bash
+# Extract lines 1-100 from session
+jq -c 'select(input_line_number >= 1 and input_line_number <= 100)' \
+  bookminder-sessions/b475*.jsonl > chunk.jsonl
+
+# Format for readable output (user messages)
+jq -r 'select(.type == "user") |
+  "[\(.timestamp // "no-ts")] USER: \(.message.content[0].text // .message.content // "?")"' \
+  chunk.jsonl
+
+# Format for readable output (assistant messages)
+jq -r 'select(.type == "assistant") |
+  "[\(.timestamp // "no-ts")] ASSISTANT: \(.message.content[0].text[:200] // "?")"' \
+  chunk.jsonl
 ```
-Read @xs-requirements/epics/{epic}.yaml for search methodology.
-Search assigned sources for user requirements related to {epic}.
-Write findings to xs-requirements/findings/{epic}-{source}.yaml
-Return summary: finding count, ambiguities, coverage gaps.
-Do NOT create stories - only extract raw findings.
+
+#### Subagent Instructions Template
+
+```
+TASK: Sequential reading for {epic} requirements (Lens {A/B/C/D})
+
+READ the session chunk provided (already extracted, ~100-200 events).
+
+LENS {A}: Focus on explicit user requests
+- What features did the user ask for?
+- What behaviors did the user describe wanting?
+- What problems did the user describe?
+
+As you read SEQUENTIALLY:
+1. Note each relevant topic when it FIRST appears (assign thread ID: T001, T002...)
+2. Track when topics are REVISITED (same thread ID)
+3. Note if topics reach RESOLUTION or are ABANDONED
+
+Write findings to xs-requirements/findings/{epic}-{source}-lensA.yaml
+
+DO NOT search for keywords. DO NOT skip ahead. Read in order.
 ```
 
-**@file notation**: Subagents can be instructed to read files (they will use Read tool). Store search methodology in epic files to ensure consistency across subagents working on the same epic.
-
-**Findings file naming**: `{epic}-{source}.yaml` where source identifies what was searched:
-- `filtering-day016-018.yaml` - Day log range
-- `filtering-session-abc123.yaml` - Single session
-- `filtering-day020-L1-50000.yaml` - Large file chunk
-
-**Finding types** (core types, extensions allowed):
-- `user_request` - User asking for feature/behavior
-- `user_correction` - User refining/correcting previous statement (use `supersedes`)
-- `design_rationale` - Explanation of why something is done a certain way
-- `bug_report` - User reporting broken behavior
-
-**Subagent output format** (findings, NOT stories):
+#### Findings File Format (Thread-Aware)
 
 ```yaml
-task: "Search for filtering requirements"
+task: "Sequential reading for filtering requirements (Lens A: user requests)"
 epic: filtering
-sources_searched: 
-  - day-016:L1-L5000
-  - day-017:L1-L8000
-  - session: abc123
+source: b475:1-200
+lens: A_user_requests
+
+threads:
+  - id: T001
+    topic: "filter by message type"
+    events:
+      - line: 45
+        type: introduced
+        quote: "I want to see only user messages"
+      - line: 89
+        type: refined
+        quote: "actually, filter should work on entity not role"
+      - line: 156
+        type: resolved
+        quote: "yes, -U for user entity, -a for assistant"
+    status: resolved
+
+  - id: T002
+    topic: "exclude specific tools"
+    events:
+      - line: 72
+        type: introduced
+        quote: "need to hide Read tool spam"
+    status: open  # Not resolved in this chunk
 
 findings:
   - id: F001
-    source: day-016:L2341-L2355
+    thread: T001
+    source: b475:45
     type: user_request
-    quote: "I want to filter to show only user messages"
-    tags: [filter, shortcut, user-messages]
+    quote: "I want to see only user messages"
 
   - id: F002
-    source: abc123:89-93
+    thread: T001
+    source: b475:89
     type: user_correction
-    quote: "no, exclude should work with glob patterns"
+    quote: "actually, filter should work on entity not role"
     supersedes: F001
-    tags: [filter, exclude, patterns]
-
-  - id: F003
-    source: day-017:L892-L905
-    type: design_rationale
-    quote: "using glob patterns because they're familiar from shell"
-    tags: [filter, patterns, design-decision]
-
-  - id: F004
-    source: day-017:L1203-L1210
-    type: user_request
-    quote: "need to exclude tools from the timeline"
-    tags: [filter, exclude, tools]
 
 ambiguities:
-  - "Conflicting statements about -x accepting multiple args"
+  - "T002 not resolved in this chunk - need to read further"
 
 coverage_gaps:
-  - "No findings about error handling for invalid patterns"
+  - "No discussion of combining multiple filters"
 ```
 
-**Risk mitigations**:
-- **Bounded scope**: Each subagent gets explicit session range + epic focus
-- **Findings persist**: Subagents write to `xs-requirements/findings/`, return summary to Opus
-- **Deduplication**: Opus handles overlapping session ranges
-- **Checkpoint per epic**: User catches drift before it compounds
-- **Ambiguity surfacing**: Subagents flag uncertainty rather than guessing
+#### Chunking Strategy
 
-**Chronology for conflict resolution**:
-- Day logs: `day-###.md` numbered sequentially (day-016 < day-017 < day-018)
-- Sessions: UUIDs are random; use file dates or `xs session --summary` for time range
-- Later sources generally supersede earlier (unless explicitly corrected)
-- When findings conflict, prefer the more recent + more specific
+| Session Size | Chunk Size | Chunks | Notes |
+|--------------|------------|--------|-------|
+| < 200 lines | Full session | 1 | Read entirely |
+| 200-500 lines | 150-200 | 2-3 | Natural boundaries |
+| 500-1000 lines | 200 | 3-5 | Parallelize |
+| > 1000 lines | 200 | Many | Focus on relevant date range |
 
-**Scope granularity** (validated 2026-01-05):
-- Day logs can be huge (day-020.md is 2.6MB) - use ripgrep, never load full file
-- Sessions can exceed 8MB - approach depends on mode:
+For large sessions (b475 has 2477 lines), use date correlation to identify relevant chunks.
 
-| Mode | Max Events | Notes |
-|------|------------|-------|
-| Search (`-S`) | Full session OK | Only returns matches |
-| Truncated | ~500 | ~78KB output, ~20K tokens |
-| Full (`--full`) | 50-100 | ~50-78KB output |
+#### Model Selection
 
-- **Search mode preferred**: Full sessions work, no chunking needed
-- **Full mode**: Chunk by event range (`-t 1-50`, `-t 51-100`, etc.)
-- If subagent reports truncation, split further
-- Edge case: `-S "-x"` fails (argparse); use `-S "exclude"` instead
-
-**Validation reference**: `xs-requirements/findings/subagent-validation-test.md`
+| Task | Model | Notes |
+|------|-------|-------|
+| Chunk extraction | Bash/jq | Pre-process before subagent |
+| Sequential reading | Haiku | Focused, follows instructions well |
+| Thread synthesis | Opus | Needs holistic view |
+| Ambiguity resolution | User | Checkpoint before proceeding |
 
 **Checkpoint**: User reviews each epic before next
 
@@ -585,9 +668,9 @@ coverage_gaps:
 ## Available Resources
 
 ### Primary Sources (Requirements Recovery)
-- Session transcripts in `~/.claude/projects/`
-- Day logs in `BookMinder/claude-dev-log-diary/` (especially day-020, day-021)
-- Use xs itself to explore sessions (meta!)
+- Session transcripts in `bookminder-sessions/` (60 files, see inventory above)
+- Day logs in `~/Developer/BookMinder/claude-dev-log-diary/` (especially day-020, day-021)
+- Process sessions with `jq` (xs tool cannot access local copies)
 
 ### Secondary Sources (LOW TRUST)
 - Design docs in `BookMinder/claude-dev-log-diary/tools/*.md`
@@ -596,7 +679,7 @@ coverage_gaps:
 
 ### Reference Documentation
 - `claude_code_jsonl_format_reference.md` - Format specification
-- `exploring-sessions` skill in BookMinder
+- `xs-tool-evolution-research.md` - Tool timeline and evolution (in uploads)
 
 ---
 
@@ -607,11 +690,22 @@ coverage_gaps:
 - Do NOT add features not in recovered requirements
 - Do NOT interleave requirements gathering with implementation
 - Do NOT load entire day log files into context (use ripgrep)
+- Do NOT use keyword search for requirements mining (confirmation bias)
+- Do NOT commit `bookminder-sessions/` to git (PII risk)
 
 ---
 
 ## Known Risks
 
-**Session directory cleanup**: Claude Code may proactively clean up `~/.claude/projects/` directories. The BookMinder sessions were recovered from backup (Oct 2025). If this directory is cleaned mid-session:
-- **Stop all work immediately**
-- **Request user help** to restore from backup
+**Session files location**: BookMinder sessions have been moved to `bookminder-sessions/` inside
+this repo to protect them from Claude Code's aggressive pruning of `~/.claude/projects/`.
+
+⚠️ **DO NOT commit `bookminder-sessions/`** - may contain PII/credentials.
+
+The files are:
+- Listed in `.gitignore`
+- Backed up externally as `bookminder-sessions-backup.tar.gz`
+
+If files are accidentally deleted:
+- Restore from external backup
+- Or recover from Time Machine

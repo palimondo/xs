@@ -1,1 +1,4 @@
 .DS_Store
+
+# Session files contain potential PII/credentials - backed up externally
+bookminder-sessions/
