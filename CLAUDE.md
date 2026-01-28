@@ -441,47 +441,44 @@ blockers: []
 **Output**: Skeleton with themes, epics, ~50 story stubs
 **Checkpoint**: User confirms structure
 
-### Pass 2: Story Mining (Per Epic) — Sequential Reading Approach
+### Pass 2: Story Mining — Sequential Reading Approach
 
-**Goal**: Fill in stories with sources and acceptance criteria
+**Goal**: Extract requirements from session transcripts, then assign to epics
 
-#### Methodology: Sequential Reading with Lenses
+#### Methodology: Sequential Reading
 
 Instead of searching for keywords, **read session chunks sequentially** and let requirements emerge.
 
-**Multi-pass lenses** (apply one lens per read-through):
-- **Lens A**: What did the user explicitly request?
-- **Lens B**: What did the user correct/reject?
-- **Lens C**: What did Claude misunderstand?
-- **Lens D**: What was discussed but never resolved?
+**Finding types** (tag each finding):
+- **user_request**: What the user explicitly asked for
+- **user_correction**: What the user corrected/rejected
+- **claude_misunderstanding**: What Claude got wrong
+- **unresolved**: Discussed but never concluded
 
 **Thread tracking**:
-- Assign IDs to topics when they emerge
-- Track lifecycle: introduced → discussed → resolved/abandoned/transformed
-- This is essentially **qualitative research coding** (grounded theory)
+- Assign IDs to topics when they emerge (T001, T002...)
+- Track lifecycle: introduced → discussed → resolved/abandoned
+- This is **grounded theory** - let categories emerge from data
 
-#### Workflow (Opus coordinates, per epic)
+#### Workflow
 
-1. **SELECT CHUNK**: Pick bounded scope (100-200 lines) from relevant session
-   - Use session inventory above to identify relevant sessions for epic
-   - Start with smaller sessions for pilot testing
+1. **EXTRACT**: Haiku subagents read session chunks sequentially
+   - One subagent per chunk (no overlaps - hard boundaries)
+   - Each writes ALL findings to `xs-requirements/findings/{source}.yaml`
+   - Findings are tagged by type, NOT separated into multiple files
 
-2. **PARALLEL**: Spawn Haiku subagents for sequential reading
-   - Haiku A: Read session chunk with Lens A (user requests)
-   - Haiku B: Read session chunk with Lens B (user corrections)
-   - Each writes findings to `xs-requirements/findings/{epic}-{source}-{lens}.yaml`
+   **Filename format**:
+   - Filename: `{uuid-prefix}-L{start}-{end}.yaml` (e.g., `7384-L1-156.yaml`)
+   - Inside YAML: `source: 7384:1-156` (colons OK inside file, not in filename)
 
-   **Filename encoding for source**:
-   - Use `b475-L1-200` format in filenames (colons are illegal in macOS filenames)
-   - Inside YAML, use `b475:1-200` format for the `source:` field
-   - Example: `filtering-b475-L1-200-lensA.yaml` contains `source: b475:1-200`
+2. **SYNTHESIZE**: Opus orchestrator reads all findings files
+   - Correlates threads across chunks (request in chunk 1 → correction in chunk 2)
+   - Assigns findings to epics based on content
+   - Writes coherent stories with full provenance
 
-3. **SERIAL**: Opus synthesizes findings into stories
-   - Merge findings across lenses
-   - Track thread evolution (request → correction → resolution)
-   - Write coherent YAML with full provenance
+3. **CHECKPOINT**: User validates before proceeding
 
-4. **CHECKPOINT**: User validates epic before proceeding
+**Key principle**: Extract first, categorize later. Don't pre-filter by epic.
 
 #### Session Access via jq
 
@@ -506,36 +503,38 @@ jq -r 'select(.type == "assistant") |
 #### Subagent Instructions Template
 
 ```
-TASK: Sequential reading for {epic} requirements (Lens {A/B/C/D})
+TASK: Extract requirements from session chunk
 
-READ the session chunk provided (already extracted, ~100-200 events).
+SOURCE: {source} (e.g., 7384:1-156)
+OUTPUT: xs-requirements/findings/{filename}.yaml (e.g., 7384-L1-156.yaml)
 
-LENS {A}: Focus on explicit user requests
-- What features did the user ask for?
-- What behaviors did the user describe wanting?
-- What problems did the user describe?
+Read the session chunk SEQUENTIALLY. Extract ALL findings related to xs tool
+requirements. Tag each finding by type:
+- user_request: User explicitly asked for something
+- user_correction: User rejected or corrected something
+- claude_misunderstanding: Claude got something wrong
+- unresolved: Discussed but not concluded
 
-As you read SEQUENTIALLY:
-1. Note each relevant topic when it FIRST appears (assign thread ID: T001, T002...)
+As you read:
+1. Assign thread IDs (T001, T002...) when topics FIRST appear
 2. Track when topics are REVISITED (same thread ID)
-3. Note if topics reach RESOLUTION or are ABANDONED
+3. Note RESOLUTION or ABANDONMENT
 
-Write findings to xs-requirements/findings/{epic}-{source}-lensA.yaml
-
+DO NOT pre-filter by epic. Extract everything. Orchestrator assigns epics later.
 DO NOT search for keywords. DO NOT skip ahead. Read in order.
 ```
 
-#### Findings File Format (Thread-Aware)
+#### Findings File Format
 
 ```yaml
-task: "Sequential reading for filtering requirements (Lens A: user requests)"
-epic: filtering
-source: b475:1-200
-lens: A_user_requests
+source: 7384:1-156
+extracted_by: haiku
+timestamp: 2026-01-28T02:30:00Z
 
 threads:
   - id: T001
     topic: "filter by message type"
+    status: resolved  # or: open, abandoned
     events:
       - line: 45
         type: introduced
@@ -546,35 +545,31 @@ threads:
       - line: 156
         type: resolved
         quote: "yes, -U for user entity, -a for assistant"
-    status: resolved
 
   - id: T002
     topic: "exclude specific tools"
+    status: open  # Not resolved in this chunk
     events:
       - line: 72
         type: introduced
         quote: "need to hide Read tool spam"
-    status: open  # Not resolved in this chunk
 
 findings:
   - id: F001
     thread: T001
-    source: b475:45
+    line: 45
     type: user_request
     quote: "I want to see only user messages"
 
   - id: F002
     thread: T001
-    source: b475:89
+    line: 89
     type: user_correction
     quote: "actually, filter should work on entity not role"
     supersedes: F001
 
-ambiguities:
-  - "T002 not resolved in this chunk - need to read further"
-
-coverage_gaps:
-  - "No discussion of combining multiple filters"
+notes:
+  - "T002 not resolved - may continue in later chunk"
 ```
 
 #### Chunking Strategy
@@ -593,11 +588,12 @@ For large sessions (b475 has 2477 lines), use date correlation to identify relev
 | Task | Model | Notes |
 |------|-------|-------|
 | Chunk extraction | Bash/jq | Pre-process before subagent |
-| Sequential reading | Haiku | Focused, follows instructions well |
-| Thread synthesis | Opus | Needs holistic view |
-| Ambiguity resolution | User | Checkpoint before proceeding |
+| Sequential reading | Haiku | One per chunk, writes findings YAML |
+| Epic assignment & synthesis | Opus | Reads all findings, assigns to epics |
+| Validation | User | Reviews findings before story synthesis |
 
-**Checkpoint**: User reviews each epic before next
+**Intermediate artifacts**: Haiku writes findings YAMLs to disk. These persist for
+user inspection and orchestrator consumption. Do not delete after synthesis.
 
 ### Pass 3: Golden File Assembly
 **Goal**: Concrete input/output pairs for specs
