@@ -500,6 +500,19 @@ jq -r 'select(.type == "assistant") |
   chunk.jsonl
 ```
 
+#### Day Log Access via sed
+
+```bash
+# Extract lines 1-800 from day log
+sed -n '1,800p' ~/Developer/BookMinder/claude-dev-log-diary/day-020.md
+
+# Extract lines 801-1600
+sed -n '801,1600p' ~/Developer/BookMinder/claude-dev-log-diary/day-020.md
+
+# Count total lines in a day log
+wc -l < ~/Developer/BookMinder/claude-dev-log-diary/day-020.md
+```
+
 #### Subagent Instructions Template
 
 ```
