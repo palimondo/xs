@@ -16,26 +16,37 @@ by embedding them in the first jq stage:
 jq -c 'input_line_number as $ln | select($ln >= {START} and $ln <= {END}) | {_ln: $ln} + .' {FILE} | \
   jq -r '
     if .type == "user" then
-      "L\(._ln) [USER] " + (.message.content[0].text // (.message.content | tostring) // "?")[0:500]
+      if (.message.content | type) == "string" then
+        "L\(._ln) [USER] " + .message.content[0:500]
+      elif (.message.content[0].type? // "") == "tool_result" then
+        "L\(._ln) [TOOL_RESULT] " + (.message.content[0].content[0].text // (.message.content[0].content | tostring) // "?")[0:200]
+      else
+        "L\(._ln) [USER] " + (.message.content | tostring)[0:500]
+      end
     elif .type == "assistant" then
-      "L\(._ln) [ASST] " + (.message.content[] | select(.type == "text") | .text[0:300] // "?")
-    elif .type == "tool_use" then
-      "L\(._ln) [TOOL_USE] " + (.name // "?") + ": " + (.input | tostring)[0:200]
-    elif .type == "tool_result" then
-      "L\(._ln) [TOOL_RESULT] " + (.content[0].text // "?")[0:200]
+      (._ln as $ln | .message.content[] |
+        if .type == "text" then "L\($ln) [ASST] " + .text[0:300]
+        elif .type == "tool_use" then "L\($ln) [TOOL_USE] " + (.name // "?") + ": " + (.input | tostring)[0:200]
+        else empty end
+      )
+    elif .type == "system" then
+      "L\(._ln) [SYSTEM]"
     else
       "L\(._ln) [" + (.type // "unknown") + "]"
     end
   '
 ```
 
-If the jq command above fails, try this simpler version:
+If the jq command above fails, try this simpler version that handles both string and array content:
 
 ```bash
 jq -c 'input_line_number as $ln | select($ln >= {START} and $ln <= {END}) | {_ln: $ln} + .' {FILE} | \
   jq -r '"L\(._ln) [\(.type // "?")] " + (
-    if .message then (.message.content[0].text // (.message.content | tostring))[0:400]
-    else (.content[0].text // .name // (.input | tostring) // "")[0:400]
+    if .message then
+      if (.message.content | type) == "string" then .message.content[0:400]
+      else (.message.content[0].text // (.message.content | tostring))[0:400]
+      end
+    else ""
     end
   )'
 ```
@@ -136,6 +147,29 @@ notes:
 DO NOT pre-filter by epic. Extract everything. Orchestrator assigns epics later.
 DO NOT add extra fields like `applies_to_epic`, `epic_hint`, `key_requirements`,
 or `epics_to_consider`. Stick to the exact YAML schema shown above.
+
+## Step 5: Self-validate before returning
+
+After writing the YAML file, read it back and check:
+
+1. **Line numbers in range**: Every `line:` value in threads and findings must be
+   between {START} and {END} inclusive. If any are outside this range, they are WRONG.
+   Use ripgrep to find the correct line number for the quote:
+   ```bash
+   # Find the actual line number of a quote in the original JSONL file
+   rg -n "some distinctive words from the quote" {FILE} | head -5
+   ```
+   Then fix the line number in the YAML and re-write.
+2. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
+3. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
+4. **Quotes are real**: Spot-check that your quotes match text you actually saw in the Step 1 output.
+   Do NOT invent or paraphrase quotes — use actual text from the L-prefixed lines.
+   If uncertain about a quote, verify with ripgrep:
+   ```bash
+   rg -n "distinctive phrase" {FILE}
+   ```
+
+If validation fails, fix the YAML file and re-write it before returning.
 
 ## CRITICAL — Return message
 

@@ -140,6 +140,29 @@ DO NOT pre-filter by epic. Extract everything. Orchestrator assigns epics later.
 DO NOT add extra fields like `applies_to_epic`, `epic_hint`, `key_requirements`,
 or `epics_to_consider`. Stick to the exact YAML schema shown above.
 
+## Step 5: Self-validate before returning
+
+After writing the YAML file, read it back and check:
+
+1. **Line numbers in range**: Every `line:` value in threads and findings must be
+   between {START} and {END} inclusive. If any are outside this range, they are WRONG.
+   Use ripgrep to find the correct line number for the quote:
+   ```bash
+   # Find the actual line number of a quote in the original day log file
+   rg -n "some distinctive words from the quote" {FILE} | head -5
+   ```
+   Then fix the line number in the YAML and re-write.
+2. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
+3. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
+4. **Quotes are real**: Spot-check that your quotes match text you actually saw in the Step 1 output.
+   Do NOT invent or paraphrase quotes — use actual text from the L-prefixed lines.
+   If uncertain about a quote, verify with ripgrep:
+   ```bash
+   rg -n "distinctive phrase" {FILE}
+   ```
+
+If validation fails, fix the YAML file and re-write it before returning.
+
 ## CRITICAL — Return message
 
 When done, return ONLY a one-line confirmation like:
