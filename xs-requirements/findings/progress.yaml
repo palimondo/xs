@@ -1,0 +1,1532 @@
+# Pass 2: Story Mining Progress Tracker
+
+meta:
+  started: 2026-02-16
+  last_updated: 2026-02-16
+  phase: setup  # setup | test | session_extraction | daylog_extraction | synthesis
+
+sessions:
+  500b:
+    file: bookminder-sessions/500b92b6-8ce1-45cd-83fe-b65120d670ca.jsonl
+    total_lines: 1
+    status: skip  # too small for requirements
+    chunks: []
+  63af:
+    file: bookminder-sessions/63af48b5-965f-4eac-ba37-2691c574dee9.jsonl
+    total_lines: 3
+    status: skip  # too small for requirements
+    chunks: []
+  7192:
+    file: bookminder-sessions/7192f39e-c388-4167-a0c8-44508d5dbb6a.jsonl
+    total_lines: 3
+    status: skip  # too small for requirements
+    chunks: []
+  7403:
+    file: bookminder-sessions/7403d094-0fa0-464e-8422-768c3b85e06d.jsonl
+    total_lines: 3
+    status: skip  # too small for requirements
+    chunks: []
+  d6d9:
+    file: bookminder-sessions/d6d943ee-8bf4-412b-8785-5079a4e52f7b.jsonl
+    total_lines: 3
+    status: skip  # too small for requirements
+    chunks: []
+  73c1:
+    file: bookminder-sessions/73c1525b-88ad-48a0-90b6-ae74d1aa8c00.jsonl
+    total_lines: 4
+    status: skip  # too small for requirements
+    chunks: []
+  d623:
+    file: bookminder-sessions/d623f1c2-c50b-4723-82a6-6fc2a1d3c321.jsonl
+    total_lines: 4
+    status: skip  # too small for requirements
+    chunks: []
+  f906:
+    file: bookminder-sessions/f9062b89-3870-4a21-ba71-318bd39fa8ee.jsonl
+    total_lines: 5
+    status: skip  # too small for requirements
+    chunks: []
+  5d06:
+    file: bookminder-sessions/5d068b69-64f9-4394-a430-95f41f7b4b26.jsonl
+    total_lines: 7
+    status: skip  # too small for requirements
+    chunks: []
+  7240:
+    file: bookminder-sessions/7240f66e-eb19-4198-a4ef-39d1201b8f6b.jsonl
+    total_lines: 9
+    status: skip  # too small for requirements
+    chunks: []
+  0dcc:
+    file: bookminder-sessions/0dcc7fba-9d38-4517-acf1-e97c9b9c993f.jsonl
+    total_lines: 10
+    status: skip  # too small for requirements
+    chunks: []
+  3c39:
+    file: bookminder-sessions/3c3930ec-527e-4e31-b68c-4e4447be9edc.jsonl
+    total_lines: 10
+    status: skip  # too small for requirements
+    chunks: []
+  df05:
+    file: bookminder-sessions/df059480-4f78-4135-8e77-623b2c9b598f.jsonl
+    total_lines: 10
+    status: skip  # too small for requirements
+    chunks: []
+  7159:
+    file: bookminder-sessions/71592650-235a-4d11-80c4-8bd746fc69ae.jsonl
+    total_lines: 19
+    status: pending
+    chunks:
+      - range: "1-19"
+        status: pending
+        findings_file: null
+  0053:
+    file: bookminder-sessions/005341c3-3dee-431c-b694-19d19bd4ee5e.jsonl
+    total_lines: 21
+    status: pending
+    chunks:
+      - range: "1-21"
+        status: pending
+        findings_file: null
+  d8ad:
+    file: bookminder-sessions/d8ad500b-6a64-4e0d-8ef7-3b698f61204e.jsonl
+    total_lines: 22
+    status: pending
+    chunks:
+      - range: "1-22"
+        status: pending
+        findings_file: null
+  ee1f:
+    file: bookminder-sessions/ee1fba4a-f23f-4bc2-8bdf-a9400c4e0cd0.jsonl
+    total_lines: 24
+    status: pending
+    chunks:
+      - range: "1-24"
+        status: pending
+        findings_file: null
+  0a50:
+    file: bookminder-sessions/0a5034b4-68e8-4ea5-a66f-adb5725fcb17.jsonl
+    total_lines: 25
+    status: pending
+    chunks:
+      - range: "1-25"
+        status: pending
+        findings_file: null
+  68bc:
+    file: bookminder-sessions/68bcc030-7b3e-498a-915e-e76636b00a3f.jsonl
+    total_lines: 43
+    status: pending
+    chunks:
+      - range: "1-43"
+        status: pending
+        findings_file: null
+  024c:
+    file: bookminder-sessions/024c7950-ab61-4dd5-9eb8-115be46620df.jsonl
+    total_lines: 44
+    status: pending
+    chunks:
+      - range: "1-44"
+        status: pending
+        findings_file: null
+  9894:
+    file: bookminder-sessions/9894a37f-2bfa-4ba0-966e-8e519c028e90.jsonl
+    total_lines: 49
+    status: pending
+    chunks:
+      - range: "1-49"
+        status: pending
+        findings_file: null
+  dfbc:
+    file: bookminder-sessions/dfbc7637-6c90-46c7-be3a-38aa00680362.jsonl
+    total_lines: 55
+    status: pending
+    chunks:
+      - range: "1-55"
+        status: pending
+        findings_file: null
+  9a38:
+    file: bookminder-sessions/9a382de9-9150-4ce2-b025-7eb371d99832.jsonl
+    total_lines: 65
+    status: pending
+    chunks:
+      - range: "1-65"
+        status: pending
+        findings_file: null
+  6129:
+    file: bookminder-sessions/61291bf3-0a04-4be0-92dc-9df6d554b040.jsonl
+    total_lines: 69
+    status: pending
+    chunks:
+      - range: "1-69"
+        status: pending
+        findings_file: null
+  9576:
+    file: bookminder-sessions/9576c206-34b2-4e2e-87be-2761e8c57a23.jsonl
+    total_lines: 76
+    status: pending
+    chunks:
+      - range: "1-76"
+        status: pending
+        findings_file: null
+  02e2:
+    file: bookminder-sessions/02e2d5ec-ae70-4850-ae85-40bfcb1fb36d.jsonl
+    total_lines: 102
+    status: pending
+    chunks:
+      - range: "1-102"
+        status: pending
+        findings_file: null
+  4c52:
+    file: bookminder-sessions/4c52d0a1-d859-4bb4-bba3-ae441a6be798.jsonl
+    total_lines: 104
+    status: pending
+    chunks:
+      - range: "1-104"
+        status: pending
+        findings_file: null
+  d5a1:
+    file: bookminder-sessions/d5a12fb9-4ff6-40b0-8771-7962bcfb7a98.jsonl
+    total_lines: 140
+    status: pending
+    chunks:
+      - range: "1-140"
+        status: pending
+        findings_file: null
+  7384:
+    file: bookminder-sessions/7384565d-c1b8-4bf7-aec8-6ccc0f4c7b56.jsonl
+    total_lines: 156
+    status: pending
+    chunks:
+      - range: "1-156"
+        status: pending
+        findings_file: null
+  6fda:
+    file: bookminder-sessions/6fda2be3-d603-4db8-ac5b-b5c0ff20178a.jsonl
+    total_lines: 161
+    status: pending
+    chunks:
+      - range: "1-161"
+        status: pending
+        findings_file: null
+  2eee:
+    file: bookminder-sessions/2eeec5c0-59db-41cf-80e7-f271734a57d7.jsonl
+    total_lines: 181
+    status: pending
+    chunks:
+      - range: "1-181"
+        status: pending
+        findings_file: null
+  31c4:
+    file: bookminder-sessions/31c4fedc-9cd2-41a9-b784-6c579096faf4.jsonl
+    total_lines: 195
+    status: pending
+    chunks:
+      - range: "1-195"
+        status: pending
+        findings_file: null
+  8a7f:
+    file: bookminder-sessions/8a7f1586-b3d9-438c-8a5f-1cf11cdd2fa2.jsonl
+    total_lines: 201
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-201"
+        status: pending
+        findings_file: null
+  184e:
+    file: bookminder-sessions/184e796c-3484-46c3-8e0d-db12737addf3.jsonl
+    total_lines: 204
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-204"
+        status: pending
+        findings_file: null
+  1b5b:
+    file: bookminder-sessions/1b5bc2d3-1ea8-4e0c-b95a-67dba7abf103.jsonl
+    total_lines: 240
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-240"
+        status: pending
+        findings_file: null
+  9193:
+    file: bookminder-sessions/9193e22f-38ff-4da2-9bba-37f89c47b871.jsonl
+    total_lines: 258
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-258"
+        status: pending
+        findings_file: null
+  e1e3:
+    file: bookminder-sessions/e1e30e7e-5869-452b-b09e-e94a249b45b6.jsonl
+    total_lines: 312
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-312"
+        status: pending
+        findings_file: null
+  f1d0:
+    file: bookminder-sessions/f1d00bc9-a55c-4495-9900-3ad5750a5f10.jsonl
+    total_lines: 421
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-421"
+        status: pending
+        findings_file: null
+  4114:
+    file: bookminder-sessions/41148fe1-ef2e-4fd9-81b3-7b137e602643.jsonl
+    total_lines: 507
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-507"
+        status: pending
+        findings_file: null
+  50fa:
+    file: bookminder-sessions/50fa24a4-d22d-4256-baf9-ca724e900b64.jsonl
+    total_lines: 520
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-520"
+        status: pending
+        findings_file: null
+  06a0:
+    file: bookminder-sessions/06a06692-5af2-45ed-93da-b9a125a34761.jsonl
+    total_lines: 522
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-522"
+        status: pending
+        findings_file: null
+  e2f7:
+    file: bookminder-sessions/e2f75c3c-fbaa-4857-8a6d-224e6be58865.jsonl
+    total_lines: 556
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-556"
+        status: pending
+        findings_file: null
+  3636:
+    file: bookminder-sessions/3636cd0a-9d95-413f-a371-b39d9382f8b6.jsonl
+    total_lines: 613
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-613"
+        status: pending
+        findings_file: null
+  760a:
+    file: bookminder-sessions/760a9954-2673-4e39-8f79-2f2bb58a92b2.jsonl
+    total_lines: 643
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-643"
+        status: pending
+        findings_file: null
+  cc2d:
+    file: bookminder-sessions/cc2d881d-91c1-48f2-8b03-c4f4df1315c1.jsonl
+    total_lines: 723
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-723"
+        status: pending
+        findings_file: null
+  943d:
+    file: bookminder-sessions/943dff12-092e-43f7-bcdf-adf26053ddec.jsonl
+    total_lines: 792
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-792"
+        status: pending
+        findings_file: null
+  8cfa:
+    file: bookminder-sessions/8cfa2feb-f54f-4db4-9d2e-6b1e284e2572.jsonl
+    total_lines: 868
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-868"
+        status: pending
+        findings_file: null
+  1e83:
+    file: bookminder-sessions/1e835dcf-aacc-4f29-9d96-6fca8fc3cdd6.jsonl
+    total_lines: 967
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-967"
+        status: pending
+        findings_file: null
+  1a53:
+    file: bookminder-sessions/1a537136-cbd7-4450-ac97-e99d3b72bbdc.jsonl
+    total_lines: 1009
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1009"
+        status: pending
+        findings_file: null
+  b722:
+    file: bookminder-sessions/b7228f1a-4add-4de5-9a0b-c67df83256c0.jsonl
+    total_lines: 1188
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1188"
+        status: pending
+        findings_file: null
+  caf2:
+    file: bookminder-sessions/caf26ae1-101d-4ba6-b2ea-fcd945f79270.jsonl
+    total_lines: 1199
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1199"
+        status: pending
+        findings_file: null
+  fa1a:
+    file: bookminder-sessions/fa1ad559-d24b-47d1-96f7-b1304ff3eeb2.jsonl
+    total_lines: 1233
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1233"
+        status: pending
+        findings_file: null
+  0841:
+    file: bookminder-sessions/084187d2-c987-447c-bbb5-72088619053e.jsonl
+    total_lines: 1505
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1505"
+        status: pending
+        findings_file: null
+  3854:
+    file: bookminder-sessions/38546901-8da8-4f90-83e0-487b75e3327e.jsonl
+    total_lines: 1600
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+  e583:
+    file: bookminder-sessions/e5837401-4f84-46e0-932f-eead7c00c678.jsonl
+    total_lines: 1785
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-1785"
+        status: pending
+        findings_file: null
+  7f7d:
+    file: bookminder-sessions/7f7d8dde-f320-4dd2-88e0-5dec03e0b1c9.jsonl
+    total_lines: 1902
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-1800"
+        status: pending
+        findings_file: null
+      - range: "1801-1902"
+        status: pending
+        findings_file: null
+  a40c:
+    file: bookminder-sessions/a40c3250-69a7-4920-93d1-737cef274819.jsonl
+    total_lines: 1919
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-1800"
+        status: pending
+        findings_file: null
+      - range: "1801-1919"
+        status: pending
+        findings_file: null
+  f9c7:
+    file: bookminder-sessions/f9c73b72-65d2-4096-bdf6-305c64d78754.jsonl
+    total_lines: 2382
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-1800"
+        status: pending
+        findings_file: null
+      - range: "1801-2000"
+        status: pending
+        findings_file: null
+      - range: "2001-2200"
+        status: pending
+        findings_file: null
+      - range: "2201-2382"
+        status: pending
+        findings_file: null
+  b475:
+    file: bookminder-sessions/b475bcb0-9259-40ed-bfa3-d7459f3d695f.jsonl
+    total_lines: 2477
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-1800"
+        status: pending
+        findings_file: null
+      - range: "1801-2000"
+        status: pending
+        findings_file: null
+      - range: "2001-2200"
+        status: pending
+        findings_file: null
+      - range: "2201-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-2477"
+        status: pending
+        findings_file: null
+  fa0d:
+    file: bookminder-sessions/fa0db91e-9118-4b92-a31f-2019e4391c7d.jsonl
+    total_lines: 2532
+    status: pending
+    chunks:
+      - range: "1-200"
+        status: pending
+        findings_file: null
+      - range: "201-400"
+        status: pending
+        findings_file: null
+      - range: "401-600"
+        status: pending
+        findings_file: null
+      - range: "601-800"
+        status: pending
+        findings_file: null
+      - range: "801-1000"
+        status: pending
+        findings_file: null
+      - range: "1001-1200"
+        status: pending
+        findings_file: null
+      - range: "1201-1400"
+        status: pending
+        findings_file: null
+      - range: "1401-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-1800"
+        status: pending
+        findings_file: null
+      - range: "1801-2000"
+        status: pending
+        findings_file: null
+      - range: "2001-2200"
+        status: pending
+        findings_file: null
+      - range: "2201-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-2532"
+        status: pending
+        findings_file: null
+
+daylogs:
+  day-016:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-016.md
+    total_lines: 7718
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-7718"
+        status: pending
+        findings_file: null
+  day-017:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-017.md
+    total_lines: 2620
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-2620"
+        status: pending
+        findings_file: null
+  day-018:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-018.md
+    total_lines: 7344
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-7344"
+        status: pending
+        findings_file: null
+  day-019:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-019.md
+    total_lines: 5384
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5384"
+        status: pending
+        findings_file: null
+  day-020:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-020.md
+    total_lines: 56185
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-8000"
+        status: pending
+        findings_file: null
+      - range: "8001-8800"
+        status: pending
+        findings_file: null
+      - range: "8801-9600"
+        status: pending
+        findings_file: null
+      - range: "9601-10400"
+        status: pending
+        findings_file: null
+      - range: "10401-11200"
+        status: pending
+        findings_file: null
+      - range: "11201-12000"
+        status: pending
+        findings_file: null
+      - range: "12001-12800"
+        status: pending
+        findings_file: null
+      - range: "12801-13600"
+        status: pending
+        findings_file: null
+      - range: "13601-14400"
+        status: pending
+        findings_file: null
+      - range: "14401-15200"
+        status: pending
+        findings_file: null
+      - range: "15201-16000"
+        status: pending
+        findings_file: null
+      - range: "16001-16800"
+        status: pending
+        findings_file: null
+      - range: "16801-17600"
+        status: pending
+        findings_file: null
+      - range: "17601-18400"
+        status: pending
+        findings_file: null
+      - range: "18401-19200"
+        status: pending
+        findings_file: null
+      - range: "19201-20000"
+        status: pending
+        findings_file: null
+      - range: "20001-20800"
+        status: pending
+        findings_file: null
+      - range: "20801-21600"
+        status: pending
+        findings_file: null
+      - range: "21601-22400"
+        status: pending
+        findings_file: null
+      - range: "22401-23200"
+        status: pending
+        findings_file: null
+      - range: "23201-24000"
+        status: pending
+        findings_file: null
+      - range: "24001-24800"
+        status: pending
+        findings_file: null
+      - range: "24801-25600"
+        status: pending
+        findings_file: null
+      - range: "25601-26400"
+        status: pending
+        findings_file: null
+      - range: "26401-27200"
+        status: pending
+        findings_file: null
+      - range: "27201-28000"
+        status: pending
+        findings_file: null
+      - range: "28001-28800"
+        status: pending
+        findings_file: null
+      - range: "28801-29600"
+        status: pending
+        findings_file: null
+      - range: "29601-30400"
+        status: pending
+        findings_file: null
+      - range: "30401-31200"
+        status: pending
+        findings_file: null
+      - range: "31201-32000"
+        status: pending
+        findings_file: null
+      - range: "32001-32800"
+        status: pending
+        findings_file: null
+      - range: "32801-33600"
+        status: pending
+        findings_file: null
+      - range: "33601-34400"
+        status: pending
+        findings_file: null
+      - range: "34401-35200"
+        status: pending
+        findings_file: null
+      - range: "35201-36000"
+        status: pending
+        findings_file: null
+      - range: "36001-36800"
+        status: pending
+        findings_file: null
+      - range: "36801-37600"
+        status: pending
+        findings_file: null
+      - range: "37601-38400"
+        status: pending
+        findings_file: null
+      - range: "38401-39200"
+        status: pending
+        findings_file: null
+      - range: "39201-40000"
+        status: pending
+        findings_file: null
+      - range: "40001-40800"
+        status: pending
+        findings_file: null
+      - range: "40801-41600"
+        status: pending
+        findings_file: null
+      - range: "41601-42400"
+        status: pending
+        findings_file: null
+      - range: "42401-43200"
+        status: pending
+        findings_file: null
+      - range: "43201-44000"
+        status: pending
+        findings_file: null
+      - range: "44001-44800"
+        status: pending
+        findings_file: null
+      - range: "44801-45600"
+        status: pending
+        findings_file: null
+      - range: "45601-46400"
+        status: pending
+        findings_file: null
+      - range: "46401-47200"
+        status: pending
+        findings_file: null
+      - range: "47201-48000"
+        status: pending
+        findings_file: null
+      - range: "48001-48800"
+        status: pending
+        findings_file: null
+      - range: "48801-49600"
+        status: pending
+        findings_file: null
+      - range: "49601-50400"
+        status: pending
+        findings_file: null
+      - range: "50401-51200"
+        status: pending
+        findings_file: null
+      - range: "51201-52000"
+        status: pending
+        findings_file: null
+      - range: "52001-52800"
+        status: pending
+        findings_file: null
+      - range: "52801-53600"
+        status: pending
+        findings_file: null
+      - range: "53601-54400"
+        status: pending
+        findings_file: null
+      - range: "54401-55200"
+        status: pending
+        findings_file: null
+      - range: "55201-56000"
+        status: pending
+        findings_file: null
+      - range: "56001-56185"
+        status: pending
+        findings_file: null
+  day-021:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-021.md
+    total_lines: 12423
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-8000"
+        status: pending
+        findings_file: null
+      - range: "8001-8800"
+        status: pending
+        findings_file: null
+      - range: "8801-9600"
+        status: pending
+        findings_file: null
+      - range: "9601-10400"
+        status: pending
+        findings_file: null
+      - range: "10401-11200"
+        status: pending
+        findings_file: null
+      - range: "11201-12000"
+        status: pending
+        findings_file: null
+      - range: "12001-12423"
+        status: pending
+        findings_file: null
+  day-022:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-022.md
+    total_lines: 5377
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5377"
+        status: pending
+        findings_file: null
+  day-023:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-023.md
+    total_lines: 9190
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-8000"
+        status: pending
+        findings_file: null
+      - range: "8001-8800"
+        status: pending
+        findings_file: null
+      - range: "8801-9190"
+        status: pending
+        findings_file: null
+  day-024:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-024.md
+    total_lines: 49894
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-8000"
+        status: pending
+        findings_file: null
+      - range: "8001-8800"
+        status: pending
+        findings_file: null
+      - range: "8801-9600"
+        status: pending
+        findings_file: null
+      - range: "9601-10400"
+        status: pending
+        findings_file: null
+      - range: "10401-11200"
+        status: pending
+        findings_file: null
+      - range: "11201-12000"
+        status: pending
+        findings_file: null
+      - range: "12001-12800"
+        status: pending
+        findings_file: null
+      - range: "12801-13600"
+        status: pending
+        findings_file: null
+      - range: "13601-14400"
+        status: pending
+        findings_file: null
+      - range: "14401-15200"
+        status: pending
+        findings_file: null
+      - range: "15201-16000"
+        status: pending
+        findings_file: null
+      - range: "16001-16800"
+        status: pending
+        findings_file: null
+      - range: "16801-17600"
+        status: pending
+        findings_file: null
+      - range: "17601-18400"
+        status: pending
+        findings_file: null
+      - range: "18401-19200"
+        status: pending
+        findings_file: null
+      - range: "19201-20000"
+        status: pending
+        findings_file: null
+      - range: "20001-20800"
+        status: pending
+        findings_file: null
+      - range: "20801-21600"
+        status: pending
+        findings_file: null
+      - range: "21601-22400"
+        status: pending
+        findings_file: null
+      - range: "22401-23200"
+        status: pending
+        findings_file: null
+      - range: "23201-24000"
+        status: pending
+        findings_file: null
+      - range: "24001-24800"
+        status: pending
+        findings_file: null
+      - range: "24801-25600"
+        status: pending
+        findings_file: null
+      - range: "25601-26400"
+        status: pending
+        findings_file: null
+      - range: "26401-27200"
+        status: pending
+        findings_file: null
+      - range: "27201-28000"
+        status: pending
+        findings_file: null
+      - range: "28001-28800"
+        status: pending
+        findings_file: null
+      - range: "28801-29600"
+        status: pending
+        findings_file: null
+      - range: "29601-30400"
+        status: pending
+        findings_file: null
+      - range: "30401-31200"
+        status: pending
+        findings_file: null
+      - range: "31201-32000"
+        status: pending
+        findings_file: null
+      - range: "32001-32800"
+        status: pending
+        findings_file: null
+      - range: "32801-33600"
+        status: pending
+        findings_file: null
+      - range: "33601-34400"
+        status: pending
+        findings_file: null
+      - range: "34401-35200"
+        status: pending
+        findings_file: null
+      - range: "35201-36000"
+        status: pending
+        findings_file: null
+      - range: "36001-36800"
+        status: pending
+        findings_file: null
+      - range: "36801-37600"
+        status: pending
+        findings_file: null
+      - range: "37601-38400"
+        status: pending
+        findings_file: null
+      - range: "38401-39200"
+        status: pending
+        findings_file: null
+      - range: "39201-40000"
+        status: pending
+        findings_file: null
+      - range: "40001-40800"
+        status: pending
+        findings_file: null
+      - range: "40801-41600"
+        status: pending
+        findings_file: null
+      - range: "41601-42400"
+        status: pending
+        findings_file: null
+      - range: "42401-43200"
+        status: pending
+        findings_file: null
+      - range: "43201-44000"
+        status: pending
+        findings_file: null
+      - range: "44001-44800"
+        status: pending
+        findings_file: null
+      - range: "44801-45600"
+        status: pending
+        findings_file: null
+      - range: "45601-46400"
+        status: pending
+        findings_file: null
+      - range: "46401-47200"
+        status: pending
+        findings_file: null
+      - range: "47201-48000"
+        status: pending
+        findings_file: null
+      - range: "48001-48800"
+        status: pending
+        findings_file: null
+      - range: "48801-49600"
+        status: pending
+        findings_file: null
+      - range: "49601-49894"
+        status: pending
+        findings_file: null
+  day-025:
+    file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-025.md
+    total_lines: 7676
+    status: pending
+    chunks:
+      - range: "1-800"
+        status: pending
+        findings_file: null
+      - range: "801-1600"
+        status: pending
+        findings_file: null
+      - range: "1601-2400"
+        status: pending
+        findings_file: null
+      - range: "2401-3200"
+        status: pending
+        findings_file: null
+      - range: "3201-4000"
+        status: pending
+        findings_file: null
+      - range: "4001-4800"
+        status: pending
+        findings_file: null
+      - range: "4801-5600"
+        status: pending
+        findings_file: null
+      - range: "5601-6400"
+        status: pending
+        findings_file: null
+      - range: "6401-7200"
+        status: pending
+        findings_file: null
+      - range: "7201-7676"
+        status: pending
+        findings_file: null
+
+summary:
+  sessions_total: 60
+  sessions_skipped: 13
+  sessions_to_process: 47
+  session_chunks: 178
+  daylog_chunks: 210
+  total_chunks: 388
