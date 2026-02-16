@@ -63,34 +63,8 @@ validate_file() {
         warnings=$((warnings + 1))
     fi
 
-    # Check 3: Finding types valid
-    local bad_types
-    bad_types=$(grep -E '^\s+type:\s+' "$f" 2>/dev/null | \
-        grep -vE '(user_request|user_correction|agent_proposal|agent_error|unresolved|introduced|refined|resolved|corrected|abandoned|open|tool_result)' | \
-        grep -vE '^\s+type:\s+"' || true)
-    # Allow any type in thread events (not restricted), only check findings
-    # Actually just check for completely wrong types in findings section
-    local findings_section=false
-    local bad_finding_types=""
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^findings: ]]; then
-            findings_section=true
-        elif [[ "$line" =~ ^[a-z] ]] && [[ ! "$line" =~ ^findings ]]; then
-            findings_section=false
-        fi
-        if $findings_section && [[ "$line" =~ ^[[:space:]]+type:[[:space:]]+ ]]; then
-            local tval=$(echo "$line" | sed 's/.*type:\s*//' | tr -d ' "'"'"'')
-            case "$tval" in
-                user_request|user_correction|agent_proposal|agent_error|unresolved) ;;
-                *) bad_finding_types="$bad_finding_types $tval" ;;
-            esac
-        fi
-    done < "$f"
-
-    if [[ -n "$bad_finding_types" ]]; then
-        echo -e "${YELLOW}WARN${NC} $basename: non-standard finding types:$bad_finding_types"
-        warnings=$((warnings + 1))
-    fi
+    # Check 3: Finding types — relaxed, contextual naming allowed
+    # No enforcement; Opus will normalize during synthesis
 
     # Check 4: File is valid YAML (basic check - has source: field)
     if ! grep -qE '^source:' "$f" 2>/dev/null; then

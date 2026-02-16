@@ -4,26 +4,44 @@ TASK: Extract requirements from day log markdown chunk
 
 SOURCE: {SOURCE_REF}
 FILE: {FILE}
-LINES: {START}-{END}
+CONTEXT: {CONTEXT_START}-{END}
+PRIMARY: {PRIMARY_START}-{END}
 OUTPUT: xs-requirements/findings/{OUTPUT_FILE}
 
 ## Step 1: Extract the chunk
 
-Run this command to get the raw text WITH LINE NUMBERS:
+Run this command to get the raw text WITH LINE NUMBERS. It reads from CONTEXT_START
+to include overlap context:
 
 ```bash
-awk 'NR>={START} && NR<={END} {printf "L%d %s\n", NR, $0}' {FILE}
+awk 'NR>={CONTEXT_START} && NR<={END} {printf "L%d %s\n", NR, $0}' {FILE}
 ```
 
 The output will look like:
 ```
-L{START} first line of chunk
-L{START+1} second line
+L{CONTEXT_START} first line (context zone if CONTEXT_START < PRIMARY_START)
 ...
+L{PRIMARY_START} first line of primary range
+...
+L{END} last line
 ```
 
 Use the L-prefixed numbers as your line references. They are the ABSOLUTE line numbers
 in the day log file.
+
+## Step 1b: Context vs primary range
+
+Lines from L{CONTEXT_START} to L{PRIMARY_START}-1 are **CONTEXT ONLY**:
+- Read them to understand what was being discussed at the end of the previous chunk
+- Do NOT create findings or thread events for lines in the context-only zone
+- They help you understand threads that span chunk boundaries
+
+Lines from L{PRIMARY_START} to L{END} are the **PRIMARY RANGE**:
+- Extract findings ONLY from these lines
+- All `line:` values in your YAML must be in [{PRIMARY_START}, {END}]
+- If a thread started in the context zone, note it as a continuation
+
+If CONTEXT_START == PRIMARY_START, there is no overlap (first chunk). Skip this step.
 
 ## Step 2: Read sequentially
 
@@ -51,34 +69,48 @@ Look for discussions about:
 ## Step 3: Extract findings
 
 CRITICAL — Diarization: Day logs capture Claude Code console output which shows a
-dialogue between "user" (lines starting with ">") and "agent" (Claude Code, lines
-starting with "⏺" or indented under it). Always identify WHO is speaking:
-- User statements ("> ...") define requirements (highest authority)
-- Agent statements ("⏺ ...") provide context, expansions, and sometimes errors
+dialogue between "user" and "agent" (Claude Code). Always identify WHO is speaking:
+- User statements define requirements (highest authority)
+- Agent statements provide context, expansions, and sometimes errors
 - User corrections of agent mistakes reveal the TRUE requirement
 
-In day log format:
-- `> text` = USER speaking
-- `⏺ text` = AGENT (Claude Code) speaking
-- `⎿ text` = Tool output (context, not a speaker)
-- `✻ Thinking…` = AGENT internal reasoning
+In day log format, look for these prefixes:
+- `> text` = USER speaking (the human developer)
+- `⏺ text` (filled circle) = AGENT (Claude Code) speaking
+- `⎿ text` (corner bracket) = Tool output/result (context, not a speaker)
+- `✻ Thinking…` (asterisk) = AGENT internal reasoning
+
+CRITICAL — Meta-layer confusion: Many day log sections capture an agent (A) working
+on reconstruct.jq or explore_session.py, which RECONSTRUCTS console output from ANOTHER
+agent's (B) session. This creates nested layers where tool results contain reconstructed
+output that ALSO uses `⏺`, `>`, and `⎿` symbols.
+
+Watch for these signs of reconstructed/expected output being compared:
+- Commands like `head -N expected_output.md` or `jq -rf reconstruct.jq` — their output
+  contains agent (B)'s reconstructed words, NOT agent (A) speaking
+- Side-by-side comparisons of "expected" vs "actual" output
+- Agent (A) discussing how to add `⏺` prefix or `⎿` formatting to its script output
+
+When tool results show reconstructed output, attribute findings about the FORMAT
+(symbols, spacing, indentation) as formatting requirements, and note in `context:`
+that this is reconstructed output revealing the target format.
 
 For each relevant discussion:
 1. Assign a thread ID (T001, T002...) when a topic FIRST appears
 2. Track when topics are REVISITED (same thread ID)
 3. Note RESOLUTION or ABANDONMENT
 4. Every event and finding MUST have a `speaker: user` or `speaker: agent` field
-5. Tag findings by type — ONLY these 5 types are allowed:
+5. Tag findings by type. Preferred types:
    - **user_request**: User explicitly asked for something (speaker: user)
    - **user_correction**: User rejected or corrected something (speaker: user)
    - **agent_proposal**: Agent suggested an approach (speaker: agent)
    - **agent_error**: Agent got something wrong (speaker: agent)
    - **unresolved**: Discussed but not concluded (either speaker)
-   Do NOT invent other types like "solution", "observation", "identified_format", etc.
+   You may use other descriptive types if these 5 don't fit, but prefer them.
 
 CRITICAL — Line numbers: The `line:` field in events and findings MUST be the
 ABSOLUTE line number in the day log file, NOT relative to the chunk start.
-Lines in this chunk range from {START} to {END}. All line numbers must fall in that range.
+All line numbers must be in the PRIMARY range [{PRIMARY_START}, {END}].
 
 CRITICAL — xs PRECURSOR tools ARE xs-relevant. Always extract findings about:
 - `reconstruct.jq` — the jq script that preceded xs (THIS IS XS WORK)
@@ -142,23 +174,27 @@ or `epics_to_consider`. Stick to the exact YAML schema shown above.
 
 ## Step 5: Self-validate before returning
 
-After writing the YAML file, read it back and check:
+After writing the YAML file, validate it:
 
-1. **Line numbers in range**: Every `line:` value in threads and findings must be
-   between {START} and {END} inclusive. If any are outside this range, they are WRONG.
-   Use ripgrep to find the correct line number for the quote:
+1. **Run validate-quotes.py** to check line numbers and quotes:
    ```bash
-   # Find the actual line number of a quote in the original day log file
-   rg -n "some distinctive words from the quote" {FILE} | head -5
+   ~/.local/bin/uv run --with pyyaml python3 xs-requirements/validate-quotes.py \
+     xs-requirements/findings/{OUTPUT_FILE} {FILE}
    ```
-   Then fix the line number in the YAML and re-write.
-2. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
-3. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
-4. **Quotes are real**: Spot-check that your quotes match text you actually saw in the Step 1 output.
-   Do NOT invent or paraphrase quotes — use actual text from the L-prefixed lines.
-   If uncertain about a quote, verify with ripgrep:
+   If any errors are reported, fix the line numbers in the YAML. Use the actual
+   line numbers reported by the validator and re-write the file.
+
+2. **Line numbers in PRIMARY range**: Every `line:` value must be between
+   {PRIMARY_START} and {END} inclusive. Lines in the context-only zone
+   [{CONTEXT_START}, {PRIMARY_START}-1] must NOT appear as finding line numbers.
+
+3. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
+
+4. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
+
+5. **Quotes are real**: If validate-quotes.py reports MISSING, verify with ripgrep:
    ```bash
-   rg -n "distinctive phrase" {FILE}
+   rg -nF "distinctive phrase" {FILE}
    ```
 
 If validation fails, fix the YAML file and re-write it before returning.

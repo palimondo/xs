@@ -4,16 +4,17 @@ TASK: Extract requirements from JSONL session chunk
 
 SOURCE: {SOURCE_REF}
 FILE: {FILE}
-LINES: {START}-{END}
+CONTEXT: {CONTEXT_START}-{END}
+PRIMARY: {PRIMARY_START}-{END}
 OUTPUT: xs-requirements/findings/{OUTPUT_FILE}
 
 ## Step 1: Extract the chunk
 
-Run this command to get the raw data. It preserves the ORIGINAL file line numbers
-by embedding them in the first jq stage:
+Run this command to get the raw data. It reads from CONTEXT_START to include
+overlap context, but preserves the ORIGINAL file line numbers:
 
 ```bash
-jq -c 'input_line_number as $ln | select($ln >= {START} and $ln <= {END}) | {_ln: $ln} + .' {FILE} | \
+jq -c 'input_line_number as $ln | select($ln >= {CONTEXT_START} and $ln <= {END}) | {_ln: $ln} + .' {FILE} | \
   jq -r '
     if .type == "user" then
       if (.message.content | type) == "string" then
@@ -40,7 +41,7 @@ jq -c 'input_line_number as $ln | select($ln >= {START} and $ln <= {END}) | {_ln
 If the jq command above fails, try this simpler version that handles both string and array content:
 
 ```bash
-jq -c 'input_line_number as $ln | select($ln >= {START} and $ln <= {END}) | {_ln: $ln} + .' {FILE} | \
+jq -c 'input_line_number as $ln | select($ln >= {CONTEXT_START} and $ln <= {END}) | {_ln: $ln} + .' {FILE} | \
   jq -r '"L\(._ln) [\(.type // "?")] " + (
     if .message then
       if (.message.content | type) == "string" then .message.content[0:400]
@@ -50,6 +51,20 @@ jq -c 'input_line_number as $ln | select($ln >= {START} and $ln <= {END}) | {_ln
     end
   )'
 ```
+
+## Step 1b: Context vs primary range
+
+Lines from L{CONTEXT_START} to L{PRIMARY_START}-1 are **CONTEXT ONLY**:
+- Read them to understand what was being discussed at the end of the previous chunk
+- Do NOT create findings or thread events for lines in the context-only zone
+- They help you understand threads that span chunk boundaries
+
+Lines from L{PRIMARY_START} to L{END} are the **PRIMARY RANGE**:
+- Extract findings ONLY from these lines
+- All `line:` values in your YAML must be in [{PRIMARY_START}, {END}]
+- If a thread started in the context zone, note it as a continuation
+
+If CONTEXT_START == PRIMARY_START, there is no overlap (first chunk). Skip this step.
 
 ## Step 2: Read sequentially
 
@@ -72,21 +87,41 @@ distinguished because:
 - Agent statements provide context, expansions, and sometimes errors
 - User corrections of agent mistakes reveal the TRUE requirement
 
+CRITICAL — Meta-layer confusion: Many of these sessions involve an agent (A) working
+on reconstruct.jq or explore_session.py, which RECONSTRUCTS console output from ANOTHER
+agent's (B) session. This creates multiple layers:
+- Layer 1: The agent (A) in this session — the one running commands
+- Layer 2: The reconstructed output from agent (B) — appears inside TOOL_RESULT content
+- Layer 3: The "expected output" files — also contain agent (B)'s reconstructed words
+
+Watch for these signs of reconstructed output inside tool results:
+- Text starting with `⏺` (filled circle) = agent (B)'s reconstructed message
+- Text starting with `>` = user's reconstructed prompt
+- Text starting with `⎿` (corner bracket) = reconstructed tool output
+- Text containing `… +N lines` = reconstructed truncation indicator
+
+When you see these patterns in `[TOOL_RESULT]` lines, the content is NOT agent (A)
+speaking — it is EXAMPLE OUTPUT showing the target format. Attribute findings about
+such content as formatting requirements (what the output should look like), and set
+`speaker: agent` with a note in `context:` that this is reconstructed output from
+another session, not direct agent speech.
+
 For each relevant discussion:
 1. Assign a thread ID (T001, T002...) when a topic FIRST appears
 2. Track when topics are REVISITED (same thread ID)
 3. Note RESOLUTION or ABANDONMENT
 4. Every event and finding MUST have a `speaker: user` or `speaker: agent` field
-5. Tag findings by type — ONLY these 5 types are allowed:
+5. Tag findings by type. Preferred types:
    - **user_request**: User explicitly asked for something (speaker: user)
    - **user_correction**: User rejected or corrected something (speaker: user)
    - **agent_proposal**: Agent suggested an approach (speaker: agent)
    - **agent_error**: Agent got something wrong (speaker: agent)
    - **unresolved**: Discussed but not concluded (either speaker)
-   Do NOT invent other types like "solution", "observation", "identified_format", etc.
+   You may use other descriptive types if these 5 don't fit, but prefer them.
 
 CRITICAL — Line numbers: The `line:` field MUST be the JSONL line number from the
 source file (as shown in the L-prefixed output from Step 1), NOT a sequence number.
+All line numbers must be in the PRIMARY range [{PRIMARY_START}, {END}].
 
 CRITICAL — xs PRECURSOR tools ARE xs-relevant. Always extract findings about:
 - `reconstruct.jq` — the jq script that preceded xs (THIS IS XS WORK)
@@ -150,23 +185,27 @@ or `epics_to_consider`. Stick to the exact YAML schema shown above.
 
 ## Step 5: Self-validate before returning
 
-After writing the YAML file, read it back and check:
+After writing the YAML file, validate it:
 
-1. **Line numbers in range**: Every `line:` value in threads and findings must be
-   between {START} and {END} inclusive. If any are outside this range, they are WRONG.
-   Use ripgrep to find the correct line number for the quote:
+1. **Run validate-quotes.py** to check line numbers and quotes:
    ```bash
-   # Find the actual line number of a quote in the original JSONL file
-   rg -n "some distinctive words from the quote" {FILE} | head -5
+   ~/.local/bin/uv run --with pyyaml python3 xs-requirements/validate-quotes.py \
+     xs-requirements/findings/{OUTPUT_FILE} {FILE}
    ```
-   Then fix the line number in the YAML and re-write.
-2. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
-3. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
-4. **Quotes are real**: Spot-check that your quotes match text you actually saw in the Step 1 output.
-   Do NOT invent or paraphrase quotes — use actual text from the L-prefixed lines.
-   If uncertain about a quote, verify with ripgrep:
+   If any errors are reported, fix the line numbers in the YAML. Use the actual
+   line numbers reported by the validator and re-write the file.
+
+2. **Line numbers in PRIMARY range**: Every `line:` value must be between
+   {PRIMARY_START} and {END} inclusive. Lines in the context-only zone
+   [{CONTEXT_START}, {PRIMARY_START}-1] must NOT appear as finding line numbers.
+
+3. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
+
+4. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
+
+5. **Quotes are real**: If validate-quotes.py reports MISSING, verify with ripgrep:
    ```bash
-   rg -n "distinctive phrase" {FILE}
+   rg -nF "distinctive phrase" {FILE}
    ```
 
 If validation fails, fix the YAML file and re-write it before returning.
