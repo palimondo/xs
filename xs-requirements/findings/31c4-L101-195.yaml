@@ -1,0 +1,9 @@
+source: 31c4:101-195
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers voice hook and slash command permission debugging — setting up a TTS toggle via /voice command, unrelated to session replay or xs tool"

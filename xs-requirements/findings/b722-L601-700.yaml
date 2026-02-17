@@ -1,0 +1,10 @@
+source: b722:601-700
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder CI/CD work: debugging Codecov integration, removing codecov.yml, adding CODECOV_TOKEN secret, fixing SHA parameter for workflow_dispatch events"
+  - "No discussion of xs, explore_session, reconstruct.jq, or session replay tools"

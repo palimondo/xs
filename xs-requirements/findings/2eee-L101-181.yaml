@@ -1,0 +1,9 @@
+source: 2eee:101-181
+extracted_by: sonnet
+timestamp: 2026-02-17T14:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Primary range (L101-L181) covers creation and debugging of a /voice slash command for text-to-speech toggle — unrelated to xs session replay, JSONL parsing, or console formatting"

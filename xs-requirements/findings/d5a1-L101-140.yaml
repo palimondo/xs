@@ -1,0 +1,9 @@
+source: d5a1:101-140
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers voice hook/slash command setup: speaking rate adjustment, creating /voice slash command, troubleshooting Bash permission errors in slash command syntax"

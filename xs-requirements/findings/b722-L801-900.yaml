@@ -1,0 +1,10 @@
+source: b722:801-900
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L801-L856: Discussion about Claude Code Notification hook (voice/speech alert when waiting for permissions) - BookMinder workflow tooling, not xs requirements"
+  - "L856-L900: Review and comparison of multiple PRs implementing filter-by-reading-status in BookMinder (ATDD/TDD process adherence analysis) - BookMinder development, not xs requirements"

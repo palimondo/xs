@@ -1,0 +1,9 @@
+source: 6fda:101-161
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L81-161 covers voice/TTS hook setup: speaking rate adjustment, slash command creation for voice toggle, and debugging Bash permission issues with /voice slash command. No session replay, JSONL parsing, console formatting, GitHub Actions fetching, or compaction recovery content."

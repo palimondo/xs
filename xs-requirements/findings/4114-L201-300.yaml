@@ -1,0 +1,9 @@
+source: 4114:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk. The entire primary range (L201-L300) covers debugging of a Claude Code Stop hook for text-to-speech functionality in BookMinder. The work involves configuring a shell script to extract transcript content and speak it via macOS text-to-speech (say command). This is BookMinder workflow tooling, not xs/explore_session requirements."
+  - "The only potentially reusable insight is the user instruction at L205/L214/L234 to always use .md suffix for Anthropic docs URLs to avoid downloading 2.4MB HTML when 21KB markdown is available — but this is a general workflow preference, not an xs requirement."

@@ -1,0 +1,8 @@
+source: d5a1:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk. Session is entirely about setting up Mac TTS voice output via Claude Code Stop hooks, voice toggle scripts, and custom slash commands. No session replay, JSONL parsing, console formatting, filtering, range selection, or GitHub Actions log fetching topics appear."

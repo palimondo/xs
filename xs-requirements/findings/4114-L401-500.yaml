@@ -1,0 +1,9 @@
+source: 4114:401-500
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder Stop hook debugging and voice feature implementation (speaking Claude responses via 'say' command, toggle script, global settings migration, /voice slash command)"

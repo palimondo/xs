@@ -1,0 +1,9 @@
+source: fa1a:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T14:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "Context zone (L481-L500): User clarified the purpose of session replay — scientific evaluation of Claude's work under different CLAUDE.md instructions on GH Actions, judging process compliance and quality. This is a workflow requirement but falls in the context-only zone."
+  - "Primary range (L501-L600): Entirely agent implementation debugging — writing Python extraction scripts, debugging JSONL parser failures, discovering JSON structure (type: assistant with nested message field). No user requests or corrections. No xs requirements extracted."

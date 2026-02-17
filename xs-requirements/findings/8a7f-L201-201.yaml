@@ -1,0 +1,10 @@
+source: 8a7f:201-201
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Primary range (L201) is a [SYSTEM] line with no content"
+  - "Context range (L181-L200) covers updating CLAUDE.md with Anthropic docs URL tip — unrelated to xs"

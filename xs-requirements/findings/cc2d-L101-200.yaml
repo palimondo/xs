@@ -1,0 +1,9 @@
+source: cc2d:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Entire chunk (lines 81-200) covers BookMinder TDD process discussion: acceptance test patterns, ATDD cycle, filter implementation history around commit 6f786cc, and use of git worktrees for restoration work — no xs/explore_session/reconstruct.jq content"

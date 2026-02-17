@@ -1,0 +1,11 @@
+source: 4114:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers debugging Claude Code Stop hook to speak responses via macOS say command"
+  - "Topics: hook configuration, jq syntax for extracting .content field, debug file creation"
+  - "Line 197 mentions WebFetch reporting 2.4MB for 21KB markdown page - interesting behavior but not an xs requirement"

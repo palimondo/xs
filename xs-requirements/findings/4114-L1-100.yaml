@@ -1,0 +1,9 @@
+source: 4114:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T14:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers lines 1-100 of session 4114 (41148fe1), which is entirely about setting up Mac TTS (text-to-speech) via Claude Code Stop hooks using the 'say' command — unrelated to xs/explore_session/reconstruct.jq"

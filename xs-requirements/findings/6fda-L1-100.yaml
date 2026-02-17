@@ -1,0 +1,8 @@
+source: 6fda:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk. Session is entirely about setting up Mac TTS voice hooks for Claude Code (using 'say' command, Stop hooks, voice toggle script, and slash commands for voice control). No session replay, JSONL parsing, console formatting, GitHub Actions fetching, or compaction recovery topics."

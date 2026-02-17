@@ -1,0 +1,9 @@
+source: 2eee:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T14:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Session is entirely about setting up Mac TTS (text-to-speech) for Claude Code via Stop/PostToolUse hooks, voice_toggle.sh script, and custom slash commands. No session replay, log fetching, or console formatting work."

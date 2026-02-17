@@ -1,0 +1,9 @@
+source: 4114:501-507
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 501-507 cover voice toggle slash command creation and a restart request — unrelated to xs/explore_session/reconstruct.jq"

@@ -1,0 +1,11 @@
+source: b722:301-400
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 301-346: Voice hook configuration (making 'say' command run in background with disown) — Claude Code settings, not xs requirements"
+  - "Lines 347-375: BookMinder issue #13 branch rename/cleanup — git operations, not xs requirements"
+  - "Lines 376-400: Codecov CI investigation for BookMinder PR #14 — CI/coverage tooling, not xs requirements"

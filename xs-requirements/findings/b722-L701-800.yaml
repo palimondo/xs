@@ -1,0 +1,10 @@
+source: b722:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L701-L799: Codecov CI integration debugging for BookMinder — monitoring CI runs, badge status, coverage upload configuration. BookMinder infrastructure work unrelated to xs."
+  - "L800: User requests a Claude Code notification hook to speak when waiting for permissions. Claude Code hooks infrastructure work, not xs session replay requirements."

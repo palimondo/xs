@@ -1,0 +1,10 @@
+source: cc2d:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 201-300 contain BookMinder work: git worktrees explanation for ATDD restoration, and BookMinder CLI filter validation debugging"
+  - "Line 227 mentions analyzing session transcripts for timeline summaries but in the context of BookMinder restoration, not xs use cases"
