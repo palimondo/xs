@@ -344,6 +344,85 @@ def consolidate():
     return len(all_findings)
 
 
+def chrono_sort():
+    """Re-sort all-findings.tsv chronologically by source date, then line number."""
+
+    # Date mapping: source prefix -> (sort_date, sort_order_within_date)
+    # Order within same date approximates chronological sequence
+    SOURCE_DATES = {
+        # Jul 4-5
+        "day-017": ("2025-07-04", 0),
+        # Jul 6
+        "day-018": ("2025-07-06", 0),
+        # Jul 9-12 (day-020 covers Jul 9-12)
+        "day-020": ("2025-07-09", 0),
+        "06a0": ("2025-07-12", 1),
+        # Jul 12 (day-021 is Jul 12)
+        "day-021": ("2025-07-12", 2),
+        # Jul 13
+        "day-022": ("2025-07-13", 0),
+        "943d": ("2025-07-13", 1),
+        # Jul 21
+        "day-023": ("2025-07-21", 0),
+        # Jul 23
+        "day-024": ("2025-07-23", 0),
+        "fa0d": ("2025-07-23", 1),
+        # Jul 25
+        "f9c7": ("2025-07-25", 0),
+        # Jul 26
+        "day-025": ("2025-07-26", 0),
+        "cc2d": ("2025-07-26", 1),
+        "e2f7": ("2025-07-26", 2),
+        "fa1a": ("2025-07-26", 3),
+        "7159": ("2025-07-26", 4),
+        # Jul 27
+        "b722": ("2025-07-27", 0),
+        "b475": ("2025-07-27", 1),
+        "0841": ("2025-07-27", 2),
+        # Jul 28
+        "caf2": ("2025-07-28", 0),
+        # Jul 30
+        "3636": ("2025-07-30", 0),
+        # Jul 31
+        "a40c": ("2025-07-31", 0),
+        # Aug 1
+        "1e83": ("2025-08-01", 0),
+        # Aug 2
+        "e583": ("2025-08-02", 0),
+        # Oct 16 (late session)
+        "760a": ("2025-10-16", 0),
+    }
+
+    tsv_path = os.path.join(OUTPUT_DIR, "all-findings.tsv")
+    chrono_path = os.path.join(OUTPUT_DIR, "all-findings-chrono.tsv")
+
+    with open(tsv_path) as f:
+        header = f.readline()
+        rows = f.readlines()
+
+    def sort_key(row):
+        fields = row.split("\t")
+        source = fields[0]  # e.g. "b475:1-100"
+        prefix = source.split(":")[0] if ":" in source else source
+        line_range = source.split(":")[1] if ":" in source else "0-0"
+        start_line = int(line_range.split("-")[0]) if "-" in line_range else int(line_range or "0")
+        line_num = int(fields[1]) if fields[1].isdigit() else 0
+
+        date_info = SOURCE_DATES.get(prefix, ("9999-99-99", 0))
+        return (date_info[0], date_info[1], start_line, line_num)
+
+    rows.sort(key=sort_key)
+
+    with open(chrono_path, "w") as f:
+        f.write(header)
+        f.writelines(rows)
+
+    print(f"Wrote: {chrono_path} ({len(rows)} findings, {os.path.getsize(chrono_path)} bytes)")
+
+
 if __name__ == "__main__":
-    count = consolidate()
-    sys.exit(0 if count > 0 else 1)
+    if "--chrono" in sys.argv:
+        chrono_sort()
+    else:
+        count = consolidate()
+        sys.exit(0 if count > 0 else 1)
