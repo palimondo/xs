@@ -74,6 +74,33 @@ def extract_primary_range(findings_path):
     return None, None
 
 
+def validate_speakers(data):
+    """Check that all thread events and findings have speaker fields.
+
+    Returns (missing_count, total_count) for items that should have speakers.
+    """
+    missing = []
+    total = 0
+
+    for thread in data.get('threads', []) or []:
+        tid = thread.get('id', '?')
+        for i, event in enumerate(thread.get('events', []) or []):
+            total += 1
+            speaker = event.get('speaker')
+            if speaker not in ('user', 'agent'):
+                line = event.get('line', '?')
+                missing.append(f"thread {tid} event {i+1} (L{line})")
+
+    for finding in data.get('findings', []) or []:
+        fid = finding.get('id', '?')
+        total += 1
+        speaker = finding.get('speaker')
+        if speaker not in ('user', 'agent'):
+            missing.append(f"finding {fid}")
+
+    return missing, total
+
+
 def validate_findings(findings_path, source_file):
     """Validate all (line, quote) pairs in a findings YAML file."""
     with open(findings_path) as f:
@@ -87,6 +114,14 @@ def validate_findings(findings_path, source_file):
     range_start, range_end = extract_primary_range(findings_path)
     if range_start and range_end:
         print(f"Primary range: [{range_start}, {range_end}]")
+
+    # Check speaker fields
+    speaker_missing, speaker_total = validate_speakers(data)
+    if speaker_missing:
+        print(f"  SPEAKER ERRORS ({len(speaker_missing)}/{speaker_total} missing):")
+        for loc in speaker_missing:
+            print(f"    MISSING speaker: {loc}")
+        print()
 
     # Collect all (line, quote, location) triples
     pairs = []
@@ -154,8 +189,13 @@ def validate_findings(findings_path, source_file):
                 print(f"  WRONG {location} L{claimed_line}: found at {actual_lines}")
                 errors += 1
 
+    # Add speaker errors to total
+    speaker_errors = len(speaker_missing)
+    errors += speaker_errors
+
     range_msg = f", {range_errors} range violations" if range_errors else ""
-    print(f"\nSummary: {checked} checked, {errors} errors{range_msg}, {skipped} skipped (short quotes)")
+    speaker_msg = f", {speaker_errors} missing speakers" if speaker_errors else ""
+    print(f"\nSummary: {checked} checked, {errors} errors{range_msg}{speaker_msg}, {skipped} skipped (short quotes)")
     return errors
 
 

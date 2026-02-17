@@ -1,0 +1,83 @@
+source: day-021:11601-11800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "TodoWrite tool formatting in reconstruction"
+    status: resolved
+    events:
+      - line: 11601
+        type: introduced
+        quote: "Perfect! Now I can see the structure. Let me create a test file to work on the TodoWrite formatting"
+      - line: 11632
+        type: design_decision
+        quote: "Now let me update the reconstruct.jq script to handle TodoWrite formatting"
+      - line: 11780
+        type: resolved
+        quote: "The reconstruction script has been successfully updated to format TodoWrite tool uses in the same style as shown in day-020.md"
+
+  - id: T002
+    topic: "TodoRead tool formatting needs improvement"
+    status: open
+    events:
+      - line: 11791
+        type: introduced
+        quote: "There's also TodoRead tool, check lines 6312-6328 in day-020.md improve that output"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 11624
+    type: design_specification
+    quote: "Wrote 7 lines to expected_todowrite.md"
+    context: "Expected output format for TodoWrite tool showing title 'Update Todos' and formatted todo list with status symbols and priority mapping (see lines 11625-11630 for the actual format)"
+
+  - id: F002
+    thread: T001
+    line: 11640
+    type: implementation_detail
+    quote: "if $line.message.content[0].name == \"TodoWrite\" then\n    \"⏺ Update Todos\"\nelse\n    \"⏺ \\(format_tool_name($line.message.content[0].name))(\\(format_tool_input($line.message.content[0].input)))\"\nend"
+    context: "TodoWrite tool use displays as 'Update Todos' instead of showing full input parameters"
+
+  - id: F003
+    thread: T001
+    line: 11663
+    type: design_specification
+    quote: "def priority_map(p):\n          if p == \"high\" then \"P0\"\n          elif p == \"medium\" then \"P1\"\n          elif p == \"low\" then \"P2\"\n          else \"P?\"\n          end;"
+    context: "Priority mapping for todo items: high→P0, medium→P1, low→P2"
+
+  - id: F004
+    thread: T001
+    line: 11670
+    type: design_specification
+    quote: "def status_symbol(s):\n          if s == \"completed\" then \"☒\"\n          elif s == \"in_progress\" then \"◐\"\n          else \"☐\"\n          end;"
+    context: "Status symbols for todo items: completed→☒, in_progress→◐, pending/other→☐"
+
+  - id: F005
+    thread: T001
+    line: 11679
+    type: implementation_detail
+    quote: "if ($line.toolUseResult? and ($line.toolUseResult | type) == \"object\" and $line.toolUseResult.newTodos?) then\n    # TodoWrite result\n    \"\\n  ⎿  \" + ($line.toolUseResult.newTodos | map(format_todo_item(.)) | join(\"\\n     \"))"
+    context: "TodoWrite results extract newTodos array and format each item with proper indentation"
+
+  - id: F006
+    thread: T001
+    line: 11782
+    type: design_rationale
+    quote: "1. TodoWrite tool use appears as \"⏺ Update Todos\" instead of showing the full input\n2. TodoWrite results show formatted todo items with:\n  - Status symbols: ☐ (pending), ◐ (in_progress), ☒ (completed)\n  - Priority mapping: high → P0, medium → P1, low → P2\n  - Proper indentation with 5 spaces for continuation lines"
+    context: "Summary of TodoWrite formatting requirements for console replay fidelity"
+
+  - id: F007
+    thread: T002
+    line: 11791
+    type: user_request
+    quote: "There's also TodoRead tool, check lines 6312-6328 in day-020.md improve that output"
+    context: "User requesting TodoRead tool formatting improvements to match day-020.md reference"
+
+notes:
+  - "This chunk shows completion of TodoWrite tool formatting implementation"
+  - "TodoWrite displays custom title 'Update Todos' rather than generic tool format"
+  - "Todo items have rich formatting with status symbols, priority codes, proper indentation"
+  - "TodoRead tool formatting is mentioned but not implemented in this chunk"
+  - "Test-driven approach: created test file, expected output, then implemented formatting"

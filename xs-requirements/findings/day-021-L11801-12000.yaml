@@ -1,0 +1,113 @@
+source: day-021:11801-12000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "TodoRead tool formatting"
+    status: resolved
+    context_note: "Thread introduced in context zone (L11791), implementation in primary range"
+    events:
+      - line: 11846
+        type: implemented
+        quote: "Write(expected_todoread.md)"
+      - line: 11906
+        type: resolved
+        quote: "Excellent! The reconstruction script now properly formats both TodoWrite and TodoRead tools"
+
+  - id: T002
+    topic: "Missing newlines between messages"
+    status: resolved
+    events:
+      - line: 11913
+        type: introduced
+        quote: "It looks to me like we are missing some newlines between some assistant and tool outputs?"
+      - line: 11923
+        type: acknowledged
+        quote: "I see the issue. Tool uses should have a newline after them, but subsequent assistant messages are missing the blank line separation."
+      - line: 11992
+        type: resolved
+        quote: "Much better! The spacing is now consistent with proper blank lines between messages."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 11848
+    type: user_request
+    quote: "⏺ Read Todos"
+    context: "TodoRead tool use should be displayed as '⏺ Read Todos' - user requested improvement of TodoRead formatting (from context zone L11791)"
+
+  - id: F002
+    thread: T001
+    line: 11848
+    type: design_decision
+    quote: "⏺ Read Todos"
+    context: "TodoRead tool use should be displayed as '⏺ Read Todos' (matching TodoWrite pattern of simplified display)"
+
+  - id: F003
+    thread: T001
+    line: 11849
+    type: design_decision
+    quote: "⎿  ☒ Extract CLI formatting logic into pure functions (P0)\n   ☒ Create direct tests for formatting functions (no subprocess) (P0)\n   ◐ Move fixture-based edge case tests to library integration tests (P0)"
+    context: "TodoRead results should show formatted todo items with status symbols (☒/☐/◐) and priorities (P0/P1/P2), matching TodoWrite result formatting"
+
+  - id: F004
+    thread: T001
+    line: 11879
+    type: implementation_detail
+    quote: "elif ($line.toolUseResult? and ($line.toolUseResult | type) == \"array\") then\n          # TodoRead result - toolUseResult is an array of todos\n          \"\\n  ⎿  \" + ($line.toolUseResult | map(format_todo_item(.)) | join(\"\\n     \"))"
+    context: "TodoRead results stored as array in toolUseResult field (unlike TodoWrite which uses newTodos object property)"
+
+  - id: F005
+    thread: T002
+    line: 11913
+    type: user_correction
+    quote: "It looks to me like we are missing some newlines between some assistant and tool outputs?"
+    context: "User identifying spacing/formatting issue in reconstructed output"
+
+  - id: F006
+    thread: T002
+    line: 11923
+    type: claude_understanding
+    quote: "I see the issue. Tool uses should have a newline after them, but subsequent assistant messages are missing the blank line separation."
+    context: "Claude identifying that tool uses need newline after them for proper spacing"
+
+  - id: F007
+    thread: T002
+    line: 11931
+    type: implementation_detail
+    quote: "end + \"\\n\""
+    context: "Adding newline after tool use formatting to ensure blank line separation"
+
+  - id: F008
+    thread: T002
+    line: 11952
+    type: implementation_detail
+    quote: "\"\\n  ⎿  \" + ($line.toolUseResult.newTodos | map(format_todo_item(.)) | join(\"\\n     \")) + \"\\n\""
+    context: "Adding newline after TodoWrite results for proper spacing"
+
+  - id: F009
+    thread: T002
+    line: 11956
+    type: implementation_detail
+    quote: "\"\\n  ⎿  \" + ($line.toolUseResult | map(format_todo_item(.)) | join(\"\\n     \")) + \"\\n\""
+    context: "Adding newline after TodoRead results for proper spacing"
+
+  - id: F010
+    thread: T002
+    line: 11965
+    type: implementation_detail
+    quote: "end) + \"\\n\""
+    context: "Adding newline after regular tool results for proper spacing"
+
+  - id: F011
+    thread: T002
+    line: 11978
+    type: implementation_detail
+    quote: "\"> \\(.message.content)\\n\""
+    context: "Adding newline after user messages for proper spacing between messages"
+
+notes:
+  - "TodoRead tool formatting follows same pattern as TodoWrite - simplified tool use display with formatted result list"
+  - "Consistent newline handling required across all message types (user, assistant, tool_use, tool_result) for proper output spacing"
+  - "Tool result arrays (TodoRead) vs objects with newTodos property (TodoWrite) require different handling in reconstruction logic"

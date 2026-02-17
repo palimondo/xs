@@ -53,9 +53,9 @@ validate_file() {
     # Check 2: Speaker field present on all events and findings
     # Count events/findings lines (lines with "- line:" or "- id: F")
     local event_count finding_count speaker_count
-    event_count=$(grep -cE '^\s+- line:\s+[0-9]+' "$f" 2>/dev/null || echo 0)
-    finding_count=$(grep -cE '^\s+- id: F[0-9]+' "$f" 2>/dev/null || echo 0)
-    speaker_count=$(grep -cE '^\s+speaker:\s+(user|agent)' "$f" 2>/dev/null || echo 0)
+    event_count=$(grep -cE '^\s*- line:\s+[0-9]+' "$f" 2>/dev/null) || event_count=0
+    finding_count=$(grep -cE '^\s*- id: F[0-9]+' "$f" 2>/dev/null) || finding_count=0
+    speaker_count=$(grep -cE '^\s*speaker:\s+(user|agent)' "$f" 2>/dev/null) || speaker_count=0
 
     local expected_speakers=$((event_count + finding_count))
     if [[ "$speaker_count" -lt "$expected_speakers" ]] && [[ "$expected_speakers" -gt 0 ]]; then
@@ -73,8 +73,9 @@ validate_file() {
     fi
 
     if [[ "$file_errors" -eq 0 ]]; then
-        local finding_count_actual=$(grep -cE '^\s+- id: F[0-9]+' "$f" 2>/dev/null || echo 0)
-        local thread_count=$(grep -cE '^\s+- id: T[0-9]+' "$f" 2>/dev/null || echo 0)
+        local finding_count_actual thread_count
+        finding_count_actual=$(grep -cE '^\s*- id: F[0-9]+' "$f" 2>/dev/null) || finding_count_actual=0
+        thread_count=$(grep -cE '^\s*- id: T[0-9]+' "$f" 2>/dev/null) || thread_count=0
         echo -e "${GREEN}OK${NC}   $basename: $finding_count_actual findings, $thread_count threads, range [$range_start-$range_end]"
     fi
 

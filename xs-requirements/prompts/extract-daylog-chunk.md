@@ -45,26 +45,40 @@ If CONTEXT_START == PRIMARY_START, there is no overlap (first chunk). Skip this 
 
 ## Step 2: Read sequentially
 
-Day logs are markdown files capturing full Claude Code session output. They contain:
-- User prompts (often prefixed with "Human:" or appearing after headers)
-- Claude responses (code, explanations, tool calls)
-- Session output (terminal output, file contents, test results)
-- Commentary and narrative between sessions
+Day logs are reconstructed Claude Code console output. They use these markers:
+- `> text` — USER speaking (the human developer)
+- `⏺ text` — AGENT (Claude Code) response or tool call
+- `⎿ text` — Tool output/result
+- `✻ Thinking…` — Agent internal reasoning
 
 Read the extracted text IN ORDER. Do NOT skip ahead or search for keywords.
 
-For each section, ask: "Is this about xs tool requirements?"
-Look for discussions about:
-- `explore_session.py`, `xs`, `reconstruct.jq` — the tools being recreated
-- Session replay, console output formatting
-- JSONL parsing, transcript handling
-- Filtering by message type, entity, tool
-- Range selection (line ranges, event indices)
-- Display modes (full, truncated, compact)
-- GitHub Actions log fetching
-- Compaction recovery
-- CLI flags and interface design
-- Output symbols (circle, bracket, etc.)
+For each section, ask: "Is this a REQUIREMENT for xs / explore_session / reconstruct.jq?"
+
+### What IS relevant (extract these):
+- **Feature requests**: CLI flags, display modes (full, truncated, compact), filtering
+  options (by message type, entity, tool), range selection (line ranges, event indices)
+- **Output format requirements**: symbols (⏺ > ⎿ ✻), spacing, indentation, truncation
+  rules, output line width
+- **Design decisions**: how to parse JSONL, what fields matter, format version handling
+  (1.x vs 2.x), unified timeline structure
+- **User corrections**: agent implemented X, user said "no, it should be Y"
+- **Workflow requirements**: console fidelity for LLM consumption, compaction recovery,
+  GitHub Actions log fetching
+- **Behavioral requirements**: what happens with malformed input, large files, missing fields
+- **Format examples**: when tool results show reconstructed output with specific formatting,
+  that IS a formatting requirement
+
+### What is NOT relevant (skip these):
+- Debugging tool invocations (getting jq syntax right, fixing Python imports, pip installs)
+- Agent reading files or exploring the codebase to understand structure
+- Implementation mechanics (how to code something, not what it should do)
+- General BookMinder work unrelated to session replay tools
+- Git operations, CI setup, test infrastructure setup
+- **Individual code snippets**: If the agent writes/debugs code, capture WHAT the code
+  does (the requirement: "tool results must be indented with 2sp + ⎿ + content"), NOT
+  HOW it does it (each jq conditional, each sed command, each code line). One finding
+  per requirement, not one finding per line of code.
 
 ## Step 3: Extract findings
 
@@ -119,13 +133,17 @@ CRITICAL — xs PRECURSOR tools ARE xs-relevant. Always extract findings about:
 - Formatting requirements (symbols, spacing, truncation) from precursor tools define xs requirements
 Do NOT dismiss reconstruct.jq work as "not about xs" — it IS the same tool lineage.
 
+BUT: discussions about HOW to implement these tools (debugging jq syntax, fixing script
+errors, getting commands to run) are NOT requirements. Only extract WHAT the tool should
+do, not how the developer struggled to make it work.
+
 ## Step 4: Write findings YAML
 
 Write the output file. Every event MUST include `speaker: user` or `speaker: agent`.
 
 ```yaml
 source: {SOURCE_REF}
-extracted_by: haiku
+extracted_by: sonnet
 timestamp: {TIMESTAMP}
 
 threads:
@@ -159,7 +177,7 @@ If NO xs-relevant findings exist in this chunk, write a minimal file:
 
 ```yaml
 source: {SOURCE_REF}
-extracted_by: haiku
+extracted_by: sonnet
 timestamp: {TIMESTAMP}
 
 threads: []
@@ -172,32 +190,57 @@ DO NOT pre-filter by epic. Extract everything. Orchestrator assigns epics later.
 DO NOT add extra fields like `applies_to_epic`, `epic_hint`, `key_requirements`,
 or `epics_to_consider`. Stick to the exact YAML schema shown above.
 
+## Step 4b: Review and revise
+
+Before validation, re-examine your findings against the source material still in memory:
+
+1. **Remove noise**: For each finding, ask: "Is this about what xs SHOULD DO, or about
+   debugging/implementation mechanics?" Remove findings about getting tools to work rather
+   than defining requirements.
+
+2. **Check completeness**: Scan the source once more. Did you miss any user requests,
+   corrections, or design decisions? Add them.
+
+3. **Check granularity**: A single conversation about one topic should be one thread
+   with one or two findings, not a finding per line. If you have 5+ findings about the
+   same narrow topic, consolidate.
+
+4. **Code vs requirements**: If you created findings for individual code lines, jq
+   conditionals, or implementation patterns, DELETE them. Replace with a single finding
+   stating the REQUIREMENT the code satisfies. Example: 10 findings about jq priority
+   mapping code → 1 finding: "Priority mapping: high→P0, medium→P1, low→P2".
+
+Rewrite the YAML file with your revisions.
+
 ## Step 5: Self-validate before returning
 
 After writing the YAML file, validate it:
 
-1. **Run validate-quotes.py** to check line numbers and quotes:
+1. **Run validate-quotes.py** to check line numbers, quotes, AND speaker fields:
    ```bash
    ~/.local/bin/uv run --with pyyaml python3 xs-requirements/validate-quotes.py \
      xs-requirements/findings/{OUTPUT_FILE} {FILE}
    ```
-   If any errors are reported, fix the line numbers in the YAML. Use the actual
-   line numbers reported by the validator and re-write the file.
+   The validator checks THREE things:
+   - Quote phrases found at claimed line numbers
+   - Line numbers within primary range [{PRIMARY_START}, {END}]
+   - Every event and finding has `speaker: user` or `speaker: agent`
 
-2. **Line numbers in PRIMARY range**: Every `line:` value must be between
-   {PRIMARY_START} and {END} inclusive. Lines in the context-only zone
-   [{CONTEXT_START}, {PRIMARY_START}-1] must NOT appear as finding line numbers.
+   **If ANY errors are reported (exit code > 0), you MUST fix and re-write the file.**
+   - For wrong line numbers: use the actual lines reported by the validator
+   - For MISSING speakers: add `speaker: user` or `speaker: agent` to every
+     thread event and every finding that lacks it. Determine speaker from context:
+     `[USER]` lines → `speaker: user`, `[ASST]`/`[TOOL_USE]` lines → `speaker: agent`,
+     `> text` in day logs → `speaker: user`, `⏺ text` → `speaker: agent`
+   - After fixing, re-run the validator to confirm 0 errors
 
-3. **Speaker field present**: Every event and finding must have `speaker: user` or `speaker: agent`.
-
-4. **Finding types valid**: Only these 5: user_request, user_correction, agent_proposal, agent_error, unresolved.
-
-5. **Quotes are real**: If validate-quotes.py reports MISSING, verify with ripgrep:
+2. **Quotes are real**: If validate-quotes.py reports MISSING, verify with ripgrep:
    ```bash
    rg -nF "distinctive phrase" {FILE}
    ```
 
-If validation fails, fix the YAML file and re-write it before returning.
+If validation fails, fix the YAML file, re-write it, and re-run the validator.
+Do NOT return until the validator reports 0 errors.
 
 ## CRITICAL — Return message
 
