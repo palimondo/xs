@@ -1,0 +1,64 @@
+source: f9c7:1901-2000
+extracted_by: sonnet
+timestamp: 2026-02-17T13:30:00Z
+
+threads:
+  - id: T001
+    topic: "GitHub Actions log step name format and UNKNOWN STEP issue"
+    status: resolved
+    events:
+      - line: 1919
+        speaker: agent
+        type: introduced
+        quote: "Run Claude Code"
+      - line: 1922
+        speaker: agent
+        type: refined
+        quote: "UNKNOWN STEP"
+      - line: 1932
+        speaker: user
+        type: refined
+        quote: "look for github bug with the UNKNOWN STEP -- it's not appearing only on log from Claude Code, which would implicate the CC GH Action, but int all steps"
+      - line: 1936
+        speaker: agent
+        type: refined
+        quote: "11055 UNKNOWN STEP"
+      - line: 1940
+        speaker: agent
+        type: refined
+        quote: "Checkout repository"
+      - line: 1980
+        speaker: agent
+        type: resolved
+        quote: "This confirms it's a known issue with GitHub's log format, not something we broke. The UNKNOWN STEP appears when GitHub can't associate log lines with specific steps"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1919
+    speaker: agent
+    type: agent_proposal
+    quote: "Run Claude Code"
+    context: "GitHub Actions log format is tab-separated: job_name TAB step_name TAB timestamp message. fetch_logs.py must parse this format to extract session content."
+
+  - id: F002
+    thread: T001
+    line: 1932
+    speaker: user
+    type: user_correction
+    quote: "look for github bug with the UNKNOWN STEP -- it's not appearing only on log from Claude Code, which would implicate the CC GH Action, but int all steps"
+    context: "User corrects agent's initial assumption — UNKNOWN STEP affects all workflow steps, not just Claude Code step. fetch_logs.py must handle UNKNOWN STEP as a valid (if degraded) step name across all log lines."
+
+  - id: F003
+    thread: T001
+    line: 1980
+    speaker: agent
+    type: agent_proposal
+    quote: "This confirms it's a known issue with GitHub's log format, not something we broke. The UNKNOWN STEP appears when GitHub can't associate log lines with specific steps"
+    context: "UNKNOWN STEP is a known GitHub Actions platform limitation. fetch_logs.py should handle it gracefully rather than failing, since it can affect entire workflow runs."
+
+notes:
+  - "Context lines (L1881-1900): cleanup of AWK test files and beginning of UNKNOWN STEP investigation — no primary findings."
+  - "L1919: Log format evidence shows tab-separated fields: {job}\\t{step_name}\\t{timestamp} {message}. Old runs had named steps; newer runs show UNKNOWN STEP for all steps."
+  - "L1940: Older run (16428036382) had proper step names: Checkout repository, Run Claude Code, Set up job, etc. — 6 distinct steps."
+  - "Ruff/code cleanup work (L1984-2000) is not xs-relevant — implementation mechanics of fetch_logs.py."

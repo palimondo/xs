@@ -1,0 +1,11 @@
+source: 943d:601-700
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder !sample filter implementation work (list_all_books, library_spec.py, cli_spec.py)"
+  - "L644 context summary block mentions filter validation story completion - pure BookMinder domain"
+  - "L673 user corrects agent about interactive git add -p usage - git workflow, not xs requirements"

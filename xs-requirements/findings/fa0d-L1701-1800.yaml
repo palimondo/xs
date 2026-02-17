@@ -1,0 +1,13 @@
+source: fa0d:1701-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Primary range covers GitHub Actions workflow debugging for BookMinder Claude Code integration"
+  - "Content: heredoc permission debugging, Claude Code allowed_tools configuration, PR creation via GitHub Actions"
+  - "This is CI setup work for BookMinder, not xs/explore_session/reconstruct.jq requirements"
+  - "L1695: user clarifies that debug instructions belong in trigger message, not in claude.yml custom_instructions — but this is about BookMinder CI workflow, not xs behavior"
+  - "L1790: user checks agent was not doing PR locally — context is BookMinder GitHub Actions, not xs"

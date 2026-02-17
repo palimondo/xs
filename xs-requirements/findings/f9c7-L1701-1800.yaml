@@ -1,0 +1,73 @@
+source: f9c7:1701-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T13:30:00Z
+
+threads:
+  - id: T001
+    topic: "fetch_logs must use --status=success to filter runs server-side"
+    status: resolved
+    events:
+      - line: 1710
+        speaker: user
+        type: introduced
+        quote: "I still don't get why you insist its better to postprocess on our end then limit is upper bound one has to guess, which sucks. Use `success`!"
+      - line: 1711
+        speaker: agent
+        type: refined
+        quote: "I should be using --status=success to get ONLY successful runs, not --status=completed which includes skipped/cancelled/failed."
+
+  - id: T002
+    topic: "fetch_logs must handle multiple GitHub Actions log format variants"
+    status: open
+    events:
+      - line: 1749
+        speaker: agent
+        type: introduced
+        quote: "Let's update our AWK scripts to handle both formats"
+      - line: 1758
+        speaker: user
+        type: refined
+        quote: "you said the modified (? was it) AWK is now flexible, so why are you doing something manually"
+      - line: 1768
+        speaker: user
+        type: refined
+        quote: "Shouldn't that work by extracting the prefix and timestamp somehow from first line, then computing the offsets indices and use those in substr below, and the prefix in the cut prefix loop?"
+
+  - id: T003
+    topic: "test Python implementation before porting to Bash"
+    status: resolved
+    events:
+      - line: 1774
+        speaker: user
+        type: introduced
+        quote: "That was bold move. Do you actually think you were able to one shot that? Let's test it py before we port to sh"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1710
+    speaker: user
+    type: user_correction
+    quote: "I still don't get why you insist its better to postprocess on our end then limit is upper bound one has to guess, which sucks. Use `success`!"
+    context: "fetch_logs must pass --status=success to gh CLI so the limit parameter means exactly N successful runs, not N total runs requiring post-filtering"
+
+  - id: F002
+    thread: T002
+    line: 1768
+    speaker: user
+    type: user_request
+    quote: "Shouldn't that work by extracting the prefix and timestamp somehow from first line, then computing the offsets indices and use those in substr below, and the prefix in the cut prefix loop?"
+    context: "fetch_logs log parsing must dynamically detect the log line format (prefix length, timestamp offset) from the first matching line rather than hardcoding two separate format paths"
+
+  - id: F003
+    thread: T003
+    line: 1774
+    speaker: user
+    type: user_correction
+    quote: "That was bold move. Do you actually think you were able to one shot that? Let's test it py before we port to sh"
+    context: "user enforces test-first discipline: validate Python implementation works before porting changes to Bash version"
+
+notes:
+  - "T002 not fully resolved in this chunk — agent was still debugging format detection at L1800"
+  - "This chunk is about fetch_logs.py/sh (GitHub Actions log retrieval tool), which is an xs precursor"
+  - "Main requirement: --status=success must be used for server-side filtering so --limit N means exactly N successful runs"

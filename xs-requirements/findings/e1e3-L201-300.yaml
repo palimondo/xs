@@ -1,0 +1,10 @@
+source: e1e3:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder YOLO mode fixes (SQL simplification, test reorganization) and a discussion about test architecture (one integration test rule for CLI spec) — all in BookMinder context, not xs"
+  - "Gemini CLI invocation pattern discussed at L292-L300 (user noticed Task tool bypassed approval dialog for gemini), but this is workflow meta-discussion, not an xs requirement"

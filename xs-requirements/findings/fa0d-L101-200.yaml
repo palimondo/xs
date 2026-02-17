@@ -1,0 +1,9 @@
+source: fa0d:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 81-200 are entirely BookMinder work: sqlite fixture queries, filter-by-sample-flag story, YOLO mode retrospective documentation, cli_spec.py reorganization with parameterized filter tests, git commits"

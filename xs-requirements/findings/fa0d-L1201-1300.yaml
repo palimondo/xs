@@ -1,0 +1,9 @@
+source: fa0d:1201-1300
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers debugging of Claude Code Action allowed_tools syntax (Bash(*) vs Bash(*:*)) in BookMinder GitHub Actions workflow — this is BookMinder CI configuration work, not xs requirements"

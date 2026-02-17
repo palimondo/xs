@@ -1,0 +1,9 @@
+source: fa0d:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 681-800 cover BookMinder fixture reorganization (moving specs/apple_books to specs/integration/apple_books), running tests with coverage, committing changes, pushing to GitHub, and troubleshooting GitHub App installation (missing workflow scope). None of this relates to xs/explore_session/reconstruct.jq requirements."

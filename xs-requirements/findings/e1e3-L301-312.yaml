@@ -1,0 +1,9 @@
+source: e1e3:301-312
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 301-312 are entirely about BookMinder test architecture organization (acceptance vs unit vs integration tests, ATDD/BDD structure), unrelated to xs/explore_session/reconstruct.jq"

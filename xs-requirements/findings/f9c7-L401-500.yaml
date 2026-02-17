@@ -1,0 +1,97 @@
+source: f9c7:401-500
+extracted_by: sonnet
+timestamp: 2026-02-17T13:00:00Z
+
+threads:
+  - id: T001
+    topic: "fetch_logs.py naming scheme: issue/PR numbers vs run IDs"
+    status: resolved
+    events:
+      - line: 413
+        speaker: user
+        type: introduced
+        quote: "Run IDs are fine, but they are secondary fallback mechanism that presents the log name after implementation detail from the CI infrustructure. I as user care about issue numbers and PR numbers. We shoudl focus primarily on these"
+      - line: 414
+        speaker: agent
+        type: refined
+        quote: "You're absolutely right! Users care about issue and PR numbers, not run IDs."
+
+  - id: T002
+    topic: "GHA log metadata: XML tags for issue/PR number extraction"
+    status: resolved
+    events:
+      - line: 448
+        speaker: user
+        type: introduced
+        quote: "it contains info like: <is_pr>false</is_pr> or <issue_number>13</issue_number>"
+      - line: 472
+        speaker: user
+        type: refined
+        quote: "Isn't this always true and you should be able to absolutely rely on these 2 tags to give you correct number and where our filename shoud be [issue|pr]?"
+      - line: 474
+        speaker: agent
+        type: refined
+        quote: "The log ALWAYS contains either `<issue_number>N</issue_number>` OR `<pr_number>N</pr_number>` regardless of branch. This is the authoritative source."
+      - line: 478
+        speaker: user
+        type: refined
+        quote: "do you have evidence for \"<pr_number>N</pr_number>\"? I think its always issue number and is_pr is just true."
+
+  - id: T003
+    topic: "evidence-first approach: investigate PR log format before implementing"
+    status: open
+    events:
+      - line: 432
+        speaker: user
+        type: introduced
+        quote: "Are you just guessing these patterns an putting them into our extraction script or did you actually locate these patters using direct experimentation and are implementing these based on actual evidence?"
+      - line: 489
+        speaker: user
+        type: refined
+        quote: "Why are you rushing to implementaion when you still know SHIT about how it actually looks like in the PR session log. You did your research in a Task before, when you were thinking hard about test cases. Extract all runs if you have to locally and analyze using `rg`."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 413
+    speaker: user
+    type: user_request
+    quote: "Run IDs are fine, but they are secondary fallback mechanism that presents the log name after implementation detail from the CI infrustructure. I as user care about issue numbers and PR numbers. We shoudl focus primarily on these"
+    context: "fetch_logs.py output files should be named by issue/PR number primarily; run ID is a fallback for cases where issue/PR number cannot be determined"
+
+  - id: F002
+    thread: T002
+    line: 448
+    speaker: user
+    type: user_request
+    quote: "it contains info like: <is_pr>false</is_pr> or <issue_number>13</issue_number>"
+    context: "GHA log 'FINAL PROMPT' section contains XML metadata tags that are the authoritative source for issue/PR number classification"
+
+  - id: F003
+    thread: T002
+    line: 472
+    speaker: user
+    type: user_correction
+    quote: "Isn't this always true and you should be able to absolutely rely on these 2 tags to give you correct number and where our filename shoud be [issue|pr]?"
+    context: "User corrects agent overcomplication: the XML tags are ALWAYS present and always authoritative, no branch-based fallback needed"
+
+  - id: F004
+    thread: T002
+    line: 478
+    speaker: user
+    type: user_correction
+    quote: "do you have evidence for \"<pr_number>N</pr_number>\"? I think its always issue number and is_pr is just true."
+    context: "Agent assumed PRs use <pr_number> tag; user corrects this - hypothesis is that it is always <issue_number> with <is_pr>true/false differentiating issues from PRs"
+
+  - id: F005
+    thread: T003
+    line: 489
+    speaker: user
+    type: user_correction
+    quote: "Why are you rushing to implementaion when you still know SHIT about how it actually looks like in the PR session log. You did your research in a Task before, when you were thinking hard about test cases. Extract all runs if you have to locally and analyze using `rg`."
+    context: "fetch_logs.py PR log format must be verified with actual evidence (extracted PR logs analyzed with rg) before implementing PR number extraction logic"
+
+notes:
+  - "T003 is open - agent fetches all runs at end of chunk to investigate PR log format; resolution may appear in next chunk"
+  - "Context zone (L381-400): agent was analyzing GitHub bot comment patterns to extract run IDs from 'View job' links"
+  - "L498 agent claims PRs use <pr_number> tags based on extracted data - this partially resolves T002/F004 but is agent claim, not user-confirmed"

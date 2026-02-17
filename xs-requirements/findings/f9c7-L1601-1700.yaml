@@ -1,0 +1,77 @@
+source: f9c7:1601-1700
+extracted_by: sonnet
+timestamp: 2026-02-17T13:30:00Z
+
+threads:
+  - id: T001
+    topic: "fetch_logs.py/sh timestamp parity - creation time vs modification time"
+    status: resolved
+    events:
+      - line: 1618
+        speaker: agent
+        type: introduced
+        quote: "Added `set_file_timestamps()` function that uses SetFile on macOS"
+      - line: 1618
+        speaker: agent
+        type: resolved
+        quote: "Both scripts now produce identical results!"
+
+  - id: T002
+    topic: "fetch_logs deduplication - skip already-downloaded runs"
+    status: resolved
+    events:
+      - line: 1619
+        speaker: user
+        type: introduced
+        quote: "what happens when we run it multiple times in a row without parameters. It fetches last 20 session logs, right? now that we have run id in filenames, maybe we can not fetch what we already have?"
+      - line: 1620
+        speaker: agent
+        type: resolved
+        quote: "Since we now have run IDs in the filenames, we can check what we already have and skip those."
+
+  - id: T003
+    topic: "fetch_logs run filtering - must filter by success status on server side"
+    status: resolved
+    events:
+      - line: 1685
+        speaker: user
+        type: introduced
+        quote: "are you listing all runs without filtering for Claude Code and success on server? I thought --limit 50 would be quivalent to `gh run list -w \"Claude Code\" -s success -L 50`"
+      - line: 1690
+        speaker: agent
+        type: refined
+        quote: "We're filtering by workflow name (claude.yml) but NOT by status. We're getting ALL runs including skipped, cancelled, and failed ones."
+      - line: 1699
+        speaker: agent
+        type: resolved
+        quote: "The scripts already handle this correctly - they skip cancelled/skipped runs in the save_workflow_data function."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1618
+    speaker: agent
+    type: agent_proposal
+    quote: "Added `set_file_timestamps()` function that uses SetFile on macOS"
+    context: "fetch_logs.py must set file creation time (not just modification time) to match session start timestamp, using SetFile on macOS. Python os.utime() only sets access+modification times, not creation time."
+
+  - id: F002
+    thread: T002
+    line: 1619
+    speaker: user
+    type: user_request
+    quote: "now that we have run id in filenames, maybe we can not fetch what we already have?"
+    context: "fetch_logs must skip already-archived runs by checking run ID in existing filenames before downloading, to avoid redundant network requests"
+
+  - id: F003
+    thread: T003
+    line: 1685
+    speaker: user
+    type: user_correction
+    quote: "are you listing all runs without filtering for Claude Code and success on server? I thought --limit 50 would be quivalent to `gh run list -w \"Claude Code\" -s success -L 50`"
+    context: "fetch_logs must filter runs by success status server-side (not just client-side), so --limit N returns N successful runs, not N total runs of mixed status"
+
+notes:
+  - "T003 user correction: the --limit parameter should count only successful runs; fetching N total and filtering locally wastes the limit budget"
+  - "Both fetch_logs.py and fetch_logs.sh are in scope as xs precursor tools for GitHub Actions log retrieval"
+  - "Deduplication uses run ID embedded in filename (e.g. _run-16433029102_) to detect already-archived runs"

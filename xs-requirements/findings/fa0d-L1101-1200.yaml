@@ -1,0 +1,9 @@
+source: fa0d:1101-1200
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content: Setting up GitHub Actions claude.yml workflow to allow Claude Code Action to push branches and implement features. Discussion of Bash(*) permissions, fetch-depth, token security for checkout action. This is BookMinder CI infrastructure setup, not xs tool requirements."

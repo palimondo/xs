@@ -1,0 +1,9 @@
+source: e1e3:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Session is entirely about BookMinder work: reviewing YOLO mode commits, reorganizing cli_spec.py test structure, ZISSAMPLE SQL condition logic, and TDD/BDD discipline discussion"

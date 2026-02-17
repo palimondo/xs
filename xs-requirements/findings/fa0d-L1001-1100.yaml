@@ -1,0 +1,9 @@
+source: fa0d:1001-1100
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder GitHub Actions workflow security configuration (claude.yml permissions, author_association checks, write permissions, creating test issues via gh CLI) — unrelated to xs session replay, console formatting, or log fetching"

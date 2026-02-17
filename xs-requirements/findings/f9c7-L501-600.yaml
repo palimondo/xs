@@ -1,0 +1,148 @@
+source: f9c7:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T13:00:00Z
+
+threads:
+  - id: T001
+    topic: "fetch_logs.py output file structure: flat github/ directory"
+    status: resolved
+    events:
+      - line: 533
+        speaker: user
+        type: introduced
+        quote: "WHO THE FUCK told you to create per-type folders? In the past, I said we want flat list of logs under github for issues and PRs."
+      - line: 533
+        speaker: user
+        type: refined
+        quote: "WHO THE FUCK told you to create per-type folders? In the past, I said we want flat list of logs under github for issues and PRs."
+      - line: 534
+        speaker: agent
+        type: refined
+        quote: "1. **NO per-type folders** - just flat JSONL files in `github/`\n2. **NO run folders** - we don't need the legacy structure at all\n3. **NO processing of skipped runs** - just output a message"
+      - line: 571
+        speaker: agent
+        type: resolved
+        quote: "PR #12 saved as `pr-12_*.jsonl`\n- ✅ Issue #13 saved as `issue-13_*.jsonl`\n- ✅ Skipped runs are properly skipped\n- ✅ No extra directories created"
+
+  - id: T002
+    topic: "fetch_logs.py: use XML tags from log content to identify issue/PR"
+    status: resolved
+    events:
+      - line: 501
+        speaker: agent
+        type: introduced
+        quote: "Analyzing PR runs that were misclassified as 'unlinked':"
+      - line: 502
+        speaker: agent
+        type: refined
+        quote: "Now let's check why these PR runs were saved as \"unlinked\" instead of being properly identified"
+      - line: 592
+        speaker: agent
+        type: resolved
+        quote: "Extracts issue/PR numbers from log XML tags (not branch/title)"
+
+  - id: T003
+    topic: "fetch_logs.py: skip cancelled/skipped runs silently, no unknown fallback files"
+    status: resolved
+    events:
+      - line: 533
+        speaker: user
+        type: introduced
+        quote: "we should not be creating anything for the skipped runs. The script might just output a simple message in that case"
+      - line: 533
+        speaker: user
+        type: refined
+        quote: "while you're obsessed with the fallback for the case we can't extract the JSONL, we should then keep the raw log, but on"
+      - line: 534
+        speaker: agent
+        type: resolved
+        quote: "3. **NO processing of skipped runs** - just output a message\n4. **Primary goal**: Extract JSONL for session analysis\n5. **Fallback**: Only save raw logs with a flag, not by default"
+
+  - id: T004
+    topic: "fetch_logs.py: optional --save-raw-logs flag for fallback, no raw_logs folder"
+    status: resolved
+    events:
+      - line: 553
+        speaker: user
+        type: introduced
+        quote: "did I ask for raw_logs folder?!?! We just talked about removing extra folders and having flat list under github for issues and PRs."
+      - line: 554
+        speaker: agent
+        type: resolved
+        quote: "No new folders. If we save raw logs with the flag, they should go in the flat `github/` directory too."
+
+  - id: T005
+    topic: "fetch_logs.py: JSONL file naming convention"
+    status: resolved
+    events:
+      - line: 592
+        speaker: agent
+        type: introduced
+        quote: "Proper naming: {date}-{time}-{issue|pr}-{N}_{session_id}.jsonl"
+      - line: 570
+        speaker: agent
+        type: resolved
+        quote: "Saved JSONL to /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/github/20250723-1"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 533
+    speaker: user
+    type: user_correction
+    quote: "WHO THE FUCK told you to create per-type folders? In the past, I said we want flat list of logs under github for issues and PRs."
+    context: "fetch_logs.py must save all JSONL files flat in github/ directory - no per-type subdirectories (issue-N/, pr-N/), no run subdirectories"
+
+  - id: F002
+    thread: T001
+    line: 533
+    speaker: user
+    type: user_correction
+    quote: "WHO THE FUCK told you to create per-type folders? In the past, I said we want flat list of logs under github for issues and PRs. You should also NEVER create run folder and also we should not be creating anything for the skipped runs."
+    context: "Additional constraint: no run-ID subdirectories either, completely flat structure"
+
+  - id: F003
+    thread: T002
+    line: 502
+    speaker: agent
+    type: agent_proposal
+    quote: "Now let's check why these PR runs were saved as \"unlinked\" instead of being properly identified"
+    context: "After analysis, agent confirmed: issues use <is_pr>false + <issue_number>N, PRs use <is_pr>true + <pr_number>N. fetch_logs.py must parse these XML tags to determine correct JSONL filename prefix (issue-N vs pr-N), not rely on branch names or titles"
+
+  - id: F004
+    thread: T003
+    line: 533
+    speaker: user
+    type: user_request
+    quote: "we should not be creating anything for the skipped runs. The script might just output a simple message in that case"
+    context: "fetch_logs.py must skip cancelled/skipped workflow runs, printing a message but not saving any file"
+
+  - id: F005
+    thread: T003
+    line: 533
+    speaker: user
+    type: user_request
+    quote: "while you're obsessed with the fallback for the case we can't extract the JSONL, we should then keep the raw log, but on"
+    context: "When JSONL extraction fails, save the raw log as fallback (but only with an explicit flag, not by default)"
+
+  - id: F006
+    thread: T004
+    line: 553
+    speaker: user
+    type: user_correction
+    quote: "did I ask for raw_logs folder?!?! We just talked about removing extra folders and having flat list under github for issues and PRs."
+    context: "Raw log fallback files must go in github/ directory alongside JSONL files, not in a separate raw_logs/ subdirectory"
+
+  - id: F007
+    thread: T005
+    line: 592
+    speaker: agent
+    type: agent_proposal
+    quote: "Proper naming: {date}-{time}-{issue|pr}-{N}_{session_id}.jsonl"
+    context: "JSONL filename format encodes date, time, type (issue/pr), number, and session UUID: 20250723-1917-issue-10_<session-id>.jsonl"
+
+notes:
+  - "Context zone (481-500): agent was rushing to implement PR handling without evidence; user angrily stopped it and demanded research first"
+  - "This chunk is primarily about fetch_logs.py (GitHub Actions log fetching) requirements"
+  - "T003 finding F005 quote is truncated in source (user message cut off mid-sentence at 'but on')"
+  - "fetch_logs.py is the predecessor to the GitHub Actions fetch use case of xs"

@@ -1,0 +1,9 @@
+source: 943d:701-792
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 701-792 are entirely BookMinder work: implementing !sample filter for list_all_books and list_recent_books, running pytest, fixing linting, and committing."

@@ -1,0 +1,10 @@
+source: fa0d:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder CLI test organization refactoring: unit/integration/acceptance/e2e directory structure, naming conventions for spec files (cli_spec.py, library_containers_spec.py, library_sqlite_spec.py), and how many integration tests CLI spec should have"
+  - "Brief discussion of retaining architectural decisions between sessions (L235-237) is general knowledge management, not xs requirements"

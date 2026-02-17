@@ -1,0 +1,10 @@
+source: fa0d:1301-1400
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 1281-1400 are entirely about configuring GitHub Actions Bash permissions for BookMinder's Claude workflow (filter-by-reading-status feature implementation)"
+  - "User corrections in this chunk are about workflow strategy (implement locally vs via GH Action), not about xs or session replay tools"

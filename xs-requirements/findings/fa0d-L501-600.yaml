@@ -1,0 +1,9 @@
+source: fa0d:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Entire primary range (L501-L600) is BookMinder test reorganization: moving specs/cli_spec.py to acceptance/cli_spec.py and e2e/cli_wiring_spec.py, running pytest, fixing ruff linting errors, and committing changes."

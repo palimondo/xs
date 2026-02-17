@@ -1,0 +1,43 @@
+source: fa0d:2501-2532
+extracted_by: sonnet
+timestamp: 2026-02-17T12:30:00Z
+
+threads:
+  - id: T001
+    topic: "empty assistant message causes session to be stuck"
+    status: open
+    events:
+      - line: 2518
+        speaker: agent
+        type: introduced
+        quote: "[]"
+      - line: 2524
+        speaker: agent
+        type: refined
+        quote: "API Error: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.79: all messages must have non-empty content except for the optional final assistant message\"}}"
+      - line: 2532
+        speaker: user
+        type: refined
+        quote: "Error: Error during compaction: Error: API Error: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.79: all messages must have non-empty content except for the optional final assistant message\"}}"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 2518
+    speaker: agent
+    type: agent_error
+    quote: "[]"
+    context: "Empty assistant message content (empty array) causes the session to become stuck - subsequent API calls fail with 'all messages must have non-empty content'. xs must handle sessions containing empty assistant messages gracefully during parsing."
+
+  - id: F002
+    thread: T001
+    line: 2532
+    speaker: user
+    type: unresolved
+    quote: "Error: Error during compaction: Error: API Error: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.79: all messages must have non-empty content except for the optional final assistant message\"}}"
+    context: "Session ends abruptly - compaction failed due to empty message. This is a real-world edge case xs will encounter when parsing sessions that were abandoned mid-stream due to API errors."
+
+notes:
+  - "Primary range is almost entirely implementation mechanics (benchmarking AWK vs Python for JSONL extraction from GitHub Actions logs) - not xs requirements."
+  - "The xs-relevant finding is the empty assistant message at L2518 (empty array content) that caused the session to become irrecoverably stuck, requiring a new session."
+  - "T001 is open - the stuck session was never resolved within this session (the compaction also failed)."

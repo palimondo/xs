@@ -1,0 +1,9 @@
+source: fa0d:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T11:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 1-100 cover BookMinder project work: adding contributors to pyproject.toml, reviewing YOLO mode commits, reorganizing CLI specs, investigating ZISSAMPLE SQL conditions, and test fixture structure — all BookMinder domain work unrelated to xs/explore_session/reconstruct.jq"

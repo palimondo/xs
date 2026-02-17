@@ -1,0 +1,9 @@
+source: fa0d:1601-1700
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder GitHub Actions CI debugging: analyzing failed Bash commands in workflow run, fixing claude.yml environment setup, investigating git commit HEREDOC permission failures, and shell (bash vs zsh) configuration"

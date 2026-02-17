@@ -1,0 +1,9 @@
+source: fa0d:801-900
+extracted_by: sonnet
+timestamp: 2026-02-17T12:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "This chunk covers BookMinder GitHub Actions CI/CD setup: configuring claude.yml workflow, ubuntu vs macos runner selection, Claude code review workflow parallelism, and @claude mention workflow activation. None of this relates to xs/explore_session/reconstruct.jq requirements."

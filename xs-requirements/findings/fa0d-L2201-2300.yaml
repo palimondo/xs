@@ -1,0 +1,67 @@
+source: fa0d:2201-2300
+extracted_by: sonnet
+timestamp: 2026-02-17T12:30:00Z
+
+threads:
+  - id: T001
+    topic: "GitHub Actions log prefix format for JSONL extraction"
+    status: resolved
+    events:
+      - line: 2228
+        speaker: agent
+        type: resolved
+        quote: "The prefix is exactly"
+
+  - id: T002
+    topic: "File naming format for archived GitHub Actions session logs (PR vs Issue)"
+    status: open
+    events:
+      - line: 2228
+        speaker: agent
+        type: introduced
+        quote: "PRs reference underlying issue number in branch, not PR number"
+
+  - id: T003
+    topic: "Unix tools vs Python for JSONL extraction from GitHub Actions logs"
+    status: open
+    events:
+      - line: 2274
+        speaker: user
+        type: introduced
+        quote: "I don't think we have to parse the logs in python to extract out jsonl -- command line unix tools should be faster I think? Or We shoudl try both and compare?"
+      - line: 2295
+        speaker: user
+        type: refined
+        quote: "I've turned off plan mode so that you could test and measure optimal solutions"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 2228
+    speaker: agent
+    type: agent_proposal
+    quote: "The prefix is exactly"
+    context: "Agent confirmed GitHub Actions log line prefix is tab-separated: claude<TAB>UNKNOWN STEP<TAB>{timestamp}Z<SPACE>. All lines between start/end markers have this prefix. User (context L2187) suggested fixed-length prefix stripping as performance optimization for fetch_logs tool"
+
+  - id: F002
+    thread: T002
+    line: 2228
+    speaker: agent
+    type: agent_proposal
+    quote: "PRs reference underlying issue number in branch, not PR number"
+    context: "Naming format for archived session files: {YYYY}-{MM}-{DD}-{HHMM}-issue-{N}_{session_id}.jsonl; PRs and issues share branch naming pattern claude/issue-{N}-{YYYYMMDD}-{HHMM}"
+
+  - id: F003
+    thread: T003
+    line: 2274
+    speaker: user
+    type: user_request
+    quote: "I don't think we have to parse the logs in python to extract out jsonl -- command line unix tools should be faster I think? Or We shoudl try both and compare?"
+    context: "User preference for Unix tool pipeline (sed/awk/cut) over Python for extracting JSONL from GitHub Actions logs; wants benchmarking of both approaches"
+
+notes:
+  - "This chunk covers GitHub Actions log archiving work (fetch_logs xs precursor)"
+  - "User requests about prefix format and PR/issue naming were in context zone (L2187); represented here via agent's summary at L2228"
+  - "T002 (PR vs Issue naming) open - user interrupted agent plan mode multiple times; actual naming decision may be in later chunk"
+  - "T003 (Unix tools vs Python) open - user just turned off plan mode to allow testing; benchmarking not yet done in this chunk"
+  - "Log extraction boundary markers: 'Running Claude with prompt from file:' (start) and 'Log saved to...claude-execution-output.json' (end)"

@@ -1,0 +1,57 @@
+source: fa1a:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T13:30:00Z
+
+threads:
+  - id: T001
+    topic: "general-purpose JSONL session parser vs issue-specific script"
+    status: open
+    events:
+      - line: 251
+        speaker: user
+        type: introduced
+        quote: "that's OK for now. But I thought we'll be reviewing replay_claude_session.py -- was I wrong?"
+      - line: 252
+        speaker: agent
+        type: refined
+        quote: "You're right! I got confused and created a specific script for issue #13 (`replay_issue_13.py`) instead of reviewing the general-purpose `replay_claude_session.py`."
+
+  - id: T002
+    topic: "git staging discipline — stage files explicitly by name"
+    status: resolved
+    events:
+      - line: 271
+        speaker: user
+        type: introduced
+        quote: "recall line 72 from CLAUDE.md"
+      - line: 272
+        speaker: agent
+        type: refined
+        quote: "Stage files explicitly by name (avoid `git add .`)"
+      - line: 273
+        speaker: user
+        type: resolved
+        quote: "go"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 251
+    speaker: user
+    type: user_correction
+    quote: "that's OK for now. But I thought we'll be reviewing replay_claude_session.py -- was I wrong?"
+    context: "User expected agent to work on the general-purpose JSONL session parser (replay_claude_session.py) rather than a hardcoded issue-specific replay script. Indicates the general-purpose JSONL parser is the intended tool for session reconstruction."
+
+  - id: F002
+    thread: T002
+    line: 272
+    speaker: agent
+    type: agent_proposal
+    quote: "Stage files explicitly by name (avoid `git add .`)"
+    context: "CLAUDE.md guideline the user invoked to fix the replay script's use of git add -A. Reflects a workflow discipline constraint for the session replay tool when it automates git operations."
+
+notes:
+  - "Context lines 181-200: agent working on parsing JSONL file from GitHub Actions run to extract commits, building extract_commits.sh and replay_issue_13.py."
+  - "T001 open: user redirected agent toward general-purpose replay_claude_session.py at L251, but chunk ends before reviewing that file."
+  - "Most of this chunk (L201-250) is implementation mechanics: debugging ruff issues, whitespace fixes, script scaffolding — not xs requirements."
+  - "The general-purpose session JSONL parser (replay_claude_session.py) is xs precursor work for session replay/reconstruction use case."
