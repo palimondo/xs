@@ -1,0 +1,74 @@
+# Story: Python and Shell Script Parity
+
+id: GFH-010
+title: Maintain feature parity between fetch_logs.py and fetch_logs.sh
+epic: fetch
+theme: github-fetch
+
+as_a: developer using fetch tools
+i_want: both Python and shell versions to behave identically
+so_that: I can use either script interchangeably
+
+sources:
+  - session: 0841:401-500
+    finding: F004
+    quote: "I've use manually the fetch_logs.py to get the latest github logs. We moved it to tools, but originally created it in parent folder, now it recreates the github folder inside tools, can you fix that (I think .sh does the exact same thing, so please keep parity of both)"
+    context: "User explicitly requires parity between .py and .sh versions"
+
+  - session: cc2d:501-600
+    finding: F004
+    quote: "Now let me update the shell script as well:"
+    context: "Every change to .py must be mirrored in .sh"
+
+  - session: cc2d:501-600
+    finding: F005
+    quote: "The deduplication logic works (shell script won't re-download what Python already fetched)"
+    context: "Deduplication works across both scripts — files from one are recognized by the other"
+
+  - session: f9c7:1301-1400
+    finding: F004
+    quote: "We are in a process of rewriting fetch_logs.py to bash script"
+    context: "Architecture: Python was original, bash is the rewrite target for performance"
+
+  - session: f9c7:1601-1700
+    finding: F001
+    quote: "Added `set_file_timestamps()` function that uses SetFile on macOS"
+    context: "Both scripts now produce identical results for timestamp setting"
+
+  - file: day-025:6801-7000
+    finding: F002
+    quote: "fetch_logs.py & fetch_logs.sh - Essential for downloading sessions from GitHub"
+    context: "Both scripts identified as essential tools"
+
+acceptance_criteria:
+  - id: GFH-010-AC1
+    given: any feature change to fetch_logs.py
+    when: committing
+    then: equivalent change must be made to fetch_logs.sh
+
+  - id: GFH-010-AC2
+    given: same input (same GitHub repo, same runs)
+    when: running either script
+    then: produces identical output files (same names, same content, same timestamps)
+
+  - id: GFH-010-AC3
+    given: files created by fetch_logs.py
+    when: running fetch_logs.sh subsequently
+    then: deduplication correctly skips runs already fetched by the other script
+
+depends_on: []
+related:
+  - GFH-001
+  - GFH-003
+  - GFH-005
+  - GFH-006
+  - GFH-007
+  - GFH-008
+
+priority: should
+status: mined
+validation_notes: |
+  User was insistent on parity across sessions.
+  The bash version was created as a performance-oriented rewrite of the Python original.
+  Both scripts coexist in tools/ directory.
+  Cross-script deduplication is a specific user-verified behavior.

@@ -9,14 +9,98 @@ as_a: developer exploring a session
 i_want: to show only specific tool types
 so_that: I can focus on relevant actions
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "a40c:1-100"
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Include filters: tools (Edit,Bash(git *)) or virtual entities (Message,Tool,User,Assistant)"
+    context: "CLI help text showing --include accepts tool names and virtual entities"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "b475:601-700"
+    line: 628
+    speaker: user
+    type: user_request
+    quote: "I want to have the --include and --exclude duality -- they shoudl have both the same syntax of of comma separated list. Do we still have that somewhere or did it det lost during refactoring?"
+    context: "User explicitly wants --include and --exclude with symmetric comma-separated syntax"
+
+  - file: "b475:701-800"
+    line: 736
+    speaker: agent
+    type: agent_proposal
+    quote: "The new syntax is cleaner: explore_session.py session.jsonl -t --include \"Bash(git *)\" explore_session.py session.jsonl -t --exclude \"TodoWrite\" explore_session.py session.jsonl -t --include \"Edit,Read\" 5-10"
+    context: "CLI design confirmed: --include with comma-separated tool names works with range selection"
+
+  - file: "b475:2301-2400"
+    line: 2316
+    speaker: agent
+    type: agent_proposal
+    quote: "[29] ⏺ Bash: $ mkdir -p myproject/src myproject/tests\n[35] ⏺ Bash: $ cd myproject && git init && git add .\n[36] ⏺ Bash: $ cd myproject && git commit -m 'Initial commit'"
+    context: "Include filter by exact tool name: --include Bash shows only Bash tool entries"
+
+  - file: "fa1a:801-900"
+    line: 855
+    speaker: user
+    type: user_request
+    quote: "I think the filters should be a single parameter with a comma separated list. At least that's how I'm reading the existing system for Claude Code's tools permissions."
+    context: "--include accepts a comma-separated list matching Claude Code's allowedTools format"
+
+  - file: "day-025:5401-5600"
+    line: 5487
+    speaker: user
+    type: user_request
+    quote: "I think the filters should be a single parameter with a comma separated list. At least that's how I'm reading the existing system for Claude Code's tools permissions."
+    context: "User wants comma-separated format matching Claude Code's tool permission syntax"
+
+  - file: "day-025:5601-5800"
+    line: 5701
+    speaker: agent
+    type: agent_explanation
+    quote: "Short tool names (without parameters): # Include all Edit operations --include \"Edit\""
+    context: "Short tool name syntax (without glob parameters) matches all operations of that tool type"
+
+  - file: "fa1a:701-800"
+    line: 797
+    speaker: user
+    type: user_request
+    quote: "it shoudl also still support the short tool inclusion syntax with just the tool name without the params, yes?"
+    context: "Filter syntax must support both bare tool name (Edit) and parameterized form (Edit(specs/**))"
+
+  - file: "b475:1401-1500"
+    line: 1409
+    speaker: user
+    type: user_request
+    quote: "I think we need to include tool responses together with tool invocations, this is incomplete"
+    context: "When filtering for a tool, both tool_use and tool_result events for matching tools must be included"
+
+acceptance_criteria:
+  - id: FLT-001-AC1
+    given: session with mixed tool types (Bash, Edit, Read, Write)
+    when: --include "Bash" is specified
+    then: only Bash tool_use and tool_result events are shown
+
+  - id: FLT-001-AC2
+    given: session with mixed tool types
+    when: --include "Edit,Read" is specified (comma-separated)
+    then: only Edit and Read tool events are shown
+
+  - id: FLT-001-AC3
+    given: session with tool calls
+    when: --include "Bash" is specified
+    then: both Bash tool_use entries AND their corresponding tool_result entries are shown
+
+  - id: FLT-001-AC4
+    given: session with user and assistant messages
+    when: --include "Bash" is specified
+    then: non-tool events (user messages, assistant text) are excluded
 
 depends_on:
   - PRS-005
-related: []
+related:
+  - FLT-002
+  - FLT-005
+  - FLT-011
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Strong evidence from multiple sessions. Comma-separated format from Claude Code allowedTools syntax."

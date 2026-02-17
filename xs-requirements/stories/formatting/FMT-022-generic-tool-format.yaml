@@ -1,0 +1,80 @@
+# Story: Generic Tool Parameter Display
+
+id: FMT-022
+title: Display generic tool calls with appropriate parameter extraction
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: all tools displayed with their most meaningful parameter
+so_that: I can identify what each tool did at a glance
+
+sources:
+  - session: "b475:98"
+    quote: "if input.command? then input.command elif input.file_path? then input.file_path elif input.path? then input.path elif input.pattern? then input.pattern else tostring end"
+    context: "reconstruct.jq parameter extraction priority chain"
+  - session: "b475:996"
+    quote: "we're missing LS, Glob, Task, WebFetch, WebSearch in the compact display"
+    context: "Several tools need parameter display"
+  - session: "b475:992"
+    quote: "I thin you can have generic output style for tools, we had special output handling only for Todos IIRC"
+    context: "User specifies generic style for most tools, special only for Todos"
+  - session: "b475:1137"
+    quote: "no, there are no tabs between tool name and params"
+    context: "Format is ToolName(param) with no tabs or special spacing"
+  - session: "b475:1716"
+    quote: "Grep shows 'pattern' in path; LS/Glob show path/pattern; Task/WebFetch/WebSearch show quoted arg"
+    context: "Tool-specific parameter selection for display"
+
+acceptance_criteria:
+  - id: FMT-022-AC1
+    given: any tool_use entry not handled by specific stories (FMT-003/004/005/020)
+    when: rendered in truncated or compact mode
+    then: "Display as '⏺ ToolName({primary_param})'"
+
+  - id: FMT-022-AC2
+    given: Grep tool_use entry
+    when: rendered
+    then: "Display as '⏺ Grep({pattern})' or '⏺ Grep(\"{pattern}\" in {path})'"
+
+  - id: FMT-022-AC3
+    given: LS tool_use entry
+    when: rendered
+    then: "Display as '⏺ LS({path})'"
+
+  - id: FMT-022-AC4
+    given: Glob tool_use entry
+    when: rendered
+    then: "Display as '⏺ Glob({pattern})'"
+
+  - id: FMT-022-AC5
+    given: WebSearch tool_use entry
+    when: rendered
+    then: "Display as '⏺ WebSearch(\"{query}\")'"
+
+  - id: FMT-022-AC6
+    given: MCP tool_use entry (prefixed with mcp__)
+    when: rendered
+    then: "Display as '⏺ mcp__provider__tool({primary_param})'"
+
+  - id: FMT-022-AC7
+    given: unknown tool with no recognized parameter fields
+    when: rendered
+    then: "Fall back to ToolName() with no parameter or JSON tostring"
+
+depends_on:
+  - PRS-005  # Must parse JSONL tool_use entries
+related:
+  - FMT-003  # Bash tool (specific handler)
+  - FMT-004  # Edit tool (specific handler)
+  - FMT-005  # Read tool (specific handler)
+  - FMT-020  # Todo tools (special handling)
+
+priority: must
+status: mined
+validation_notes: |
+  Generic tool display: ToolName(primary_param) with parameter extraction chain.
+  Parameter priority: .command > .file_path > .path > .pattern > fallback.
+  Special parameter display for Grep ("pattern" in path) per b475:1716.
+  Most tools use generic path; only Todos have special handling per b475:992.
+  Source: b475:98, b475:996, b475:992, b475:1716

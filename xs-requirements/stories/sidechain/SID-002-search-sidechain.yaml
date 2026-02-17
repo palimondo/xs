@@ -9,15 +9,56 @@ as_a: developer searching session content
 i_want: searches to include sidechain event content
 so_that: I can find information from delegated work
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: e583:1001-1100
+    finding: F003
+    quote: "Task sub-agent actions ARE visible in xs output, contrary to what we thought earlier"
+    context: "Characterization test confirmed search finds content within sidechain events"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: e583:201-300
+    finding: F002
+    quote: "AttributeError: 'list' object has no attribute 'lower'"
+    context: "xs search crashes with AttributeError when message content is a list rather than a string -- this bug was encountered while searching for Task sub-agent content"
+
+  - session: e583:301-400
+    finding: F002
+    quote: "The search is broken. Let me look at the Task invocation area in JSON format"
+    context: "Search function (search_timeline) crashes with AttributeError when it encounters user messages with list content (tool_result type); this was discovered while trying to search sidechain content"
+
+  - session: e583:301-400
+    finding: F003
+    quote: "Are we missing characterization tests for search completely or did you discover an issue that's specific to something?"
+    context: "User enforcing characterization test discipline -- search bug affecting sidechain content must be covered by a failing test first"
+
+acceptance_criteria:
+  - id: SID-002-AC1
+    given: a session JSONL containing sidechain events with text content
+    when: searching with -S flag for text that appears in sidechain event content
+    then: matching sidechain events are included in search results
+    notes: "Confirmed as current behavior by characterization test (e583:1001-1100)"
+
+  - id: SID-002-AC2
+    given: a session JSONL containing sidechain events with list-type content (tool_result)
+    when: searching with -S flag
+    then: search does not crash with AttributeError; list content is handled gracefully
+    notes: "Bug discovered in e583:201-300 and e583:301-400; search crashes on list content type"
 
 depends_on:
-  - SID-001
-  - SRC-001
-related: []
+  - SID-001  # Sidechain events must be parsed and present in timeline
+  - SRC-001  # Core search functionality
+
+related:
+  - FLT-001  # General filtering
+  - PRS-005  # JSONL parsing of sidechain metadata
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Two key findings:
+  1. Search DOES find content within sidechain events (confirmed by characterization test
+     in e583:1001-1100). This is current behavior, not a new requirement.
+  2. However, searching sessions with sidechain events can trigger a crash (AttributeError)
+     when message content is a list type (tool_result entries). This bug was found while
+     investigating sidechain content visibility (e583:201-300, e583:301-400).
+  The bug fix is tracked separately (likely SRC or PRS epic), but its interaction with
+  sidechain content is documented here.

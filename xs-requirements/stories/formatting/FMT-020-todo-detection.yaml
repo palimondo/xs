@@ -1,22 +1,83 @@
 # Story: Todo Detection and Formatting
 
 id: FMT-020
-title: Detect and format todo-related content
+title: Format TodoWrite and TodoRead with special display
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: TodoWrite tool calls formatted distinctively
-so_that: I can quickly identify task management
+i_want: TodoWrite/TodoRead tool calls formatted with custom display
+so_that: I can quickly identify task management and see todo status
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "day-021:11640"
+    quote: 'if $line.message.content[0].name == "TodoWrite" then "⏺ Update Todos"'
+    context: "reconstruct.jq: TodoWrite displays as 'Update Todos' not generic format"
+  - session: "day-021:11670"
+    quote: 'def status_symbol(s): if s == "completed" then "☒" elif s == "in_progress" then "◐" else "☐" end;'
+    context: "Status symbols: completed=☒, in_progress=◐, pending=☐"
+  - session: "day-021:11663"
+    quote: 'def priority_map(p): if p == "high" then "P0" elif p == "medium" then "P1" elif p == "low" then "P2" else "P?" end;'
+    context: "Priority mapping: high=P0, medium=P1, low=P2"
+  - session: "b475:1156"
+    quote: "Truncated: '⏺ Update Todos' (matches reconstruct.jq)"
+    context: "Truncated mode uses reconstruct.jq style for TodoWrite"
+  - session: "b475:1281"
+    quote: "[86] ⏺ TodoWrite: Updated 3 todos (1 completed, 1 in_progress, 1 pending)"
+    context: "Compact mode shows detailed todo counts"
+  - session: "b475:1152"
+    quote: "IIRC the special handling of Todos was necessary only for compact mode, I believe the defaults worked OK in truncated"
+    context: "Special handling mainly needed in compact mode"
+  - session: "caf2:7"
+    quote: "Todo result formatting with checkboxes: ☒ (completed), ◐ (in_progress), ☐ (pending)"
+    context: "Session summary listing todo checkbox symbols"
+  - session: "06a0:337"
+    quote: "⏺ Read Todos"
+    context: "TodoRead displays as 'Read Todos'"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-020-AC1
+    given: TodoWrite tool_use entry
+    when: rendered in truncated mode
+    then: "Display as '⏺ Update Todos' (not generic tool format)"
+
+  - id: FMT-020-AC2
+    given: TodoRead tool_use entry
+    when: rendered in truncated mode
+    then: "Display as '⏺ Read Todos'"
+
+  - id: FMT-020-AC3
+    given: TodoWrite tool_use entry
+    when: rendered in compact mode
+    then: "Display as '[N] ⏺ TodoWrite: Updated N todos (X completed, Y in_progress, Z pending)'"
+
+  - id: FMT-020-AC4
+    given: TodoWrite tool result with newTodos array
+    when: rendered in truncated mode
+    then: "Display each todo item with status symbol (☒/◐/☐) and priority (P0/P1/P2)"
+
+  - id: FMT-020-AC5
+    given: TodoRead tool result
+    when: rendered in truncated mode
+    then: "Display todo items with status symbols and priorities, same format as TodoWrite result"
+
+  - id: FMT-020-AC6
+    given: todo item continuation lines
+    when: rendered
+    then: "Indent with 5 spaces for alignment"
 
 depends_on:
-  - FMT-010
-related: []
+  - PRS-005  # Must parse JSONL tool_use entries
+  - FMT-007  # Tool result formatting
+related:
+  - FMT-003  # Bash tool (TodoWrite is exception to generic format)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  TodoWrite/TodoRead have SPECIAL display:
+  - Truncated: '⏺ Update Todos' / '⏺ Read Todos' (not generic ToolName(params))
+  - Compact: shows status breakdown counts
+  - Todo items use checkbox symbols and priority codes
+  - Special handling mainly for compact mode (b475:1152)
+  Source: day-021:11640, day-021:11670, b475:1156, b475:1281, caf2:7

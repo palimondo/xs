@@ -6,18 +6,112 @@ epic: display-modes
 theme: local-exploration
 
 as_a: developer debugging a session
-i_want: complete output without truncation
-so_that: I can see all details
+i_want: complete output without any truncation
+so_that: I can see all tool input and output details for analysis
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: 1e83-L201-300.yaml
+    finding: F001
+    quote: "Full mode is like what is displayed in console after pressign ctrl+r"
+    context: "User defines full mode = expanded view equivalent to pressing ctrl+r in CC console"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L1601-1700.yaml
+    finding: F003
+    quote: "Then there's the full mode which does show full input and output messages to tools. That's a rich-text formatted version (using markdown and colors on the console) of whole messages."
+    context: "Full mode shows complete tool I/O with rich-text formatting (markdown, colors)"
+
+  - file: caf2-L1-100.yaml
+    finding: F004
+    quote: "Display modes: compact (single line), truncated (3-line preview), full (complete output)"
+    context: "Session continuation summary confirming three display modes"
+
+  - file: b475-L1901-2000.yaml
+    finding: F002
+    quote: "display_mode = 'compact'\n        if args.truncated:\n            display_mode = 'truncated'\n        elif args.full:\n            display_mode = 'full'"
+    context: "--full flag selects full display mode, mutually exclusive with --truncated"
+
+  - file: b475-L1901-2000.yaml
+    finding: F005
+    quote: "I'll run these commands to demonstrate the differences between the timeline display modes."
+    context: "Full mode: same console-style format as truncated but without the 3-line limit"
+
+  - file: a40c-L1-100.yaml
+    finding: F007
+    quote: "Show full output without truncation"
+    context: "CLI help text: --full shows complete output without truncation"
+
+  - file: a40c-L501-600.yaml
+    finding: F001
+    quote: "Full mode displays complete content"
+    context: "Agent verification: full mode correctly shows complete content"
+
+  - file: b475-L2101-2200.yaml
+    finding: F004
+    quote: "I've successfully demonstrated the three display modes of the `explore_session.py` tool"
+    context: "Full mode shows complete output without truncation, same format as truncated otherwise"
+
+  - file: 7159-L1-19.yaml
+    finding: F001
+    quote: "I'll implement the --full display mode for explore_session.py as that's the current in_progress task."
+    context: "Full mode identified as a distinct implementation task"
+
+  - file: 0841-L1401-1500.yaml
+    finding: F002
+    quote: "Now let me implement the --full display mode. This mode should show complete output without any truncation"
+    context: "Full mode = same format as truncated but tool results not truncated"
+
+acceptance_criteria:
+  - id: DSP-003-AC1
+    given: a parsed session timeline
+    when: rendered with --full flag
+    then: all tool result content is displayed completely without any truncation
+
+  - id: DSP-003-AC2
+    given: a tool_result with many lines of content in full mode
+    when: rendered
+    then: "all lines displayed; no '... +N lines' truncation indicator"
+
+  - id: DSP-003-AC3
+    given: full mode output
+    when: rendered
+    then: "same console-style formatting as truncated mode (⏺, ⎿, >, ✻ symbols, blank lines, indentation)"
+
+  - id: DSP-003-AC4
+    given: full mode output
+    when: rendered
+    then: "no sequence numbers in left margin (by default, without --show-numbers)"
+
+  - id: DSP-003-AC5
+    given: full mode output
+    when: rendered
+    then: "no section headers (=== TIMELINE ===, etc.) appear in output"
+
+  - id: DSP-003-AC6
+    given: --full and --truncated flags specified simultaneously
+    when: parsed
+    then: mutually exclusive; only one display mode flag accepted at a time
+
+  - id: DSP-003-AC7
+    given: full mode with rich tool output (markdown, code blocks)
+    when: rendered
+    then: content formatted as rich-text with markdown preserved
 
 depends_on:
-  - FMT-001
-  - FMT-002
-related: []
+  - FMT-001  # User message formatting
+  - FMT-002  # Assistant message formatting
+  - DSP-002  # Full mode is truncated mode minus truncation
+
+related:
+  - DSP-001  # Compact mode
+  - DSP-004  # --show-numbers
+  - PRIN-001  # Console fidelity
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Clear evidence from b475, 1e83, caf2, a40c, 7159, 0841.
+  Full mode is defined as truncated mode without the 3-line truncation limit.
+  User describes it as "what is displayed in console after pressing ctrl+r" —
+  the expanded view. Same symbols and formatting as truncated mode.
+  --full and --truncated are mutually exclusive CLI flags.
+  Rich-text formatting (markdown, colors) mentioned for full mode output.

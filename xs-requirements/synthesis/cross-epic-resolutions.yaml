@@ -1,0 +1,245 @@
+# Cross-Epic Finding Resolutions
+# Generated during Phase 4 Step C: Cross-Epic Reconciliation
+# Each entry documents a finding that was flagged by multiple epics
+
+timestamp: 2026-02-17T23:30:00Z
+
+resolutions:
+
+  # === Filter Pipeline Ordering ===
+  - finding: "Filter pipeline ordering (search->range->include->exclude->context)"
+    flagged_by: [cli-interface, filtering, summary, range-selection, search]
+    resolution: |
+      Owned by filtering epic (RNG-007, SRC-007, FLT pipeline stories).
+      Elevated to PRIN-002 as a cross-cutting principle since 5 epics reference it.
+      CLI-006 captures the CLI surface (implicit timeline triggers).
+      SUM-001-AC7 captures the summary-to-timeline switch.
+    owner_epic: filtering
+    related_from: [cli-interface, summary, search, range-selection]
+    principle: PRIN-002
+
+  # === Implicit Timeline Mode ===
+  - finding: "Implicit timeline mode when filter/range params present"
+    flagged_by: [cli-interface, filtering, summary]
+    resolution: |
+      Owned by CLI epic (CLI-006) since it's a mode routing decision.
+      FLT-015 captures the constraint that no implicit filtering occurs.
+      SUM-001-AC7 captures the summary-side behavior.
+    owner_epic: cli-interface
+    related_from: [filtering, summary]
+
+  # === Raw JSONL Passthrough ===
+  - finding: "--json/--jsonl must output raw JSONL objects"
+    flagged_by: [export, jsonl-parsing, sidechain-handling]
+    resolution: |
+      Owned by export epic (EXP-001, EXP-002).
+      Parser support is PRS-012 (raw object preservation).
+      Sidechain metadata preservation (SID-003-AC3) depends on this.
+      Elevated to PRIN-003 as a cross-cutting principle.
+    owner_epic: export
+    related_from: [jsonl-parsing, sidechain-handling]
+    principle: PRIN-003
+
+  # === No Section Headers / No Emojis ===
+  - finding: "No === headers in output; no emojis"
+    flagged_by: [console-formatting, display-modes, summary]
+    resolution: |
+      Owned by console-formatting epic (FMT-024, FMT-025).
+      Elevated to PRIN-004 as a cross-cutting constraint.
+      All display modes and summary must comply.
+    owner_epic: console-formatting
+    related_from: [display-modes, summary]
+    principle: PRIN-004
+
+  # === Sequence Number Display ===
+  - finding: "Sequence number display logic and formatting"
+    flagged_by: [display-modes, console-formatting]
+    resolution: |
+      DSP-004 owns the mode-level behavior (when to show/hide sequence numbers).
+      FMT-017 owns the formatting specifics (how [N] is rendered).
+      Both are needed; DSP-004 is the primary, FMT-017 is the rendering detail.
+    owner_epic: display-modes
+    related_from: [console-formatting]
+
+  # === Discontinuous Separator ===
+  - finding: "-- separator between non-contiguous result sections"
+    flagged_by: [display-modes, search, console-formatting]
+    resolution: |
+      DSP-005 owns the display mode behavior (when separators appear).
+      SRC-006 owns the search-specific context (grep-style convention).
+      FMT-018 owns the rendering format.
+      DSP-005 is primary since it's a display concern applicable beyond search.
+    owner_epic: display-modes
+    related_from: [search, console-formatting]
+
+  # === --git Shortcut / cd-Prefixed Commands ===
+  - finding: "--git shortcut pattern matching failure with cd-prefixed commands"
+    flagged_by: [filtering, cli-interface, summary]
+    resolution: |
+      Owned by filtering epic (FLT-014) since it's a pattern matching concern.
+      CLI-003 references it as a CLI alias.
+      SUM-003 references the same issue for git detection in summary.
+      Elevated to CONF-003 as a design conflict requiring user decision.
+    owner_epic: filtering
+    related_from: [cli-interface, summary]
+    conflict: CONF-003
+
+  # === Tool Announcement Suppression ===
+  - finding: "--no-tool-results suppresses separate tool_result events"
+    flagged_by: [console-formatting, filtering]
+    resolution: |
+      Owned by filtering epic (FLT-010) since it's about event suppression.
+      Console-formatting report correctly cross-referenced to FLT-015.
+    owner_epic: filtering
+    related_from: [console-formatting]
+
+  # === --files Deprecation ===
+  - finding: "--files deprecation pointing to --include Edit,Write,MultiEdit"
+    flagged_by: [filtering, cli-interface]
+    resolution: |
+      Owned by CLI epic (CLI-004) since it's a CLI migration/deprecation concern.
+      FLT-006 documents the include filter that replaces --files.
+    owner_epic: cli-interface
+    related_from: [filtering]
+
+  # === Duration Calculation / Timestamp Parsing ===
+  - finding: "Duration calculation depends on timestamp parsing"
+    flagged_by: [summary, jsonl-parsing]
+    resolution: |
+      Owned by jsonl-parsing epic (PRS-005) as the timestamp extraction layer.
+      SUM-001 consumes the parsed timestamps for duration display.
+    owner_epic: jsonl-parsing
+    related_from: [summary]
+
+  # === --search as Substring (Not rg Delegation) ===
+  - finding: "--search uses simple substring matching not rg delegation"
+    flagged_by: [search, cli-interface]
+    resolution: |
+      Owned by search epic (SRC-001) as the core search behavior.
+      CLI-008 references it for help text accuracy.
+    owner_epic: search
+    related_from: [cli-interface]
+
+  # === find_session_file() Implementation ===
+  - finding: "find_session_file() session discovery"
+    flagged_by: [cli-interface, jsonl-parsing]
+    resolution: |
+      Owned by jsonl-parsing epic (PRS-002) as the session loading concern.
+      CLI-007 references it for argument parsing (multi-index, session resolution).
+    owner_epic: jsonl-parsing
+    related_from: [cli-interface]
+
+  # === JSON/JSONL Export Modes ===
+  - finding: "JSON/JSONL output export modes"
+    flagged_by: [cli-interface, export]
+    resolution: |
+      Owned by export epic (EXP-001, EXP-002).
+      CLI captures only the flag surface (--json, --jsonl, --export-json).
+    owner_epic: export
+    related_from: [cli-interface]
+
+  # === Thinking Content Parsing ===
+  - finding: "Parsing thinking content from JSONL"
+    flagged_by: [filtering, jsonl-parsing]
+    resolution: |
+      Owned by jsonl-parsing epic (PRS-013) as content block extraction.
+      FLT-013 (filter by Thinking virtual entity) depends on this parsing.
+    owner_epic: jsonl-parsing
+    related_from: [filtering]
+
+  # === Tool Filtering for Replay/Export ===
+  - finding: "Filtering tool calls for replay/export"
+    flagged_by: [filtering, export]
+    resolution: |
+      Owned by export epic (EXP-003) as the export-for-replay workflow.
+      Filtering provides the mechanism; export defines the use case.
+    owner_epic: export
+    related_from: [filtering]
+
+  # === Range Before Filtering (Design Decision) ===
+  - finding: "+N range applies to full timeline before filtering"
+    flagged_by: [cli-interface, range-selection, filtering]
+    resolution: |
+      Owned by range-selection epic (RNG-007) as the definitive pipeline ordering story.
+      Also captured in PRIN-002 (filter pipeline ordering).
+    owner_epic: range-selection
+    related_from: [cli-interface, filtering]
+    principle: PRIN-002
+
+  # === --json Diagnostic Usage (Cross-Display/Export) ===
+  - finding: "User uses --json to diagnose missing events in compact mode"
+    flagged_by: [export, display-modes]
+    resolution: |
+      This is a usage pattern, not a requirement. The export epic owns --json
+      behavior (EXP-001). Compact mode display issues belong to DSP-001.
+      No additional story needed; this is diagnostic usage of existing features.
+    owner_epic: export
+    related_from: [display-modes]
+    note: "No action needed — usage pattern, not new requirement"
+
+  # === jq Filtering Integration ===
+  - finding: "User asking about jq filtering integration in xs"
+    flagged_by: [export, filtering]
+    resolution: |
+      The --jq flag was a requested but unresolved feature (e583:1601-1700).
+      Currently out of scope. Noted in context epic's open questions.
+    owner_epic: none
+    note: "Out of scope — requested but never resolved. Noted as future capability."
+
+uncovered_findings_resolution:
+
+  # === Session Graph/Timeline Scanning ===
+  - finding_file: e583-L1-100.yaml
+    finding_id: F007
+    quote: "scan the entire @~/.claude/projects/{project-dir} to establish a timeline of sessions"
+    resolution: |
+      Out of scope for current xs recreation. User explicitly marked as "side quest".
+      Document as a future capability in the synthesis summary.
+    disposition: out_of_scope
+
+  # === xs Executable/Symlink Location ===
+  - finding_file: e583-L1-100.yaml
+    finding_id: F006
+    quote: "Can the symlink live at project root"
+    resolution: |
+      Deployment concern, not a functional requirement. Added to tech-stack
+      constraints consideration for implementation phase.
+    disposition: constraints
+
+  # === Shell Quoting with Glob Patterns ===
+  - finding_file: b475-L801-900.yaml
+    finding_id: F004
+    quote: "This is still failing: (shell quoting for glob patterns)"
+    resolution: |
+      Edge case in shell interaction, not an xs requirement per se. The filtering
+      system must accept glob patterns; how the shell passes them is a documentation
+      concern. Noted in FLT-006 (include/exclude with glob) as an implementation note.
+    disposition: implementation_note
+
+  # === Named Filter Modes (Early Design) ===
+  - finding_file: 0841-L801-900.yaml
+    finding_id: F001
+    quote: "unified timeline with filter modes: tools, conversation, all"
+    resolution: |
+      Superseded by virtual entity design. Historical artifact from early iteration.
+      No action needed — the current FLT stories correctly capture the final design.
+    disposition: superseded
+
+  # === Sidechain Epic Size Question ===
+  - finding: "Is sidechain-handling epic large enough to justify being separate from filtering?"
+    source: sidechain-handling report
+    resolution: |
+      Keep as separate epic. Although small (3 stories), sidechain handling has
+      distinct concerns (sub-agent session visibility, metadata preservation) that
+      don't naturally fit within the filtering abstraction. The epic serves as a
+      clear grouping for these related requirements.
+    disposition: keep_as_is
+
+  # === SID-003-AC3 Metadata Preservation Location ===
+  - finding: "Should SID-003-AC3 (metadata preservation) be moved to DSP-003 or PRS-005?"
+    source: sidechain-handling report
+    resolution: |
+      Keep in SID-003 with cross-reference to PRS-012 (raw object preservation)
+      and PRIN-003 (raw passthrough contract). The sidechain metadata preservation
+      is a specific instance of the broader passthrough contract.
+    disposition: keep_with_cross_reference

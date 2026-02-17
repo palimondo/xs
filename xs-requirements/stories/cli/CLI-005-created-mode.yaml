@@ -6,17 +6,55 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to see only created files
+i_want: to see only files that were created during the session
 so_that: I know what new files were added
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1101-1200.yaml
+    finding: F004
+    line: 1197
+    speaker: agent
+    type: agent_proposal
+    quote: "[2] new_file.py\n   print('hello')...\n\n[8] another.txt\n   test content..."
+    context: "--created output format: [event_index] filename with indented content preview and ellipsis"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: a40c-L801-900.yaml
+    finding: F003
+    line: 886
+    speaker: agent
+    type: agent_proposal
+    quote: "usage: explore_session.py [-h] [-s] [-t] [-g] [-f] [-c] [-S SEARCH]\n                          [--export-json RANGE OUTPUT] [--json] [--jsonl]\n                          [-i FILTERS] [-x FILTERS] [--truncated] [--full]\n                          [--no-tool-results] [--show-numbers] [-A NUM]\n                          [-B NUM] [-C NUM] [-M] [-U] [-a] [-T]\n                          session [indices ...]"
+    context: "-c flag confirmed in the full CLI interface snapshot as of Jul 31, 2025"
+
+  - file: day-025-L3401-3600.yaml
+    finding: F004
+    line: 3473
+    speaker: agent
+    type: agent_observation
+    quote: "Now you have a proper CLI! Try these"
+    context: "Agent documents CLI commands including --created as one of the original modes"
+
+acceptance_criteria:
+  - id: CLI-005-AC1
+    given: a valid session file
+    when: invoked with -c or --created
+    then: displays only files that were newly created (Write tool calls for new files)
+
+  - id: CLI-005-AC2
+    given: --created mode
+    when: files were created during the session
+    then: shows each created file with its event index, filename, and a brief content preview
+
+  - id: CLI-005-AC3
+    given: --created mode
+    when: content preview is displayed
+    then: content is indented under the filename with truncation indicated by ellipsis
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Unified timeline data structure
+related:
+  - CLI-004  # File changes mode (related file operation view)
 
 priority: could
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "--created was one of the original CLI modes from the first version of explore_session.py (day-025:3473). Output format shows event index plus filename plus indented content preview (a40c:1197). Limited evidence for detailed requirements; may need further investigation during golden file assembly."

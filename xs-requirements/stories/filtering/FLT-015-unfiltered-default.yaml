@@ -1,0 +1,45 @@
+# Story: Unfiltered Timeline Default
+
+id: FLT-015
+title: Timeline shows all events when no filters specified
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: the timeline to show ALL events when I have not specified any filters
+so_that: I get a complete picture without implicit filtering
+
+sources:
+  - file: "a40c:201-300"
+    line: 218
+    speaker: user
+    type: user_correction
+    quote: "The timeline shoudl contain all events. That there's a specific filtering going on, while none of the --include and --exclude parameters are specified is a serious issue"
+    context: "User corrects agent: without explicit filters, timeline must show ALL events including thinking content"
+
+  - file: "caf2:1-100"
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Focus on Phase 0: Architecture Cleanup - separate filtering (what to show) from display (how to show)"
+    context: "Filtering and display are orthogonal; no filters means no filtering"
+
+acceptance_criteria:
+  - id: FLT-015-AC1
+    given: timeline display with no filter flags
+    when: -t is specified alone (or implied)
+    then: all events are shown including user messages, assistant messages, tool calls, tool results, thinking content
+
+  - id: FLT-015-AC2
+    given: no --include or --exclude flags
+    when: timeline is displayed
+    then: no implicit filtering occurs
+
+depends_on:
+  - PRS-005
+related:
+  - FLT-011  # Filter composition
+
+priority: must
+status: mined
+validation_notes: "User explicitly called out implicit filtering as a serious issue. Without explicit filter flags, no events should be hidden."

@@ -1,0 +1,192 @@
+# Epic Synthesis Report: Search
+
+epic: search
+name: Full-Text Search
+synthesized_by: opus
+timestamp: 2026-02-17T23:00:00Z
+
+## Summary
+
+stories_populated: 7
+stories_original: 5
+stories_new: 2
+stories_by_priority:
+  must: 2   # SRC-001, SRC-007
+  should: 5 # SRC-002, SRC-003, SRC-004, SRC-005, SRC-006
+  could: 0
+stories_status: mined  # all 7 stories now have sources and acceptance criteria
+
+## Stories
+
+original:
+  - id: SRC-001
+    title: Basic substring search
+    priority: must
+    status: mined
+    sources_count: 10
+    acceptance_criteria_count: 6
+    bugs_documented: 5
+    key_decision: "Simple substring match (case-insensitive), NOT regex, NOT rg delegation. Short form is -S."
+
+  - id: SRC-002
+    title: Show lines after match (-A)
+    priority: should
+    status: mined
+    sources_count: 5
+    acceptance_criteria_count: 3
+    key_decision: "Uppercase -A NUM (grep convention). Context expansion is pipeline step 4."
+
+  - id: SRC-003
+    title: Show lines before match (-B)
+    priority: should
+    status: mined
+    sources_count: 5
+    acceptance_criteria_count: 3
+    key_decision: "Uppercase -B NUM (grep convention). Confirmed working with range: --search 'interrupted' -B 2 120-150."
+
+  - id: SRC-004
+    title: Show lines before and after match (-C)
+    priority: should
+    status: mined
+    sources_count: 4
+    acceptance_criteria_count: 4
+    key_decision: "-C NUM equivalent to -A NUM -B NUM. Overlapping context windows must be merged."
+
+  - id: SRC-005
+    title: Search results and display mode interaction
+    priority: should
+    status: mined
+    sources_count: 5
+    acceptance_criteria_count: 6
+    key_decision: "Search must suppress implicit timeline to avoid duplicate output. Must work with --full."
+
+new:
+  - id: SRC-006
+    title: Visual separators between non-contiguous results
+    priority: should
+    status: mined
+    sources_count: 3
+    acceptance_criteria_count: 4
+    justification: "Multiple findings document the need for -- separators between non-contiguous search/filter result sections. Follows grep/rg convention. Agent self-identified the visual gap issue (caf2:1101-1199) and a separate session explicitly references -- separator for discontinuous sections (1e83:601-700)."
+
+  - id: SRC-007
+    title: Search position in filter pipeline
+    priority: must
+    status: mined
+    sources_count: 6
+    acceptance_criteria_count: 4
+    justification: "The 5-step filter pipeline ordering (search -> range -> include -> exclude -> context) was stated by the user TWICE in separate sessions (caf2:301-400 and caf2:901-1000). A bug was found where search ignored -i/-x filters (caf2:1001-1100). A known gap exists where tail-of-search-results is not expressible. This interaction model is fundamental to the search epic and warrants its own story."
+
+## Key Design Decisions Found
+
+decisions:
+  - id: DEC-SRC-001
+    topic: "Search is simple substring, not regex/rg"
+    resolution: "Simple case-insensitive substring match"
+    sources: ["caf2:801-900 F001", "caf2:701-800 F007"]
+    confidence: high
+    notes: "User asked about rg delegation. Agent confirmed it is NOT rg. Help text says 'simple substring match'."
+
+  - id: DEC-SRC-002
+    topic: "Short form for --search"
+    resolution: "-S (not -E as initially proposed)"
+    sources: ["caf2:701-800 F005", "caf2:801-900 F001", "e583:901-1000 F001"]
+    confidence: high
+    notes: "User proposed -E (grep convention for regex). Resolved as -S. No short form conflict since -s is --summary."
+
+  - id: DEC-SRC-003
+    topic: "Context flags are uppercase -A/-B/-C"
+    resolution: "Uppercase (grep/rg convention). Lowercase -a reserved for assistant filter."
+    sources: ["caf2:301-400 F005"]
+    confidence: high
+    notes: "User explicitly stated: 'grep/rg parameters are capital A, B, C, so we are free to use -a as shortcut for -i Assistant'."
+
+  - id: DEC-SRC-004
+    topic: "Filter pipeline ordering"
+    resolution: "search -> range -> include -> exclude -> context expansion"
+    sources: ["caf2:301-400 F004", "caf2:901-1000 F001"]
+    confidence: high
+    notes: "Stated twice by user. Implementation bugs found when ordering was wrong."
+
+  - id: DEC-SRC-005
+    topic: "Gap separator style"
+    resolution: "-- (double dash, grep/rg convention)"
+    sources: ["1e83:601-700 F005", "caf2:1101-1199 F001"]
+    confidence: medium
+    notes: "Agent-initiated decision, not explicitly user-approved. Follows grep convention."
+
+## Bugs Documented
+
+bugs:
+  - id: SRC-001-BUG1
+    description: "AttributeError when content is a list (tool_result entries)"
+    severity: critical
+    sessions: ["e583:201-300", "e583:301-400", "a40c:901-1000"]
+
+  - id: SRC-001-BUG2
+    description: "Search for patterns starting with -- treated as argparse flags"
+    severity: medium
+    sessions: ["e583:201-300", "e583:401-500", "e583:801-900"]
+    workaround: "Use --search=--pattern or -S=--pattern syntax"
+
+  - id: SRC-001-BUG3
+    description: "Search with --full flag causes crash"
+    severity: high
+    sessions: ["e583:201-300"]
+
+  - id: SRC-001-BUG4
+    description: "Search ignores -i/-x include/exclude filters"
+    severity: high
+    sessions: ["caf2:1001-1100"]
+
+  - id: SRC-001-BUG5
+    description: "Search with range causes duplicate output (implicit timeline conflict)"
+    severity: critical
+    sessions: ["caf2:801-900", "caf2:901-1000"]
+
+## Cross-Epic References
+
+references:
+  - epic: filtering
+    stories: [FLT-001, FLT-002]
+    relationship: "Search is step 0 of the filter pipeline; include/exclude are steps 2-3"
+
+  - epic: range-selection
+    stories: [RNG-001]
+    relationship: "Range is step 1 of filter pipeline; search results are scoped by range"
+
+  - epic: display-modes
+    stories: [DSP-001]
+    relationship: "Search must work with all display modes without crashing or duplicating output"
+
+  - epic: cli-interface
+    stories: [CLI-002]
+    relationship: "Flag naming conventions (-S vs -E, uppercase -A/-B/-C vs lowercase -a)"
+
+## Findings Files Consulted
+
+findings_files:
+  - caf2-L301-400.yaml
+  - caf2-L401-500.yaml
+  - caf2-L501-600.yaml
+  - caf2-L701-800.yaml
+  - caf2-L801-900.yaml
+  - caf2-L901-1000.yaml
+  - caf2-L1001-1100.yaml
+  - caf2-L1101-1199.yaml
+  - e583-L1-100.yaml
+  - e583-L201-300.yaml
+  - e583-L301-400.yaml
+  - e583-L401-500.yaml
+  - e583-L801-900.yaml
+  - e583-L901-1000.yaml
+  - e583-L1201-1300.yaml
+  - e583-L1601-1700.yaml
+  - a40c-L201-300.yaml
+  - a40c-L501-600.yaml
+  - a40c-L801-900.yaml
+  - a40c-L901-1000.yaml
+  - a40c-L1201-1300.yaml
+  - 760a-L401-500.yaml
+  - 3636-L501-600.yaml
+  - 1e83-L601-700.yaml

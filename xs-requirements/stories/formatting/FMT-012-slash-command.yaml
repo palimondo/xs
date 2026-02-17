@@ -1,7 +1,7 @@
 # Story: Slash Command Display Format
 
 id: FMT-012
-title: Format slash commands distinctively
+title: Format slash commands as user messages with running indicator
 epic: console-formatting
 theme: console-replay
 
@@ -9,14 +9,58 @@ as_a: developer reviewing session output
 i_want: slash commands displayed with their characteristic format
 so_that: I can identify user-invoked commands
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "day-021:12234"
+    quote: "The reconstructed log now properly shows slash commands as: > /hi is running... > /expert-council is running..."
+    context: "reconstruct.jq output format for slash commands"
+  - session: "day-021:12177"
+    quote: 'In day-020 it says "> /expert-council is running..." can you double check against original'
+    context: "User verifying slash command format against original log"
+  - session: "06a0:457"
+    quote: "Excellent! The reconstructed log now properly shows slash commands as: > /hi is running... and > /expert-council is running..."
+    context: "User acceptance of slash command format"
+  - session: "1e83:607"
+    quote: "In truncated mode, the code adds a / prefix and a : suffix"
+    context: "Agent fixing slash command colon bug"
+  - session: "1e83:202"
+    quote: "seems to only add noise and no signal in compact mode"
+    context: "User says 'is running...' suffix adds noise in compact mode"
+  - session: "1e83:292"
+    quote: "just the command"
+    context: "Compact mode: show just the command name, no 'is running...' suffix"
+  - session: "0841:1257"
+    quote: "I dislike that you used > prefix also for these"
+    context: "User objects to > prefix on slash command messages"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-012-AC1
+    given: slash command user message (containing <command-message> tags)
+    when: rendered in truncated mode
+    then: "Display as '> /{command} is running...' matching original console"
+
+  - id: FMT-012-AC2
+    given: slash command user message
+    when: rendered in compact mode
+    then: "Display as '[N] > /{command}' (just the command, no 'is running...' suffix)"
+
+  - id: FMT-012-AC3
+    given: slash command message in JSONL
+    when: parsing
+    then: "Extract command name from <command-name> XML tag in message content"
 
 depends_on:
-  - PRS-007
-related: []
+  - PRS-007  # Must parse slash command messages
+related:
+  - FMT-001  # User message prefix
+  - FMT-019  # Meta/caveat messages (slash commands trigger caveats)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Truncated mode: '> /command is running...' (matching CC console).
+  Compact mode: '> /command' (no running suffix, per 1e83:292).
+  Slash commands parsed from <command-message> and <command-name> XML tags.
+  CONFLICT: User at 0841:1257 dislikes > prefix on slash commands, but
+  reconstruct.jq (the authoritative reference) uses > prefix.
+  Resolution needed in Pass 5 (conflicts).
+  Source: day-021:12234, 06a0:457, 1e83:292, 0841:1257

@@ -7,39 +7,115 @@ theme: github-fetch
 
 as_a: developer fetching session logs
 i_want: JSONL extracted from raw workflow logs
-so_that: I have session files in standard format
+so_that: I have session files in standard format matching local ~/.claude/projects/ layout
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: extract_jsonl_from_logs
-    lines: 107-233
+  - file: day-024:33601-33800
+    finding: F003
+    quote: "shoudl extract just the jsonl of the Claude Code execution."
+    context: "User wants only JSONL session transcript, not raw log or JSON metadata"
+
+  - file: day-024:33601-33800
+    finding: F004
+    quote: "the tail-end of the log that interests us ends in"
+    context: "Start='Running Claude with prompt from file:...', End='Log saved to...claude-execution-output.json'"
+
+  - file: day-024:33801-34000
+    finding: F005
+    quote: "When striping, the \"claude\\tUNKNOWN STEP\\t{timestamp}Z \" -- I think it's constant length prefix so we don't need to use regex on each line (perf. optim.)?"
+    context: "GHA log lines have constant-length tab-separated prefix to strip"
+
+  - file: day-024:34201-34400
+    finding: F006
+    quote: "if \"Running Claude with prompt from file:\" in line:"
+    context: "Start boundary marker for JSONL extraction"
+
+  - file: day-024:34201-34400
+    finding: F007
+    quote: "elif \"Log saved to\" in line and \"claude-execution-output.json\" in line:"
+    context: "End boundary marker for JSONL extraction"
+
+  - file: day-024:34201-34400
+    finding: F010
+    quote: "sed -n '/Running Claude with prompt from file:/,/Log saved to.*claude-execution-output\\.json/p' \"$log_file\" |"
+    context: "Unix pipeline approach preferred over Python for extraction performance"
+
+  - file: day-024:48801-49000
+    finding: F001
+    quote: "I've turned off plan mode so that you could test and measure optimal solutions... do you want add it to our plan to try all options and pick the fastest?"
+    context: "User wants empirical benchmarking of extraction methods (sed, awk, python)"
+
+  - file: day-025:1-200
+    finding: F009
+    quote: "Further optimization using exact string matching with index() achieved ~2-3ms"
+    context: "AWK with index() achieved best performance (~2-3ms for 6K line file)"
+
+  - file: day-025:1-200
+    finding: F011
+    quote: "JSONL log format with constant 49-character prefix: `claude\\tUNKNOWN STEP\\t{timestamp}Z `"
+    context: "Log line prefix is exactly 49 characters, enabling fixed-position substring extraction"
+
+  - session: fa0d:2101-2200
+    finding: F001
+    quote: "I think we don't need the raw low - instead we shoud extract just the jsonl of the Claude Code execution"
+    context: "Primary output is JSONL, not raw log"
+
+  - session: fa0d:2101-2200
+    finding: F002
+    quote: "I believe we shoudl be able to recreate how the logs/session transcripts look like in ~/.claude/projects/-Users-palimondo-Developer-BookMinder/ -- down to the naming with <session-id>.jsonl"
+    context: "Fetched sessions should match local ~/.claude/projects/ format"
+
+  - file: day-024:33601-33800
+    finding: F001
+    quote: "I'm interested only in the log of the claude code execution for later analysis of agentic coding"
+    context: "No JSON metadata files needed, only JSONL session transcripts"
+
+  - session: f9c7:1301-1400
+    finding: F004
+    quote: "We are in a process of rewriting fetch_logs.py to bash script"
+    context: "Architecture: separate grep for XML metadata + AWK for JSONL content extraction"
 
 acceptance_criteria:
   - id: GFH-003-AC1
-    given: log with Claude execution output
+    given: raw GitHub Actions log content
     when: extracting JSONL
-    then: uses AWK to parse log prefix format
+    then: identifies start boundary by "Running Claude with prompt from file:" marker
 
   - id: GFH-003-AC2
-    given: log content
-    when: parsing
-    then: identifies start by "Running Claude with prompt from file"
+    given: raw GitHub Actions log content
+    when: extracting JSONL
+    then: identifies end boundary by "Log saved to" + "claude-execution-output.json" marker
 
   - id: GFH-003-AC3
-    given: log content
-    when: parsing
-    then: identifies end by "Log saved to...claude-execution-output.json"
+    given: lines between start and end markers
+    when: stripping prefix
+    then: removes constant-length "claude\tUNKNOWN STEP\t{timestamp}Z " prefix using fixed-position substring (not regex)
 
   - id: GFH-003-AC4
     given: valid extraction
     when: complete
     then: returns jsonl_content, session_id, start_timestamp, end_timestamp
 
+  - id: GFH-003-AC5
+    given: session_id extraction
+    when: parsing JSONL content
+    then: scans first 10 lines (not just line 1) for session_id field
+
+  - id: GFH-003-AC6
+    given: extraction output
+    when: saving
+    then: saves only JSONL file, no JSON metadata files
+
 depends_on:
   - GFH-002
 related:
-  - GFH-005
+  - GFH-006
+  - GFH-007
 
 priority: must
-status: draft
-validation_notes: "Uses optimized AWK script for single-pass extraction"
+status: mined
+validation_notes: |
+  Uses optimized AWK script for single-pass extraction (~2-3ms for 6K lines).
+  User explicitly rejected Python parsing in favor of Unix tools (sed/awk/cut).
+  Constant-length prefix (49 chars) enables fixed-position stripping without regex.
+  Session ID extraction must scan first 10 lines, not just line 1 (bug fix from f9c7:301-400).

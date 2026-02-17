@@ -1,23 +1,57 @@
 # Story: Thinking Block Formatting
 
 id: FMT-006
-title: Format thinking blocks
+title: Format thinking blocks with teardrop-spoked asterisk
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: thinking blocks displayed with "Thinking..." prefix
+i_want: thinking blocks displayed with correct symbol and label
 so_that: I can distinguish reasoning from output
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:18"
+    quote: "the thinking in compact mode and also in truncated mode is not that full fidelity"
+    context: "User identifying thinking block format as incorrect"
+  - session: "1e83:142"
+    quote: "the thinking blocks are showing as ⏺ <thinking> in our tool's output, but that's not how they appear in the actual Claude Code console"
+    context: "Agent recognizes thinking block format is wrong"
+  - session: "1e83:292"
+    quote: "1. [N] ✻ Thinking..."
+    context: "User specifies correct thinking block format: ✻ symbol with 'Thinking...' text"
+  - session: "1e83:473"
+    quote: "assert '[1] ✻ Thinking...' in stdout"
+    context: "Test assertion confirming correct thinking block format"
+  - session: "1e83:537"
+    quote: "Change thinking blocks from '⏺ <thinking>' to '✻ Thinking...' format"
+    context: "Commit message documenting the format change"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-006-AC1
+    given: thinking block in assistant message
+    when: rendered in truncated mode
+    then: "Display as '✻ Thinking...' (teardrop-spoked asterisk, not play button)"
+
+  - id: FMT-006-AC2
+    given: thinking block in assistant message
+    when: rendered in compact mode
+    then: "Display as '[N] ✻ Thinking...' on a single line"
+
+  - id: FMT-006-AC3
+    given: thinking block in assistant message
+    when: rendered in full mode
+    then: "Display as '[N] ✻ Thinking...' followed by full thinking content"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse thinking blocks from JSONL
 related:
-  - PRIN-001
+  - PRIN-001  # Console fidelity
+  - FMT-011  # Thinking in truncated mode (content display)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User explicitly corrected format from '⏺ <thinking>' to '✻ Thinking...' (1e83:292).
+  Uses teardrop-spoked asterisk ✻, not play button ⏺ or regular asterisk *.
+  Test assertion confirms format: '[1] ✻ Thinking...' (1e83:473).
+  Source: 1e83:142, 1e83:292, 1e83:473, 1e83:537

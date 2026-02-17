@@ -1,0 +1,33 @@
+id: PRIN-008
+title: Filter-Display Separation
+
+statement: |
+  Filters control WHAT events to show; display modes control HOW to show them.
+  These are orthogonal concerns that must compose freely.
+
+rationale: |
+  The user articulated this separation explicitly in multiple sessions.
+  Filters (-i, -x, -U, -a, -S, range args) select a subset of events
+  from the timeline. Display modes (compact, truncated, full) determine
+  the rendering format. Any filter can combine with any display mode.
+  When no filters are specified, all events are shown (FLT-015).
+
+implications:
+  - Any filter flag can combine with any display mode flag
+  - Filters must not assume or force a specific display mode
+  - Display modes must not filter events (they only control rendering)
+  - Without explicit filters, no events are hidden from timeline (FLT-015)
+  - The only exception is summary mode, which is replaced (not composed) by timeline
+
+applies_to:
+  - FLT-*   # All filtering stories
+  - DSP-*   # All display mode stories
+  - CLI-002 # Timeline boolean flag
+  - FLT-015 # No implicit filtering
+
+evidence:
+  - "display-modes report: 'filters control WHAT to show and display modes control HOW to show it' (b475:1501-1600/F003, caf2:1-100/F003)"
+  - "filtering report: FLT-015 — user called out implicit filtering as 'serious issue'"
+  - "display-modes report: 'architecture principle' noted across multiple findings"
+
+status: draft

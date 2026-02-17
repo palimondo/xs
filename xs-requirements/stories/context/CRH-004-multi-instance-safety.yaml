@@ -13,12 +13,18 @@ sources:
   - file: ~/Developer/BookMinder/.claude/hooks/precompact_flag_hook.py
     function: get_flag_file
     lines: 9-11
+  - session: 760a:101-200
+    quote: "ls -la /tmp/.claude_compaction_* && cat /tmp/.claude_compaction_*"
+    context: "User verified flag file naming at /tmp/.claude_compaction_* during hook testing"
+  - session: 760a:201-300
+    quote: "can you try using `xs` to check current session (you should know the session-id from the compaction hook's temp file I think?)"
+    context: "Session ID from flag filename used to identify which session to run xs against"
 
 acceptance_criteria:
   - id: CRH-004-AC1
     given: flag file naming
     when: creating flag
-    then: includes session_id[:8] in filename
+    then: includes session_id[:8] in filename (/tmp/.claude_compaction_{session_id[:8]}.json)
 
   - id: CRH-004-AC2
     given: multiple concurrent sessions
@@ -30,11 +36,20 @@ acceptance_criteria:
     when: processing first flag found
     then: processes only one flag per hook invocation
 
+  - id: CRH-004-AC4
+    given: flag file contents
+    when: reading session_id
+    then: full session_id available inside flag JSON even though filename only has first 8 chars
+
 depends_on: []
 related:
   - CRH-001
   - CRH-002
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Flag file naming pattern confirmed in 760a:101-200 via user's ls command.
+  Session ID used as both filename component ([:8]) and in flag JSON contents.
+  AC4 added: the 8-char prefix in filename is for disambiguation; full session_id
+  is inside the JSON for passing to xs commands.

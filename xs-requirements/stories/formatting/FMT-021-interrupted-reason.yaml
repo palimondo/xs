@@ -1,42 +1,58 @@
 # Story: Display user's interruption reason
 
 id: FMT-021
-title: Display user interruption reason in timeline
+title: Display user interruption indicator in timeline
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session history
-i_want: to see the user's reason for interrupting a response
-so_that: I understand why Claude was stopped mid-response
+i_want: to see when Claude was interrupted by the user
+so_that: I understand the flow of conversation and why responses ended early
 
 sources:
-  - file: xs-requirements/bugs/BUG-004-interrupted-reason.md
-    context: "Currently only shows '[Request interrupted by user]'"
+  - session: "day-021:12240"
+    quote: 'check also "Interrupted by user" in original log and replicate that output'
+    context: "User requesting interrupted output be reproduced"
+  - session: "day-021:12286"
+    quote: 'if ($line.message.content[0].content | contains("[Request interrupted by user")) then "  ⎿  Interrupted by user"'
+    context: "reconstruct.jq format for interrupted tool results"
+  - session: "06a0:511"
+    quote: "Interrupted tool results showing ⎿ Interrupted by user"
+    context: "Confirmed format for interrupted tool results"
+  - session: "day-021:12364"
+    quote: 'elif $line.type == "user" ... ($line.message.content[0].text | contains("[Request interrupted by user")) then empty'
+    context: "User text messages with interrupt notice are silently skipped"
+  - session: "0841:1189"
+    quote: "For interrupted tool uses, there are two related messages: 1. The error result with: is_error: true"
+    context: "JSONL structure: interrupted tool uses have is_error:true and specific content"
 
 acceptance_criteria:
   - id: FMT-021-AC1
-    given: user interruption with reason provided
-    when: reason is captured in JSONL (future Claude Code feature)
-    then: display reason text after "[Request interrupted by user]"
+    given: tool result containing "[Request interrupted by user for tool use]"
+    when: rendered in truncated mode
+    then: "Display as '  ⎿  Interrupted by user'"
 
   - id: FMT-021-AC2
-    given: user interruption without reason
-    when: no reason in JSONL
-    then: display only "[Request interrupted by user]"
+    given: user text message containing "[Request interrupted by user]"
+    when: rendered
+    then: "Silently skip (do not display)"
 
-current_behavior: |
-  Claude Code does not capture the user's interruption reason in JSONL.
-  The text "[Request interrupted by user]" is stored but not the reason.
-  This story is contingent on Claude Code adding this data.
+  - id: FMT-021-AC3
+    given: interrupted tool result
+    when: rendered in compact mode
+    then: "Display as '[N] ⎿  Interrupted by user'"
 
-workaround: |
-  Look at the NEXT user message after an interruption - it typically
-  contains the correction or reason for interrupting.
-
-depends_on: []
+depends_on:
+  - PRS-009  # Must detect interruption in JSONL
+  - FMT-007  # Tool result formatting
 related:
-  - PRS-009  # User interruption detection
+  - FMT-001  # User message formatting (next user message often contains reason)
 
 priority: could
-status: draft
-validation_notes: "Blocked on Claude Code adding reason to JSONL"
+status: mined
+validation_notes: |
+  Two types of interrupted messages in JSONL:
+  1. Tool result with '[Request interrupted by user for tool use]' -> show '⎿  Interrupted by user'
+  2. User text message with '[Request interrupted by user]' -> silently skip
+  Interruption reason NOT captured in JSONL by Claude Code (only the fact of interruption).
+  Source: day-021:12240, day-021:12286, 06a0:511, 0841:1189

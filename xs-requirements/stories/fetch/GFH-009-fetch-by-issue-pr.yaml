@@ -1,0 +1,77 @@
+# Story: Fetch by Issue or PR Number
+
+id: GFH-009
+title: Fetch workflow runs by issue or PR number
+epic: fetch
+theme: github-fetch
+
+as_a: developer who knows which issue/PR was worked on
+i_want: to fetch all session logs for a given issue or PR number
+so_that: I don't need to know the run ID to retrieve sessions
+
+sources:
+  - session: fa1a:1201-1233
+    finding: F001
+    quote: "fetch tools don't yet support downloading by issue/pr number"
+    context: "User noted this as a missing feature; the approach would browse issue/PR comments to find session run IDs"
+
+  - session: fa1a:1201-1233
+    finding: F002
+    quote: "Add ability to fetch runs by issue/PR number via Claude's sticky comments"
+    context: "Agent proposed: use gh issue view / gh pr view to get comments, find Claude's sticky comment with run ID, fetch that run"
+
+  - file: day-025:401-600
+    finding: F001
+    quote: "Add ability to fetch runs by issue/PR number via Claude's sticky comments"
+    context: "Listed as pending TODO item in session"
+
+  - file: day-025:7401-7600
+    finding: F001
+    quote: "fetch tools don't yet support downloading by issue/pr number. Do we have a TODO note somewhere, about a plan to add it? (by browsing the issue/pr by comments to find the sessions..."
+    context: "User reiterating the requirement and asking about implementation plan"
+
+  - session: f9c7:1401-1500
+    finding: F005
+    quote: "we also would need to implement verions that would search for the runs by issue # or PR # -- by walking the comments on specific issue number and searching for Claude's sticky comment's which should include the link to runs somewhere. add Todo"
+    context: "User describes mechanism: walk issue/PR comments, find Claude's sticky comment with run link"
+
+  - file: day-025:1401-1600
+    finding: F003
+    quote: "Add ability to fetch runs by issue/PR number via Claude's sticky comments"
+    context: "Persistent TODO item across multiple sessions"
+
+acceptance_criteria:
+  - id: GFH-009-AC1
+    given: CLI invocation with --issue N or --pr N
+    when: fetching
+    then: uses gh api to retrieve issue/PR comments
+
+  - id: GFH-009-AC2
+    given: issue/PR comments retrieved
+    when: scanning for Claude's sticky comment
+    then: finds Claude bot's comment containing workflow run link(s)
+
+  - id: GFH-009-AC3
+    given: run ID(s) extracted from sticky comment
+    when: fetching
+    then: downloads and extracts JSONL for each identified run
+
+  - id: GFH-009-AC4
+    given: multiple runs found for an issue/PR
+    when: fetching
+    then: downloads all sessions (unless already deduplicated by GFH-005)
+
+depends_on:
+  - GFH-001
+  - GFH-002
+related:
+  - GFH-005
+  - GFH-008
+
+priority: could
+status: mined
+validation_notes: |
+  This was a planned but never-implemented feature in the original fetch_logs tools.
+  Mentioned as TODO across at least 4 separate sessions.
+  Mechanism: parse Claude bot's sticky comments on GitHub issues/PRs for run links.
+  Priority is 'could' because it was never actually built, just planned.

@@ -3,20 +3,93 @@
 id: PRS-009
 title: Detect user interruptions in session
 epic: jsonl-parsing
-theme: local-exploration
+theme: console-replay
 
 as_a: developer exploring sessions
-i_want: user interruptions detected
-so_that: I can see where work was interrupted
+i_want: user interruptions detected and classified
+so_that: I can see where work was interrupted and display it correctly
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: 06a0:401-500
+    finding: F015
+    quote: "I see we're not handling the interrupted tool results properly. Let me update the reconstruction script:"
+    context: "Interrupted tool results need special handling in parsing"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: 06a0:401-500
+    finding: F017
+    quote: "Most of these are in the `toolUseResult` field with \"interrupted\":false. Let me find actual interr"
+    context: "Need to distinguish interrupted:false (normal) from actual interrupted tool results"
+
+  - session: 06a0:501-522
+    finding: (via TSV)
+    quote: "**Interrupted tool results** showing `Interrupted by user`"
+    context: "Formatting requirement for interrupted tool results"
+
+  - session: day-021:12201-12400
+    finding: F003
+    quote: "check also \"Interrupted by user\" in original log and replicate that output"
+    context: "User wants interrupted-by-user reproduced in reconstructed log"
+
+  - session: day-021:12201-12400
+    finding: F004
+    quote: "if ($line.message.content[0].content | contains(\"[Request interrupted by user\")) then \"  Interrupted by user\""
+    context: "Interrupted tool results have content containing '[Request interrupted by user for tool use]'"
+
+  - session: day-021:12201-12400
+    finding: F005
+    quote: "elif $line.type == \"user\" and ($line.message.content | type) == \"array\" and ($line.message.content[0].text | contains(\"[Request interrupted by user\")) then empty"
+    context: "Two types of interrupted messages: (1) tool_result with interrupt content -> show, (2) user text with same text -> skip"
+
+  - session: 0841:1101-1200
+    finding: F006
+    quote: "For interrupted tool uses, there are two related messages: 1. The error result with: \"is_error\": true, Content: \"The user doesn't want to proceed...\""
+    context: "Interrupted tool use has is_error:true in tool_result content plus separate interrupt user message"
+
+  - session: b475:401-500
+    finding: F007
+    quote: "And interruptions should probably be \"User interruptions\" for clarity... or do you have a better idea?"
+    context: "Summary label for interrupted messages should be 'User interruptions'"
+
+acceptance_criteria:
+  - id: PRS-009-AC1
+    given: a tool_result content block containing "[Request interrupted by user for tool use]"
+    when: parsed
+    then: the event is classified as an interrupted tool result
+
+  - id: PRS-009-AC2
+    given: a user text message containing "[Request interrupted by user]"
+    when: parsed
+    then: the event is classified as an interruption marker
+
+  - id: PRS-009-AC3
+    given: a tool_result with is_error:true and interruption content
+    when: parsed
+    then: both the error status and interruption are tracked
+
+  - id: PRS-009-AC4
+    given: a tool_result with interrupted:false in toolUseResult
+    when: parsed
+    then: the event is NOT classified as interrupted (normal completion)
+
+  - id: PRS-009-AC5
+    given: a session with user interruptions
+    when: summary is displayed
+    then: the count appears under "User interruptions" label
 
 depends_on:
   - PRS-001
-related: []
+
+related:
+  - FMT-015  # Interruption display formatting
+  - PRS-005  # Timeline building includes interruption events
 
 priority: could
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Two distinct patterns for interruptions in JSONL:
+  1. tool_result with content "[Request interrupted by user for tool use]" and
+     is_error:true -> display as "Interrupted by user" in console replay
+  2. user text message with "[Request interrupted by user]" -> skip in
+     reconstruct.jq (display nothing)
+  The distinction between interrupted:false (normal) and actual interruption
+  content is important. Summary should count these under "User interruptions".

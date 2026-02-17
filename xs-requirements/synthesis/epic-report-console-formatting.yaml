@@ -1,0 +1,138 @@
+# Epic Synthesis Report: Console Formatting
+# Generated: 2026-02-17
+
+epic: console-formatting
+theme: console-replay
+synthesized_by: opus
+
+summary: |
+  The console-formatting epic covers how xs renders session content to match
+  Claude Code console appearance. It is the largest epic with 25 stories
+  (21 original + 4 new). Requirements were extracted from ~290 findings
+  across 130+ finding files spanning sessions b475, 1e83, 0841, a40c, caf2,
+  e583, 06a0, day-021, day-022, day-025, and others.
+
+stories:
+  original: 21
+  new: 4
+  total: 25
+
+  by_priority:
+    must: 12
+    should: 11
+    could: 2
+
+  by_status:
+    mined: 25
+    draft: 0
+
+new_stories:
+  - id: FMT-022
+    title: "Generic Tool Parameter Display"
+    priority: must
+    rationale: "Most tools use a generic ToolName(param) format with parameter extraction chain. This was implicit in multiple stories but not explicitly captured. Covers LS, Glob, WebSearch, WebFetch, MCP tools."
+    sources: ["b475:98", "b475:996", "b475:992", "b475:1716"]
+
+  - id: FMT-023
+    title: "Blank Line Spacing Between Messages"
+    priority: must
+    rationale: "Spacing rules (blank lines after each message type in truncated mode) were a major source of bugs and corrections. Critical for CC console fidelity. Was scattered across FMT-001, FMT-002, FMT-007 but deserves its own story."
+    sources: ["day-021:12005", "06a0:390", "b475:1224"]
+
+  - id: FMT-024
+    title: "No Section Headers in Output"
+    priority: must
+    rationale: "User repeatedly corrected agent to remove === TIMELINE ===, === CONVERSATION ===, etc. headers. This is a cross-cutting constraint that affects all display modes."
+    sources: ["b475:1224", "caf2:12", "caf2:66", "b475:2395"]
+
+  - id: FMT-025
+    title: "No Emojis in Output"
+    priority: must
+    rationale: "User corrected agent multiple times about emoji usage. Claude Code uses Unicode symbols (⏺, ⎿, ✻), not emojis. This is a cross-cutting formatting constraint."
+    sources: ["b475:966", "b475:981", "b475:1017"]
+
+key_symbols:
+  user_message: ">"
+  assistant_message: "⏺"
+  tool_call: "⏺"
+  tool_result: "⎿"
+  thinking: "✻"
+  local_bash: "!"
+  file_reference: "@"
+  slash_command: "/"
+  meta_message: "[META]"
+  todo_completed: "☒"
+  todo_in_progress: "◐"
+  todo_pending: "☐"
+
+display_mode_summary:
+  truncated:
+    description: "Replicates CC console output faithfully"
+    sequence_numbers: "Hidden by default; shown when filtering"
+    truncation: "Tool results: first 3 lines + '... +N lines'"
+    assistant_text: "Shown in full (NOT truncated)"
+    spacing: "Blank lines between message types"
+    interactive_elements: "OMITTED (no ctrl+r to expand)"
+
+  compact:
+    description: "Single line per event with sequence numbers"
+    sequence_numbers: "Always shown as [N]"
+    truncation: "first_line [...] last_line for multiline"
+    spacing: "No blank lines"
+    format: "Same as truncated except single-line enforcement"
+
+  full:
+    description: "Complete output without truncation"
+    sequence_numbers: "Always shown as [N]"
+    truncation: "None"
+    spacing: "Blank lines between message types"
+
+design_hierarchy: |
+  CC Console -> reconstruct.jq -> truncated mode -> compact mode
+  User explicitly stated compact mode derives from truncated mode (b475:1011).
+  reconstruct.jq is the authoritative formatting reference (0841:1285).
+
+identified_conflicts:
+  - id: slash-command-prefix
+    description: "User at 0841:1257 dislikes > prefix on slash commands, but reconstruct.jq uses > prefix"
+    affects: FMT-012
+    resolution: "Needs user decision in Pass 5"
+
+  - id: compact-vs-truncated-tool-format
+    description: "b475:2301 shows compact using 'Bash: $ command' while truncated uses 'Bash(command)'"
+    affects: [FMT-003, FMT-022]
+    resolution: "Later evidence (b475:1142) establishes both should use same format"
+
+findings_coverage:
+  total_relevant_findings: ~290
+  findings_assigned: ~250
+  findings_not_assigned: ~40
+  not_assigned_reason: |
+    ~40 findings were implementation mechanics (code edits, git operations,
+    test debugging) that informed understanding but don't map to specific
+    acceptance criteria. They are referenced in validation_notes where relevant.
+
+cross_epic_findings:
+  - finding: "Session summary should include interrupted request count"
+    source: "a40c:1601"
+    assigned_to: SUM-001  # Summary display epic
+
+  - finding: "--no-tool-results suppresses separate tool_result events"
+    source: "caf2:288"
+    assigned_to: FLT-015  # Filtering epic
+
+  - finding: "Include/exclude filters with glob patterns"
+    source: "b475:1213"
+    assigned_to: FLT-006  # Filtering epic
+
+  - finding: "--show-numbers and --no-tool-results CLI flags"
+    source: "b475:1797"
+    assigned_to: CLI-003  # CLI interface epic
+
+  - finding: "JSON/JSONL export missing sequence numbers"
+    source: "e583:1587"
+    assigned_to: EXP-001  # Export epic
+
+  - finding: "No === headers in output"
+    source: "caf2:12"
+    assigned_to: FMT-024  # (new story in this epic)

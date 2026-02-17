@@ -9,14 +9,49 @@ as_a: power user
 i_want: -T as shortcut for -i Tool
 so_that: I can quickly see all tool calls
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "a40c:1-100"
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Include all messages (shortcut for"
+    context: "CLI help text showing shortcuts including -T for all tools"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "a40c:501-600"
+    line: 525
+    speaker: agent
+    type: agent_proposal
+    quote: "Test tool filtering without results"
+    context: "Tool filtering: -T flag combined with --no-tool-results to show tool calls without output"
+
+  - file: "a40c:201-300"
+    line: 290
+    speaker: agent
+    type: agent_proposal
+    quote: "python explore_session.py 943dff12 -t -T --no-tool-results | head -15"
+    context: "-T combined with --no-tool-results for a compact view of all tool actions"
+
+acceptance_criteria:
+  - id: FLT-009-AC1
+    given: session with mixed content
+    when: -T flag is specified
+    then: equivalent to --include Tool (shows all tool_use and tool_result events)
+
+  - id: FLT-009-AC2
+    given: -T flag
+    when: combined with --no-tool-results
+    then: shows only tool_use events without their results
+
+  - id: FLT-009-AC3
+    given: -T flag
+    when: specified
+    then: implies timeline display mode
 
 depends_on:
   - FLT-004
-related: []
+related:
+  - FLT-010  # --no-tool-results
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Confirmed working in agent testing. Commonly combined with --no-tool-results for compact tool listing."

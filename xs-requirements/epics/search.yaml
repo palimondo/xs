@@ -7,6 +7,8 @@ themes: [local-exploration, compaction-recovery]
 description: |
   Search across all timeline content with context lines.
   Essential for finding specific content in large sessions.
+  Also a key enabler for compaction recovery workflows (finding compaction
+  events, recovering context from specific session points).
 
 cli_flags:
   - "-S, --search SEARCH"
@@ -23,47 +25,68 @@ spec_files:
   - search_bugs_spec.py
 
 capabilities:
-  - Simple substring search
-  - Context lines before match
-  - Context lines after match
-  - Combined context
-  - Search with display modes
+  - Simple substring search across all timeline content
+  - Context lines before match (-B)
+  - Context lines after match (-A)
+  - Combined context (-C)
+  - Search with display modes (truncated, full, timeline)
+  - Visual gap separators between non-contiguous results
+  - Search position in filter pipeline (step 0)
 
 search_semantics:
-  type: "Simple substring match"
-  scope: "All content in timeline"
-  case_sensitivity: "TBD - needs mining"
+  type: "Simple substring match (case-insensitive)"
+  scope: "All content in timeline (text, tool_use, tool_result)"
+  case_sensitivity: "Case-insensitive (content lowered before comparison)"
+  pattern_type: "Simple substring, NOT regex, NOT rg delegation"
 
 context_options:
-  "-A NUM": "Show NUM lines after each match"
-  "-B NUM": "Show NUM lines before each match"
-  "-C NUM": "Show NUM lines before AND after"
+  "-A NUM": "Show NUM timeline entries after each match"
+  "-B NUM": "Show NUM timeline entries before each match"
+  "-C NUM": "Show NUM timeline entries before AND after (equivalent to -A NUM -B NUM)"
+
+filter_pipeline:
+  step_0: "Search: find events matching -S pattern (or all events if no -S)"
+  step_1: "Range: apply positional index range"
+  step_2: "Include: keep only events matching -i filters"
+  step_3: "Exclude: remove events matching -x filters"
+  step_4: "Context: expand with -A/-B/-C, merge overlaps without duplication"
 
 special_cases:
-  - "Patterns starting with -- need -S=pattern or --search=pattern"
-  - "Search with filters"
-  - "Search with range selection"
+  - "Patterns starting with -- need -S=pattern or --search=pattern (argparse constraint)"
+  - "Non-string content (lists in tool_result) must be handled without crashing"
+  - "Search must work with all display modes: truncated, --full, -t, --json"
+  - "Search must suppress implicit timeline mode to avoid duplicate output"
+  - "Non-contiguous results must show -- separator between sections"
+  - "Context expansion must merge overlapping windows (no duplicates)"
+
+stories:
+  - SRC-001: Basic substring search (must)
+  - SRC-002: Show lines after match -A (should)
+  - SRC-003: Show lines before match -B (should)
+  - SRC-004: Show lines before and after match -C (should)
+  - SRC-005: Search results and display mode interaction (should)
+  - SRC-006: Visual separators between non-contiguous results (should)
+  - SRC-007: Search position in filter pipeline (must)
 
 story_areas:
   - Basic substring search
-  - Case sensitivity behavior
+  - Case-insensitive matching
   - After context (-A)
   - Before context (-B)
   - Combined context (-C)
-  - Search with filtering
+  - Search with filtering (-i/-x)
   - Search with ranges
   - Search with display modes
   - Patterns starting with --
   - No matches handling
-  - Search in tool results
-  - Search in messages
+  - Non-string content robustness
+  - Gap separators for non-contiguous results
+  - Filter pipeline ordering
 
-search_methodology: |
-  Search day logs for:
-  - "search", "-S", "--search"
-  - "context", "-A", "-B", "-C"
-  - "grep", "match", "find"
+key_findings_sessions:
+  - caf2: "Primary search development session — pipeline design, -A/-B/-C, -S flag, bugs"
+  - e583: "Search bugs (AttributeError, --full crash, -- prefix), characterization tests"
+  - a40c: "Search + range + context usage examples, CLI feature completeness"
+  - 760a: "Search in compaction recovery workflow"
 
-  Check search_bugs_spec.py for known issues and edge cases.
-
-status: draft
+status: mined

@@ -6,17 +6,68 @@ epic: range-selection
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to view items from a point to the end
-so_that: I can see everything after an event
+i_want: to view items from a given index to the end of the timeline
+so_that: I can see everything after a specific event
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F003
+    quote: "Indices/ranges: 5 (item 5), +10 (first 10), -20 (last 20), 10-30 (range), 60+ (from 60 onwards)"
+    context: "Help text defining 60+ as from 60 onwards"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: caf2-L901-1000.yaml
+    finding: F004
+    quote: "60+ (from 60 onwards... I'm blanking on the proper name for this...suffix? I dunno how to explain it succintly -- maybe therefore bad idea? think hardest)"
+    context: "User proposes N+ syntax; struggled to name it succinctly"
+
+  - file: caf2-L901-1000.yaml
+    finding: F004
+    quote: "open-ended range** or **unbounded range**. Very intuitive and consistent with existing syntax"
+    context: "Agent named it 'open-ended range' or 'unbounded range'; confirmed it is intuitive"
+
+  - file: caf2-L1001-1100.yaml
+    finding: F001
+    quote: "Perfect! The `60+` syntax works as expected."
+    context: "Agent confirmed 60+ works; notes both '60-' and '60+' syntaxes are supported"
+
+  - file: b475-L1801-1900.yaml
+    finding: F004
+    quote: "export-json RANGE OUTPUT"
+    context: "parse_range supports open-end syntax (50-) alongside the 60+ form"
+
+acceptance_criteria:
+  - id: RNG-005-AC1
+    given: a timeline with 100 items
+    when: user specifies 60+ as a positional argument
+    then: items 60 through 100 are displayed
+
+  - id: RNG-005-AC2
+    given: a timeline with 39 items
+    when: user specifies 60+ (start beyond timeline length)
+    then: empty output is produced without error
+
+  - id: RNG-005-AC3
+    given: a timeline with 100 items
+    when: user specifies 60- as a positional argument
+    then: same behavior as 60+ (items 60 through end); both syntaxes supported
+
+  - id: RNG-005-AC4
+    given: a timeline with 100 items
+    when: user specifies 1+ as a positional argument
+    then: all items are displayed (equivalent to no range selection)
 
 depends_on:
   - PRS-005
-related: []
+
+related:
+  - RNG-004  # N-M is bounded range; N+ is unbounded variant
+  - RNG-002  # +N is head (first N); N+ is from N onwards (different semantics)
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User proposed 60+ syntax in caf2:901-1000. Agent noted that 60- syntax
+  already existed for open-ended ranges and added 60+ as an alias. Both
+  forms should work. The user hesitated about naming/discoverability but
+  ultimately kept it. Note: +N (head) and N+ (from N onwards) are
+  syntactically similar but semantically different.

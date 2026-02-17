@@ -12,15 +12,30 @@ so_that: I recover context before wrong work
 sources:
   - file: ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
     lines: 31-53
+  - session: e583:1701-1785
+    quote: "for PreToolUse we should use \"permissionDecision\": \"deny\" with \"permissionDecisionReason\" - that message is shown to Claude"
+    context: "Correct Claude Code hook API for blocking tool use and injecting recovery prompt"
+  - session: e583:1701-1785
+    quote: "I think you are incorrect in assumign that using `additionalContext` will do anything on this event hook. I think that field is read only on SessionStart and UserPromptSubmit"
+    context: "User corrects agent; additionalContext only works for SessionStart and UserPromptSubmit, not PreToolUse"
+  - session: e583:1701-1785
+    quote: "I think we can try to use \"continue\": false, \"stopReason\": \"{our prompt here}\""
+    context: "User proposed alternative mechanism before agent identified permissionDecision as correct approach"
+  - session: 760a:301-400
+    quote: "tdd-guard successfully uses PreToolUse hooks to block tool calls AND provide feedback to Claude, using: { \"decision\": \"block\", \"reason\": \"detailed feedback that Claude sees and acts on\" }"
+    context: "tdd-guard reference implementation uses decision/block format; user investigated this as alternative"
+  - session: 760a:401-500
+    quote: "API Error: 400 due to tool use concurrency issues. Run /rewind to recover the conversation."
+    context: "The deprecated decision/block format caused 400 errors in practice"
 
 acceptance_criteria:
   - id: CRH-003-AC1
-    given: flag detected
+    given: flag detected by PreToolUse hook
     when: generating response
-    then: returns {"decision": "block", "reason": context_prompt}
+    then: "returns {\"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"<context_prompt>\"}"
 
   - id: CRH-003-AC2
-    given: context prompt
+    given: context prompt in permissionDecisionReason
     when: included
     then: contains xs commands for recovery
 
@@ -29,11 +44,22 @@ acceptance_criteria:
     when: displayed
     then: includes session ID for xs commands
 
+  - id: CRH-003-AC4
+    given: PreToolUse hook response format
+    when: choosing API
+    then: does NOT use additionalContext (only works for SessionStart/UserPromptSubmit)
+
 depends_on:
   - CRH-002
 related:
   - CRH-005
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Multiple format options were investigated:
+  - decision/block (tdd-guard): caused 400 errors in 760a:401-500
+  - additionalContext: user corrected agent, only for SessionStart/UserPromptSubmit
+  - continue/stopReason: user proposed but agent identified better option
+  - permissionDecision/permissionDecisionReason: confirmed correct API in e583:1701-1785
+  The YAML syntax error on the original stub line 20 (unquoted JSON) has been fixed.

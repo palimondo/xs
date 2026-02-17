@@ -1,23 +1,63 @@
 # Story: Multiline Content Truncation
 
 id: FMT-008
-title: Truncate multiline content with [...]
+title: Truncate multiline content with first [...] last pattern
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: long content truncated with first/last line pattern
-so_that: I get overview without overwhelming output
+i_want: long content shown with first line, [...], and last line
+so_that: I get overview without overwhelming output while preserving context
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "0841:1034"
+    quote: "we shoudl end with [...] when it's multiline, but otherwise don't truncate it at all. This way we can rely on head/tail/grep to get the correct sequence number from our responses"
+    context: "Truncation only for multiline; full first line shown; enables grep workflows"
+  - session: "0841:1233"
+    quote: "in the multiline messages, can we append the list line after the [...]? Sometimes there are questions that the next message responds to."
+    context: "User requests last line after [...] for conversation context preservation"
+  - session: "1e83:729"
+    quote: "The thinking message in compact mode shoudl also include the first and last line from the thoughts separated with [...]"
+    context: "first [...] last pattern applies to thinking blocks too"
+  - session: "a40c:1343"
+    quote: "user messages, tool results, and assistant text all use the [...] {last_line} pattern for multiline content"
+    context: "Consistent truncation pattern across all content types"
+  - session: "a40c:1349"
+    quote: "mcp__github_comment__update_claude_comment(Test comment with [...] lines)"
+    context: "Truncation pattern applies to unhandled tool parameters too"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-008-AC1
+    given: multiline content (user message, assistant message, or tool parameter)
+    when: rendered in compact mode
+    then: "Display as '{first_line} [...] {last_line}' on a single line"
+
+  - id: FMT-008-AC2
+    given: single-line content
+    when: rendered in compact mode
+    then: "Display full line without any truncation"
+
+  - id: FMT-008-AC3
+    given: multiline tool result
+    when: rendered in compact mode
+    then: "Display as '{first_line} [...] {last_line}' on a single line"
+
+  - id: FMT-008-AC4
+    given: multiline unhandled tool parameter
+    when: rendered in compact mode
+    then: "Display as 'ToolName({first_line} [...] {last_line})'"
 
 depends_on:
   - PRS-005
 related:
-  - DSP-002  # Truncated mode
+  - FMT-015  # Truncation rules for truncated mode
+  - FMT-011  # Thinking truncation
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Pattern: first_line [...] last_line for ALL multiline content in compact mode.
+  No arbitrary character truncation (e.g., no 60-char limit).
+  Enables grep/head/tail workflows on output.
+  Applied consistently to user messages, assistant text, tool params, tool results.
+  Source: 0841:1034, 0841:1233, 1e83:729, a40c:1343

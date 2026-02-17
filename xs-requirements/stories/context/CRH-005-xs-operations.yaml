@@ -14,34 +14,92 @@ sources:
     lines: 31-46
   - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/context_recovery_pattern.md
     lines: 67-78
+  - session: 760a:201-300
+    quote: "./xs 760a9954 -i Read"
+    context: "xs CLI: filter by tool name using -i flag to show only Read tool invocations"
+  - session: 760a:201-300
+    quote: "Find compaction summary in current session"
+    context: "xs CLI: -S flag for text search (command: ./xs 760a9954 -S 'This session is being continued')"
+  - session: 760a:201-300
+    quote: "./xs 760a9954 239 --full"
+    context: "xs CLI: single event index with --full flag for complete content"
+  - session: 760a:201-300
+    quote: "Aha! You're right - I **did** read `hooks.md` at event [48]! But it's not in my current context after the compaction."
+    context: "Confirms compaction recovery use case: xs reveals what was read pre-compaction but dropped from summary"
+  - session: e583:1101-1200
+    quote: "it could get the right session id and message id for compaction (if possible) and just pass these as parameters to xs"
+    context: "PostCompact hook workflow: session_id and compaction message index passed to xs"
+  - session: e583:1101-1200
+    quote: "`xs {current_session_id} {compact_message_index}` and the subagent in `Task` ca"
+    context: "xs accepts session_id and event index as positional parameters"
+  - session: e583:1201-1300
+    quote: "by searchign for all todos in compact mode using xs, then tail to grap last one and extract the index from the start of that line"
+    context: "User proposes xs -i TodoWrite | tail -1 to find last todo state"
+  - session: e583:1401-1500
+    quote: "the robust way to find compaction events is to look for JSON events with \"isCompactSummary\": true"
+    context: "JSONL format has dedicated isCompactSummary boolean field for compaction detection"
+  - session: e583:1501-1600
+    quote: "Are we using `jq` in `xs` yet? I think it could be useful for cases liek this if you could filter events by `jq`?"
+    context: "User wants --jq flag for arbitrary jq filtering (e.g. select(.isCompactSummary == true))"
+  - session: e583:1601-1700
+    quote: "I think I woudl like to implement support for `--jq` and `--tail` that you drafted:  ./xs e583 --jq 'select(.isCompactSummary == true)' --tail 1 --full"
+    context: "User requests --jq and --tail flags to find last compaction event in full mode"
+  - session: 760a:401-500
+    quote: "future session can: `./xs 760a9954 -S \"commit|tdd-guard|decision block\"`"
+    context: "xs -S supports regex/keyword search patterns for finding prior context"
+  - session: 760a:401-500
+    quote: "in case of compaction that doesn't trigger the post-compaction context review and recovery using `xs`, read the docs from 1"
+    context: "xs is also the manual fallback when automatic hook-based recovery fails"
 
 acceptance_criteria:
   - id: CRH-005-AC1
     given: recovery prompt
-    when: searching for compaction
-    then: uses `xs session -S "This session is being continued"`
+    when: searching for compaction summary
+    then: uses `xs {session} -S "This session is being continued"` or `xs {session} --jq 'select(.isCompactSummary == true)' --tail 1 --full`
 
   - id: CRH-005-AC2
     given: recovery prompt
     when: reading compaction summary
-    then: uses `xs session <event> --full`
+    then: uses `xs {session} {event_index} --full`
 
   - id: CRH-005-AC3
     given: recovery prompt
     when: checking todo state
-    then: uses `xs session -i TodoWrite`
+    then: uses `xs {session} -i TodoWrite` (pipe to tail for last occurrence)
 
   - id: CRH-005-AC4
     given: recovery prompt
     when: searching decisions
-    then: uses `xs session -S "decision|approach|should"`
+    then: uses `xs {session} -S "decision|approach|should"` (regex alternation)
+
+  - id: CRH-005-AC5
+    given: recovery prompt
+    when: filtering by tool invocation
+    then: uses `xs {session} -i {ToolName}` to filter by specific tool
+
+  - id: CRH-005-AC6
+    given: manual recovery fallback
+    when: automatic hook does not trigger
+    then: user can manually run xs commands to recover context
 
 depends_on:
   - CRH-003
 related:
   - SRC-001
   - DSP-003
+  - FLT-001
+  - RNG-001
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Rich evidence from 760a and e583 sessions demonstrating xs CLI in compaction
+  recovery workflows. Key xs operations:
+  - -S for text search (supports regex alternation)
+  - -i for tool invocation filtering
+  - --full for complete content display
+  - Event index for specific event access
+  - --jq for arbitrary jq filtering (requested but may not be implemented)
+  - --tail for post-filter slicing (requested but may not be implemented)
+  The isCompactSummary field enables robust compaction detection vs text matching.
+  Note: --jq and --tail are requested features (e583:1601-1700) that may not exist yet.

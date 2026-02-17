@@ -14,6 +14,24 @@ sources:
     section: "CRH Test Findings"
   - session: 84db
     context: "Unplanned real-world test during Pass 1 completion"
+  - session: e583:501-600
+    quote: "I'm noticing a repeated failure mode, where after a forced compaction (we ran out of context) the model picks up a first Todo item prom our list and just runs away with implementation, even though we werer just in a process of planning and analysis. I'm turning on plan mode."
+    context: "Identifies the primary failure mode that recovery should prevent"
+  - session: e583:1601-1700
+    quote: "our -N for tail is being applied before the search, not after... looks like we are hitting a gap in our functionality"
+    context: "Range selection ordering gap discovered during compaction recovery testing"
+  - session: e583:1601-1700
+    quote: "I am worried that we might accidentally create conflicting mess of exclusive parameter sets. We shoudl think hardest about interactions between all our filtering and range options, so that we have coherent UX."
+    context: "User wants careful pipeline design for filter/range interaction"
+  - session: 0841:1401-1500
+    quote: "Oh no, your memory has been compacted and now you are undoing things we agreed to do differently before I fear..."
+    context: "Real-world compaction causing regression of previously agreed formatting decisions"
+  - session: 760a:401-500
+    quote: "API Error: 400 due to tool use concurrency issues. Run /rewind to recover the conversation."
+    context: "Hook format errors (deprecated decision/block) broke compaction recovery mechanism"
+  - session: e583:901-1000
+    quote: "debugging hooks requires my involvement, because I have to trigger /hooks to reload them you cannot edit hooks autonomously, because they do not auto-reload, even though you can modify their config files"
+    context: "Practical constraint: hooks require manual /hooks reload by user"
 
 acceptance_criteria:
   - id: CRH-007-AC1
@@ -31,10 +49,33 @@ acceptance_criteria:
     when: working on tasks
     then: plan files prevent needing full recovery
 
+  - id: CRH-007-AC4
+    given: range selection gap
+    when: -N (tail) and -S (search) combined
+    then: tail applies before search, not after; --tail flag needed for post-filter slicing
+
+  - id: CRH-007-AC5
+    given: hook debugging
+    when: modifying hook scripts
+    then: hooks do not auto-reload; user must trigger /hooks to reload
+
+  - id: CRH-007-AC6
+    given: post-compaction agent behavior
+    when: compaction drops prior agreements
+    then: agent may regress previously agreed decisions; recovery must re-establish agreements
+
 depends_on:
   - CRH-006
-related: []
+related:
+  - FLT-001
+  - RNG-001
 
 priority: could
-status: draft
-validation_notes: "Derived from session 84db auto-compaction at event 919"
+status: mined
+validation_notes: |
+  Derived from session 84db auto-compaction at event 919 plus multiple
+  real-world observations across sessions.
+  AC4 documents a specific gap: the pipeline ordering problem where -N applies
+  before -S, making it impossible to get "last N search results."
+  AC5 is a practical constraint for hook development workflow.
+  AC6 documents the regression pattern observed in 0841:1401-1500.

@@ -5,18 +5,75 @@ title: Parse multi-line JSON objects in JSONL
 epic: jsonl-parsing
 theme: local-exploration
 
-as_a: developer
-i_want: JSONL files with multi-line JSON objects to parse correctly
+as_a: developer exploring session history
+i_want: JSONL files with multi-line (pretty-printed) JSON objects to parse correctly
 so_that: Claude Code sessions (which use multi-line JSON) load properly
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: day-025:801-1000
+    finding: F002
+    quote: "The JSONL isn't pure JSON. Let me check the actual format"
+    context: "Agent discovering GitHub Actions session JSONL uses pretty-printed (multi-line) JSON objects, not one-object-per-line"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: day-025:1001-1200
+    finding: F001
+    quote: "Extract tool calls from Claude's JSONL session log. Handles the multi-line JSON format efficiently."
+    context: "JSONL session files are multi-line format, not single-line-per-object. Parser must accumulate lines."
+
+  - session: day-025:6601-6800
+    finding: F005
+    quote: "This is the multi-line JSONL parser that explore_session.py already imports and uses!"
+    context: "parse_claude_jsonl.py is a dependency (imported) by explore_session.py for multi-line JSONL parsing"
+
+  - session: day-025:6601-6800
+    finding: F006
+    quote: "This tries line-by-line JSON parsing which doesn't work with Claude's multi-line format. The README already notes this is broken."
+    context: "Line-by-line JSON parsing breaks with Claude's multi-line format; dedicated parser required"
+
+  - session: day-025:3801-4000
+    finding: F003
+    quote: "JSONL session log format (multi-line JSON, not standard JSONL)"
+    context: "Compaction summary confirms the format is multi-line JSON, not standard JSONL"
+
+  - session: day-025:801-1000
+    finding: F003
+    quote: "Error: Command timed out after 2m 0.0s"
+    context: "Naive parsing (read entire content into memory and split by newlines) times out on 500KB files"
+
+acceptance_criteria:
+  - id: PRS-003-AC1
+    given: a JSONL file with pretty-printed (multi-line) JSON objects
+    when: parsed
+    then: each complete JSON object is returned as a separate parsed object
+
+  - id: PRS-003-AC2
+    given: a JSONL file with single-line JSON objects
+    when: parsed
+    then: each line is parsed as a separate object (backward compatible)
+
+  - id: PRS-003-AC3
+    given: a multi-line JSON object spanning multiple lines
+    when: parsed
+    then: line accumulation correctly identifies object boundaries
+
+  - id: PRS-003-AC4
+    given: a 500KB+ JSONL file with multi-line JSON
+    when: parsed
+    then: parsing completes efficiently without excessive memory usage or timeout
 
 depends_on:
   - PRS-001
-related: []
+
+related:
+  - PRS-004  # Error handling during parsing
+  - PRS-006  # Format versions may affect JSON structure
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  This is a critical technical requirement. Claude Code session files use
+  pretty-printed JSON with newlines inside objects. A naive line-by-line
+  JSON.loads() approach fails. The parser must accumulate lines until a
+  complete JSON object is formed. An early attempt using line-by-line parsing
+  (extract_tool_calls.py) was confirmed broken. The parse_claude_jsonl.py
+  module was created specifically to handle this format.

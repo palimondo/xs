@@ -1,0 +1,50 @@
+id: CONF-001
+title: Claude Code 1.x vs 2.x Output Format Differences
+
+description: |
+  Claude Code's JSONL format and console output evolved between 1.x and 2.x.
+  The user has sessions from both eras. Key differences include content block
+  structure, tool output format, and available metadata fields. User wants
+  "period appropriate" output but this creates two code paths.
+
+evidence:
+  1x:
+    - observation: "Different content block structure in JSONL"
+    - observation: "Tool format may use 'Bash: $ command' style"
+    - note: "Golden files exist for 1.x era from existing implementation"
+
+  2x:
+    - observation: "New content block structure with typed arrays"
+    - observation: "Tool format uses 'Bash(command)' style"
+    - note: "Current CC sessions use this format"
+
+options:
+  - id: A
+    name: "Always 2.x style"
+    pros: [simpler implementation, forward-compatible, less maintenance]
+    cons: [historical sessions look different from original CC output]
+
+  - id: B
+    name: "Period-appropriate (auto-detect from version field)"
+    pros: [historical accuracy, sessions look correct for their era]
+    cons: [two code paths for formatting, harder to test, complexity]
+
+  - id: C
+    name: "User flag --format-style=1x|2x|auto"
+    pros: [user control, flexibility]
+    cons: [complexity, decision burden on user, three code paths]
+
+resolution: pending
+decided_by: null
+decision_rationale: null
+
+affects:
+  - PRS-006  # Format version detection
+  - FMT-*    # All formatting stories
+  - DSP-*    # Display mode rendering
+  - PRIN-006 # Period-appropriate formatting principle
+
+sources:
+  - "jsonl-parsing report: PRS-006 — format version detection"
+  - "console-formatting report: compact-vs-truncated tool format conflict (b475:2301 vs b475:1142)"
+  - "CLAUDE.md template for this conflict"

@@ -5,19 +5,53 @@ title: Continue processing despite parse errors
 epic: jsonl-parsing
 theme: local-exploration
 
-as_a: developer
+as_a: developer exploring session history
 i_want: partial results when some entries fail to parse
-so_that: I can still extract useful information from corrupted sessions
+so_that: I can still extract useful information from corrupted or partially downloaded sessions
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: day-025:801-1000
+    finding: F003
+    quote: "Error: Command timed out after 2m 0.0s"
+    context: "Parsing failures (timeout, malformed JSON) should not prevent processing the rest of the file"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: e583:801-900
+    finding: F002 (via TSV)
+    quote: "fix: handle SIGPIPE gracefully when piping to head/tail"
+    context: "xs must handle SIGPIPE when output is piped to head/tail without crashing"
+
+acceptance_criteria:
+  - id: PRS-004-AC1
+    given: a JSONL file with one malformed JSON object among valid ones
+    when: parsed
+    then: the malformed object is skipped and all valid objects are returned
+
+  - id: PRS-004-AC2
+    given: a JSONL file with a malformed object
+    when: parsed
+    then: a warning is emitted indicating the parse error location
+
+  - id: PRS-004-AC3
+    given: a truncated JSONL file (incomplete final object)
+    when: parsed
+    then: all complete objects before the truncation are returned
+
+  - id: PRS-004-AC4
+    given: xs output piped to head/tail
+    when: the pipe is closed early (SIGPIPE)
+    then: xs exits gracefully without a traceback
 
 depends_on:
   - PRS-001
+
 related:
   - PRIN-003  # Graceful degradation principle
+  - PRS-003   # Multi-line parsing is where errors can occur
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Limited direct evidence in sessions for parse error recovery as a distinct
+  requirement. The SIGPIPE handling was explicitly addressed. The general
+  principle of graceful degradation (PRIN-003) applies here. Truncated files
+  are plausible from interrupted GitHub Actions downloads.

@@ -1,0 +1,88 @@
+# Story: Multiple Range Arguments
+
+id: RNG-006
+title: Combine multiple indices and ranges as free positional arguments
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to specify multiple indices and ranges as free positional arguments
+so_that: I can view non-contiguous sections of the timeline in one command
+
+sources:
+  - file: b475-L201-300.yaml
+    finding: F004
+    quote: "can can these be liek free parameters at the and and I could just list specific indices and ranges?"
+    context: "User wants indices/ranges as free positional args, supports multiple values"
+
+  - file: b475-L201-300.yaml
+    finding: T003
+    quote: "**Multiple selections**: `1 5 10-20 -5`"
+    context: "Agent confirmed multiple selection syntax; mix of single indices, ranges, and tail"
+
+  - file: b475-L201-300.yaml
+    finding: F002
+    quote: "range must be independet and not a param to some other sub command"
+    context: "Ranges are independent positional arguments, not parameters to --timeline or other flags"
+
+  - file: b475-L1801-1900.yaml
+    finding: F003
+    quote: "Currently we have inconsistent range syntax"
+    context: "Agent identified range syntax was inconsistent across features; led to unification"
+
+  - file: 1e83-L801-900.yaml
+    finding: F002
+    quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works"
+    context: "CLI ordering: options first, then session, then range arguments"
+
+  - file: caf2-L1-100.yaml
+    finding: F005
+    quote: "Consistent range syntax"
+    context: "User requirement from session summary: range syntax must be consistent across all features"
+
+acceptance_criteria:
+  - id: RNG-006-AC1
+    given: a timeline with 39 items
+    when: user specifies "1 5 10-20" as positional arguments
+    then: items 1, 5, and 10 through 20 are displayed
+
+  - id: RNG-006-AC2
+    given: a timeline with 39 items
+    when: user specifies "1 5 10-20 -5" as positional arguments
+    then: union of items 1, 5, 10-20, and last 5 items are displayed
+
+  - id: RNG-006-AC3
+    given: range arguments are positional
+    when: user specifies "xs session_id -U -a 10-20"
+    then: range arguments are parsed correctly even when interspersed with filter flags
+
+  - id: RNG-006-AC4
+    given: range arguments are free positional parameters
+    when: user specifies them after session argument
+    then: they are independent of display mode flags (--truncated, --full, etc.)
+
+  - id: RNG-006-AC5
+    given: a consistent range syntax
+    when: used with --export-json or other range-consuming features
+    then: the same parse_range function handles all range syntax uniformly
+
+depends_on:
+  - PRS-005
+  - RNG-001
+  - RNG-002
+  - RNG-003
+  - RNG-004
+  - RNG-005
+
+related:
+  - CLI-001  # CLI argument ordering and parsing
+  - FLT-001  # Interaction with filter flags
+
+priority: should
+status: mined
+validation_notes: |
+  Multiple range arguments were explicitly requested by user in b475:201-300.
+  The agent confirmed the syntax "1 5 10-20 -5" as a valid example.
+  Ranges must be free positional arguments independent of display mode or
+  filter flags. Consistent syntax across all features was a user requirement
+  (caf2:1-100).

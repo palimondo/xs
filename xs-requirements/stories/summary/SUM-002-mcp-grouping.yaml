@@ -9,14 +9,76 @@ as_a: developer reviewing a session
 i_want: MCP tools grouped separately in summary
 so_that: I can distinguish MCP from built-in tools
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: caf2-L301-400.yaml
+    finding: F007
+    quote: "we need the support for parametrized filters `Tool(mcp__toolname*)` and `Tool(mcp__toolname_operation*)`"
+    context: "MCP tools follow naming pattern mcp__<server>__<tool>. Tool(pattern) filter supports Tool(mcp__*), Tool(mcp__memory*) etc."
+  - file: caf2-L401-500.yaml
+    finding: F002
+    quote: "Found it! Line 98 is explicitly skipping MCP tools: `if not tool_name.startswith('mcp__'):`"
+    context: "Bug: MCP tools were excluded from timeline parsing. After fix, all tools including MCP must appear in timeline and be filterable"
+  - file: caf2-L401-500.yaml
+    finding: F001
+    quote: "[11] ⏺ mcp__memory__read(project_context)\n[12] ⏺ mcp__memory__write(test)\n[13] ⏺ mcp__github__create_issue(Test)"
+    context: "MCP tools displayed with full name including mcp__ prefix and server prefix"
+  - file: day-025-L1001-1200.yaml
+    finding: F003
+    quote: "# Skip MCP tools"
+    context: "Early implementation skipped MCP tools; this was corrected as a bug"
+  - file: b475-L401-500.yaml
+    finding: F002
+    quote: "Perfect! Here's the final design with Git under Bash"
+    context: "Final YAML-style summary design uses hierarchical grouping for tool breakdown"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: SUM-002-AC1
+    given: a JSONL session containing MCP tool invocations
+    when: summary mode displays tool calls breakdown
+    then: |
+      MCP tools are included in the tool call counts (not skipped).
+      MCP tools appear in the Tool calls breakdown alongside built-in tools.
+
+  - id: SUM-002-AC2
+    given: a session with multiple MCP tools from different servers
+    when: summary mode displays tool calls breakdown
+    then: |
+      MCP tools are grouped by server prefix under a parent category.
+      Example hierarchy:
+        Tool calls:
+          Bash: 91
+          Edit: 51
+          mcp__memory: 3        # -i Tool(mcp__memory*)
+            read: 2
+            write: 1
+          mcp__github: 1        # -i Tool(mcp__github*)
+            create_issue: 1
+      Each MCP server group shows individual operation counts.
+
+  - id: SUM-002-AC3
+    given: summary output with MCP tool groups
+    when: reading inline comments
+    then: |
+      Each MCP server group has an inline comment showing the
+      filter pattern to view just those tools, e.g. # -i Tool(mcp__memory*)
+
+  - id: SUM-002-AC4
+    given: a session with zero MCP tool invocations
+    when: summary mode is displayed
+    then: |
+      No MCP grouping section appears (zero-count omission rule from SUM-001).
 
 depends_on:
   - SUM-001
-related: []
+related:
+  - FLT-001
+  - PRS-005
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  MCP tool handling evolved from being explicitly excluded (bug in day-025/caf2 era)
+  to being included and filterable. The grouping requirement is inferred from the
+  hierarchical summary design (b475:301-500) and the MCP naming convention
+  (mcp__<server>__<operation>). User explicitly requested Tool(mcp__*) filtering
+  patterns in caf2:301-400.

@@ -1,0 +1,137 @@
+# Story: Argument Ordering and Help Text
+
+id: CLI-008
+title: Argument ordering rules and help text conventions
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer using xs
+i_want: consistent argument ordering rules and well-formatted help text
+so_that: I can reliably compose complex invocations and learn the tool from --help
+
+sources:
+  - file: 1e83-L801-900.yaml
+    finding: F002
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works, so I guess I wa"
+    context: "CLI options must be specified BEFORE the positional session argument. Correct order: flags, session, ranges."
+
+  - file: 1e83-L701-800.yaml
+    finding: F003
+    line: 781
+    speaker: user
+    type: user_correction
+    quote: "`./explore_session.py 943dff12 +14` works\n`./explore_session.py 943dff12 -U -a -x Tool +14` doesn't work"
+    context: "Argparse breaks when flags appear after positional session argument combined with +N range syntax"
+
+  - file: caf2-L701-800.yaml
+    finding: F004
+    line: 794
+    speaker: user
+    type: user_request
+    quote: "We shoudl unify and follow the concentional order."
+    context: "CLI help text must use consistent ordering of short and long flags (pick one convention and stick to it)"
+
+  - file: caf2-L701-800.yaml
+    finding: F003
+    line: 794
+    speaker: user
+    type: user_request
+    quote: "Maybe we shoudl use capitals in all cases except `-a` for the shortcuts?"
+    context: "Short flag naming: uppercase for virtual entity shortcuts (-M, -U, -T) to avoid rg flag conflicts, -a lowercase as exception"
+
+  - file: caf2-L801-900.yaml
+    finding: F002
+    line: 824
+    speaker: agent
+    type: agent_proposal
+    quote: "parser.add_argument('-M', dest='include_message'"
+    context: "Virtual entity filter shortcuts changed to uppercase: -M (message), -U (user), -T (tool)"
+
+  - file: caf2-L501-600.yaml
+    finding: F004
+    line: 593
+    speaker: agent
+    type: agent_error
+    quote: "The -s flag conflicts with --summary. Let me remove the short form"
+    context: "-s cannot be used as short form for --search because --summary already claims it"
+
+  - file: caf2-L101-200.yaml
+    finding: F005
+    line: 160
+    speaker: user
+    type: user_request
+    quote: "We shoudl also probably introduce short forms of most parameters"
+    context: "User wants short forms for most parameters to minimize typing"
+
+  - file: e583-L1-100.yaml
+    finding: F002
+    line: 60
+    speaker: user
+    type: user_request
+    quote: "I'm satisfied by the CLI we designed, which should build on your knowledge of conceptualy related tools like grep, rg, etc."
+    context: "CLI design should follow Unix tool conventions (grep, rg, ls)"
+
+  - file: e583-L1-100.yaml
+    finding: F005
+    line: 70
+    speaker: user
+    type: user_request
+    quote: "a 4-6 char prefix is totally sufficient to uniquely identify a specific session."
+    context: "Session identification via short GUID prefix, git-revision style"
+
+  - file: caf2-L1-100.yaml
+    finding: F001
+    line: 12
+    speaker: user
+    type: user_correction
+    quote: "there's still header CONVERSATION"
+    context: "Output should never contain section headers (=== TIMELINE ===, etc.); user knows what flags they sent"
+
+acceptance_criteria:
+  - id: CLI-008-AC1
+    given: a CLI invocation
+    when: flags are specified before the session positional argument
+    then: all flags parse correctly (e.g. `xs -U -a -x Tool <session> +14`)
+
+  - id: CLI-008-AC2
+    given: the --help output
+    when: short and long forms are listed
+    then: they follow a consistent ordering convention throughout
+
+  - id: CLI-008-AC3
+    given: short flag assignments
+    when: -S is used for --search
+    then: -S does not conflict with -s/--summary (which uses -s)
+
+  - id: CLI-008-AC4
+    given: virtual entity shortcut flags
+    when: assigned short forms
+    then: use uppercase letters (-M, -U, -T) to avoid conflicts with grep/rg flags; -a is lowercase (exception)
+
+  - id: CLI-008-AC5
+    given: output in any mode
+    when: displayed
+    then: no section headers like === TIMELINE ===, === FILE CHANGES ===, === CONVERSATION === appear in output
+
+  - id: CLI-008-AC6
+    given: the xs tool
+    when: invoked
+    then: the tool name is `xs` (short for explore-session), accessible as a command without specifying full path
+
+depends_on: []
+related:
+  - CLI-001  # Summary mode (default)
+  - CLI-002  # Timeline mode
+  - CLI-007  # Multi-index (affected by argument ordering)
+  - FLT-006  # -M shortcut
+  - FLT-007  # -U shortcut
+  - FLT-008  # -a shortcut
+  - FLT-009  # -T shortcut
+  - SRC-001  # -S/--search flag
+
+priority: should
+status: mined
+validation_notes: "Argument ordering constraint discovered through user bug report (1e83:781). Short flag naming conventions evolved through discussion (caf2:794). The xs abbreviation was user-requested (e583:60). Section headers were explicitly rejected (caf2:12)."

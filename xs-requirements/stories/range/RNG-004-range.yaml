@@ -6,17 +6,83 @@ epic: range-selection
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to view items in a range
-so_that: I can focus on a specific section
+i_want: to view items in a contiguous range using N-M syntax
+so_that: I can focus on a specific section of the timeline
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F003
+    quote: "Indices/ranges: 5 (item 5), +10 (first 10), -20 (last 20), 10-30 (range), 60+ (from 60 onwards)"
+    context: "Help text defining 10-30 as range of items 10 through 30"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: 0841-L801-900.yaml
+    finding: F002
+    quote: "Next up: Add range parsing utility function. Let me implement this"
+    context: "Range parsing supports START-END (e.g. 50-60)"
+
+  - file: 0841-L801-900.yaml
+    finding: F003
+    quote: "./explore_session.py 943dff12 --timeline 12-14\n...\n[12] Read         <- cli_spec.py\n[14] CLAUDE: Now let me check..."
+    context: "User noticed gap: item [13] was missing from range 12-14 display"
+
+  - file: 0841-L801-900.yaml
+    finding: F004
+    quote: "we only show assistant messages if they have text OR tools. If an assistant message has neither (which can happen), it's silently skipped. This creates gaps in the sequence numbers."
+    context: "Bug: empty messages were skipped, causing gaps. Timeline indices must be gapless."
+
+  - file: b475-L2301-2400.yaml
+    finding: F010
+    quote: "=== TIMELINE ==="
+    context: "Out-of-bounds range (100-200 when session has 39 items) produces empty timeline without error"
+
+  - file: caf2-L101-200.yaml
+    finding: F001
+    quote: "Error: Invalid range format: conversation. Use format like '5', '+5', '-5', '1-50'"
+    context: "Error message shown for invalid range format; valid formats include '1-50'"
+
+  - file: b475-L1801-1900.yaml
+    finding: F004
+    quote: "export-json RANGE OUTPUT"
+    context: "Consistent range syntax used across features: parse_range supports single index (5), range (1-50), relative from start (+10), relative from end (-20)"
+
+acceptance_criteria:
+  - id: RNG-004-AC1
+    given: a timeline with 39 items
+    when: user specifies 10-30 as a positional argument
+    then: items 10 through 30 (inclusive) are displayed
+
+  - id: RNG-004-AC2
+    given: a timeline with 39 items
+    when: user specifies range 12-14
+    then: exactly items 12, 13, and 14 are displayed with no gaps
+
+  - id: RNG-004-AC3
+    given: a timeline with 39 items
+    when: user specifies range 100-200 (completely out of bounds)
+    then: empty output is produced without error
+
+  - id: RNG-004-AC4
+    given: a timeline with 39 items
+    when: user specifies range 30-50 (partially out of bounds)
+    then: items 30 through 39 are displayed without error
+
+  - id: RNG-004-AC5
+    given: user input "conversation" where range is expected
+    when: parsed as range
+    then: error message shown indicating valid range formats
 
 depends_on:
   - PRS-005
-related: []
+
+related:
+  - RNG-001  # Single index is degenerate range
+  - RNG-005  # N+ is open-ended variant
+  - PRS-005  # Timeline must have gapless indices
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Range syntax N-M was one of the earliest features (0841:801-900).
+  The gapless indices requirement emerged from a user-reported bug
+  where item [13] was missing from range 12-14 display. Out-of-bounds
+  handling confirmed: empty output, no error (b475:2301-2400).

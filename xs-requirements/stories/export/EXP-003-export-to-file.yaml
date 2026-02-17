@@ -1,4 +1,4 @@
-# Story: Export Range to File
+# Story: Export Range to JSON File
 
 id: EXP-003
 title: Export range to JSON file
@@ -6,18 +6,169 @@ epic: export
 theme: console-replay
 
 as_a: developer replaying sessions
-i_want: to export a range to a file
-so_that: I can replay specific parts
+i_want: to export a filtered range of events to a JSON file
+so_that: I can replay specific tool calls via sub-agents or reconstruct.jq
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F011
+    quote: "Export tool calls in RANGE as JSON to FILE. RANGE can be: 5 (single)"
+    context: "CLI help showing --export-json takes RANGE and OUTPUT arguments"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: 0841-L601-700.yaml
+    finding: F004
+    quote: "I think the --export would be more intuitive as --export-json ? and it's argparse description shoudl explain that OUTPUT is a file to write to"
+    context: "User renamed --export to --export-json for clarity; OUTPUT arg is a file path"
+
+  - file: 0841-L601-700.yaml
+    finding: F005
+    quote: "**Export format**: Currently outputs **JSON** (a single array), not JSONL. The input is JSONL, but export creates a JSON array of selected tool calls."
+    context: "Export format is JSON array (not JSONL); input is JSONL but output is a single JSON array"
+
+  - file: 0841-L901-1000.yaml
+    finding: F003
+    quote: "you should be able to --export a snippet from ./explore_session.py 943dff12 --timeline 11-15 // just be avare of the JSON vs JSONL difference and adjust the save file accordingly fo that reconstruct can process it"
+    context: "User wants export capability; exported snippets should be format-compatible with downstream tools"
+
+  - file: b475-L1-100.yaml
+    finding: F010
+    quote: "Rename --export to --export-json"
+    context: "Flag rename from --export to --export-json for clarity"
+
+  - file: b475-L1801-1900.yaml
+    finding: F004
+    quote: "export-json RANGE OUTPUT"
+    context: "--export-json changed from 'START END OUTPUT' (3 args) to 'RANGE OUTPUT' (2 args) using parse_range syntax"
+
+  - file: b475-L1601-1700.yaml
+    finding: F004
+    quote: "we have --export-json which currently works by writing to files, but maybe that OUTPUT parameter shoudl be optional? Maybe --json is a formatting flag, it prints json to console, can be redirected out"
+    context: "User questioning whether --export-json OUTPUT should be optional; --json covers stdout, --export-json covers file output"
+
+  - file: a40c-L601-700.yaml
+    finding: F002
+    quote: "Exported 5 events to /tmp/export_test.json"
+    context: "--export-json writes raw JSONL objects to file for replay workflow"
+
+  - file: b722-L1-100.yaml
+    finding: F002
+    quote: "python claude-dev-log-diary/tools/explore_session.py issue-13 --export 1 46 - --include \"Edit(*/specs/**),Edit(*/bookminder/**),Bash(git add *),Bash(git commit *)\""
+    context: "Real usage: --export with range, output to stdout (-), combined with --include glob filters for session replay"
+
+  - file: b722-L101-200.yaml
+    finding: F002
+    quote: "python claude-dev-log-diary/tools/explore_session.py issue-13 --export 47 85 - --include \"Edit(*/specs/**),Edit(*/bookminder/**),Bash(git add *),Bash(git commit *)\""
+    context: "--export supports stdout output with '-' as output path; combined with include filters"
+
+  - file: day-025-L4601-4800.yaml
+    finding: F005
+    quote: "explore_session supports ranges and filters, right? do we need these intermediary files or can we parametrize the calls to explore_session.py to give us what we want as inputs for task"
+    context: "User prefers using --export directly rather than intermediary JSON files for replay"
+
+  - file: day-025-L4601-4800.yaml
+    finding: F008
+    quote: "I guess we could have some include exclude parameters to filter the extracted tool calls within the specified export range in that tool"
+    context: "User requests include/exclude filter parameters for --export"
+
+  - file: day-025-L4601-4800.yaml
+    finding: F010
+    quote: "Yes, but also don't forget we wanted to include only specific files to be written to... basically we care about files in specs and bookminder folder and want to ignore the temporary exploration files"
+    context: "Path-based filtering for file operations within export range"
+
+  - file: day-025-L5201-5400.yaml
+    finding: F006
+    quote: "if output_file == '-':\n    json.dump(selected, sys.stdout, indent=2)"
+    context: "Export supports stdout output when output_file is '-', enabling pipeline composition"
+
+  - file: day-025-L5201-5400.yaml
+    finding: F003
+    quote: "1. Start with all tool calls in range 1-46\n2. Keep only those matching ANY include filter\n3. Remove any that match ANY exclude filter"
+    context: "Filter logic for --export: start with range, keep include matches (OR), remove exclude matches (AND)"
+
+  - file: fa1a-L901-1000.yaml
+    finding: F004
+    quote: "we can tehn test on a subset (2-3 edits if the Task can be instructed to replay these commans (it can execute the specific `explore_session.py` to get all the parameters)"
+    context: "Export format must be machine-readable JSON so sub-agents can parse and replay tool calls"
+
+  - file: fa1a-L901-1000.yaml
+    finding: F005
+    quote: "Exported 6 tool calls to chunk1_verify.json"
+    context: "Export output is JSON array with name, id, parameters fields per tool call"
+
+  - file: a40c-L1201-1300.yaml
+    finding: F004
+    quote: "[--export-json RANGE OUTPUT] [--json] [--jsonl]"
+    context: "--export-json takes two required arguments: RANGE and OUTPUT"
+
+  - file: cc2d-L601-700.yaml
+    finding: F004
+    quote: "I think the --export would be more intuitive as --export-json ? and it's argparse description shoudl explain that OUTPUT is a file to write to"
+    context: "Duplicate of 0841 finding; same session, same user correction about naming"
+
+acceptance_criteria:
+  - id: EXP-003-AC1
+    given: a parsed session
+    when: --export-json RANGE OUTPUT is specified with a file path
+    then: writes a JSON array of raw JSONL objects for the specified range to the output file
+
+  - id: EXP-003-AC2
+    given: "--export-json with RANGE and OUTPUT set to '-'"
+    when: "'-' is specified as the OUTPUT argument"
+    then: writes the JSON array to stdout instead of a file
+    notes: "Enables pipeline composition without intermediate files (day-025:5303)"
+
+  - id: EXP-003-AC3
+    given: --export-json with --include filters
+    when: Tool(glob) include patterns are specified
+    then: only events matching ANY include pattern are exported
+    notes: "Include is OR-logic: match ANY pattern to be included"
+
+  - id: EXP-003-AC4
+    given: --export-json with --exclude filters
+    when: Tool(glob) exclude patterns are specified
+    then: events matching ANY exclude pattern are removed from the export
+    notes: "Exclude applied AFTER include filtering"
+
+  - id: EXP-003-AC5
+    given: --export-json with --include and --exclude
+    when: both filters are specified
+    then: |
+      filter pipeline is: (1) select events in range, (2) keep events matching
+      ANY include pattern, (3) remove events matching ANY exclude pattern
+    notes: "User confirmed include-first semantics in day-025:5216-5245"
+
+  - id: EXP-003-AC6
+    given: --export-json RANGE
+    when: RANGE uses parse_range syntax
+    then: supports single index (5), range (1-50), open-end (50-), relative from start (+10), relative from end (-20)
+    notes: "Range syntax unified with other commands (b475:1877)"
+
+  - id: EXP-003-AC7
+    given: exported JSON file
+    when: consumed by a sub-agent for replay
+    then: each tool call object contains name, id, and parameters fields sufficient for replay
+    notes: "Primary use case is session replay by sub-agents (fa1a:905, b722:49)"
 
 depends_on:
-  - PRS-005
-  - RNG-004
-related: []
+  - PRS-005  # Timeline construction from parsed JSONL
+  - RNG-004  # Range parsing
+
+related:
+  - EXP-001  # JSON array to stdout (--json)
+  - EXP-002  # JSONL to stdout (--jsonl)
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Extensively evidenced across b722, day-025, fa1a, 0841/cc2d, a40c, b475.
+  Key design decisions:
+  1. Renamed --export to --export-json for clarity (0841:672, b475:72)
+  2. Takes RANGE OUTPUT (2 args, not START END OUTPUT 3 args) after b475:1877
+  3. Supports '-' for stdout output (day-025:5303, b722:49)
+  4. Include/exclude filters apply within the export range (day-025:4725-5400)
+  5. Filter semantics: include=OR whitelist, exclude=AND blacklist, applied in sequence
+  6. Output is JSON array of raw JSONL objects for machine consumption by sub-agents
+  7. Tool(glob) filter syntax: Edit(*/specs/**), Bash(git commit *) etc.

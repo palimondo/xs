@@ -7,29 +7,110 @@ theme: github-fetch
 
 as_a: developer organizing fetched sessions
 i_want: consistent file naming with metadata
-so_that: I can identify sessions by name
+so_that: I can identify sessions by name and files sort naturally by date
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: save_workflow_data
-    lines: 341-343
+  - session: f9c7:1401-1500
+    finding: F002
+    quote: "Filename: `{date}-{time}-{issue|pr}-{number}_{session_id}.jsonl`"
+    context: "Core filename format with date, time, issue/PR type, number, and session UUID"
+
+  - session: f9c7:1401-1500
+    finding: F003
+    quote: "I'm now leaning towards extending the filename also with run id and adding session_id into filename"
+    context: "User wants both run_id and session_id embedded in filename for traceability"
+
+  - session: f9c7:501-600
+    finding: F001
+    quote: "WHO THE FUCK told you to create per-type folders? In the past, I said we want flat list of logs under github for issues and PRs."
+    context: "All files must be flat in github/ directory — no per-type subdirectories, no run subdirectories"
+
+  - session: f9c7:501-600
+    finding: F006
+    quote: "did I ask for raw_logs folder?!?! We just talked about removing extra folders and having flat list under github for issues and PRs."
+    context: "Raw log fallback files also go in github/ directory, not separate raw_logs/ folder"
+
+  - session: f9c7:501-600
+    finding: F007
+    quote: "Proper naming: {date}-{time}-{issue|pr}-{N}_{session_id}.jsonl"
+    context: "Agent confirmed naming format"
+
+  - file: day-024:33801-34000
+    finding: F006
+    quote: "maybe we should have a subfolder for GitHub and then flat lists that would naturally sort by time: `claude-dev-log-diary/github/{date}-{time}-[issue|pr]-{N}_{session_id}.jsonl`"
+    context: "User's original naming proposal — flat list under github/ with date-time prefix for natural sort"
+
+  - file: day-025:1-200
+    finding: F003
+    quote: "User wanted flat JSONL files under `github/` directory only"
+    context: "Flat directory structure confirmed in compaction summary"
+
+  - file: day-025:1-200
+    finding: F004
+    quote: "No type-specific folders, no run folders, no processing of skipped runs"
+    context: "Explicit rejection of subdirectory structure"
+
+  - session: f9c7:401-500
+    finding: F001
+    quote: "Run IDs are fine, but they are secondary fallback mechanism that presents the log name after implementation detail from the CI infrustructure. I as user care about issue numbers and PR numbers. We shoudl focus primarily on these"
+    context: "Issue/PR number is primary identifier in filename; run ID is secondary"
+
+  - session: 3636:501-600
+    finding: F002
+    quote: "Saved JSONL to .../github/20250729-1706-pr-18_run-16602666423_session-3cb480e6-79b3-4834-9cd8-b998719ad24b.jsonl"
+    context: "Actual filename example from running fetch_logs.py"
+
+  - session: 0841:401-500
+    finding: F004
+    quote: "We moved it to tools, but originally created it in parent folder, now it recreates the github folder inside tools, can you fix that"
+    context: "github/ directory must be created relative to parent (claude-dev-log-diary/), not relative to script location (tools/)"
+
+  - session: f9c7:1401-1500
+    finding: F004
+    quote: "no, I actually like the createdAt from run good."
+    context: "Filename timestamp comes from workflow createdAt, not session start time"
+
+  - session: f9c7:1401-1500
+    finding: F006
+    quote: "but then we should extract if from raw log as additional metadata fo that it is trully matching the time"
+    context: "Session start time should also be extracted from raw log to match branch naming exactly"
 
 acceptance_criteria:
   - id: GFH-007-AC1
-    given: extracted metadata
+    given: extracted metadata (date, time, type, number, run_id, session_id)
     when: naming file
-    then: format is {date}-{time}-{type}-{number}_run-{id}_session-{uuid}.jsonl
+    then: format is {YYYYMMDD}-{HHMM}-{issue|pr}-{N}_run-{run_id}_session-{session_uuid}.jsonl
 
   - id: GFH-007-AC2
-    given: date_str and time_str from extraction
-    when: naming file
-    then: date is YYYYMMDD, time is HHMM
+    given: date and time fields
+    when: constructing filename prefix
+    then: date is YYYYMMDD, time is HHMM (from workflow createdAt)
+
+  - id: GFH-007-AC3
+    given: output directory
+    when: saving files
+    then: all files saved flat in github/ subdirectory — no per-type or per-run subdirectories
+
+  - id: GFH-007-AC4
+    given: github/ directory location
+    when: determining path
+    then: github/ is created as sibling to tools/ directory (in claude-dev-log-diary/), not inside tools/
+
+  - id: GFH-007-AC5
+    given: raw log fallback files (with --save-raw-logs)
+    when: saving
+    then: raw logs also saved in github/ directory, not a separate raw_logs/ subdirectory
 
 depends_on:
   - GFH-003
   - GFH-004
-related: []
+related:
+  - GFH-005
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Naming evolved through multiple iterations. Final format includes run_id for deduplication
+  and session_id for traceability. Date-time prefix enables natural filesystem sort order.
+  User was extremely insistent on flat structure — no subdirectories at all.
+  github/ directory relative to claude-dev-log-diary/ parent, not tools/ script location.

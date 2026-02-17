@@ -7,16 +7,141 @@ theme: local-exploration
 
 as_a: developer exploring a session
 i_want: to filter tools by pattern like "Bash(git *)"
-so_that: I can find specific commands
+so_that: I can find specific commands or file operations
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "day-025:4801-5000"
+    line: 4937
+    speaker: user
+    type: user_request
+    quote: "I thought more like `Write(*spec*)` globbing filter over the tool parameter? And we could combine several of these --include and --exclude Tool(params glob) filters to precisely control what gets included and excluded from the rull run."
+    context: "User proposes unified Tool(glob) syntax combining tool name with glob pattern over tool parameters"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "b475:801-900"
+    line: 838
+    speaker: user
+    type: user_correction
+    quote: "not explicit regex syntax, what the allowed-tools do"
+    context: "User corrected agent: patterns use Claude Code allowed-tools glob syntax (*, **), NOT regex"
+
+  - file: "b475:601-700"
+    line: 621
+    speaker: user
+    type: user_request
+    quote: "There was a syntax for including or excluding specific tool calls that was trying to use the `allowed-tools` syntax that's used in several places in Claude Code configuration."
+    context: "Filter syntax derived from Claude Code's allowed-tools permission syntax"
+
+  - file: "b475:701-800"
+    line: 738
+    speaker: user
+    type: user_correction
+    quote: "there seems to be somethign wrong with how we process tool parameters for filtering.We originally implemented a glob supprot to include only specific files"
+    context: "Glob pattern applied to tool parameters: Edit(specs/*) filters by file path"
+
+  - file: "day-025:5201-5400"
+    line: 5312
+    speaker: agent
+    type: agent_implementation
+    quote: "def _parse_tool_filter(self, filter_str):\n    \"\"\"Parse 'Tool' or 'Tool(glob)' format.\"\"\""
+    context: "Filter format: ToolName or ToolName(glob). Uses fnmatch for pattern matching."
+
+  - file: "day-025:5201-5400"
+    line: 5332
+    speaker: agent
+    type: agent_implementation
+    quote: "# For file operations, match against file_path\nif tool_name in ['Edit', 'Write', 'MultiEdit']:\n    file_path = params.get('file_path', '')\n    return fnmatch.fnmatch(file_path, pattern)"
+    context: "Tool filter matching: Edit/Write/MultiEdit match against file_path; Bash matches against command"
+
+  - file: "day-025:4801-5000"
+    line: 4971
+    speaker: agent
+    type: agent
+    quote: "# Include only edits to spec files\n--include \"Edit(**/specs/*.py)\"\n\n# Include writes but not to temp files  \n--include \"Write(*)\" --exclude \"Write(inspect_*.py)\"\n\n# Include git operations but not status/diff\n--include \"Bash(git add *)\" \"Bash(git commit *)\""
+    context: "Examples of Tool(glob) filter syntax for various use cases"
+
+  - file: "day-025:5001-5200"
+    line: 5063
+    speaker: user
+    type: user_request
+    quote: "it shoudl also still support the short tool inclusion syntax with just the tool name without the params, yes?"
+    context: "Both bare tool name (Edit) and parameterized form (Edit(pattern)) must be supported"
+
+  - file: "b475:1201-1300"
+    line: 1222
+    speaker: agent
+    type: agent_proposal
+    quote: "Work with comma-separated lists and glob patterns"
+    context: "Comma-separated list can mix bare names and glob patterns: Edit,Bash(git *)"
+
+  - file: "b475:2301-2400"
+    line: 2323
+    speaker: agent
+    type: agent_proposal
+    quote: "[35] ⏺ Bash: $ cd myproject && git init && git add .\n[36] ⏺ Bash: $ cd myproject && git commit -m 'Initial commit'"
+    context: "Glob pattern --include Bash(*git*) matches commands containing git"
+
+  - file: "caf2:301-400"
+    line: 332
+    speaker: user
+    type: user_request
+    quote: "we need the support for parametrized filters `Tool(mcp__toolname*)` and `Tool(mcp__toolname_operation*)`"
+    context: "MCP tools use naming pattern mcp__server__tool; Tool(mcp__*) filter matches all MCP tools"
+
+  - file: "day-025:5401-5600"
+    line: 5589
+    speaker: user
+    type: user_request
+    quote: "allowed_tools: \"Bash(git:*),View,GlobTool,GrepTool,BatchTool\""
+    context: "Claude Code GitHub Actions uses comma-separated Tool(glob) in allowed_tools; xs adopts same convention"
+
+  - file: "b475:801-900"
+    line: 805
+    speaker: user
+    type: user_correction
+    quote: "original example was better, because it shows plain tool inclusion as well as parametrized one"
+    context: "Help text for --include should show both plain tool name and parameterized glob example"
+
+acceptance_criteria:
+  - id: FLT-005-AC1
+    given: session with Bash tool calls containing git commands
+    when: --include "Bash(git *)" is specified
+    then: only Bash calls where command starts with "git " are shown
+
+  - id: FLT-005-AC2
+    given: session with Edit tool calls on various files
+    when: --include "Edit(*/specs/**)" is specified
+    then: only Edit calls where file_path matches */specs/** glob are shown
+
+  - id: FLT-005-AC3
+    given: session with various MCP tools
+    when: --include "Tool(mcp__*)" is specified
+    then: all tools with names matching mcp__* glob are shown
+
+  - id: FLT-005-AC4
+    given: glob pattern matching
+    when: pattern is evaluated
+    then: uses fnmatch semantics (*, **, ?), NOT regex
+
+  - id: FLT-005-AC5
+    given: filter with bare tool name "Edit"
+    when: no glob pattern specified
+    then: matches all Edit tool calls regardless of parameters
+
+  - id: FLT-005-AC6
+    given: comma-separated filters
+    when: --include "Edit,Bash(git *)" is specified
+    then: shows all Edit calls PLUS Bash calls matching git *
+
+  - id: FLT-005-AC7
+    given: glob matching for different tool types
+    when: filter is evaluated
+    then: Edit/Write/MultiEdit match against file_path; Bash matches against command
 
 depends_on:
   - FLT-001
-related: []
+related:
+  - FLT-002
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Very strong evidence. Glob syntax from Claude Code's allowed-tools. Uses fnmatch, not regex. User corrected agent on this."

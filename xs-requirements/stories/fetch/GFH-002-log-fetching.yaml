@@ -10,26 +10,50 @@ i_want: to download logs for a specific run
 so_that: I can extract session JSONL
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: get_workflow_logs
-    lines: 56-64
+  - session: f9c7:2201-2300
+    finding: F001
+    quote: "gh run view 16483315365 --log > issue-13-raw.log"
+    context: "GitHub Actions raw logs fetched via 'gh run view --log' command"
+
+  - file: day-024:20601-20800
+    finding: F004
+    quote: "return run_gh_command(['gh', 'run', 'view', run_id, '--log'])"
+    context: "fetch_logs.py uses gh run view --log to retrieve actual log content"
+
+  - session: fa0d:2001-2100
+    finding: F001
+    quote: "Uses `gh` CLI to list and fetch workflow runs"
+    context: "gh CLI is the core log-fetching mechanism"
+
+  - file: day-024:20601-20800
+    finding: F002
+    quote: "I would like you to secure the logs (before they are deleted from CI) from each of the workflow runs of Claude Code action, so that we can later analyze the Claude Code's performance during these implementation attempts."
+    context: "Original motivation: preserve CI logs before GitHub's automatic deletion"
 
 acceptance_criteria:
   - id: GFH-002-AC1
     given: valid run ID
     when: fetching logs
-    then: returns log content via `gh run view --log`
+    then: returns log content via `gh run view {run_id} --log`
 
   - id: GFH-002-AC2
     given: expired or invalid run ID
     when: fetching logs
-    then: returns empty string with warning
+    then: returns empty string with warning message
+
+  - id: GFH-002-AC3
+    given: raw log content
+    when: successfully fetched
+    then: log content is passed to JSONL extraction (GFH-003) for processing
 
 depends_on:
   - GFH-001
 related:
   - GFH-003
+  - GFH-004
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Uses `gh run view --log` command exclusively.
+  Logs must be fetched before GitHub's automatic CI log retention period expires.

@@ -1,0 +1,54 @@
+# Story: Sequence Numbers in JSON/JSONL Export
+
+id: EXP-004
+title: Include sequence numbers in JSON/JSONL export
+epic: export
+theme: local-exploration
+
+as_a: developer analyzing exported session data
+i_want: sequence/index numbers included in JSON/JSONL export output
+so_that: I can correlate exported events with their position in the timeline
+
+sources:
+  - file: e583-L1501-1600.yaml
+    finding: F004
+    quote: "the JSON events/messages do not include sequence number?"
+    context: "User discovers sequence numbers are missing from JSON/JSONL export; expects them to be present"
+
+  - file: e583-L1501-1600.yaml
+    finding: T004/agent-L1592
+    quote: "No sequence number! The events don't include their position in the timeline. This is a limitation - when you use `--json` or `--jsonl`, you lose the sequence numbers that xs adds."
+    context: "Agent acknowledges missing sequence numbers as a limitation of current export"
+
+  - file: e583-L1501-1600.yaml
+    finding: T004/agent-L1595
+    quote: "The JSON output should probably include a `sequence` or `index` field to maintain the timeline position information when exporting to JSON/JSONL format."
+    context: "Agent proposes adding sequence/index field but it was not resolved in the session"
+
+acceptance_criteria:
+  - id: EXP-004-AC1
+    given: a session exported with --json or --jsonl
+    when: events are output
+    then: each event object includes a sequence or index field indicating its position in the timeline
+    notes: "UNRESOLVED: user raised this as a question, agent proposed adding it, but no final decision was made"
+
+depends_on:
+  - EXP-001  # JSON output
+  - EXP-002  # JSONL output
+
+related:
+  - EXP-003  # Export to file (may also need sequence numbers)
+
+priority: could
+status: draft
+validation_notes: |
+  PROPOSED NEW STORY based on unresolved discussion in e583:1587-1595.
+  User noticed the limitation. Agent acknowledged it and proposed adding a
+  sequence/index field. However, the discussion was NOT resolved -- there is
+  a tension with the raw-passthrough contract (EXP-001-AC4, EXP-002-AC4)
+  which says JSON objects must be verbatim from the session transcript.
+  Adding a sequence field would modify the raw objects.
+
+  Possible resolution: wrap each raw object in an envelope with metadata,
+  or add sequence as a top-level field that doesn't exist in the original.
+  This needs user decision before implementation.

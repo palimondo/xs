@@ -7,16 +7,37 @@ theme: console-replay
 
 as_a: developer reviewing session output
 i_want: file references shown with @ prefix
-so_that: I can see which files were referenced
+so_that: I can see which files were referenced by the user
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:215"
+    quote: "Have you noticed special message type when I used just single @filename ?"
+    context: "User identifies @ prefix as a special message type in Claude Code"
+  - session: "0841:1052"
+    quote: "context load using @filename -- I think I havent covered these edge cases in reconstruct"
+    context: "User identifies @filename as an edge case not yet covered"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-014-AC1
+    given: file reference user message (containing @filename pattern)
+    when: rendered in compact mode
+    then: "Display as '[N] @ {filename}' on a single line"
+
+  - id: FMT-014-AC2
+    given: file reference user message
+    when: rendered in truncated mode
+    then: "Display as '@ {filename}'"
 
 depends_on: []
 related:
-  - FMT-001
+  - FMT-001  # User message formatting (@ is a special user message type)
+  - FMT-013  # Local bash commands (! is another special type)
+  - FMT-012  # Slash commands (/ is another special type)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  @filename is a special user message type in Claude Code.
+  User identified but deferred to future work (0841:1052).
+  Not covered in reconstruct.jq; needs implementation from scratch.
+  Source: 1e83:215, 0841:1052

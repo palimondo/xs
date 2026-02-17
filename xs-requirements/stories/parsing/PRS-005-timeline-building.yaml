@@ -1,23 +1,132 @@
-# Story: Timeline Building
+# Story: Build Unified Chronological Timeline
 
 id: PRS-005
 title: Build unified chronological timeline
 epic: jsonl-parsing
 theme: local-exploration
 
-as_a: developer
-i_want: messages and tools merged into a single chronological view
-so_that: I can see the actual flow of conversation
+as_a: developer exploring session history
+i_want: all messages, tool calls, and tool results merged into a single chronological timeline with sequence numbers
+so_that: I can see the actual flow of conversation and reference events by index
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: 0841:701-800
+    finding: F005
+    quote: "Moving to Phase 2: Create unified timeline data structure."
+    context: "Phase 2 of implementation: create unified timeline that includes both tool calls and conversation messages"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: 0841:801-900
+    finding: F001
+    quote: "The unified timeline is working. Let me test the different filter modes"
+    context: "Timeline supports filter modes: tools (tool calls only), conversation (messages only), all (everything interleaved chronologically)"
+
+  - session: 0841:801-900
+    finding: F003
+    quote: "./explore_session.py 943dff12 --timeline 12-14 ... [12] Read ← cli_spec.py [14] CLAUDE: Now let me check..."
+    context: "User noticed item [13] was missing from range 12-14; sequence numbers must be contiguous with no gaps"
+
+  - session: 0841:801-900
+    finding: F004
+    quote: "we only show assistant messages if they have text OR tools. If an assistant message has neither (which can happen), it's silently skipped. This creates gaps in the sequence numbers."
+    context: "Bug: empty messages were silently skipped causing sequence number gaps"
+
+  - session: 0841:901-1000
+    finding: F001
+    quote: "wait, so are you sure that reconstruct.js just ignores [1], [4], [7]? Isn't that some convention that results from tool calls are presented as user messages to Claude, and that reconstruct usese them tu output the truncated messages?"
+    context: "User corrects agent: tool results come as user messages with tool_result content type, not as empty messages"
+
+  - session: a40c:201-300
+    finding: F001
+    quote: "The timeline shoudl contain all events. That there's a specific filtering going on, while none of the --include and --exclude parameters are specified is a serious issue"
+    context: "Without explicit filter flags, the timeline MUST show ALL events including thinking content"
+
+  - session: a40c:201-300
+    finding: F002
+    quote: "The parsing logic only looks for `type == 'text'` or `type == 'tool_use'`, but it completely ignores `type == 'thinking'`"
+    context: "Parsing must handle ALL content types: text, tool_use, tool_result, thinking"
+
+  - session: 0841:601-700
+    finding: F001
+    quote: "shouldn't this be united somehow (at least in timeline)? Also the limits work only on --export and --conversation and the need to specify --timeline \"\" to list all was confusing to me."
+    context: "User requested unified CLI interface instead of separate timeline, conversation, and tool views"
+
+  - session: 1e83:301-400
+    finding: F002
+    quote: "we must show something there, so that we have all line numbers == events/messages in our output."
+    context: "Core requirement: one output line per JSONL event/message, preserving event indexing integrity"
+
+  - session: day-025:3001-3200
+    finding: F001
+    quote: "Object 1: type=system, keys=['type', 'subtype', 'cwd', 'session_id', 'tools']"
+    context: "Top-level JSONL event types are: system, assistant, user"
+
+  - session: day-025:3001-3200
+    finding: F002
+    quote: "Object 2: type=assistant, keys=['type', 'message', 'parent_tool_use_id', 'session_id']"
+    context: "Assistant events have nested 'message' field with 'content' array containing text, tool_use, and thinking blocks"
+
+  - session: b475:401-500
+    finding: F006
+    quote: "Do all timeline events contain a timestamp? Where are we getting the session time metadata from?"
+    context: "Timestamps are on top-level event objects; some event types (system with summary) may lack timestamps"
+
+  - session: caf2:201-300
+    finding: F001
+    quote: "tool call and tool response are two sepparate events in the timeline. We have decided to include the tool response for each tool call, but we've added option to suppress it"
+    context: "Tool call and tool result are separate timeline events; tool results can be suppressed with --no-tool-results"
+
+acceptance_criteria:
+  - id: PRS-005-AC1
+    given: a parsed JSONL session file
+    when: timeline is built
+    then: all events are assigned contiguous sequence numbers starting from 1
+
+  - id: PRS-005-AC2
+    given: a session with user messages, assistant messages, tool_use, and tool_result
+    when: timeline is built
+    then: all event types appear in chronological order in a single unified list
+
+  - id: PRS-005-AC3
+    given: an assistant message with multiple content blocks (text + tool_use + thinking)
+    when: timeline is built
+    then: each content block appears as a separate timeline entry with its own sequence number
+
+  - id: PRS-005-AC4
+    given: a tool_use event from an assistant message
+    when: timeline is built
+    then: the corresponding tool_result (user message with tool_result content) follows in sequence
+
+  - id: PRS-005-AC5
+    given: an empty message (assistant with no text/tools, or empty user message)
+    when: timeline is built
+    then: the event still receives a sequence number (no gaps allowed)
+
+  - id: PRS-005-AC6
+    given: a session with thinking blocks in assistant messages
+    when: timeline is built
+    then: thinking content appears in the timeline with its own sequence number
+
+  - id: PRS-005-AC7
+    given: a session file with timestamps on events
+    when: timeline is built
+    then: session start time, end time, and duration can be computed from event timestamps
 
 depends_on:
   - PRS-001
   - PRS-003
-related: []
+
+related:
+  - RNG-001  # Range selection operates on timeline sequence numbers
+  - FLT-001  # Filtering operates on timeline events
+  - DSP-001  # Display modes render timeline events
+  - SUM-001  # Summary aggregates timeline statistics
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  The unified timeline is the central data structure of xs. Key requirements
+  established through user corrections: (1) no gaps in sequence numbers,
+  (2) ALL event types must appear including thinking content and empty messages,
+  (3) tool results are user messages with tool_result content type (not empty),
+  (4) without explicit filters, show everything. The timeline supports
+  multiple display modes (compact, truncated, full) and filtering.

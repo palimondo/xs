@@ -1,22 +1,77 @@
 # Story: Sequence Number Display Logic
 
 id: FMT-017
-title: Display sequence numbers appropriately
+title: Display sequence numbers with clear rules per display mode
 epic: console-formatting
 theme: console-replay
 
 as_a: developer exploring sessions
-i_want: sequence numbers displayed with clear logic
-so_that: I can reference specific events
+i_want: sequence numbers displayed with clear logic based on mode and filtering
+so_that: I can reference specific events and see discontinuity
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "b475:128"
+    quote: "No sequence numbers in truncated mode"
+    context: "Default truncated mode: no sequence numbers"
+  - session: "b475:1330"
+    quote: "I'm thinking we should add a parameter that would enable the line numbers also in truncated mode when its present and we should turn it on automaticaly when we do any filtering on the timeline, so that we show discontinuity clearly. And we ommit the line number only when displaying full timeline."
+    context: "User defines line number rules: auto-show when filtering, hide for full timeline"
+  - session: "b475:1145"
+    quote: "Compact mode should also have the dot it simply has the additional number at the front."
+    context: "Compact mode always shows [N] ⏺ prefix"
+  - session: "a40c:100"
+    quote: "Show sequence numbers in truncated mode even without filtering"
+    context: "Flag to optionally show numbers in truncated mode"
+  - session: "1e83:301"
+    quote: "we must show something there, so that we have all line numbers == events/messages in our output."
+    context: "Compact mode: line count must equal event count"
+  - session: "b475:2090"
+    quote: "[1] > Run the tests and show me the results [2] ⏺ I'll run the tests..."
+    context: "Full mode output with sequence numbers"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-017-AC1
+    given: truncated mode with no filters/range
+    when: displaying full timeline
+    then: "No sequence numbers by default (matching reconstruct.jq style)"
+
+  - id: FMT-017-AC2
+    given: truncated mode with filters or range active
+    when: displaying filtered timeline
+    then: "Automatically show [N] sequence numbers to indicate discontinuity"
+
+  - id: FMT-017-AC3
+    given: compact mode
+    when: displaying any timeline
+    then: "Always show [N] sequence numbers before each event"
+
+  - id: FMT-017-AC4
+    given: full mode
+    when: displaying any timeline
+    then: "Always show [N] sequence numbers before each event"
+
+  - id: FMT-017-AC5
+    given: --show-numbers flag
+    when: in truncated mode without filters
+    then: "Override default and show sequence numbers"
+
+  - id: FMT-017-AC6
+    given: compact mode output
+    when: counting events
+    then: "One output line per JSONL event/message (sequence numbers equal event count)"
 
 depends_on:
-  - DSP-004
-related: []
+  - DSP-004  # Display mode selection
+related:
+  - FMT-018  # Discontinuous separator (complements line numbers)
+  - RNG-001  # Range selection
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Sequence number rules clearly defined by user at b475:1330:
+  - Truncated mode: hidden by default, shown when filtering
+  - Compact mode: always shown
+  - Full mode: always shown
+  - --show-numbers flag: override for truncated mode
+  Source: b475:128, b475:1330, b475:1145, a40c:100

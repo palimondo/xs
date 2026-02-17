@@ -69,4 +69,15 @@ search_methodology: |
   - "-s", "-t", "-g", "-f"
   - "ordering", "positional"
 
-status: draft
+stories:
+  - CLI-001: Summary mode (default)
+  - CLI-002: Timeline mode (-t/--timeline)
+  - CLI-003: Git operations mode (-g/--git)
+  - CLI-004: File changes mode (-f/--files)
+  - CLI-005: Created files mode (-c/--created)
+  - CLI-006: Implicit timeline mode activation
+  - CLI-007: Support multiple index selection
+  - CLI-008: Argument ordering rules and help text conventions  # NEW
+  - CLI-009: Remove deprecated --conversation flag              # NEW
+
+status: mined

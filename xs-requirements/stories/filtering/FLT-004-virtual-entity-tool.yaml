@@ -9,15 +9,70 @@ as_a: developer exploring a session
 i_want: to show all tool calls
 so_that: I can see what actions were taken
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "caf2:101-200"
+    line: 160
+    speaker: user
+    type: user_request
+    quote: "support for Meta/virtual tools, so that we can say things like `--exclude Tools` or `--include Message`"
+    context: "User wants virtual entity categories for coarse filtering; Tool matches all tool calls"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "caf2:101-200"
+    line: 165
+    speaker: user
+    type: user_correction
+    quote: "Tools shoudl be a virtual category without parameters, we already have short syntax for including tool calls: -i Bash,Grep don't overcomplicate it -- parameters are there for finetuning combinations"
+    context: "Tool virtual entity takes no parameters. It is a coarse filter for all tools. Fine-grained filtering uses specific tool names."
+
+  - file: "a40c:501-600"
+    line: 525
+    speaker: agent
+    type: agent_proposal
+    quote: "Test tool filtering without results"
+    context: "Tool filtering verified: -T flag filters to show only tool events"
+
+  - file: "a40c:201-300"
+    line: 292
+    speaker: agent
+    type: agent_proposal
+    quote: "[9] ⏺ TodoWrite: Updated 3 todos (1 in_progress, 2 pending)\n\n[13] ⏺ Read: ← /Users/palimondo/Developer/BookMinder/specs/cli_spec.py"
+    context: "--no-tool-results with -T shows tool invocations without result content"
+
+  - file: "caf2:601-700"
+    line: 694
+    speaker: agent
+    type: agent_proposal
+    quote: "DEPRECATED: Use --timeline --include \"Edit,Write,MultiEdit\" instead."
+    context: "--files flag deprecated; file change filtering done via --include with specific tool names, not virtual entity"
+
+acceptance_criteria:
+  - id: FLT-004-AC1
+    given: session with user messages, assistant messages, and tool calls
+    when: --include "Tool" is specified
+    then: only tool_use and tool_result events are shown
+
+  - id: FLT-004-AC2
+    given: "Tool" virtual entity
+    when: used in --include
+    then: it matches all tool types (Bash, Edit, Read, Write, Grep, etc.)
+
+  - id: FLT-004-AC3
+    given: "Tool" virtual entity
+    when: used in --exclude
+    then: it excludes all tool_use and tool_result events
+
+  - id: FLT-004-AC4
+    given: "Tool" virtual entity
+    when: specified
+    then: it takes no parameters (Tool, not Tool(pattern))
 
 depends_on:
   - PRS-005
 related:
   - FLT-009  # -T shortcut
+  - FLT-010  # --no-tool-results
+  - FLT-003  # Message virtual entity
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Tool virtual entity is complementary to Message. Takes no parameters. For specific tools, use tool name directly."

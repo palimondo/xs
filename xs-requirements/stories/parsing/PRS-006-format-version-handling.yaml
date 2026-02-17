@@ -5,19 +5,80 @@ title: Handle Claude Code format versions (1.x vs 2.x)
 epic: jsonl-parsing
 theme: local-exploration
 
-as_a: developer
-i_want: both old and new Claude Code session formats to work
-so_that: I can explore historical sessions
+as_a: developer exploring session history
+i_want: both old (1.x) and new (2.x) Claude Code session formats to work
+so_that: I can explore historical sessions as well as current ones
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: 760a:501-600
+    finding: F001
+    quote: "Update the `xs` to support old and new format (we need full backwards/forwads compatibility -- we still need to recover full session transcripts"
+    context: "User explicitly requires full backwards/forwards compatibility for CC 1.x and 2.x formats"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: 760a:501-600
+    finding: F002
+    quote: "Document transcript format changes (we have previously reverse engineered this from our session logs)"
+    context: "Format changes were reverse-engineered from session logs, not from official docs"
+
+  - session: 760a:601-643
+    finding: F002
+    quote: "Transcript has `version` field for format detection"
+    context: "JSONL transcripts have a version field for distinguishing CC 1.x from 2.x format"
+
+  - session: 760a:601-643
+    finding: F004
+    quote: "Tool renames (LS Tool->LS, View->Read)"
+    context: "Breaking changes between CC 1.x and 2.x include tool name renames"
+
+  - session: day-025:3001-3200
+    finding: F001
+    quote: "Object 1: type=system, keys=['type', 'subtype', 'cwd', 'session_id', 'tools']"
+    context: "System event structure includes session_id and tools list"
+
+  - session: day-025:3001-3200
+    finding: F002
+    quote: "Object 2: type=assistant, keys=['type', 'message', 'parent_tool_use_id', 'session_id']"
+    context: "Assistant events use type field at top level (not role); actual message in nested 'message' field"
+
+acceptance_criteria:
+  - id: PRS-006-AC1
+    given: a Claude Code 1.x format session file
+    when: loaded
+    then: all events are parsed correctly
+
+  - id: PRS-006-AC2
+    given: a Claude Code 2.x format session file
+    when: loaded
+    then: all events are parsed correctly
+
+  - id: PRS-006-AC3
+    given: a session file with a version field in the system event
+    when: loaded
+    then: the format version is detected and stored for downstream use
+
+  - id: PRS-006-AC4
+    given: a 1.x session with old tool names (LS Tool, View)
+    when: displayed
+    then: tool names are shown as they appear in the JSONL (not renamed)
+
+  - id: PRS-006-AC5
+    given: a session file without a version field
+    when: loaded
+    then: the format is inferred from the event structure (graceful fallback)
 
 depends_on:
   - PRS-001
+
 related:
   - CONF-001  # Format version conflict
+  - FMT-001   # Formatting may differ between versions
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User explicitly required "full backwards/forwards compatibility" for format
+  versions. The version field in JSONL system events can be used for detection.
+  Tool renames between versions (LS Tool->LS, View->Read) are known breaking
+  changes. The format differences were reverse-engineered from session logs.
+  This story covers parsing correctness; display format differences are
+  handled by CONF-001 and the formatting epic.

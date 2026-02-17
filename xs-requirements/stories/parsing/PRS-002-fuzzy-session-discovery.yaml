@@ -5,18 +5,104 @@ title: Discover session by substring match
 epic: jsonl-parsing
 theme: local-exploration
 
-as_a: developer
-i_want: to find a session by typing any unique substring
+as_a: developer exploring session history
+i_want: to find a session by typing any unique substring of its filename
 so_that: I don't need to remember or type full paths
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: day-025:3401-3600
+    finding: F007
+    quote: "the JSONL filenames contain more discriminators, can we support all of them? maybe it doesn't need to be branched so much by type and could just substring match? think harder about what I mean"
+    context: "User rejected type-specific parsing (issue/pr branching) in favor of generic substring matching"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: day-025:3601-3800
+    finding: F003
+    quote: "Session file or any unique substring (issue-13, run ID, date, etc.)"
+    context: "CLI help text for the jsonl argument updated to explain substring matching"
+
+  - session: day-025:3601-3800
+    finding: F004
+    quote: "Now you can use any part of the filename"
+    context: "Session lookup supports any substring: issue number, run ID, session ID fragment, date, time, or combination"
+
+  - session: day-025:3601-3800
+    finding: F011
+    quote: "If multiple files match, it shows a menu to choose from. This makes exploring sessions much easier!"
+    context: "Interactive disambiguation menu when substring matches multiple files"
+
+  - session: 0841:301-400
+    finding: F005
+    quote: "let's allso add fallback mechanism that would search for sessions in `~/.claude/projects/` -- can that be done using ripgrep to search only in filename from that folder down to find a match?"
+    context: "Session lookup should fall back to ~/.claude/projects/ directory"
+
+  - session: fa1a:601-700
+    finding: F003
+    quote: "the JSONL filenames contain more discriminators, can we support all of them? maybe it doesn't need to be branched so much by type and could just substring match?"
+    context: "Same requirement surfaced in earlier session (fa1a), confirming substring matching is the desired approach"
+
+  - session: fa1a:1001-1100
+    finding: F001 (via TSV)
+    quote: "we would need to adjust the session lookup mechanism after the relocation"
+    context: "Session lookup must adapt to where sessions are stored"
+
+acceptance_criteria:
+  - id: PRS-002-AC1
+    given: a substring that uniquely matches one session file
+    when: passed as the first positional argument
+    then: that session file is loaded automatically
+
+  - id: PRS-002-AC2
+    given: a substring that matches multiple session files
+    when: passed as the first positional argument
+    then: a numbered list is shown and user can select interactively
+
+  - id: PRS-002-AC3
+    given: a substring that matches no session files
+    when: passed as the first positional argument
+    then: a clear "no match" error message is shown
+
+  - id: PRS-002-AC4
+    given: a partial session UUID (e.g., "943dff12")
+    when: passed as identifier
+    then: the matching session is found
+
+  - id: PRS-002-AC5
+    given: an issue number (e.g., "issue-13")
+    when: passed as identifier
+    then: the matching GitHub Actions session is found
+
+  - id: PRS-002-AC6
+    given: a date string (e.g., "20250723")
+    when: passed as identifier
+    then: all sessions from that date are matched
+
+  - id: PRS-002-AC7
+    given: a run ID (e.g., "16483315365")
+    when: passed as identifier
+    then: the matching GitHub Actions session is found
+
+  - id: PRS-002-AC8
+    given: a date+time combination (e.g., "0723-2239")
+    when: passed as identifier
+    then: the matching session is found
+
+  - id: PRS-002-AC9
+    given: no match found in the primary session directory
+    when: searching for a session
+    then: the search falls back to ~/.claude/projects/ directory
 
 depends_on:
   - PRS-001
-related: []
+
+related:
+  - CLI-001  # CLI interface for session argument
+  - GFH-001  # GitHub fetch produces session files with naming convention
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  The user explicitly rejected type-specific branching (issue/pr parsing) in favor
+  of simple substring matching against full filename. The disambiguation menu for
+  multiple matches was user-approved. Fallback to ~/.claude/projects/ was explicitly
+  requested. GitHub Actions sessions use naming convention:
+  {date}-{time}-{issue|pr}-{N}_{session_id}.jsonl

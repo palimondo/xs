@@ -6,18 +6,63 @@ epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: user messages displayed with > prefix
-so_that: they match Claude Code console and are recognizable
+i_want: user messages displayed with > prefix matching Claude Code console
+so_that: I can distinguish user input from assistant output and the output is parseable by other LLMs
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "day-021:10176"
+    quote: '"> \\(.message.content)"'
+    context: "reconstruct.jq renders user messages with > prefix"
+  - session: "b475:96"
+    quote: "No > prefix for user messages, just direct text"
+    context: "Agent initially noted reconstruct.jq had no > prefix; later corrected"
+  - session: "0841:1034"
+    quote: "for User and the dot for Claude"
+    context: "User specifies > for user messages, bullet/dot for Claude"
+  - session: "b475:2084"
+    quote: "[1] > Run the tests and show me the results"
+    context: "Compact mode output showing > prefix for user messages"
+  - session: "b475:2087"
+    quote: "> Run the tests and show me the results"
+    context: "Truncated mode output showing > prefix for user messages"
+  - session: "day-021:12005"
+    quote: 'Blank lines after user messages ("> message")'
+    context: "Spacing rule: blank line follows user messages"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-001-AC1
+    given: user message with text content in JSONL
+    when: rendered in truncated mode
+    then: "Display as '> {message_text}' followed by a blank line"
+
+  - id: FMT-001-AC2
+    given: user message with text content in JSONL
+    when: rendered in compact mode
+    then: "Display as '[N] > {first_line}' on a single line; append '[...] {last_line}' if multiline"
+
+  - id: FMT-001-AC3
+    given: user message with text content in JSONL
+    when: rendered in full mode
+    then: "Display as '[N] > {full_message_text}' with complete content"
+
+  - id: FMT-001-AC4
+    given: multiline user message
+    when: rendered in compact mode
+    then: "Show first line [...] last line on a single line"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse JSONL user messages
 related:
   - PRIN-001  # Console fidelity
+  - FMT-008  # Multiline truncation
+  - FMT-012  # Slash commands (special user message type)
+  - FMT-013  # Local bash commands (special user message type)
+  - FMT-014  # File references (special user message type)
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User messages use > prefix consistently across all display modes.
+  Multiline user messages in compact mode use first [...] last pattern.
+  Blank line separator follows user messages in truncated mode.
+  Source: 0841:1034, b475:2084-2090, day-021:12005

@@ -1,0 +1,92 @@
+# Story: Content Block Extraction from Messages
+
+id: PRS-013
+title: Extract content blocks from message objects
+epic: jsonl-parsing
+theme: console-replay
+
+as_a: developer exploring session history
+i_want: all content block types within messages correctly extracted and classified
+so_that: text, tool_use, tool_result, and thinking blocks can be rendered appropriately
+
+sources:
+  - session: a40c:201-300
+    finding: F002
+    quote: "The parsing logic only looks for `type == 'text'` or `type == 'tool_use'`, but it completely ignores `type == 'thinking'`"
+    context: "Parser must handle ALL content types: text, tool_use, tool_result, thinking"
+
+  - session: day-025:3001-3200
+    finding: F002
+    quote: "Object 2: type=assistant, keys=['type', 'message', 'parent_tool_use_id', 'session_id']"
+    context: "Assistant events have nested 'message' field; content is an array of typed blocks"
+
+  - session: day-025:3001-3200
+    finding: F004
+    quote: "timestamp': message.get('timestamp', obj.get('timestamp', ''))"
+    context: "Timestamp may be in nested message object, not at top-level"
+
+  - session: 0841:901-1000
+    finding: F001
+    quote: "wait, so are you sure that reconstruct.js just ignores [1], [4], [7]? Isn't that some convention that results from tool calls are presented as user messages to Claude"
+    context: "Tool results arrive as user messages with tool_result content blocks"
+
+  - session: day-025:1001-1200
+    finding: F002
+    quote: "The structure has role, model, and content fields"
+    context: "Content is an array within the message object"
+
+  - session: day-025:1001-1200
+    finding: F003
+    quote: "# Skip MCP tools"
+    context: "MCP tools (mcp__ prefix) should be filterable from tool call extraction"
+
+acceptance_criteria:
+  - id: PRS-013-AC1
+    given: an assistant message with content array containing type="text" blocks
+    when: parsed
+    then: text content is extracted and available for display
+
+  - id: PRS-013-AC2
+    given: an assistant message with content array containing type="tool_use" blocks
+    when: parsed
+    then: tool name, tool_use_id, and input parameters are extracted
+
+  - id: PRS-013-AC3
+    given: an assistant message with content array containing type="thinking" blocks
+    when: parsed
+    then: thinking content is extracted and classified as extended thinking
+
+  - id: PRS-013-AC4
+    given: a user message with content array containing type="tool_result" blocks
+    when: parsed
+    then: tool result content, tool_use_id, and is_error flag are extracted
+
+  - id: PRS-013-AC5
+    given: a user message with content as a plain string (not an array)
+    when: parsed
+    then: the string content is extracted as the message text
+
+  - id: PRS-013-AC6
+    given: an assistant message with both text and tool_use content blocks
+    when: parsed
+    then: each block becomes a separate timeline entry preserving order
+
+depends_on:
+  - PRS-001
+  - PRS-003
+
+related:
+  - PRS-005  # Timeline building depends on content block extraction
+  - FMT-001  # Text formatting
+  - FMT-004  # Tool use formatting
+
+priority: must
+status: mined
+validation_notes: |
+  Content blocks are the fundamental units within JSONL message objects.
+  Assistant messages have a content array with typed blocks (text, tool_use,
+  thinking). User messages have content that can be either a plain string
+  (regular input) or an array with tool_result blocks. The user explicitly
+  corrected the parser when it ignored thinking blocks. MCP tools have
+  mcp__ prefix and may need special handling. This story is foundational
+  for timeline building (PRS-005) and all formatting stories.

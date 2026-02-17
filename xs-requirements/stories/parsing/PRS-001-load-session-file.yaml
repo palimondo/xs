@@ -5,17 +5,77 @@ title: Load session file by path
 epic: jsonl-parsing
 theme: local-exploration
 
-as_a: developer
-i_want: to load a session file by its path
+as_a: developer exploring session history
+i_want: to load a JSONL session file by its absolute path
 so_that: I can explore its contents
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: 0841:301-400
+    finding: F003
+    quote: "that script should be able to accept absolute path to session log and give you statistic about number of things... and then you should be able to list a range of calls (start with first ten or so?"
+    context: "User specifies core PRS-001 requirement: accept absolute path, show statistics, list range of calls"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: day-025:3401-3600
+    finding: F002
+    quote: "I'm now intrigues to play with the session extractor... waht's the curent state of our tools? I see you're modyfying apythonf file to use it, so I guess it's not yet a CLI i could use?"
+    context: "Genesis of explore_session.py as a proper CLI tool"
+
+  - session: day-025:3801-4000
+    finding: F003
+    quote: "JSONL session log format (multi-line JSON, not standard JSONL)"
+    context: "Session files are multi-line JSON format, not standard single-line JSONL"
+
+  - session: f9c7:801-900
+    finding: F002
+    quote: "ideally I would replace all day-*.md files with session logs. But I suspect that for my marathon sessions the jsonl files are much bugger (filesize and line count-wise) than console log, which only has truncated truncated tools I/O."
+    context: "JSONL sessions contain full tool I/O vs truncated console output; xs must work from JSONL"
+
+  - session: a40c:1401-1500
+    finding: F001
+    quote: "the JSONL parsing is imported from `parse_claude_jsonl`"
+    context: "JSONL parsing is in a separate module parse_claude_jsonl.py with a parse_jsonl_objects(filename) function"
+
+  - session: day-025:801-1000
+    finding: F001
+    quote: "Examine the JSONL file structure without reading the whole 500KB file"
+    context: "GitHub Actions session JSONL files can be 500KB+; parser must be efficient"
+
+acceptance_criteria:
+  - id: PRS-001-AC1
+    given: a valid absolute path to a JSONL session file
+    when: passed as the first positional argument
+    then: the file is loaded and parsed into structured objects
+
+  - id: PRS-001-AC2
+    given: a JSONL file from a local Claude session (~/.claude/projects/)
+    when: loaded
+    then: all events are parsed including user, assistant, and system types
+
+  - id: PRS-001-AC3
+    given: a JSONL file from GitHub Actions (github/*.jsonl)
+    when: loaded
+    then: all events are parsed correctly (these lack user input events)
+
+  - id: PRS-001-AC4
+    given: a non-existent file path
+    when: passed as the first argument
+    then: a clear error message is shown
+
+  - id: PRS-001-AC5
+    given: a large JSONL file (500KB+)
+    when: loaded
+    then: parsing completes without timeout or excessive memory usage
 
 depends_on: []
-related: []
+
+related:
+  - PRS-002  # Fuzzy discovery as alternative to full path
+  - PRS-003  # Multi-line JSON parsing (the actual parse logic)
+  - PRS-006  # Format version handling
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Core entry point for all xs functionality. Session file loading is the foundation
+  that all other features depend on. GitHub Actions sessions lack user messages
+  (non-interactive mode) while local sessions have full conversation.

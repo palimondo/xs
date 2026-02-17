@@ -10,30 +10,82 @@ i_want: clear CLI with useful options
 so_that: I can control fetch behavior
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: main
-    lines: 360-386
+  - session: 3636:501-600
+    finding: F001
+    quote: "usage: fetch_logs.py [-h] [--limit LIMIT] [--run-id RUN_ID] [--save-raw-logs]"
+    context: "fetch_logs.py CLI: --limit N (default 20 recent runs), --run-id for specific run, --save-raw-logs for debugging"
+
+  - file: day-024:20401-20600
+    finding: F001
+    quote: "python claude-code-dev-diary/fetch_logs.py 6 - Archive issue #6 logs"
+    context: "Early CLI had positional issue number argument"
+
+  - file: day-024:20401-20600
+    finding: F002
+    quote: "Archive recent runs  \\n- `python claude-code-dev-diary/fetch_logs.py --run-id"
+    context: "fetch_logs.py --limit flag archives N most recent runs"
+
+  - file: day-024:20401-20600
+    finding: F003
+    quote: "fetch_logs.py --run-id {ID}` - Archive specific run"
+    context: "--run-id flag archives a specific workflow run by ID"
+
+  - file: day-025:1-200
+    finding: F007
+    quote: "Raw logs only as fallback with `--save-raw-logs` flag"
+    context: "Raw logs saved only when explicitly requested via flag, not by default"
+
+  - session: f9c7:501-600
+    finding: F004
+    quote: "we should not be creating anything for the skipped runs. The script might just output a simple message in that case"
+    context: "Skipped runs produce console message only, no file output"
+
+  - session: f9c7:501-600
+    finding: F005
+    quote: "while you're obsessed with the fallback for the case we can't extract the JSONL, we should then keep the raw log, but on"
+    context: "Raw log fallback only with --save-raw-logs flag"
 
 acceptance_criteria:
   - id: GFH-008-AC1
     given: CLI invocation
     when: using --limit N
-    then: fetches up to N recent runs (default: 20)
+    then: fetches up to N recent successful runs (default 20)
 
   - id: GFH-008-AC2
     given: CLI invocation
     when: using --run-id ID
-    then: fetches only the specific run
+    then: fetches only the specific run by ID
 
   - id: GFH-008-AC3
     given: CLI invocation
     when: using --save-raw-logs
-    then: saves raw logs for failed extractions
+    then: saves raw log content for runs where JSONL extraction fails
+
+  - id: GFH-008-AC4
+    given: CLI invocation with no arguments
+    when: running
+    then: fetches up to 20 recent successful runs from both workflows, skipping already-downloaded
+
+  - id: GFH-008-AC5
+    given: a skipped or cancelled run encountered
+    when: processing
+    then: outputs informational message to console but creates no files
+
+  - id: GFH-008-AC6
+    given: successful extraction
+    when: complete
+    then: prints summary including files saved, runs skipped, and session durations
 
 depends_on: []
 related:
   - GFH-001
+  - GFH-002
+  - GFH-003
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Early CLI had positional issue number argument (python fetch_logs.py 6).
+  Current CLI uses named flags: --limit, --run-id, --save-raw-logs.
+  Default behavior (no args): fetch 20 recent successful runs, deduplicate, save JSONL.
+  Both Python (.py) and shell (.sh) scripts must support same CLI interface.

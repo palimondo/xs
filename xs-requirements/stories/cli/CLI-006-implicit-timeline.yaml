@@ -6,17 +6,86 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer using xs
-i_want: timeline mode activated implicitly by certain flags
-so_that: I don't need to specify -t explicitly
+i_want: timeline mode activated implicitly when I use filters, ranges, or shortcut flags
+so_that: I don't need to specify -t explicitly for common operations
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: caf2-L301-400.yaml
+    finding: F002
+    line: 301
+    speaker: agent
+    type: agent_proposal
+    quote: "You're suggesting that `-t` should be implied when: Using include/exclude filters (`-i`, `-x`, `-m`, `-u`, `-a`, `-T`)"
+    context: "Timeline display is implicit when any filter or range is specified"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: caf2-L301-400.yaml
+    finding: F003
+    line: 305
+    speaker: user
+    type: user_request
+    quote: "We shoudl make the timeline implied."
+    context: "Explicit UX rule: no args = summary; any filter/range arg = timeline implied"
+
+  - file: caf2-L801-900.yaml
+    finding: F004
+    line: 892
+    speaker: agent
+    type: agent_proposal
+    quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode"
+    context: "Range indices trigger implicit timeline display mode"
+
+  - file: caf2-L801-900.yaml
+    finding: F003
+    line: 892
+    speaker: agent
+    type: agent_error
+    quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode, which shows the timeline first, THEN the search runs and shows its own results. This is a major bug!"
+    context: "Bug: implicit timeline must NOT activate separately when search mode (--search) is active; search is a primary output mode that handles its own display"
+
+  - file: caf2-L901-1000.yaml
+    finding: F002
+    line: 919
+    speaker: agent
+    type: agent_error
+    quote: "We still have the double output issue! The -M filter is triggering implicit timeline."
+    context: "When search is used with filters, implicit timeline mode must NOT activate separately"
+
+acceptance_criteria:
+  - id: CLI-006-AC1
+    given: a session and filter flags (-i, -x, -U, -a, -M, -T)
+    when: invoked without explicit -t flag
+    then: timeline mode is implicitly activated
+
+  - id: CLI-006-AC2
+    given: a session and range arguments (e.g. 5-10, +20, -5)
+    when: invoked without explicit -t flag
+    then: timeline mode is implicitly activated
+
+  - id: CLI-006-AC3
+    given: a session with no mode flags and no filters/ranges
+    when: invoked as `xs <session>`
+    then: summary mode is used (implicit timeline does NOT activate without triggers)
+
+  - id: CLI-006-AC4
+    given: --search is active
+    when: combined with filters or range arguments
+    then: search mode is the primary output mode; implicit timeline does NOT produce duplicate output
+
+  - id: CLI-006-AC5
+    given: -g/--git shortcut flag
+    when: invoked
+    then: implicitly activates timeline mode (since --git expands to filter arguments)
 
 depends_on:
-  - CLI-002
-related: []
+  - CLI-002  # Timeline mode
+related:
+  - CLI-001  # Summary mode (default when no implicit timeline triggers)
+  - CLI-003  # Git mode (triggers implicit timeline)
+  - FLT-001  # Include filter (triggers implicit timeline)
+  - FLT-002  # Exclude filter (triggers implicit timeline)
+  - RNG-001  # Range selection (triggers implicit timeline)
+  - SRC-001  # Search mode (overrides implicit timeline)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "User explicitly requested implicit timeline at caf2:305. The key subtlety is that --search mode must NOT be overridden by implicit timeline (caf2:892 bug). The rule is: no args = summary, search = search mode, any filter/range without search = implicit timeline."

@@ -1,0 +1,46 @@
+# Story: Thinking Virtual Entity
+
+id: FLT-013
+title: Filter by Thinking virtual entity
+epic: filtering
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: to filter to show only extended thinking/reasoning blocks
+so_that: I can see Claude's reasoning process
+
+sources:
+  - file: "b475:1401-1500"
+    line: 1484
+    speaker: user
+    type: user_request
+    quote: "are we outputting the Claude's Thinking? -- This seems like another Meta tool parameter, where we shoul say something like `--include Thinking` to show all assistant messades where it enabled advanced reasoning"
+    context: "User wants Thinking/extended reasoning blocks filterable as a named virtual entity via --include Thinking"
+
+  - file: "b475:1501-1600"
+    line: 1502
+    speaker: agent
+    type: unresolved
+    quote: "These appear to be UI-only in Claude Code, not in the JSONL data"
+    context: "Agent believed Thinking blocks might be UI-only; unresolved whether they appear in JSONL format"
+
+acceptance_criteria:
+  - id: FLT-013-AC1
+    given: session with extended thinking content
+    when: --include "Thinking" is specified
+    then: only assistant messages containing thinking/reasoning blocks are shown
+
+  - id: FLT-013-AC2
+    given: Thinking virtual entity
+    when: thinking content is present in JSONL
+    then: it is filterable as a distinct entity type
+
+depends_on:
+  - PRS-005
+related:
+  - FLT-003  # Message virtual entity
+  - FLT-004  # Tool virtual entity
+
+priority: could
+status: mined
+validation_notes: "Unresolved - user requested it but agent questioned whether thinking blocks appear in JSONL. Needs format investigation."

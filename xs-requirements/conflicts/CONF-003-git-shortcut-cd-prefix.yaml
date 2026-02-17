@@ -1,0 +1,49 @@
+id: CONF-003
+title: --git Shortcut Fails with cd-Prefixed Commands
+
+description: |
+  The --git convenience alias is defined as --include Bash(git *) which uses
+  glob pattern matching. However, many git commands in real sessions start with
+  "cd /path && git ..." rather than bare "git ...". The glob pattern Bash(git *)
+  does not match these cd-prefixed commands, causing --git to miss real git
+  operations.
+
+evidence:
+  problem:
+    - source: "b475:2301-2400 F007"
+      observation: "--git shortcut pattern matching failure with cd-prefixed git commands"
+    - source: "summary report: SUM-003 — known issue: git detection fails when command starts with 'cd dir &&'"
+
+  design:
+    - source: "filtering report: FLT-014 — --git must delegate to centralized filtering system"
+    - source: "cli-interface report: CLI-003 — git shortcut as alias"
+
+options:
+  - id: A
+    name: "Expand glob to Bash(*git *) to catch cd-prefixed commands"
+    pros: [catches common cd+git pattern]
+    cons: [may match non-git commands containing 'git' substring, overly broad]
+
+  - id: B
+    name: "Use regex instead of glob for --git pattern"
+    pros: [precise matching possible]
+    cons: [inconsistent with other glob-based filters, complexity]
+
+  - id: C
+    name: "Apply --git as semantic filter (parse command for git subcommands)"
+    pros: [most accurate, handles all patterns]
+    cons: [separate implementation from glob system, violates FLT-014 delegation requirement]
+
+  - id: D
+    name: "Document limitation — --git only matches direct git commands"
+    pros: [simple, honest]
+    cons: [misses significant portion of real git operations]
+
+resolution: pending
+decided_by: null
+decision_rationale: null
+
+affects:
+  - FLT-014 # --git convenience alias
+  - CLI-003 # Git shortcut
+  - SUM-003 # Git operations detection in summary

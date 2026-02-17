@@ -9,14 +9,36 @@ as_a: developer reviewing session output
 i_want: Task tool calls displayed showing subagent info
 so_that: I can see when subagents were spawned
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "b475:996"
+    quote: "we're missing LS, Glob, Task, WebFetch, WebSearch in the compact display"
+    context: "Task tool is among tools missing parameter display"
+  - session: "b475:98"
+    quote: "if input.command? then input.command elif input.file_path? then input.file_path elif input.path? then input.path elif input.pattern? then input.pattern else tostring end"
+    context: "reconstruct.jq fallback: tools without specific field use tostring"
+  - session: "b475:1716"
+    quote: "Task/WebFetch/WebSearch show quoted arg"
+    context: "Task tool shows quoted argument in parameter display"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-010-AC1
+    given: Task tool_use entry in JSONL
+    when: rendered in truncated mode
+    then: "Display as '⏺ Task({quoted_prompt_excerpt})'"
+
+  - id: FMT-010-AC2
+    given: Task tool_use entry
+    when: rendered in compact mode
+    then: "Display as '[N] ⏺ Task({quoted_prompt_excerpt})' on a single line"
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Must parse JSONL tool_use entries
+related:
+  - FMT-003  # Bash tool (same pattern)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Task tool uses generic ToolName(param) format with quoted argument.
+  Part of the set of "missing" tools identified at b475:996.
+  Source: b475:996, b475:1716

@@ -1,0 +1,64 @@
+# Story: Gap Separators Between Non-Contiguous Results
+
+id: SRC-006
+title: Visual separators between non-contiguous search/filter results
+epic: search
+theme: local-exploration
+
+as_a: developer viewing filtered or searched session output
+i_want: visual separators between non-contiguous sections of results
+so_that: I can clearly see where gaps exist in the sequence
+
+sources:
+  - session: caf2:1101-1199
+    finding: F001
+    quote: "Wait, this shows a visual issue - there's no indication of gaps between non-contiguous matches. Let me add visual separators"
+    context: "Agent self-identified that filtered/searched results need visual gap indicators when sequence numbers are not contiguous."
+
+  - session: 1e83:601-700
+    finding: F005
+    quote: "Now let me work on adding the `--` separator for discontinuous sections"
+    context: "Uses -- (grep convention) as separator between discontinuous sections."
+
+  - session: caf2:1101-1199
+    finding: F001
+    quote: "Perfect! Now the output clearly shows the gaps between non-contiguous matches."
+    context: "After adding separators, output clearly indicates gaps between non-contiguous matched sections."
+
+acceptance_criteria:
+  - id: SRC-006-AC1
+    given: search results with non-contiguous sequence numbers
+    when: displaying search results (e.g., events 5, 6, 7 then 15, 16)
+    then: a visual separator (--) appears between the non-contiguous sections
+
+  - id: SRC-006-AC2
+    given: search results with context expansion (-A/-B/-C)
+    when: context windows from separate matches do not overlap
+    then: a visual separator (--) appears between the separate context blocks
+
+  - id: SRC-006-AC3
+    given: search results with context expansion
+    when: context windows overlap and are merged
+    then: no separator appears within the merged contiguous block
+
+  - id: SRC-006-AC4
+    given: filtered timeline results (not just search)
+    when: displaying results from -i/-x filters with gaps in sequence
+    then: visual separators shown between non-contiguous sections
+
+depends_on:
+  - SRC-001  # Basic search
+  - SRC-002  # After context (context expansion creates the sections)
+
+related:
+  - SRC-003  # Before context
+  - SRC-004  # Combined context
+  - FMT-001  # Output formatting conventions
+
+priority: should
+status: mined
+validation_notes: |
+  Uses -- as separator (grep/rg convention).
+  Applies to both search results and filter results when gaps exist.
+  Must correctly interact with context expansion: merged overlaps = no separator,
+  disjoint blocks = separator.

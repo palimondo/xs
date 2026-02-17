@@ -1,0 +1,93 @@
+# Story: Range Selection Pipeline Ordering
+
+id: RNG-007
+title: Range selection applies to full timeline before filtering
+epic: range-selection
+theme: local-exploration
+
+as_a: developer exploring a session
+i_want: range selection to apply to the full unfiltered timeline
+so_that: I can reliably address events by their stable index regardless of active filters
+
+sources:
+  - file: 1e83-L801-900.yaml
+    finding: F001
+    quote: "This works as designed (capture that in design decisions if its not there yet): \"When indices are provided (like +14), they are applied to the FULL timeline first, then filtering happens. So +14 gets the first 14 items from timeline, THEN filters them for User and Assistant (excluding Tools).\""
+    context: "User explicitly confirmed range applies before filters as intentional design"
+
+  - file: b475-L501-600.yaml
+    finding: F003
+    quote: "why isn't the range-ing implemented once for all output styles on the event array level? is this loginc reimplemented in each sub-command separately?"
+    context: "User requires range filtering at event array level, not duplicated per output mode"
+
+  - file: caf2-L901-1000.yaml
+    finding: F001
+    quote: "the behavior shoudl be chain of: (0.) Find matches by `-e PATTERN --search PATTERN`, or take all events 1. Filter events by range 2. Filter by `-i --include` 3. Filter by `-x --exclude` 4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C`"
+    context: "User defines canonical pipeline: search -> range -> include -> exclude -> context expansion"
+
+  - file: e583-L1601-1700.yaml
+    finding: F003
+    quote: "our -N for tail is being applied before the search, not after... looks like we are hitting a gap in our functionality"
+    context: "User identified gap: -N range applies before search, preventing 'last N search results' use case"
+
+  - file: e583-L1601-1700.yaml
+    finding: F004
+    quote: "I think I woudl like to implement support for `--jq` and `--tail` that you drafted:  ./xs e583 --jq 'select(.isCompactSummary == true)' --tail 1 --full"
+    context: "User proposed --tail flag for post-filter tail selection; distinct from -N range syntax"
+
+  - file: e583-L1601-1700.yaml
+    finding: F005
+    quote: "I am worried that we might accidentally create conflicting mess of exclusive parameter sets. We shoudl think hardest about interactions between all our filtering and range options, so that we have coherent UX."
+    context: "User warning about coherent pipeline UX design"
+
+  - file: b475-L2201-2300.yaml
+    finding: F003
+    quote: "We haven't implemented range selection based on timestamps at all and are not needing it at the moment"
+    context: "Timestamp-based range is explicitly out of scope"
+
+  - file: b475-L501-600.yaml
+    finding: F002
+    quote: "we support ranges by index numbers, can we add time based ranges? or is this overthinking?"
+    context: "Time-based ranges deferred as future extension"
+
+acceptance_criteria:
+  - id: RNG-007-AC1
+    given: a timeline with 39 items and filter -U (user messages only)
+    when: user specifies +14
+    then: first 14 items from FULL timeline are selected, then -U filter applied to those 14
+
+  - id: RNG-007-AC2
+    given: a filter pipeline
+    when: range and filters are both specified
+    then: pipeline order is search -> range -> include -> exclude -> context expansion
+
+  - id: RNG-007-AC3
+    given: range filtering logic
+    when: implemented
+    then: centralized at event array level, applied once (not duplicated per output mode)
+
+  - id: RNG-007-AC4
+    given: range selection
+    when: applied
+    then: indices are stable regardless of which display mode or filters are active
+
+depends_on:
+  - PRS-005
+  - RNG-001
+  - FLT-001
+
+related:
+  - FLT-001  # Filter pipeline design
+  - FLT-015  # Potential --tail post-filter flag (unresolved)
+  - PRIN-001  # Console fidelity requires stable addressing
+
+priority: must
+status: mined
+validation_notes: |
+  The pipeline ordering was explicitly confirmed by the user in 1e83:801-900
+  as "works as designed." The canonical pipeline was defined by the user
+  in caf2:901-1000. The user also identified a gap (e583:1601-1700):
+  range-before-filter prevents "last N search results." A --tail flag
+  was proposed for post-filter slicing but not resolved. Centralized
+  implementation at event array level was a user requirement (b475:501-600).
+  Timestamp-based ranges explicitly deferred (b475:2201-2300, b475:501-600).

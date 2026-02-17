@@ -1,0 +1,65 @@
+# Story: Blank Line Spacing Between Messages
+
+id: FMT-023
+title: Insert blank lines between messages in truncated mode
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: proper blank line spacing between messages in truncated mode
+so_that: output is readable and matches Claude Code console appearance
+
+sources:
+  - session: "day-021:12005"
+    quote: "1. Blank lines after user messages 2. Blank lines after assistant text messages 3. Blank lines after tool uses 4. Blank lines after tool results"
+    context: "Complete spacing rules: blank lines after ALL message types"
+  - session: "day-021:10892"
+    quote: "The script is missing the empty lines. The expected output has empty lines between certain messages."
+    context: "Agent identifying missing spacing in reconstruct.jq output"
+  - session: "06a0:390"
+    quote: "Perfect! The reconstructed file now has proper spacing throughout"
+    context: "User confirming spacing rules are correct"
+  - session: "b475:1224"
+    quote: "in truncated mode we need to add newlines in specific places to replicate yout output"
+    context: "User requesting spacing to match CC output"
+
+acceptance_criteria:
+  - id: FMT-023-AC1
+    given: user message
+    when: rendered in truncated mode
+    then: "Follow with one blank line"
+
+  - id: FMT-023-AC2
+    given: assistant text message
+    when: rendered in truncated mode
+    then: "Follow with one blank line"
+
+  - id: FMT-023-AC3
+    given: tool use line (⏺ ToolName(...))
+    when: rendered in truncated mode
+    then: "Follow with tool result on next line (no extra blank line between call and result)"
+
+  - id: FMT-023-AC4
+    given: tool result block
+    when: rendered in truncated mode
+    then: "Follow with one blank line before next message"
+
+  - id: FMT-023-AC5
+    given: compact mode
+    when: rendering any event
+    then: "No blank lines between events (single-line per event format)"
+
+depends_on:
+  - FMT-001  # User message
+  - FMT-002  # Assistant message
+  - FMT-007  # Tool result
+related:
+  - PRIN-001  # Console fidelity
+
+priority: must
+status: mined
+validation_notes: |
+  Truncated mode uses blank lines between all message types for readability.
+  Compact mode has NO blank lines (one line per event).
+  Tool call and tool result are grouped together (no blank line between them).
+  Source: day-021:12005, 06a0:390, b475:1224

@@ -1,0 +1,44 @@
+# Story: No Emojis in Output
+
+id: FMT-025
+title: Prohibit emoji usage in all display modes
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: no emojis in any output mode
+so_that: output faithfully matches Claude Code console (which uses Unicode symbols, not emojis)
+
+sources:
+  - session: "b475:966"
+    quote: "adding emojis and cltering how the truncated mode works, where it was supopsed to be a high fidelity replication of the Claude COde Output"
+    context: "User correcting agent's emoji additions"
+  - session: "b475:981"
+    quote: "No emojis! The truncated mode should be a faithful reproduction of Claude Code's console output."
+    context: "Agent confirming: no emojis"
+  - session: "b475:1017"
+    quote: "definitely remove emojis. We already have had a finely tuned copact output"
+    context: "User also rejecting emojis in compact mode"
+
+acceptance_criteria:
+  - id: FMT-025-AC1
+    given: any formatted output
+    when: rendered in any display mode
+    then: "No emoji characters appear in output"
+
+  - id: FMT-025-AC2
+    given: symbol requirements
+    when: choosing display characters
+    then: "Use only Claude Code console symbols: ⏺ ⎿ ✻ > ! @ / ☒ ◐ ☐"
+
+depends_on: []
+related:
+  - PRIN-001  # Console fidelity
+
+priority: must
+status: mined
+validation_notes: |
+  User corrected agent MULTIPLE times about emojis.
+  Claude Code uses Unicode symbols (⏺, ⎿, ✻), not emojis.
+  This is a cross-cutting constraint, not just a single story.
+  Source: b475:966, b475:981, b475:1017

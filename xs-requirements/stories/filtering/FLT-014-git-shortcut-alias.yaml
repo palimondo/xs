@@ -1,0 +1,72 @@
+# Story: --git Shortcut Alias
+
+id: FLT-014
+title: --git as convenience alias for --include Bash(git *)
+epic: filtering
+theme: local-exploration
+
+as_a: power user
+i_want: --git as a shortcut for filtering to git operations
+so_that: common use cases remain concise
+
+sources:
+  - file: "b475:701-800"
+    line: 738
+    speaker: user
+    type: user_correction
+    quote: "it looks like --git is a completely separate implementation instead of being a shortgut that applies `--include Bash(git *)`"
+    context: "User identified --git as a separate code path; requires it to be a convenience alias using centralized filtering"
+
+  - file: "b475:701-800"
+    line: 746
+    speaker: agent
+    type: agent_proposal
+    quote: "# --git is a shortcut for --timeline --include"
+    context: "Agent refactored --git to delegate to centralized filtering system"
+
+  - file: "b475:1201-1300"
+    line: 1222
+    speaker: agent
+    type: agent_proposal
+    quote: "Correctly filters git commands"
+    context: "--git shortcut equivalent to --include Bash(git *)"
+
+  - file: "caf2:101-200"
+    line: 165
+    speaker: user
+    type: user_request
+    quote: "I'm fine with having aliases for common things like --git (the goal there is to not be londer in new world then in old, for common use cases)"
+    context: "Convenience aliases acceptable when they keep common invocations concise"
+
+  - file: "b475:2301-2400"
+    line: 2351
+    speaker: agent
+    type: agent_error
+    quote: "the --git shortcut is using \"Bash(git *)\" which expects commands starting with \"git \", but our commands start with \"cd myproject &&\""
+    context: "Known limitation: Bash(git *) only matches commands starting with git, not cd dir && git patterns"
+
+acceptance_criteria:
+  - id: FLT-014-AC1
+    given: --git flag
+    when: specified
+    then: equivalent to --include "Bash(git *)" with timeline mode implied
+
+  - id: FLT-014-AC2
+    given: --git flag
+    when: used
+    then: delegates to centralized filtering system, not separate implementation
+
+  - id: FLT-014-AC3
+    given: Bash commands like "cd dir && git commit"
+    when: --git is specified
+    then: should consider matching git anywhere in command (known limitation of Bash(git *) pattern)
+
+depends_on:
+  - FLT-005
+  - FLT-001
+related:
+  - CLI-001  # CLI interface
+
+priority: should
+status: mined
+validation_notes: "User explicitly required --git to use centralized filtering, not separate code. Known issue with cd-prefixed git commands."

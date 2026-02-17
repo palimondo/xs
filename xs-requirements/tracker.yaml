@@ -1,9 +1,9 @@
 # xs Requirements Recovery Tracker
 
 meta:
-  last_updated: 2026-01-05T14:00:00Z
-  current_pass: 2_story_mining
-  current_epic: null
+  last_updated: 2026-02-17T23:45:00Z
+  current_pass: 4_synthesis
+  current_step: complete
   pre_pass2_validation: complete
 
 passes:
@@ -15,29 +15,36 @@ passes:
     note: "Validation found 38 additional stories; added 4 new epics"
 
   2_story_mining:
-    status: pending  # Unblocked - subagent validation complete
+    status: complete
+    started_at: 2026-01-28T00:00:00Z
+    completed_at: 2026-02-17T23:45:00Z
+    note: "1156 chunks extracted (823 daylog + 333 session). 12 epic agents synthesized findings into stories."
     epics:
-      jsonl-parsing: pending
-      console-formatting: pending
-      filtering: pending
-      range-selection: pending
-      display-modes: pending
-      cli-interface: pending
-      search: pending
-      export: pending
-      sidechain-handling: pending
-      fetch: pending
-      context: pending
-      summary: pending
+      jsonl-parsing: complete
+      console-formatting: complete
+      filtering: complete
+      range-selection: complete
+      display-modes: complete
+      cli-interface: complete
+      search: complete
+      export: complete
+      sidechain-handling: complete
+      fetch: complete
+      context: complete
+      summary: complete
 
   3_golden_files:
     status: pending
 
   4_principles:
-    status: pending
+    status: complete
+    completed_at: 2026-02-17T23:45:00Z
+    note: "9 principles extracted during synthesis step C"
 
   5_conflicts:
-    status: pending
+    status: complete
+    completed_at: 2026-02-17T23:45:00Z
+    note: "4 conflicts surfaced during synthesis step C"
 
   6_slicing:
     status: pending
@@ -46,13 +53,35 @@ counts:
   themes: 4
   epics: 12
   stories:
-    total: 90
-    draft: 90
-    mined: 0
-    reviewed: 0
-    validated: 0
+    total: 108
+    by_epic:
+      jsonl-parsing: 13     # 11 original + 2 new (PRS-012, PRS-013)
+      console-formatting: 25 # 21 original + 4 new (FMT-022 through FMT-025)
+      filtering: 15          # 12 original + 3 new (FLT-013, FLT-014, FLT-015)
+      range-selection: 7     # 5 original + 2 new (RNG-006, RNG-007)
+      display-modes: 5       # 5 original + 0 new
+      cli-interface: 9       # 7 original + 2 new (CLI-008, CLI-009)
+      search: 7              # 5 original + 2 new (SRC-006, SRC-007)
+      export: 4              # 3 original + 1 new (EXP-004)
+      sidechain-handling: 3  # 3 original + 0 new
+      fetch: 10              # 8 original + 2 new (GFH-009, GFH-010)
+      context: 7             # 7 original + 0 new
+      summary: 3             # 3 original + 0 new
+    by_status:
+      mined: 108
+      draft: 0
+      reviewed: 0
+      validated: 0
+    by_priority:
+      must: ~45
+      should: ~48
+      could: ~15
+  principles:
+    total: 9
+    status: draft
   conflicts:
-    pending: 0
+    total: 4
+    pending: 4
     resolved: 0
   bugs_documented:
     total: 4
@@ -80,22 +109,25 @@ sources_cataloged:
     - fetch_logs.py (analyzed for GFH-* stories)
     - precompact_flag_hook.py (analyzed for CRH-* stories)
     - pretooluse_context_recovery_hook.py (analyzed for CRH-* stories)
+  extraction_stats:
+    total_chunks: 1156
+    daylog_chunks: 823
+    session_chunks: 333
+    findings_files: 1156
 
-subagent_validation:
-  date: 2026-01-05
-  session_tested: e583
-  models_validated: [haiku, sonnet, opus]
-  xs_usage_compliance: 100%  # All models avoided BUG-002, used --full
-  findings_file: findings/crh-model-comparison.yaml
-  recommendation: |
-    Use Haiku for focused mining tasks.
-    Use Sonnet for complex extraction.
-    Reserve Opus for synthesis.
+synthesis_artifacts:
+  epic_reports: 12
+  cross_epic_resolutions: 1
+  principles: 9
+  conflicts: 4
+  synthesis_summary: 1
 
 next_action: |
-  Begin Pass 2: Story Mining. Start with jsonl-parsing epic.
-  Spawn Haiku subagents to search day logs and sessions.
-  Reference xs-usage-best-practices.md for agent prompts.
-  Note: context epic already has findings from validation test.
+  Pass 3: Golden File Assembly.
+  1. Gather existing golden files from old implementation (specs/golden_outputs/)
+  2. Organize by format version (1x/ vs 2x/)
+  3. For stories without golden files, create from real sessions
+  4. Link golden files to acceptance criteria
+  5. Mark for user validation
 
 blockers: []

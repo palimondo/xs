@@ -1,0 +1,103 @@
+epic: summary
+agent: opus
+timestamp: 2026-02-17T20:00:00Z
+
+assigned_findings:
+  total: 48
+  by_story:
+    SUM-001: 35
+    SUM-002: 7
+    SUM-003: 6
+
+stories_populated:
+  - id: SUM-001
+    title: "Summary mode shows session statistics"
+    status: mined
+    sources_count: 25
+    acceptance_criteria_count: 7
+    key_evidence:
+      - "b475:301-500 — User designed hierarchical YAML summary format with tree structure, capitalized keys, arithmetic consistency"
+      - "caf2:201-400 — User handcrafted final mock with inline parameter hints; tool counts sorted descending, zero-count omitted"
+      - "e583:1-100 — Summary designed as self-documenting tutorial for tool usage"
+      - "a40c:1-100 — 'Shows summary by default' confirmed in --help output"
+      - "a40c:401-500 — Full summary format example with Metadata and Timeline sections"
+      - "760a:601-643 — Duration calculation bug identified by user"
+
+  - id: SUM-002
+    title: "Group MCP tools in summary display"
+    status: mined
+    sources_count: 5
+    acceptance_criteria_count: 4
+    key_evidence:
+      - "caf2:301-400 — User requested Tool(mcp__toolname*) filter patterns"
+      - "caf2:401-500 — Bug: MCP tools were excluded from timeline; fixed to include all tools"
+      - "b475:401-500 — Hierarchical grouping design pattern (Git under Bash) applies to MCP grouping"
+
+  - id: SUM-003
+    title: "Detect and show git commits in summary"
+    status: mined
+    sources_count: 8
+    acceptance_criteria_count: 4
+    key_evidence:
+      - "b475:301-400 — User corrected: 'Yes, but Git under Bash'"
+      - "b475:401-500 — User corrected: 'not just commits, its git operations!' with Commits as sub-level"
+      - "day-025:4001-4200 — Git operation detection function: git add, commit, checkout, branch"
+      - "b475:2301-2400 — Known issue: git detection fails when command starts with 'cd dir &&'"
+
+new_stories_proposed: []
+  # No new stories needed. The three existing stubs comprehensively cover:
+  # - Core statistics and format (SUM-001: hierarchical YAML, metadata, parameter hints)
+  # - MCP tool grouping (SUM-002: server-based grouping, include/omit rules)
+  # - Git operations in summary (SUM-003: nested under Bash, commit sub-count)
+  #
+  # The "summary as tutorial" aspect is an acceptance criterion of SUM-001 (AC4),
+  # not a separate story. The "implicit timeline mode" when filters are present
+  # is captured as SUM-001-AC7 and also belongs to CLI-001.
+
+cross_epic_candidates:
+  - finding_file: "caf2-L201-300.yaml"
+    finding_id: "F004"
+    suggested_epic: "cli-interface"
+    reason: "Implicit timeline mode when filters/ranges present is primarily a CLI routing concern (CLI-001)"
+
+  - finding_file: "caf2-L301-400.yaml"
+    finding_id: "F004"
+    suggested_epic: "filtering"
+    reason: "Filter pipeline ordering (search->range->include->exclude->context) belongs to filtering epic"
+
+  - finding_file: "caf2-L301-400.yaml"
+    finding_id: "F007"
+    suggested_epic: "filtering"
+    reason: "Tool(mcp__*) glob pattern filtering belongs to filtering epic (FLT-001)"
+
+  - finding_file: "b475-L2301-2400.yaml"
+    finding_id: "F007"
+    suggested_epic: "filtering"
+    reason: "--git shortcut pattern matching issues belong to filtering epic (FLT-014)"
+
+  - finding_file: "760a-L601-643.yaml"
+    finding_id: "F001"
+    suggested_epic: "parsing"
+    reason: "Duration calculation correctness depends on timestamp parsing (PRS-005)"
+
+  - finding_file: "b475-L401-500.yaml"
+    finding_id: "F006"
+    suggested_epic: "parsing"
+    reason: "Timestamp location in JSONL events is a parsing concern (PRS-005)"
+
+notes: |
+  The summary epic is well-defined with clear user-designed output format.
+  The user spent significant effort designing the hierarchical YAML output
+  with inline parameter hints (b475:301-500, caf2:201-400). Key design
+  principles:
+  1. Valid YAML with capitalized keys
+  2. Hierarchical tree with arithmetic consistency (children sum to parent)
+  3. Self-documenting: inline comments show CLI flags to drill down
+  4. Descending sort, zero-count omission
+  5. Graceful degradation when metadata (timestamps) absent
+  6. Git operations nested under Bash, Commits nested under Git operations
+  7. MCP tools grouped by server prefix
+
+  The summary mode is the default display (bare `xs <session>` invocation).
+  Any filter, range, or include/exclude parameter implicitly switches to
+  timeline mode.

@@ -6,18 +6,61 @@ epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: Bash tool calls displayed as "Bash(command)"
+i_want: Bash tool calls displayed as Bash(command) matching Claude Code console
 so_that: I can see what commands were executed
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:348"
+    quote: "I hate the dollar sign creativity you've added. We had this issue also with read file and write file that you've added arrows there. So you should check those and always use the same output as Claude code in the console."
+    context: "User rejecting Bash: $ command format in favor of Bash(command)"
+  - session: "1e83:490"
+    quote: "# Format like Claude Code: Bash(command)"
+    context: "Agent confirms correct format after user correction"
+  - session: "b475:96"
+    quote: "Tool calls: ⏺ ToolName(parameter)"
+    context: "reconstruct.jq format for tool calls"
+  - session: "b475:944"
+    quote: "can we not truncate it to 60 and just try outputting full line?"
+    context: "User wants Bash command line shown in full, not truncated to 60 chars"
+  - session: "b475:2087"
+    quote: "⏺ Bash()"
+    context: "Truncated mode showing Bash tool call format"
+  - session: "b475:1301-1400"
+    quote: '[53] ⏺ Bash(git log --grep="validate" --oneline -10)'
+    context: "Filtered truncated mode showing Bash tool call with full command"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-003-AC1
+    given: Bash tool_use entry in JSONL
+    when: rendered in truncated mode
+    then: "Display as '⏺ Bash({command})' where command is the .input.command field"
+
+  - id: FMT-003-AC2
+    given: Bash tool_use entry with multiline command
+    when: rendered in truncated mode
+    then: "Show full first line of command (no arbitrary character truncation)"
+
+  - id: FMT-003-AC3
+    given: Bash tool_use entry in JSONL
+    when: rendered in compact mode
+    then: "Display as '[N] ⏺ Bash({first_line_of_command})' on a single line"
+
+  - id: FMT-003-AC4
+    given: Bash tool_use entry with command containing newlines
+    when: rendered in compact mode
+    then: "Collapse to single line, show first line only"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse JSONL tool_use entries
 related:
   - PRIN-001  # Console fidelity
+  - FMT-007  # Tool results
+  - FMT-016  # Indentation consistency
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User explicitly rejected 'Bash: $ command' format (1e83:348).
+  Correct format is Bash(command) matching Claude Code console.
+  Full first line of command displayed (no 60-char truncation per b475:944).
+  Source: 1e83:348, 1e83:490, b475:96, b475:944

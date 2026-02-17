@@ -9,14 +9,45 @@ as_a: power user
 i_want: -U as shortcut for -i User
 so_that: I can quickly see what the user asked
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "a40c:1-100"
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Include all messages (shortcut for"
+    context: "CLI help text showing shortcuts including -U for user messages"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "a40c:501-600"
+    line: 518
+    speaker: agent
+    type: agent_proposal
+    quote: "Test user message filtering"
+    context: "Virtual entity filtering: -U flag filters to show only user messages in timeline"
+
+  - file: "1e83:801-900"
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works"
+    context: "User demonstrating -U combined with -a and -x Tool; confirms -U is a working shortcut"
+
+acceptance_criteria:
+  - id: FLT-007-AC1
+    given: session with mixed content
+    when: -U flag is specified
+    then: equivalent to --include User (shows only user messages)
+
+  - id: FLT-007-AC2
+    given: -U flag
+    when: specified
+    then: implies timeline display mode
 
 depends_on:
   - FLT-003
-related: []
+related:
+  - FLT-006  # -M shortcut
+  - FLT-008  # -a shortcut
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Confirmed working in user test. Uppercase -U consistent with naming convention."

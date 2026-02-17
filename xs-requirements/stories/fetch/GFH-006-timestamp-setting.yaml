@@ -7,33 +7,68 @@ theme: github-fetch
 
 as_a: developer organizing fetched sessions
 i_want: file timestamps reflecting actual session times
-so_that: files sort by when sessions occurred
+so_that: files sort by when sessions occurred, not when they were downloaded
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: set_file_timestamps
-    lines: 259-294
+  - session: f9c7:1301-1400
+    finding: F001
+    quote: "not atime GOD DAMNED IT! Creation time and modification time!!!!!"
+    context: "User emphatically corrected agent: must set creation time + modification time, NOT access time"
+
+  - session: f9c7:1601-1700
+    finding: F001
+    quote: "Added `set_file_timestamps()` function that uses SetFile on macOS"
+    context: "Python os.utime() only sets access+modification times, not creation time — macOS needs SetFile"
+
+  - session: f9c7:1401-1500
+    finding: F001
+    quote: "Creation time = session start (\"Running Claude with prompt from file:\" timestamp)\nModification time = session end (\"Log saved to\" timestamp)"
+    context: "Timestamp mapping: ctime = session start, mtime = session end"
+
+  - file: day-024:33601-33800
+    finding: F005
+    quote: "I'd like if we could get their creation date and last modified dates to match the actual"
+    context: "User requesting timestamps match actual GHA run time, not fetch time"
+
+  - file: day-024:33801-34000
+    finding: F004
+    quote: "Set file timestamps to match actual run times"
+    context: "Timestamps from extraction (start/end markers) applied to output file"
+
+  - session: fa0d:2101-2200
+    finding: F009
+    quote: "I'd like if we could get their creation date and last modified dates to match the actual run from the log"
+    context: "Fetched files should have timestamps matching actual GHA run, not fetch time"
 
 acceptance_criteria:
   - id: GFH-006-AC1
-    given: start and end timestamps from extraction
+    given: start and end timestamps from JSONL extraction
     when: setting timestamps
-    then: access time = start, modification time = end
+    then: creation time = session start timestamp, modification time = session end timestamp
 
   - id: GFH-006-AC2
     given: macOS platform
-    when: setting timestamps
-    then: uses SetFile for creation time if available
+    when: setting creation time (birth time)
+    then: uses SetFile command (os.utime cannot set creation time on macOS)
 
   - id: GFH-006-AC3
+    given: non-macOS platform
+    when: setting timestamps
+    then: sets modification time via touch/os.utime (creation time may not be settable)
+
+  - id: GFH-006-AC4
     given: successful timestamp setting
     when: complete
-    then: logs session duration
+    then: logs session duration (mtime - ctime)
 
 depends_on:
   - GFH-003
 related: []
 
 priority: should
-status: draft
-validation_notes: "Platform-specific: macOS uses SetFile for creation time"
+status: mined
+validation_notes: |
+  Platform-specific: macOS uses SetFile for birth time, Python os.utime for mtime.
+  User was extremely emphatic about NOT using access time.
+  Session duration derivable from mtime - ctime.
+  Both .py and .sh scripts must produce identical timestamp results.

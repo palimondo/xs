@@ -8,6 +8,7 @@ description: |
   Load and parse Claude Code session files in JSONL format.
   Handle multi-line JSON objects, format versions (1.x, 2.x),
   and graceful degradation for malformed content.
+  Build unified chronological timeline from parsed events.
 
 cli_flags: []  # No direct CLI flags, foundation for all other features
 
@@ -25,16 +26,34 @@ capabilities:
   - Handle format version differences (1.x vs 2.x)
   - Graceful degradation for parse errors
   - Support both local files and stdin
+  - Session discovery by substring matching
+  - Extract all content block types (text, tool_use, tool_result, thinking)
+  - Track meta flags (isMeta, isCompactSummary)
+  - Parse slash command XML structure
+  - Detect user interruptions
+  - Preserve raw JSONL for passthrough export
 
-story_areas:
-  - Load session file by path
-  - Fuzzy session discovery by substring
-  - Parse multi-line JSON objects
-  - Handle malformed entries
-  - Extract message entries
-  - Extract tool_use entries
-  - Extract tool_result entries
-  - Build unified timeline
+stories:
+  - PRS-001: Load session file by path (must)
+  - PRS-002: Discover session by substring match (must)
+  - PRS-003: Parse multi-line JSON objects in JSONL (must)
+  - PRS-004: Continue processing despite parse errors (should)
+  - PRS-005: Build unified chronological timeline (must)
+  - PRS-006: Handle Claude Code format versions 1.x vs 2.x (must)
+  - PRS-007: Parse slash commands from XML tags (should)
+  - PRS-008: Extract bash content from XML tags (should)
+  - PRS-009: Detect user interruptions in session (could)
+  - PRS-010: Track isMeta and caveat message flags (should)
+  - PRS-011: Load and parse agent transcript files (should)
+  - PRS-012: Preserve raw JSONL objects for JSON/JSONL export (must)
+  - PRS-013: Extract content blocks from message objects (must)
+
+story_counts:
+  total: 13
+  must: 7
+  should: 4
+  could: 1
+  new_in_synthesis: 2  # PRS-012, PRS-013
 
 search_methodology: |
   Search day logs for:
@@ -45,4 +64,4 @@ search_methodology: |
 
   Search sessions for tool_use/tool_result handling discussions.
 
-status: draft
+status: mined

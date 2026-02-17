@@ -9,14 +9,39 @@ as_a: developer viewing filtered output
 i_want: discontinuous sections separated by --
 so_that: I can see where content was filtered out
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:690"
+    quote: "Now let me work on adding the -- separator for discontinuous sections"
+    context: "Agent implementing grep-style separator"
+  - session: "1e83:710"
+    quote: "[1] [META] Caveat: ...\n--\n[5] ⏺ Bash(git log --oneline -20)\n--\n[10] ⏺ [Tools: Bash]"
+    context: "Actual output showing -- separators between non-contiguous events"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-018-AC1
+    given: filtered timeline with gaps between events
+    when: rendered in any display mode
+    then: "Insert '--' separator line between non-contiguous events"
+
+  - id: FMT-018-AC2
+    given: unfiltered timeline (contiguous events)
+    when: rendered
+    then: "No '--' separators"
+
+  - id: FMT-018-AC3
+    given: range-selected timeline with gaps
+    when: using -B (context before) flag
+    then: "Show context events before match, separated by '--'"
 
 depends_on:
-  - DSP-005
-related: []
+  - DSP-005  # Filtered display
+related:
+  - FMT-017  # Sequence numbers (both indicate discontinuity)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Grep-style '--' separator for non-contiguous event ranges.
+  Used when filtering creates gaps in sequence numbers.
+  Confirmed working in 1e83:710 output example.
+  Source: 1e83:690, 1e83:710

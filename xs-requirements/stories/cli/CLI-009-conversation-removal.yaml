@@ -1,0 +1,72 @@
+# Story: Deprecated --conversation Flag Removal
+
+id: CLI-009
+title: Remove deprecated --conversation flag
+epic: cli-interface
+theme: local-exploration
+
+as_a: developer using xs
+i_want: --conversation to not exist as a flag
+so_that: the CLI is clean with no dead code or misleading deprecation messages
+
+sources:
+  - file: e583-L401-500.yaml
+    finding: F001
+    line: 438
+    speaker: user
+    type: user_correction
+    quote: "`--conversation` was a historical parameter, that was latere removed and replaced by combination of parameters that should have done the same thing"
+    context: "User clarifying that --conversation was intentionally removed; behavior replicated by combining other parameters"
+
+  - file: caf2-L601-700.yaml
+    finding: F004
+    line: 665
+    speaker: user
+    type: user_correction
+    quote: "Isn't it just something old to be removed and not worth fixing? Are there similarilly other discrepancies in features listed in --help and out latest impl status?"
+    context: "User identifies --conversation as legacy dead code that should be removed, not maintained"
+
+  - file: caf2-L601-700.yaml
+    finding: F005
+    line: 687
+    speaker: agent
+    type: agent_proposal
+    quote: "Note: --conversation is deprecated. Use -t -m (or --timeline --include Message)"
+    context: "Deprecation message reveals the replacement: -m (shortcut for --include Message) gives conversation-style output"
+
+  - file: caf2-L701-800.yaml
+    finding: F001
+    line: 709
+    speaker: user
+    type: user_request
+    quote: "Yes to all: 1. remove;"
+    context: "User explicitly approved removal of --conversation flag"
+
+  - file: 1e83-L801-900.yaml
+    finding: F003
+    line: 870
+    speaker: user
+    type: user_request
+    quote: "I was trying to recreate the old use case of option --conversation, which should have displayed only user messages and text responses from the assistant. The -x Tools should have removed the tools calls... IIRC."
+    context: "The old --conversation was equivalent to -U -a -x Tool (show user and assistant messages, exclude tool calls)"
+
+acceptance_criteria:
+  - id: CLI-009-AC1
+    given: the xs CLI
+    when: --conversation is used
+    then: the flag does not exist and produces an unrecognized argument error
+
+  - id: CLI-009-AC2
+    given: a user wanting conversation-only output
+    when: using the xs CLI
+    then: can achieve equivalent output with -U -a -x Tool or -M (message filter)
+
+depends_on: []
+related:
+  - FLT-012  # Conversation mode interaction
+  - FLT-003  # Virtual entity Message
+  - FLT-006  # -M shortcut
+
+priority: should
+status: mined
+validation_notes: "User explicitly approved removal at caf2:709 ('Yes to all: 1. remove'). The equivalent behavior is achieved by combining filter flags. --conversation was broken before removal (caf2:133 showed 'Invalid range format: conversation' error). The xs recreation should NOT include this flag."

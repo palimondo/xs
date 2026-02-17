@@ -6,18 +6,93 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer exploring sessions
-i_want: to select multiple specific indices
-so_that: I can view non-contiguous events
+i_want: to select multiple specific indices and ranges as free positional arguments
+so_that: I can view non-contiguous events in a single invocation
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L201-300.yaml
+    finding: F004
+    line: 239
+    speaker: user
+    type: user_request
+    quote: "can can these be liek free parameters at the and and I could just list specific indices and ranges?"
+    context: "User wants indices/ranges as free positional args (not tied to a flag), supports multiple values"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L201-300.yaml
+    finding: F005
+    line: 245
+    speaker: user
+    type: user_correction
+    quote: "Hmm, that discrepancy between specific index in case of single positive integer vs. last N messages in case of negative number bothers me. Can we do +5 as head?"
+    context: "Range syntax: N = specific index, +N = first N (head), -N = last N (tail), N-M = range"
+
+  - file: a40c-L1-100.yaml
+    finding: F003
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Indices/ranges: 5 (item 5), +10 (first 10), -20 (last 20), 10-30 (range), 60+ (from 60 onwards)"
+    context: "Complete range syntax from help text: single index, head, tail, range, and open-ended range"
+
+  - file: caf2-L901-1000.yaml
+    finding: F004
+    line: 974
+    speaker: user
+    type: user_request
+    quote: "60+ (from 60 onwards... I'm blanking on the proper name for this...suffix? I dunno how to explain it succintly -- maybe therefore bad idea? think hardest)"
+    context: "User proposes open-ended range syntax N+ meaning 'from item N to end'; both N+ and N- syntax accepted"
+
+  - file: 1e83-L701-800.yaml
+    finding: F003
+    line: 781
+    speaker: user
+    type: user_correction
+    quote: "`./explore_session.py 943dff12 +14` works\n`./explore_session.py 943dff12 -U -a -x Tool +14` doesn't work\n\ndon't forget to use tests for properly fixing this issue!"
+    context: "Bug: +N range syntax fails when combined with filter flags (-U -a -x); must work with all flag combinations"
+
+  - file: 1e83-L801-900.yaml
+    finding: F002
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works, so I guess I wa"
+    context: "CLI options must be specified BEFORE the positional session argument. Correct order: flags, session, ranges."
+
+acceptance_criteria:
+  - id: CLI-007-AC1
+    given: multiple index/range arguments after the session identifier
+    when: invoked as `xs <session> 5 10-20 -5`
+    then: all specified indices and ranges are applied to produce the combined selection
+
+  - id: CLI-007-AC2
+    given: range arguments
+    when: combined with filter flags (-U, -a, -x, -i, etc.)
+    then: range arguments work correctly regardless of which flags are present
+
+  - id: CLI-007-AC3
+    given: range syntax variants
+    when: any of N (index), +N (head), -N (tail), N-M (range), N+ (open-ended) are used
+    then: each syntax form is correctly parsed and applied
+
+  - id: CLI-007-AC4
+    given: multiple range arguments
+    when: displayed
+    then: results from all ranges are merged into a single output without duplicates
+
+  - id: CLI-007-AC5
+    given: CLI invocation
+    when: flags are placed after the session positional argument
+    then: argparse does not misinterpret them (options must precede positional arguments)
 
 depends_on:
-  - RNG-001
+  - RNG-001  # Range parsing logic
 related:
-  - RNG-004
+  - RNG-002  # Head/tail syntax (+N/-N)
+  - RNG-003  # Open-ended range (N+)
+  - RNG-004  # Multiple range composition
+  - CLI-002  # Timeline mode (ranges imply timeline)
+  - CLI-006  # Implicit timeline activation
 
 priority: could
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Range syntax was iteratively designed through multiple user corrections (b475:224-245). The +N head syntax was specifically requested by the user to resolve ambiguity between 'index N' and 'first N items'. Argument ordering (flags before session before ranges) is a known constraint (1e83:836)."

@@ -1,23 +1,82 @@
 # Story: Tool Result Formatting
 
 id: FMT-007
-title: Format tool results with indentation
+title: Format tool results with ⎿ prefix and indentation
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: tool results displayed with proper indentation
+i_want: tool results displayed with proper ⎿ prefix and indentation
 so_that: I can see what tools returned
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "b475:96"
+    quote: "Tool results: '  ⎿  Waiting...' then '  ⎿  [content]'"
+    context: "reconstruct.jq format for tool results"
+  - session: "day-021:10190"
+    quote: 'if $line.toolUseResult | type == "string" then "  ⎿ \\($line.toolUseResult)"'
+    context: "Tool result display format: 2-space indent + ⎿ + content"
+  - session: "day-021:10980"
+    quote: "Tool result starts with:   ⎿  Waiting... then on the next line, the actual result content"
+    context: "Waiting... placeholder before actual tool result"
+  - session: "b475:1765"
+    quote: "The ⎿ is the tool result indicator, not a prefix for each line"
+    context: "⎿ appears only on first line of tool result block"
+  - session: "day-021:11448"
+    quote: '  ⎿  Waiting...\n\n  ⎿  '
+    context: "Final spacing pattern: 2 spaces + ⎿ + 2 spaces + content"
+  - session: "0841:1022"
+    quote: "is too heavy. use just the"
+    context: "User wants ⎿ symbol only, not verbose 'TOOL RESULT:' prefix"
+  - session: "b475:2087"
+    quote: "⎿  ============================= test session starts ======"
+    context: "Truncated mode showing tool result with ⎿ and indentation"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-007-AC1
+    given: tool result entry in JSONL
+    when: rendered in truncated mode
+    then: "Display with '  ⎿  ' prefix (2 spaces + ⎿ + 2 spaces) on first line"
+
+  - id: FMT-007-AC2
+    given: tool result with multi-line content
+    when: rendered in truncated mode
+    then: "First 3 lines shown, then '... +N lines' truncation indicator"
+
+  - id: FMT-007-AC3
+    given: tool result entry
+    when: rendered in compact mode
+    then: "Display as '[N] ⎿  {first_line}' on a single line"
+
+  - id: FMT-007-AC4
+    given: tool result entry
+    when: rendered in full mode
+    then: "Display with '  ⎿  ' prefix followed by complete content"
+
+  - id: FMT-007-AC5
+    given: tool result with interrupted content
+    when: rendered in truncated mode
+    then: "Display as '  ⎿  Interrupted by user'"
+
+  - id: FMT-007-AC6
+    given: tool result in truncated mode
+    when: filtering for specific tools (--include)
+    then: "Tool result is shown together with its tool invocation"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse tool result entries
 related:
-  - PRIN-001
+  - PRIN-001  # Console fidelity
+  - FMT-003  # Bash tool (invocation paired with result)
+  - FMT-008  # Multiline truncation rules
+  - FMT-016  # Indentation consistency
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Tool results use ⎿ prefix with 2-space indent before it.
+  ⎿ appears on first line only, not on every line.
+  Truncated mode shows first 3 lines then '... +N lines'.
+  Tool results must accompany tool invocations when filtering (b475:1409).
+  Interrupted tool results show '⎿  Interrupted by user' (06a0:511).
+  Source: b475:96, day-021:10190, b475:1765, day-021:11448

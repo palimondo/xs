@@ -12,11 +12,26 @@ so_that: post-compaction recovery can be triggered
 sources:
   - file: ~/Developer/BookMinder/.claude/hooks/precompact_flag_hook.py
     lines: 1-36
+  - session: 760a:101-200
+    quote: "PreCompact [$CLAUDE_PROJECT_DIR/.claude/hooks/precompact_flag_hook.py] completed successfully"
+    context: "Confirms the precompact hook runs successfully during /compact and creates flag at /tmp/.claude_compaction_*"
+  - session: 760a:101-200
+    quote: "we can probably try to effectively test our `xs` hooks for post /compact recovery. Can you describe what to expect? How do we verify that our hooks work correctly?"
+    context: "User initiates hook testing workflow to verify flag file creation"
+  - session: e583:1601-1700
+    quote: "MOdify hook to also work on manual"
+    context: "User requests precompact hook trigger on both auto and manual /compact"
+  - session: e583:1701-1785
+    quote: "shouldn't that just be * ?"
+    context: "User corrects two separate matcher entries (auto, manual) to single wildcard matcher"
+  - session: e583:901-1000
+    quote: "We should try to prepare prepare a hook that would detect the automatic compaction message and would trigger out context recovery prompt."
+    context: "User requests compaction recovery via hook; first articulation of the requirement"
 
 acceptance_criteria:
   - id: CRH-001-AC1
     given: PreCompact hook triggered
-    when: trigger is "auto" or "manual"
+    when: trigger is "auto" or "manual" (wildcard matcher)
     then: creates flag at /tmp/.claude_compaction_{session_id[:8]}.json
 
   - id: CRH-001-AC2
@@ -29,11 +44,20 @@ acceptance_criteria:
     when: hook completes
     then: exits cleanly (exit 0)
 
+  - id: CRH-001-AC4
+    given: hook matcher configuration
+    when: configuring which triggers to respond to
+    then: uses wildcard "*" matcher to catch all compaction events (not separate auto/manual entries)
+
 depends_on: []
 related:
   - CRH-002
   - CRH-004
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Confirmed via 760a session that precompact hook fires successfully.
+  User explicitly requested wildcard matcher in e583:1701-1785 (F001).
+  Two-hook architecture (PreCompact flag + PreToolUse detect) confirmed
+  because PostCompact hook does not exist in Claude Code hooks API.

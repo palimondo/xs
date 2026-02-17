@@ -6,17 +6,56 @@ epic: range-selection
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to view a single item by its index
-so_that: I can focus on one specific event
+i_want: to view a single item by its index number
+so_that: I can focus on one specific event in the timeline
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F003
+    quote: "Indices/ranges: 5 (item 5), +10 (first 10), -20 (last 20), 10-30 (range), 60+ (from 60 onwards)"
+    context: "Help text defining all range syntax forms; '5' means single item at index 5"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L201-300.yaml
+    finding: F005
+    quote: "Hmm, that discrepancy between specific index in case of single positive integer vs. last N messages in case of negative number bothers me. Can we do +5 as head?"
+    context: "User decided that bare positive integer N means specific item at index N, NOT first N; +N is for head"
+
+  - file: b475-L201-300.yaml
+    finding: F004
+    quote: "can can these be liek free parameters at the and and I could just list specific indices and ranges?"
+    context: "Single index is one of the free positional arguments after the session argument"
+
+  - file: b475-L2301-2400.yaml
+    finding: F001
+    quote: "[35] ... [36] ... [37] ... [38] ... [39] ..."
+    context: "Agent testing range syntax forms including single item selection"
+
+acceptance_criteria:
+  - id: RNG-001-AC1
+    given: a timeline with 39 items
+    when: user specifies index 5 as a positional argument
+    then: only item at index 5 is displayed
+
+  - id: RNG-001-AC2
+    given: a timeline with 39 items
+    when: user specifies index 0 or negative number without + prefix
+    then: index 0 is not a valid single item (negative is tail syntax -N)
+
+  - id: RNG-001-AC3
+    given: a timeline with 39 items
+    when: user specifies index 100 (out of bounds)
+    then: empty output is produced without error
 
 depends_on:
   - PRS-005
-related: []
+
+related:
+  - RNG-002  # +N could be confused with single index
+  - RNG-006  # Multiple indices can be listed
+  - CLI-001  # Free positional argument parsing
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User explicitly resolved ambiguity: bare positive integer = specific index,
+  +N = first N items (head). See b475:201-300 lines 245-246.

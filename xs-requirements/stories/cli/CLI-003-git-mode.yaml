@@ -6,18 +6,88 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to see only git operations
-so_that: I can review version control activity
+i_want: to see only git operations from a session
+so_that: I can review version control activity without wading through other tool calls
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L701-800.yaml
+    finding: F001
+    line: 738
+    speaker: user
+    type: user_correction
+    quote: "it looks like --git is a completely separate implementation instead of being a shortgut that applies `--include Bash(git *)`"
+    context: "User identified that --git had a separate show_git_operations() method instead of reusing the centralized filtering system; must be a convenience alias"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L701-800.yaml
+    finding: F002
+    line: 746
+    speaker: agent
+    type: agent_proposal
+    quote: "# --git is a shortcut for --timeline --include"
+    context: "Agent refactored --git to delegate to centralized filtering system"
+
+  - file: caf2-L101-200.yaml
+    finding: F006
+    line: 165
+    speaker: user
+    type: user_request
+    quote: "I'm fine with having aliases for common things like --git (the goal there is to not be londer in new world then in old, for common use cases)"
+    context: "Convenience aliases for common filtering patterns acceptable if they keep invocations short"
+
+  - file: caf2-L601-700.yaml
+    finding: F005 # note 1
+    line: 700
+    speaker: agent
+    type: agent_proposal
+    quote: "**--git**: NOT deprecated - it's been properly updated to use the new filtering system"
+    context: "--git is not deprecated; it uses the unified filtering system"
+
+  - file: b475-L2301-2400.yaml
+    finding: F007
+    line: 2351
+    speaker: agent
+    type: agent_error
+    quote: "the --git shortcut is using \"Bash(git *)\" which expects commands starting with \"git \", but our commands start with \"cd myproject &&\""
+    context: "--git glob pattern Bash(git *) fails for common patterns like 'cd dir && git ...'; glob needs to match anywhere in command, not just prefix"
+
+  - file: day-025-L4601-4800.yaml
+    finding: F004
+    line: 4634
+    speaker: agent
+    type: design_rationale
+    quote: "python explore_session.py issue-13 --git"
+    context: "--git as a standard mode for viewing git operations"
+
+acceptance_criteria:
+  - id: CLI-003-AC1
+    given: a valid session file
+    when: invoked with -g or --git
+    then: displays only timeline events related to git operations
+
+  - id: CLI-003-AC2
+    given: -g/--git flag
+    when: invoked
+    then: is implemented as a shortcut that delegates to the unified filtering system (equivalent to --include with appropriate git filter pattern), not a separate code path
+
+  - id: CLI-003-AC3
+    given: a session with Bash commands like "cd myproject && git commit -m 'msg'"
+    when: --git mode is active
+    then: matches git operations that appear anywhere in the command string, not only commands starting with "git"
+
+  - id: CLI-003-AC4
+    given: -g/--git flag
+    when: combined with additional --include or --exclude filters
+    then: filters compose correctly (git filter is additive with explicit filters)
 
 depends_on:
-  - PRS-005
-  - FLT-005  # Glob patterns
-related: []
+  - PRS-005  # Unified timeline data structure
+  - FLT-005  # Tool(glob) pattern matching
+related:
+  - CLI-002  # Timeline mode (--git implies timeline)
+  - CLI-006  # Implicit timeline activation
+  - FLT-001  # Include filter
+  - FLT-005  # Glob pattern filtering
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "--git is a convenience alias, not a separate implementation. The glob pattern must handle 'cd dir && git ...' patterns, not just 'git *' prefix matching (b475:2351). User explicitly approved keeping --git as an alias (caf2:165)."

@@ -9,15 +9,90 @@ as_a: developer reviewing a session
 i_want: git commits detected and shown in summary
 so_that: I can see what was committed during the session
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L301-400.yaml
+    finding: F007
+    quote: "Yes, but Git under Bash."
+    context: "Git operations count should be nested under Bash in the tool breakdown, not at top level"
+  - file: b475-L401-500.yaml
+    finding: F001
+    quote: "its not gust commits, its git operations! If you want to sepparate commits, I'm for it, but as another levet Under git oprations"
+    context: "Summary shows 'Git operations' as subcategory under Bash, with 'Commits' as a further sub-level"
+  - file: b475-L401-500.yaml
+    finding: F002
+    quote: "Git operations: 50\n          Commits: 24"
+    context: "Agent design: Git operations total under Bash, with Commits count nested below"
+  - file: day-025-L3201-3400.yaml
+    finding: F005
+    quote: "Git operations: git add, git commit, git checkout -b"
+    context: "Git operations taxonomy: git add, git commit, git checkout are classified as git operations"
+  - file: day-025-L4001-4200.yaml
+    finding: F005
+    quote: "def is_git_operation(command): git_ops = ['git add', 'git commit', 'git checkout', 'git branch']"
+    context: "Git operation detection function checks for git add, git commit, git checkout, git branch"
+  - file: b475-L2301-2400.yaml
+    finding: F007
+    quote: "the --git shortcut is using \"Bash(git *)\" which expects commands starting with \"git \", but our commands start with \"cd myproject &&\""
+    context: "Git detection must handle commands where git is not the first word, e.g. 'cd dir && git commit'"
+  - file: a40c-L201-300.yaml
+    finding: F006
+    quote: "[56] ⏺ Bash: $ git log --grep=\"validate\" --oneline -10\n[57] ⎿  f5f6e9e [claude-dev-log-diary] day-021"
+    context: "--git flag filters timeline to show only git-related Bash commands"
+  - file: day-025-L3001-3200.yaml
+    finding: F006
+    quote: "25 Edit calls - The exact file modifications\n5 git commits at sequences 46, 85, 93, 109, and 118"
+    context: "Git commits have specific sequence positions in the session timeline; summary should count them"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: SUM-003-AC1
+    given: a JSONL session with Bash tool calls containing git operations
+    when: summary mode shows tool calls breakdown
+    then: |
+      Bash tool count includes a nested "Git operations" sub-count:
+        Tool calls:
+          Bash: 91               # -i Bash
+            Git operations: 50   # -g
+              Commits: 24
+      Git operations are a subcategory of Bash, not a separate top-level entry.
+
+  - id: SUM-003-AC2
+    given: Bash commands containing git operations in various formats
+    when: detecting git operations for summary counts
+    then: |
+      The following patterns are all detected as git operations:
+      - "git add ."
+      - "git commit -m 'message'"
+      - "git checkout -b branch"
+      - "git branch feature"
+      - "cd dir && git add ."  (git not at start of command)
+      - "cd dir && git commit -m 'msg'"
+
+  - id: SUM-003-AC3
+    given: a session with git commit commands
+    when: summary shows Git operations breakdown
+    then: |
+      Commits are counted as a sub-level under Git operations.
+      The count reflects actual "git commit" commands found in Bash tool calls.
+
+  - id: SUM-003-AC4
+    given: a session with no git operations in Bash commands
+    when: summary mode shows tool calls
+    then: |
+      No "Git operations" sub-entry appears under Bash
+      (zero-count omission rule from SUM-001).
 
 depends_on:
   - SUM-001
 related:
   - CLI-003
+  - FLT-001
+  - DSP-003
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Primary evidence from b475:301-500 (user correcting "Git under Bash" hierarchy,
+  "not just commits, its git operations" with Commits as sub-level).
+  Git detection function defined in day-025:4001-4200. Known issue with commands
+  where git is not the first word (b475:2301-2400). Git operations taxonomy includes
+  git add, commit, checkout, branch.

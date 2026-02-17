@@ -1,4 +1,4 @@
-# Story: JSON Output
+# Story: JSON Array Output to Stdout
 
 id: EXP-001
 title: JSON array output to stdout
@@ -6,17 +6,99 @@ epic: export
 theme: local-exploration
 
 as_a: developer processing session data
-i_want: to export as JSON array
-so_that: I can use jq for further processing
+i_want: to output filtered timeline events as a JSON array to stdout
+so_that: I can pipe to jq or other tools for batch processing
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F010
+    quote: "Output timeline as JSON array to stdout (use with"
+    context: "CLI help output showing --json flag for machine-readable timeline output"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: a40c-L501-600.yaml
+    finding: F006
+    quote: "JSON option should output the original JSON from the session transcript, not and empty bogus message"
+    context: "User corrects agent: --json must output raw JSONL entries, not transformed timeline structure with null fields"
+
+  - file: a40c-L501-600.yaml
+    finding: F007
+    quote: "the --json should output raw JSON from the JSONL file for that event"
+    context: "Explicit requirement: --json outputs verbatim JSONL record from source file, not parsed/transformed representation"
+
+  - file: a40c-L601-700.yaml
+    finding: F001
+    quote: "Perfect! The JSON export is now correctly outputting the raw JSONL objects."
+    context: "Confirmed: --json outputs raw JSONL entries from session file after correction"
+
+  - file: e583-L1101-1200.yaml
+    finding: F001
+    quote: "Does the --json and/or --jsonl output just output the raw segments from session transcript that passed the filters and ranges? That's what its meant to do -- it shouldn't mess with the JSON objects in any way/shape/form."
+    context: "User reconfirming the contract: --json passes raw JSONL objects unchanged, only applying range/filter selection"
+
+  - file: b475-L2101-2200.yaml
+    finding: F001
+    quote: "do that too"
+    context: "User approved implementing JSON export redesign (--json as stdout display format)"
+
+  - file: b475-L2201-2300.yaml
+    finding: F001
+    quote: "Outputs timeline as a JSON array to stdout (for processing entire datasets)"
+    context: "Agent summary of --json flag: outputs timeline as JSON array for batch processing"
+
+  - file: caf2-L1-100.yaml
+    finding: F008
+    quote: "JSON/JSONL output formats for timeline data"
+    context: "Session continuation summary confirming --json and --jsonl flags as established features"
+
+  - file: e583-L1501-1600.yaml
+    finding: F003
+    quote: "What?!!? --json and --jsonl were definitely working before"
+    context: "User confirming --json is an established, working feature that must be maintained"
+
+acceptance_criteria:
+  - id: EXP-001-AC1
+    given: a parsed session with timeline events
+    when: --json flag is specified
+    then: outputs a JSON array containing the raw JSONL objects for each selected event to stdout
+    notes: "Output is a JSON array (square brackets), not individual objects"
+
+  - id: EXP-001-AC2
+    given: a session with --json flag
+    when: filters (--include, --exclude) are applied
+    then: only events passing the filters appear in the JSON array output
+    notes: "Filters apply before JSON serialization"
+
+  - id: EXP-001-AC3
+    given: a session with --json flag
+    when: a range is specified
+    then: only events within the range appear in the JSON array output
+
+  - id: EXP-001-AC4
+    given: a session with --json flag
+    when: events are output
+    then: each event is the raw/verbatim JSONL object from the session transcript, not a transformed structure
+    notes: "Critical requirement established via user correction in a40c:545 and reconfirmed in e583:1103"
+
+  - id: EXP-001-AC5
+    given: --json output
+    when: piped to jq
+    then: jq can parse the output as a valid JSON array
+    notes: "Primary use case is piping to jq for further processing"
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Timeline construction from parsed JSONL
+
+related:
+  - EXP-002  # JSONL output (streaming counterpart)
+  - EXP-003  # Export to file (file-based counterpart)
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Strong evidence from multiple sessions (a40c, b475, e583, caf2).
+  Key design decision: --json outputs RAW JSONL objects, not transformed timeline data.
+  This was explicitly corrected by user in a40c:545 and reconfirmed in e583:1103.
+  The word "JSON array" means the output is wrapped in [ ], containing raw objects.

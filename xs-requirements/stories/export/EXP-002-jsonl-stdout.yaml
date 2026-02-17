@@ -1,22 +1,99 @@
-# Story: JSONL Output
+# Story: JSONL Output to Stdout
 
 id: EXP-002
 title: JSONL output to stdout
 epic: export
 theme: local-exploration
 
-as_a: developer processing session data
-i_want: to export as JSONL stream
-so_that: I can grep or stream-process
+as_a: developer streaming session data
+i_want: to output filtered timeline events as newline-delimited JSON to stdout
+so_that: I can grep, stream-process, or pipe one line at a time
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L2101-2200.yaml
+    finding: F003
+    quote: "Now let me also create an option to output as JSONL (JSON Lines) format which might be more useful for streaming"
+    context: "Agent proposed JSONL output mode as complement to --json; one JSON object per line for streaming"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L2201-2300.yaml
+    finding: F002
+    quote: "Outputs timeline as JSONL (newline-delimited JSON) to stdout (for streaming/processing)"
+    context: "Agent summary of --jsonl flag: newline-delimited JSON for streaming and piping"
+
+  - file: e583-L1101-1200.yaml
+    finding: F001
+    quote: "Does the --json and/or --jsonl output just output the raw segments from session transcript that passed the filters and ranges? That's what its meant to do -- it shouldn't mess with the JSON objects in any way/shape/form."
+    context: "User explicitly includes --jsonl in the raw-passthrough contract: must not transform JSON objects"
+
+  - file: e583-L1501-1600.yaml
+    finding: F003
+    quote: "What?!!? --json and --jsonl were definitely working before"
+    context: "User confirming --jsonl is an established feature that must be maintained"
+
+  - file: e583-L1501-1600.yaml
+    finding: T003
+    quote: "Both `--json` and `--jsonl` ARE working! So we can already do: python explore_session.py e583 --jsonl | jq 'select(.isCompactSummary == true)'"
+    context: "Confirmed workflow: --jsonl piped to jq for arbitrary filtering (e.g. finding compaction events)"
+
+  - file: a40c-L1201-1300.yaml
+    finding: F004
+    quote: "[--export-json RANGE OUTPUT] [--json] [--jsonl]"
+    context: "CLI usage showing --jsonl as a distinct flag alongside --json and --export-json"
+
+  - file: caf2-L1-100.yaml
+    finding: F008
+    quote: "JSON/JSONL output formats for timeline data"
+    context: "Session continuation summary confirming --jsonl as established feature"
+
+  - file: b475-L2101-2200.yaml
+    finding: F005
+    quote: "The issue is that the positional argument is called 'jsonl', which conflicts with our new --jsonl flag. Let me rename it to 'session'"
+    context: "CLI naming conflict resolved: positional arg renamed from 'jsonl' to 'session' to avoid clash with --jsonl flag"
+
+acceptance_criteria:
+  - id: EXP-002-AC1
+    given: a parsed session with timeline events
+    when: --jsonl flag is specified
+    then: outputs one raw JSONL object per line to stdout (newline-delimited JSON)
+    notes: "No wrapping array; each line is a complete, parseable JSON object"
+
+  - id: EXP-002-AC2
+    given: a session with --jsonl flag
+    when: filters (--include, --exclude) are applied
+    then: only events passing the filters appear in the output stream
+
+  - id: EXP-002-AC3
+    given: a session with --jsonl flag
+    when: a range is specified
+    then: only events within the range appear in the output stream
+
+  - id: EXP-002-AC4
+    given: a session with --jsonl flag
+    when: events are output
+    then: each line is the raw/verbatim JSONL object from the session transcript, not a transformed structure
+    notes: "Same raw-passthrough contract as --json (confirmed in e583:1103)"
+
+  - id: EXP-002-AC5
+    given: --jsonl output
+    when: piped to jq line-by-line
+    then: each line is independently parseable by jq
+    notes: "Key use case: python xs e583 --jsonl | jq 'select(.isCompactSummary == true)'"
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Timeline construction from parsed JSONL
+
+related:
+  - EXP-001  # JSON array output (batch counterpart)
+  - EXP-003  # Export to file
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  --jsonl is the streaming counterpart to --json. Both share the raw-passthrough
+  contract (user confirmed in e583:1103). The key difference: --json wraps in a
+  JSON array, --jsonl outputs one object per line. Primary use case is piping to
+  jq for arbitrary filtering (e.g. compaction detection via isCompactSummary field).
+  Naming conflict with positional arg resolved by renaming positional to 'session'.

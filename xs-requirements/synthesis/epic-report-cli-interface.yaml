@@ -1,0 +1,71 @@
+epic: cli-interface
+agent: opus
+timestamp: "2026-02-17T22:00:00Z"
+
+assigned_findings:
+  total: 62
+  by_story:
+    CLI-001: 7   # Summary mode default, self-documenting tutorial, counts, alignment
+    CLI-002: 7   # Timeline boolean flag, unified view, orthogonal filters
+    CLI-003: 6   # Git shortcut as alias, glob pattern, compose with filters
+    CLI-004: 4   # Files mode deprecation/reinstatement, grouped display
+    CLI-005: 3   # Created files output format
+    CLI-006: 5   # Implicit timeline triggers, search override
+    CLI-007: 6   # Multi-index, range syntax, argument ordering
+    CLI-008: 10  # Arg ordering, short flags, help text, section headers, naming
+    CLI-009: 5   # --conversation removal, equivalent filter combination
+
+  # Note: Many findings are cross-epic (filtering, display, search) and were
+  # primarily assigned to their home epics. CLI-interface captures the CLI
+  # surface of these features (flag names, argument parsing, mode activation).
+
+new_stories_proposed:
+  - id: CLI-008
+    title: "Argument ordering rules and help text conventions"
+    rationale: "Multiple findings about flags-before-session ordering (1e83:781, 1e83:836), short flag naming conventions (caf2:794), help text consistency (caf2:794), section header removal (caf2:12), and xs naming (e583:60) form a coherent story about CLI conventions."
+
+  - id: CLI-009
+    title: "Remove deprecated --conversation flag"
+    rationale: "User explicitly approved removal (caf2:709). The flag was broken (caf2:133), deprecated, and replaced by filter combinations (-U -a -x Tool or -M). The xs recreation should not include this legacy flag. Five findings document the removal decision."
+
+cross_epic_candidates:
+  - finding_file: caf2-L301-400.yaml
+    finding_id: F004
+    suggested_epic: filtering
+    reason: "Filter pipeline ordering (search -> range -> include -> exclude -> context) is primarily a filtering concern, but triggers implicit timeline mode which is CLI-006"
+
+  - finding_file: 1e83-L801-900.yaml
+    finding_id: F001
+    suggested_epic: range-selection
+    reason: "+N range applies to full timeline before filtering (design decision) — primarily a range-selection concern, but impacts CLI argument semantics"
+
+  - finding_file: caf2-L801-900.yaml
+    finding_id: F001
+    suggested_epic: search
+    reason: "--search uses simple substring matching not rg delegation — primarily search epic, but impacts CLI help text claims"
+
+  - finding_file: day-025-L3401-3600.yaml
+    finding_id: F009
+    suggested_epic: jsonl-parsing
+    reason: "find_session_file() implementation detail — primarily PRS-002 in parsing epic"
+
+  - finding_file: a40c-L1-100.yaml
+    finding_id: F010
+    suggested_epic: export
+    reason: "JSON/JSONL output export modes — primarily export epic (EXP-001, EXP-002)"
+
+uncovered:
+  - finding_file: e583-L1-100.yaml
+    finding_id: F007
+    quote_snippet: "scan the entire @~/.claude/projects/{project-dir} to establish a timeline of sessions"
+    reason: "Future capability: session graph/timeline scanning from file system. User marked as 'side quest' — not in current scope but worth noting for future stories."
+
+  - finding_file: e583-L1-100.yaml
+    finding_id: F006
+    quote_snippet: "Can the symlink live at project root"
+    reason: "xs executable/symlink location — deployment concern, not a functional requirement. May belong in constraints."
+
+coverage_gaps:
+  - "CLI-005 (created mode) has only 3 findings, all from agent output rather than user requests. May need more evidence during golden file assembly."
+  - "No findings specifically about error messages for invalid arguments (e.g., unknown flags, malformed ranges). This is implied but not explicitly discussed in sessions."
+  - "The --export-json flag (EXP-003) is mentioned in CLI help snapshots but assigned to export epic, not CLI."

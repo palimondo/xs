@@ -1,0 +1,74 @@
+# Story: Raw JSONL Object Passthrough
+
+id: PRS-012
+title: Preserve raw JSONL objects for JSON/JSONL export
+epic: jsonl-parsing
+theme: local-exploration
+
+as_a: developer using xs for session replay
+i_want: the parser to preserve raw JSONL objects verbatim
+so_that: --json and --jsonl export modes output unmodified source data
+
+sources:
+  - session: a40c:501-600
+    finding: F006
+    quote: "JSON option should output the original JSON from the session transcript, not and empty bogus message"
+    context: "Agent's --json flag was outputting transformed timeline data instead of raw JSONL"
+
+  - session: a40c:501-600
+    finding: F007
+    quote: "the --json should output raw JSON from the JSONL file for that event"
+    context: "Explicit requirement: --json outputs verbatim JSONL record, not transformed"
+
+  - session: e583:1101-1200
+    finding: F001
+    quote: "Does the --json and/or --jsonl output just output the raw segments from session transcript that passed the filters and ranges? That's what its meant to do -- it shouldn't mess with the JSON objects in any way/shape/form."
+    context: "User clarifying the contract: raw passthrough of JSONL objects, only applying range/filter selection"
+
+  - session: e583:1501-1600
+    finding: F004
+    quote: "the JSON events/messages do not include sequence number?"
+    context: "User expects sequence/index numbers to be included when exporting events as JSON/JSONL"
+
+  - session: 0841:901-1000
+    finding: F003
+    quote: "you should be able to --export a snippet from ./explore_session.py 943dff12 --timeline 11-15 // just be avare of the JSON vs JSONL difference and adjust the save file accordingly fo that reconstruct can process it"
+    context: "Exported snippets must be in JSONL format for reconstruct.jq/xs to process"
+
+acceptance_criteria:
+  - id: PRS-012-AC1
+    given: a parsed JSONL session
+    when: --json flag is used
+    then: raw JSONL objects are output as a JSON array, unmodified from source
+
+  - id: PRS-012-AC2
+    given: a parsed JSONL session
+    when: --jsonl flag is used
+    then: raw JSONL objects are output one per line, unmodified from source
+
+  - id: PRS-012-AC3
+    given: a range or filter applied with --json/--jsonl
+    when: events are exported
+    then: only matching events are included but their JSON content is unmodified
+
+  - id: PRS-012-AC4
+    given: events exported via --json/--jsonl
+    when: sequence numbers are needed
+    then: the sequence number is available (either injected or derivable from position)
+
+depends_on:
+  - PRS-001
+  - PRS-005  # Timeline provides sequence numbers and filtering
+
+related:
+  - EXP-001  # Export modes
+  - DSP-005  # JSON/JSONL display modes
+
+priority: must
+status: mined
+validation_notes: |
+  The parser must retain raw JSONL objects alongside the parsed/structured
+  timeline. The user explicitly corrected the agent when --json output was
+  returning transformed data with null fields. The contract is clear: raw
+  passthrough with range/filter selection only. The sequence number inclusion
+  in JSON export was raised but not fully resolved.

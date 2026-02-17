@@ -6,17 +6,104 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to see the full timeline
-so_that: I can review all events
+i_want: to see the full chronological timeline of all events
+so_that: I can review all events in order and select specific ones for deeper inspection
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L601-700.yaml
+    finding: F001
+    line: 618
+    speaker: user
+    type: user_correction
+    quote: "let's discuss what's the purpose of --timeline and why/or if it need parameters at all... what you're stragling with now in implementaiton is an issue cause by bad CLI UX Design"
+    context: "User identified that --timeline had ambiguous parameter handling (filter type vs index) and triggered a CLI redesign"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L701-800.yaml
+    finding: F005
+    line: 736
+    speaker: agent
+    type: agent_proposal
+    quote: "The new syntax is cleaner: explore_session.py session.jsonl -t --include \"Bash(git *)\" explore_session.py session.jsonl -t --exclude \"TodoWrite\" explore_session.py session.jsonl -t --include \"Edit,Read\" 5-10"
+    context: "After redesign: --timeline (-t) is a simple boolean flag; filters and indices are separate arguments"
+
+  - file: b475-L201-300.yaml
+    finding: F002
+    line: 214
+    speaker: user
+    type: user_correction
+    quote: "range must be independet and not a param to some other sub command. I ran --files and was surprised ti does summary of edits per files, which is interested, But I wasn't even aware of this feature"
+    context: "Range selection must be independent of --timeline flag, not a parameter to it"
+
+  - file: 0841-L801-900.yaml
+    finding: F001
+    line: 815
+    speaker: agent
+    type: agent_proposal
+    quote: "The unified timeline is working. Let me test the different filter modes"
+    context: "Timeline supports interleaved display of all event types: tool calls, messages, tool results in chronological order"
+
+  - file: day-025-L3401-3600.yaml
+    finding: F005
+    line: 3503
+    speaker: agent
+    type: agent_observation
+    quote: "# See timeline of all operations\n./explore_session.py <jsonl> --timeline"
+    context: "Timeline shows all operations in chronological order"
+
+  - file: cc2d-L601-700.yaml
+    finding: F001
+    line: 653
+    speaker: user
+    type: user_request
+    quote: "I am confused by the separation of tool listing adn conversation listing and timeline parameter... shouldn't this be united somehow (at least in timeline)?"
+    context: "User wants timeline to show both tool calls AND conversation messages in a single unified view"
+
+  - file: caf2-L1-100.yaml
+    finding: F003
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Focus on Phase 0: Architecture Cleanup - separate filtering (what to show) from display (how to show)"
+    context: "Filters control event selection; display modes control formatting. These are orthogonal concerns."
+
+acceptance_criteria:
+  - id: CLI-002-AC1
+    given: a valid session file
+    when: invoked with -t or --timeline
+    then: displays all events in chronological order as a unified timeline
+
+  - id: CLI-002-AC2
+    given: a valid session file with -t flag
+    when: no display mode flag is specified
+    then: uses compact display mode (single line per event with sequence numbers)
+
+  - id: CLI-002-AC3
+    given: a valid session file with -t flag
+    when: combined with --include, --exclude, or range arguments
+    then: filters apply to the timeline output (filters are orthogonal to display mode)
+
+  - id: CLI-002-AC4
+    given: -t flag
+    when: specified without parameters
+    then: -t is a simple boolean flag (no arguments); range and filters are separate positional/flag arguments
+
+  - id: CLI-002-AC5
+    given: a timeline with empty messages
+    when: displayed
+    then: sequence numbers are contiguous with no gaps (all events including empty ones are assigned indices)
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Unified timeline data structure
+related:
+  - CLI-006  # Implicit timeline activation
+  - CLI-001  # Summary mode (default, guides toward -t)
+  - DSP-001  # Compact display mode
+  - DSP-002  # Truncated display mode
+  - DSP-003  # Full display mode
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Key design decision: -t is a boolean flag, not a filter parameter. This was resolved after the user identified the CLI UX problem (b475:618). Range and filters are independent of timeline mode."

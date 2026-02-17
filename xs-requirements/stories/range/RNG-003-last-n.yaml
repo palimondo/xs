@@ -6,17 +6,69 @@ epic: range-selection
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to view the last N items
-so_that: I can see recent activity
+i_want: to view the last N items using -N syntax
+so_that: I can see recent activity at the end of the session
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F003
+    quote: "Indices/ranges: 5 (item 5), +10 (first 10), -20 (last 20), 10-30 (range), 60+ (from 60 onwards)"
+    context: "Help text defining -20 as last 20 items (tail)"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L201-300.yaml
+    finding: F003
+    quote: "if single negative numberis tail, maybe single positive should be head?"
+    context: "User confirms: single negative number = tail (last N items)"
+
+  - file: 0841-L801-900.yaml
+    finding: F002
+    quote: "Next up: Add range parsing utility function. Let me implement this"
+    context: "Range parsing supports -N (last N items, e.g. -10)"
+
+  - file: b475-L2301-2400.yaml
+    finding: F001
+    quote: "[35] ... [36] ... [37] ... [38] ... [39] ..."
+    context: "Agent testing -5 (last 5 items) on a 39-item timeline"
+
+  - file: e583-L1601-1700.yaml
+    finding: F003
+    quote: "our -N for tail is being applied before the search, not after... looks like we are hitting a gap in our functionality"
+    context: "User discovered that -N tail is applied before search/filtering; this is by design for range selection but creates a gap in use case of 'last N search results'"
+
+  - file: 1e83-L801-900.yaml
+    finding: F001
+    quote: "This works as designed: When indices are provided (like +14), they are applied to the FULL timeline first, then filtering happens."
+    context: "Same pipeline ordering applies to -N: tail selection happens on full timeline before filters"
+
+acceptance_criteria:
+  - id: RNG-003-AC1
+    given: a timeline with 39 items
+    when: user specifies -5 as a positional argument
+    then: the last 5 items (indices 35-39) are displayed
+
+  - id: RNG-003-AC2
+    given: a timeline with 39 items
+    when: user specifies -50 (exceeds timeline length)
+    then: all 39 items are displayed without error
+
+  - id: RNG-003-AC3
+    given: a timeline with 39 items and include filter -U
+    when: user specifies -20
+    then: last 20 items from full timeline are selected, then user filter applied
 
 depends_on:
   - PRS-005
-related: []
+
+related:
+  - RNG-002  # +N is the symmetric head counterpart
+  - FLT-001  # Range applies before filters (pipeline ordering)
+  - e583-L1601-1700  # Known gap: --tail proposed for post-filter tail
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  -N for tail was among the earliest range syntax features implemented
+  (0841:801-900). User confirmed pipeline ordering in 1e83:801-900.
+  The user also identified a gap: -N applies before search, so you
+  cannot get "last N search results" with this syntax. A separate
+  --tail flag was proposed but not resolved (e583:1601-1700).

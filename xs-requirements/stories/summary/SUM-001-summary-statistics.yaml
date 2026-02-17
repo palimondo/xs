@@ -9,15 +9,183 @@ as_a: developer reviewing a session
 i_want: to see session statistics in summary mode
 so_that: I get a quick overview without reading entries
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L301-400.yaml
+    finding: F001
+    quote: "Start with the parsing and the name of the file that was matched. That's basically our session identifier."
+    context: "Summary should lead with the matched filename as session identifier"
+  - file: b475-L301-400.yaml
+    finding: F003
+    quote: "I want it to be a tree where the nodes sum up to the top. So we are basically splitting the timeline into two categories."
+    context: "Summary must be a hierarchical tree where child counts sum to parent"
+  - file: b475-L301-400.yaml
+    finding: F004
+    quote: "Before you start changing code, let's design the output. I'm leaning towards something with the YAML aesthetic."
+    context: "Summary output should use YAML-like aesthetic"
+  - file: b475-L301-400.yaml
+    finding: F005
+    quote: "We keep it a valid YAML. This can be machine-partcible, right?"
+    context: "Summary output should be valid, machine-parseable YAML"
+  - file: b475-L301-400.yaml
+    finding: F006
+    quote: "start with capable letters. And instead of. Total. And mine, we could just say events."
+    context: "YAML keys should be capitalized. Use 'N events' format, not 'total:'"
+  - file: b475-L301-400.yaml
+    finding: F008
+    quote: "we are counting the same messages. I will make sure we implement something stupid there that wouldn't sum up correctly."
+    context: "Summary counts must be arithmetically consistent - children must sum to parent"
+  - file: b475-L401-500.yaml
+    finding: F004
+    quote: "and we still wanted to edd session metadata like times (session start, end, duration), right?"
+    context: "Summary should include session metadata: start time, end time, duration"
+  - file: b475-L401-500.yaml
+    finding: F005
+    quote: "I don't think we have tokens, do we?"
+    context: "Token count NOT available in JSONL data - do not include"
+  - file: b475-L401-500.yaml
+    finding: F007
+    quote: "And interruptions should probably be \"User interruptions\" for clarity..."
+    context: "Summary label for interrupted messages should be 'User interruptions'"
+  - file: b475-L401-500.yaml
+    finding: F008
+    quote: "where are we counting slash-commands? will we get a correct counts? waht about ! commands?"
+    context: "Slash commands and ! commands should be counted correctly in summary"
+  - file: b475-L401-500.yaml
+    finding: F003
+    quote: "yes, but summary shoudl output filename (remember our github sesson naming convention"
+    context: "Summary must show full filename (e.g. issue-13-run-12558649296.jsonl), not just UUID stem"
+  - file: b475-L501-600.yaml
+    finding: F001
+    quote: "Interesting - the GitHub session doesn't have timestamps. Let's commit what we have"
+    context: "Sessions without timestamps (e.g. GitHub CI) should gracefully omit the metadata section"
+  - file: caf2-L201-300.yaml
+    finding: F002
+    quote: "Can we have a look at the output of summary and maybe add comments after the numbers, that would give you/user hints about how to use the tool"
+    context: "Summary output should include brief parameter-combination hints inline"
+  - file: caf2-L201-300.yaml
+    finding: F003
+    quote: "we should keep the comment extremely brief, after some introductory comment that makes it clear that below are parameter combinations to display just the specific message type, we shoudl not add much descriptive text. Just the parameter combo."
+    context: "Summary hints should show only parameter combos, not descriptive text"
+  - file: caf2-L201-300.yaml
+    finding: F005
+    quote: "As I think about it, no params is summary, any other params is timeline or a special option like --files which has it's of display."
+    context: "CLI mode selection: no-params = summary display; filter/range/include/exclude params = timeline"
+  - file: caf2-L301-400.yaml
+    finding: F001
+    quote: "Here's my handcrafted final mock:"
+    context: "User provided a handcrafted YAML summary mock showing hierarchical structure with inline parameter comments"
+  - file: caf2-L301-400.yaml
+    finding: F006
+    quote: "Note that the `Assistant messages` children are ordere by count, descending. (Default) Tools with 0 counts should be left out from the listing."
+    context: "Tool counts sorted descending; zero-count tools omitted"
+  - file: caf2-L301-400.yaml
+    finding: F008
+    quote: "Timeline:                   # to show specific event types:\n  Events: 6                  # -t\n  User inputs: 0              # -u\n  Tool results: 1             # (shown after -T events, use --no-tool-results to exclude)\n  Assistant: 3                # -a\n  Assistant messages:\n    Text: 2                  # -a -x Tool\n    Tool: 1                  # -T\n    Tool calls:\n      Read: 1                  # -i Read"
+    context: "Implemented summary format showing hierarchical counts with inline CLI parameter hints"
+  - file: e583-L1-100.yaml
+    finding: F003
+    quote: "We've tried to design the summary view for a session as a kind of tutorial fo using the tool, mentioning specific parameters/options to retrieve or exclude specific evetn/message type from the session."
+    context: "Summary view is designed as a self-documenting tutorial for using the tool"
+  - file: e583-L1-100.yaml
+    finding: F004
+    quote: "Also, `-s` is implied parameter so `xs <session_id_prefix>` should be the minimal starting invocation."
+    context: "Summary mode (-s) is the default; bare `xs <prefix>` shows summary"
+  - file: a40c-L1-100.yaml
+    finding: F001
+    quote: "Explore Claude session logs. Shows summary by default."
+    context: "Default mode is summary; confirmed in --help output"
+  - file: a40c-L401-500.yaml
+    finding: F004
+    quote: "Session: 943dff12-092e-43f7-bcdf-adf26053ddec.jsonl\n\nMetadata:\n  Started: 2025-07-13 08:17:39 UTC\n  Ended: 2025-07-13 17:03:59 UTC\n  Duration: 8h 46m 19s\n                            # Use filter params and options below\nTimeline:                     # to show specific event types:\n  Events: 890                 # -t\n  User inputs: 98             # -U\n  Tool results: 190           # (shown after -T events, use --no-tool-results to exclude)\n  Assistant: 412              # -a"
+    context: "Summary mode output format example showing metadata and annotated timeline counts"
+  - file: 1e83-L901-967.yaml
+    finding: F003
+    quote: "I'm still confused, if you look at summary output, where we characterize the session and provide an event breakdown by counts am I missing something?"
+    context: "Summary must clearly characterize all event types without ambiguity"
+  - file: 1e83-L901-967.yaml
+    finding: F004
+    quote: "Text: 188                 # -a -x Tool"
+    context: "Summary shows assistant breakdown with inline filter comments"
+  - file: 760a-L601-643.yaml
+    finding: F001
+    quote: "Note that we apparently have an error in duration calculation."
+    context: "Duration calculation must be correct; known bug existed in prior implementation"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: SUM-001-AC1
+    given: a valid JSONL session file with timestamps
+    when: xs is invoked with only the session identifier (no flags)
+    then: |
+      Summary mode is displayed showing:
+      1. Session filename (not UUID stem) as the header
+      2. Metadata section with Started, Ended, Duration timestamps
+      3. Timeline section with hierarchical event counts
+      All output is valid, machine-parseable YAML with capitalized keys
+
+  - id: SUM-001-AC2
+    given: a JSONL session with multiple event types
+    when: summary mode is displayed
+    then: |
+      Timeline section shows hierarchical tree:
+        Events: N            # -t
+        User inputs: N       # -U
+        Tool results: N      # (shown after -T events, use --no-tool-results to exclude)
+        Assistant: N         # -a
+        Assistant messages:
+          Text: N            # -a -x Tool
+          Tool: N            # -T
+          Tool calls:
+            ToolName: N      # -i ToolName
+      Each parent count equals the sum of its children.
+
+  - id: SUM-001-AC3
+    given: a JSONL session with various tool types
+    when: summary mode shows tool calls breakdown
+    then: |
+      Tool calls are listed sorted by count descending.
+      Tools with zero invocations are omitted entirely.
+
+  - id: SUM-001-AC4
+    given: summary mode output
+    when: reading the inline comments
+    then: |
+      Each count has a brief inline YAML comment showing the
+      CLI parameter combination to view just that event type.
+      Comments show only flag combinations, not descriptive text.
+
+  - id: SUM-001-AC5
+    given: a GitHub CI session without timestamps
+    when: summary mode is displayed
+    then: |
+      Metadata section (Started/Ended/Duration) is gracefully omitted.
+      Timeline section still displays event counts normally.
+
+  - id: SUM-001-AC6
+    given: a session with user interruptions and slash commands
+    when: summary mode is displayed
+    then: |
+      User interruptions are labeled "User interruptions".
+      Slash commands and ! commands are counted correctly.
+
+  - id: SUM-001-AC7
+    given: any filter, range, or include/exclude parameter is present
+    when: xs is invoked with those parameters
+    then: |
+      Timeline display mode is implicitly activated instead of summary.
+      Summary mode only appears with no output-mode parameters (bare invocation).
 
 depends_on:
   - PRS-005
 related:
   - CLI-001
+  - DSP-001
+  - SUM-002
+  - SUM-003
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Primary evidence from b475:301-500 (user-designed hierarchical YAML format),
+  caf2:201-400 (handcrafted mock, parameter hints, sort/omit rules),
+  e583:1-100 (self-documenting tutorial design), a40c:1-100/401-500 (default mode,
+  format examples). Duration calculation bug noted in 760a:601-643.

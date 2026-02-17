@@ -3,21 +3,94 @@
 id: PRS-007
 title: Parse slash commands from XML tags
 epic: jsonl-parsing
-theme: local-exploration
+theme: console-replay
 
 as_a: developer exploring sessions
-i_want: slash commands parsed from XML structure
-so_that: they can be displayed distinctively
+i_want: slash commands parsed from XML structure in user messages
+so_that: they can be displayed distinctively and not filtered out
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: 06a0:301-400
+    finding: F006
+    quote: "why doesn't the day-020-reconstructed.md include my (user's) initial invocation of /hi ?"
+    context: "User noticed /hi command was missing from reconstructed output"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: 06a0:301-400
+    finding: F007
+    quote: "I see! The `/hi` command is there, but it's wrapped in a `<command-message>` tag. Our script is currently filtering those out"
+    context: "Root cause: command-message XML tags were being filtered out, removing slash commands"
+
+  - session: 06a0:401-500
+    finding: F010
+    quote: "can you add the output of these slash-commands too? /hi and /expert-council are the ones used in the session"
+    context: "User explicitly requests slash command output in reconstructed log"
+
+  - session: 06a0:401-500
+    finding: F011
+    quote: "Excellent! The reconstructed log now properly shows slash commands as: `> /hi is running...` and `> /expert-council is running...`"
+    context: "User confirms slash command formatting matches original console"
+
+  - session: day-021:12001-12200
+    finding: F010
+    quote: "<command-message>expert-council is running...</command-message> <command-name>/expert-council</command-name>"
+    context: "JSONL structure for slash commands contains both command-message (status) and command-name (actual command) XML tags"
+
+  - session: day-021:12001-12200
+    finding: F006
+    quote: "| if $line.type == \"user\" and ($line.message.content | type) == \"string\" then if $line.message.content | contains(\"<command-name>\") then"
+    context: "jq pattern for extracting command name from XML-tagged content"
+
+  - session: 0841:1101-1200
+    finding: F002
+    quote: "so, [1] is a message to Claude that next thing will be output from custom slash-command and that it is not a typed user input. is that before any slash command or only custom slash commands?"
+    context: "User clarifying: caveat message only precedes custom slash commands, not built-in commands"
+
+  - session: 1e83:201-300
+    finding: F006
+    quote: "Have you noticed special message type when I used just single @filename ?"
+    context: "User shares CC help text showing special prefix characters (!, /, @, #) each have distinct message types"
+
+acceptance_criteria:
+  - id: PRS-007-AC1
+    given: a user message containing <command-name>/hi</command-name> XML tags
+    when: parsed
+    then: the command name "/hi" is extracted and available for formatting
+
+  - id: PRS-007-AC2
+    given: a user message containing <command-message>expert-council is running...</command-message>
+    when: parsed
+    then: the command status message "expert-council is running..." is extracted
+
+  - id: PRS-007-AC3
+    given: a user message with both <command-name> and <command-message> tags
+    when: parsed
+    then: both the command name and status message are available in the timeline entry
+
+  - id: PRS-007-AC4
+    given: a user message with <command-message> tags
+    when: parsed
+    then: the message is classified as a slash command, not a regular user message
+
+  - id: PRS-007-AC5
+    given: a user message that is a regular text message (no XML command tags)
+    when: parsed
+    then: the message is classified as a regular user message
 
 depends_on:
   - PRS-001
+
 related:
-  - FMT-012
+  - FMT-012  # Slash command display formatting
+  - PRS-010  # Meta/caveat messages precede custom slash commands
+  - PRS-008  # Bash content extraction (similar XML parsing)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Slash commands in JSONL are user messages with content containing XML tags:
+  <command-message>command is running...</command-message> and
+  <command-name>/command</command-name>. Early reconstruct.jq implementation
+  filtered these out entirely. User explicitly requested they be included.
+  Custom slash commands (like /expert-council) are preceded by a caveat/meta
+  message, but built-in commands (like /compact) are not. The XML structure
+  must be parsed to extract command name and status separately.

@@ -1,18 +1,74 @@
 # Story: Issue/PR Metadata Extraction
 
 id: GFH-004
-title: Extract issue or PR number from log XML
+title: Extract issue or PR number from log XML tags
 epic: fetch
 theme: github-fetch
 
 as_a: developer fetching session logs
-i_want: issue/PR metadata extracted from logs
+i_want: issue/PR metadata extracted from XML tags in logs
 so_that: files are named with context (issue-123 or pr-456)
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: extract_issue_or_pr_from_log
-    lines: 83-104
+  - session: f9c7:401-500
+    finding: F002
+    quote: "it contains info like: <is_pr>false</is_pr> or <issue_number>13</issue_number>"
+    context: "GHA log 'FINAL PROMPT' section contains XML metadata tags — authoritative source for issue/PR classification"
+
+  - session: f9c7:401-500
+    finding: F003
+    quote: "Isn't this always true and you should be able to absolutely rely on these 2 tags to give you correct number and where our filename shoud be [issue|pr]?"
+    context: "XML tags are ALWAYS present and always authoritative — no branch-based fallback needed"
+
+  - session: f9c7:401-500
+    finding: F004
+    quote: "do you have evidence for \"<pr_number>N</pr_number>\"? I think its always issue number and is_pr is just true."
+    context: "User questions whether PRs use <pr_number> tag; agent later confirmed PRs DO use <pr_number>"
+
+  - session: f9c7:501-600
+    finding: F003
+    quote: "Now let's check why these PR runs were saved as \"unlinked\" instead of being properly identified"
+    context: "Issues use <is_pr>false + <issue_number>N; PRs use <is_pr>true + <pr_number>N"
+
+  - file: day-024:33601-33800
+    finding: F009
+    quote: "the fetch_logs.py was supposed to Parse issue numbers from workflow titles or branch names but it didn't work?"
+    context: "Title-based parsing failed; XML tags are the robust solution"
+
+  - file: day-024:33801-34000
+    finding: F007
+    quote: "We should't look for issue number in titles - no guarantee it works, don't waste time, find robust soltion instead"
+    context: "User explicitly rejected title-parsing approach"
+
+  - file: day-025:1-200
+    finding: F005
+    quote: "User pointed out that logs should ALWAYS contain `<issue_number>` or `<pr_number>` XML tags"
+    context: "XML tags are the reliable, authoritative source"
+
+  - file: day-025:1-200
+    finding: F006
+    quote: "Isn't this always true and you should be able to absolutely rely on these 2 tags to give you correct number"
+    context: "User confirms absolute reliability of XML tags"
+
+  - session: f9c7:1301-1400
+    finding: F002
+    quote: "I think we still need to extract from the raw file whether this is issue or PR and its number."
+    context: "Metadata extraction is a separate step from JSONL content extraction"
+
+  - session: f9c7:1301-1400
+    finding: F003
+    quote: "let's also try alternative with multiple grep patterns. or maybe rg ? Can't grep/rg extract all metadata by looking for first occurence of multiple patterns at the same time?"
+    context: "User wants single grep/rg command matching multiple XML tag patterns at once"
+
+  - session: f9c7:401-500
+    finding: F001
+    quote: "Run IDs are fine, but they are secondary fallback mechanism that presents the log name after implementation detail from the CI infrustructure. I as user care about issue numbers and PR numbers."
+    context: "Issue/PR number is the primary identifier; run ID is secondary"
+
+  - file: day-024:33601-33800
+    finding: F006
+    quote: "I don't like this unlinked folder at all. We have to improve the linking from issues and PRs to be solid."
+    context: "User rejected 'unlinked' fallback folder — linking must be reliable"
 
 acceptance_criteria:
   - id: GFH-004-AC1
@@ -26,15 +82,29 @@ acceptance_criteria:
     then: returns ('issue', number) from <issue_number> tag
 
   - id: GFH-004-AC3
-    given: log without recognizable tags
+    given: log without recognizable XML tags
     when: extracting metadata
-    then: returns (None, None)
+    then: returns (None, None) — no 'unlinked' fallback folder
+
+  - id: GFH-004-AC4
+    given: metadata extraction step
+    when: parsing XML tags
+    then: does NOT parse issue numbers from workflow titles or branch names (rejected as unreliable)
+
+  - id: GFH-004-AC5
+    given: multiple XML tag patterns to match
+    when: extracting metadata
+    then: uses single grep/rg invocation matching all patterns at once (not multiple separate calls)
 
 depends_on:
   - GFH-002
 related:
-  - GFH-006
+  - GFH-007
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  XML tags are in the "FINAL PROMPT" section of GHA logs, early in the log file.
+  PRs confirmed to use <pr_number>N</pr_number> (verified against actual PR logs).
+  Title-based parsing was explicitly rejected by user — do not implement.
+  No 'unlinked' fallback folder — if tags are missing, skip the file or use --save-raw-logs.

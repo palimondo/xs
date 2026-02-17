@@ -6,18 +6,145 @@ epic: display-modes
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: one line per event in compact mode
-so_that: I can scan the session quickly
+i_want: one line per event in compact mode (default display)
+so_that: I can scan the session quickly like git log --oneline
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: 0841-L601-700.yaml
+    finding: F007
+    quote: "I also liked the compact single line fomat of the tool calls we had before. can we keep that as an option or even defailt and have the truncated and expand (full?) as options?"
+    context: "User establishes three display modes: compact (default), truncated, full"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: cc2d-L601-700.yaml
+    finding: F005
+    quote: "I also liked the compact single line fomat of the tool calls we had before. can we keep that as an option or even defailt and have the truncated and expand (full?) as options?"
+    context: "Same request in parallel session — compact is the default, single-line format"
+
+  - file: caf2-L1-100.yaml
+    finding: F004
+    quote: "Display modes: compact (single line), truncated (3-line preview), full (complete output)"
+    context: "Session continuation summary confirming three display modes"
+
+  - file: b475-L1001-1100.yaml
+    finding: F002
+    quote: "compact mode display shoudl be base as much as possible on the excellent UX of Claude Code's default console output that we are striving to replicate in --truncated mode"
+    context: "Compact mode derives from truncated mode (which replicates CC console); hierarchy: CC console -> truncated -> compact"
+
+  - file: b475-L1101-1200.yaml
+    finding: F002
+    quote: "the compact mode is the same format as --truncated mode, just one special handling for todo, nothing else"
+    context: "Compact and truncated share Tool(param) format; compact adds sequence number prefix"
+
+  - file: b475-L1101-1200.yaml
+    finding: F003
+    quote: "Compact mode should also have the dot it simply has the additional number at the front."
+    context: "Compact format is [seq] followed by the same content truncated mode renders"
+
+  - file: a40c-L701-800.yaml
+    finding: F001
+    quote: "and [104] are multiline but in compact mode each event from session log should be presented on single line only"
+    context: "Strict single-line-per-event enforcement; multiline content collapsed"
+
+  - file: b475-L1001-1100.yaml
+    finding: F003
+    quote: "definitely remove emojis. We already have had a finely tuned copact output that was largely based on waht the truncated mode outputs, there was a lot of finessing over whitespace in tool responses"
+    context: "No emojis; careful whitespace tuning required"
+
+  - file: 1e83-L101-200.yaml
+    finding: F003
+    quote: "The full console output is equal to our truncated mode. And our compact mode is compressing each event into a single line."
+    context: "User articulating mode semantics: compact = single-line compression of truncated output"
+
+  - file: 0841-L1001-1100.yaml
+    finding: F002
+    quote: "we shoudl end with `[...]` when it's multiline, but otherwise don't truncate it at all. This way we can rely on head/tail/grep to get the correct sequence number from our responses"
+    context: "Multiline content in compact mode: show full first line + [...] marker; enables grep/head/tail workflows"
+
+  - file: 1e83-L701-800.yaml
+    finding: F002
+    quote: "The thinking message in compact mode shoudl also include the first and last line from the thoughts separated with [...] -- check for precedents, we already do that for other message types"
+    context: "Multiline content preview: first line [...] last line pattern applies to thinking blocks and other multiline types"
+
+  - file: b475-L1501-1600.yaml
+    finding: F002
+    quote: "in the compact mode we added support to display first and last lien separated by `[...]` on single line in messages"
+    context: "Compact mode shows first_line [...] last_line for multiline assistant messages"
+
+  - file: b475-L1901-2000.yaml
+    finding: F001
+    quote: "display_mode: 'compact' (default), 'truncated', or 'full'"
+    context: "Compact is the default display mode"
+
+  - file: b475-L1901-2000.yaml
+    finding: F003
+    quote: "if display_mode not in ['truncated', 'full']: print('\\n=== TIMELINE ===')"
+    context: "Only compact mode shows === TIMELINE === header (later removed — see DSP-001-AC6)"
+
+  - file: caf2-L1-100.yaml
+    finding: F001
+    quote: "there's still header CONVERSATION"
+    context: "User repeatedly corrected agent to remove section headers from output"
+
+  - file: b475-L1201-1300.yaml
+    finding: F001
+    quote: "Drop the === TIMELINE ===; in truncated mode we need to add newlines"
+    context: "User explicitly requesting removal of === TIMELINE === header"
+
+acceptance_criteria:
+  - id: DSP-001-AC1
+    given: a parsed session timeline
+    when: rendered in compact mode (default, no --truncated or --full flag)
+    then: each event is displayed on exactly one line, regardless of content length
+
+  - id: DSP-001-AC2
+    given: a tool_use event in compact mode
+    when: rendered
+    then: "format is '[seq] ToolName(param)' using same Tool(param) format as truncated mode"
+
+  - id: DSP-001-AC3
+    given: an assistant message with multiline content in compact mode
+    when: rendered
+    then: "shows first_line [...] last_line on a single line"
+
+  - id: DSP-001-AC4
+    given: a thinking block with multiline content in compact mode
+    when: rendered
+    then: "shows '[seq] Thinking... first_line [...] last_line' on a single line"
+
+  - id: DSP-001-AC5
+    given: any compact mode output
+    when: rendered
+    then: no emojis appear in the output; uses same symbols as truncated mode (>, ⎿)
+
+  - id: DSP-001-AC6
+    given: compact mode output
+    when: rendered
+    then: "no section headers (=== TIMELINE ===, CONVERSATION, etc.) appear in output"
+
+  - id: DSP-001-AC7
+    given: a tool_use event with multiline parameters (e.g. MCP tool with body containing newlines) in compact mode
+    when: rendered
+    then: newlines in parameters replaced with spaces; content fits on single line
+
+  - id: DSP-001-AC8
+    given: compact mode output with sequence numbers
+    when: rendered
+    then: "sequence numbers enable reliable grep/head/tail workflows on output"
 
 depends_on:
-  - FMT-001
-  - FMT-002
-related: []
+  - FMT-001  # User message formatting
+  - FMT-002  # Assistant message formatting
+
+related:
+  - DSP-002  # Compact derives format from truncated mode
+  - DSP-004  # Sequence number display
+  - DSP-005  # Discontinuous separator
+  - PRIN-001  # Console fidelity principle
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Strong evidence across multiple sessions (0841, b475, 1e83, a40c, caf2, cc2d).
+  Compact mode is default, shows [seq] prefix + same format as truncated, one line per event.
+  Multiline content uses first_line [...] last_line pattern.
+  No emojis, no section headers. TodoWrite has special handling (see FMT-* stories).

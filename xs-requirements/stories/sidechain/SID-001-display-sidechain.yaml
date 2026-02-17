@@ -9,15 +9,83 @@ as_a: developer exploring sessions with Task subagents
 i_want: sidechain events visible in timeline
 so_that: I can see what delegated work was performed
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: e583:1001-1100
+    finding: F002
+    quote: "xs does display sidechain events - they appear in the timeline as regular events without any special marking"
+    context: "Confirmed by characterization test: sidechain/Task sub-agent events appear inline in timeline output without special marking"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: e583:1001-1100
+    finding: F003
+    quote: "Task sub-agent actions ARE visible in xs output, contrary to what we thought earlier"
+    context: "Characterization test confirmed xs shows sidechain events from Task sub-agents in timeline; summary counts also include sidechain actions"
+
+  - session: e583:301-400
+    finding: F001
+    quote: "I cannot find the sub-agent's `find` command or its output in the xs-accessible transcript."
+    context: "Initial (incorrect) conclusion that sub-agent actions are not visible; later corrected in e583:1001-1100"
+
+  - session: e583:201-300
+    finding: F004
+    quote: "this looks like I can access the full transcript of Task's session in Claude Code's interactive session when I press ctrl+r. Can't you find the same in out session transcript?"
+    context: "User asks whether Task sub-agent full transcript (including sub-agent's own tool calls) is visible via xs"
+
+  - session: e583:201-300
+    finding: F005
+    quote: "I don't think looking at compact mode output `./xs e583 -t 202-210` proves you have access to full transcript of the subtasks actions. For that you shoudl carefylly explore the messafes in --full or --json modes"
+    context: "User demands rigorous verification using --full or --json modes -- compact mode insufficient for deep content inspection of sidechain events"
+
+  - session: b475:901-1000
+    finding: F005
+    quote: "we're missing LS, Glob, Task, WebFetch, WebSearch in the compact display"
+    context: "Task tool is among those needing parameter display in compact/truncated timeline mode"
+
+  - session: e583:1001-1100
+    finding: F001
+    quote: "I just wan't to make sure you are correctly detecting architectural limitation and not a bug in `xs` aka `explore_session.py`'s implementation of --json and --jsonl outputs"
+    context: "User corrects agent's premature 'architectural limitation' conclusion -- wants confirmation whether sidechain handling is intentional behavior or a bug"
+
+acceptance_criteria:
+  - id: SID-001-AC1
+    given: a session JSONL containing events with isSidechain=true (from Task sub-agent sessions)
+    when: rendered in timeline mode (-t)
+    then: sidechain events appear inline in the timeline as regular events without special marking
+    notes: "Current confirmed behavior per characterization test in e583:1001-1100"
+
+  - id: SID-001-AC2
+    given: a session JSONL containing sidechain events
+    when: summary mode is displayed (no flags)
+    then: summary counts include sidechain events in their totals (tool counts, message counts)
+    notes: "Confirmed by characterization test: summary counts include sidechain actions"
+
+  - id: SID-001-AC3
+    given: a session JSONL containing sidechain events
+    when: rendered in truncated/compact mode
+    then: Task tool calls display with appropriate parameters (like other tools)
+    notes: "b475:901-1000 identified Task as missing from compact display parameter handling"
+
+  - id: SID-001-AC4
+    given: a session JSONL containing sidechain events
+    when: rendered in --full mode
+    then: full content of sidechain events (including sub-agent tool calls and results) is visible
+    notes: "User explicitly required --full mode verification for sidechain content (e583:201-300)"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse isSidechain field from JSONL
+
 related:
-  - SID-002
+  - SID-002  # Search includes sidechain content
+  - SID-003  # Filter sidechain events
+  - FMT-001  # General formatting
+  - DSP-001  # Display modes
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  The investigation in session e583 went through three phases:
+  1. Initial incorrect conclusion that sub-agent actions are NOT visible (e583:301-400)
+  2. Discovery that xs --jsonl strips isSidechain metadata (e583:901-1000)
+  3. Final resolution: xs DOES display sidechain events in timeline without special
+     marking, confirmed by characterization test (e583:1001-1100)
+  Current behavior is: sidechain events appear as regular timeline entries.
+  No discussion of whether special marking/indentation is desired.

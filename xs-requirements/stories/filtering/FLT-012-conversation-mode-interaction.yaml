@@ -9,16 +9,83 @@ as_a: developer filtering to conversation mode
 i_want: -M combined with -x Tool to work correctly
 so_that: I can exclude tools while keeping messages
 
-sources: []  # To be mined in Pass 2 - conversation_mode_bug_spec.py
+sources:
+  - file: "e583:501-600"
+    line: 529
+    speaker: agent
+    type: agent_error
+    quote: "When using `-M -x Tool`, it's still showing the tool announcement lines like `[Tools: Bash]` instead of filtering them out completely"
+    context: "Bug: [Tools: Bash] announcement lines shown in -M mode are not filtered by -x Tool"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "1e83:801-900"
+    line: 870
+    speaker: user
+    type: user_request
+    quote: "I was trying to recreate the old use case of option --conversation, which should have displayed only user messages and text responses from the assistant. The -x Tools should have removed the tools calls... IIRC."
+    context: "User's intent: -M -x Tool should produce clean conversation view (user text + assistant text, no tools)"
+
+  - file: "1e83:801-900"
+    line: 893
+    speaker: agent
+    type: agent_error
+    quote: "The issue is that `-x Tool` only excludes actual tool events (type='tool'), but assistant messages that only contain tools (showing as `[Tools: ...]`) are still type='message' with type='assistant'."
+    context: "Root cause: -x Tool filters tool_use events but assistant messages consisting entirely of tool calls pass as messages"
+
+  - file: "e583:701-800"
+    line: 701
+    speaker: agent
+    type: agent_proposal
+    quote: "The tool announcements are generated during display, not during filtering. When an assistant message contains only tool uses, it: 1. Passes the filter because it's a 'Message' (matches `-M`) 2. During display, it shows as `[Tools: ...]` because it has no text content"
+    context: "Root cause analysis: tool announcements are display-level artifacts; -x Tool must also suppress them"
+
+  - file: "e583:701-800"
+    line: 779
+    speaker: agent
+    type: agent_proposal
+    quote: "[1] > We'll continue working on a meta analysis tool we have in @claude-dev-log-diary/tools/explore_session.py"
+    context: "After fix: xs e583 -M -x Tool shows only conversation text, no [Tools: ...] announcements"
+
+  - file: "e583:401-500"
+    line: 438
+    speaker: user
+    type: user_correction
+    quote: "`--conversation` was a historical parameter, that was latere removed and replaced by combination of parameters that should have done the same thing"
+    context: "--conversation removed; -M -x Tool is its replacement and must work correctly"
+
+acceptance_criteria:
+  - id: FLT-012-AC1
+    given: session with user messages, assistant text, and tool calls
+    when: -M -x Tool is specified
+    then: only user messages and assistant TEXT messages are shown (no tool events)
+
+  - id: FLT-012-AC2
+    given: assistant message containing only tool_use blocks
+    when: -M -x Tool is specified
+    then: the assistant message is completely suppressed (not shown as [Tools: ...])
+
+  - id: FLT-012-AC3
+    given: assistant message with both text and tool_use content
+    when: -M -x Tool is specified
+    then: the text portion is shown; tool_use portions are suppressed
+
+  - id: FLT-012-AC4
+    given: -M -x Tool combination
+    when: filtering is applied
+    then: produces same result as old --conversation flag (clean user/assistant text dialogue)
+
+  - id: FLT-012-AC5
+    given: -x Tool filter
+    when: exclude_filters are passed to display function
+    then: tool announcement generation is suppressed at display time, not just at filter time
 
 depends_on:
   - FLT-006
   - FLT-002
+  - FLT-004
 related:
-  - FLT-011
+  - FLT-011  # Filter composition
+  - FLT-003  # Message virtual entity
 
 priority: must
-status: draft
-validation_notes: "Known bug - spec exists in conversation_mode_bug_spec.py"
+status: mined
+validation_notes: "Known bug documented in multiple sessions. Fix requires passing exclude filters to display function to suppress tool announcements."

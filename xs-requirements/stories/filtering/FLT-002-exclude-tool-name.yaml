@@ -9,15 +9,77 @@ as_a: developer exploring a session
 i_want: to hide specific tool types
 so_that: I can reduce noise
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "a40c:1-100"
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Exclude filters: tools or virtual entities"
+    context: "CLI help text showing --exclude mirrors --include for exclusion"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "b475:601-700"
+    line: 628
+    speaker: user
+    type: user_request
+    quote: "I want to have the --include and --exclude duality -- they shoudl have both the same syntax of of comma separated list."
+    context: "User explicitly wants --include and --exclude as symmetric flags with identical syntax"
+
+  - file: "cc2d:601-700"
+    line: 665
+    speaker: user
+    type: user_correction
+    quote: "please don't rename include to filter, it breaks the duality, you should also have a look at @claude-dev-log-diary/tools/reconstruct.jq"
+    context: "User rejected agent renaming --include to --filter because it breaks the include/exclude duality"
+
+  - file: "b475:2301-2400"
+    line: 2331
+    speaker: agent
+    type: agent_proposal
+    quote: "[30] ⏺ Write: → myproject/setup.py\n[31] ⏺ TodoWrite: Updated 3 todos (1 completed, 2 pending)\n...[39] ⏺"
+    context: "Exclude filter: --exclude Bash removes Bash entries from the timeline"
+
+  - file: "day-025:5201-5400"
+    line: 5241
+    speaker: user
+    type: user_correction
+    quote: "Again, why exclude pytest? I am assuming that when you use --include parameter, everything it doesn't match will be left out, and that the resulting list is then culled by matching against the exclude list. So the exlude for pytest is redundant, right?"
+    context: "User clarifies include/exclude semantics: include acts as whitelist first, then exclude removes from what matched"
+
+  - file: "fa1a:801-900"
+    line: 824
+    speaker: user
+    type: user_request
+    quote: "I am assuming that when you use --include parameter, everything it doesn't match will be left out, and that the resulting list is then culled by matching against the exclude list. So the exlude for pytest is redundant, right?"
+    context: "Explicit semantics: include is a whitelist; exclude further removes from included items"
+
+acceptance_criteria:
+  - id: FLT-002-AC1
+    given: session with mixed tool types
+    when: --exclude "Bash" is specified (no include filter)
+    then: all events EXCEPT Bash tool events are shown
+
+  - id: FLT-002-AC2
+    given: session with mixed tool types
+    when: --exclude "Bash,Read" is specified (comma-separated)
+    then: all events EXCEPT Bash and Read tool events are shown
+
+  - id: FLT-002-AC3
+    given: session with mixed tool types
+    when: --include "Edit,Bash" --exclude "Bash" is specified
+    then: only Edit events are shown (exclude removes from included set)
+
+  - id: FLT-002-AC4
+    given: --exclude uses same syntax as --include
+    when: specifying exclusion
+    then: comma-separated list format, identical to --include
 
 depends_on:
   - PRS-005
 related:
   - FLT-001
+  - FLT-011
+  - FLT-012
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Include/exclude duality is a strong user requirement. Semantics: include first (whitelist), then exclude (blacklist from whitelist)."

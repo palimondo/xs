@@ -6,19 +6,188 @@ epic: display-modes
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: console-like output with 3-line preview
-so_that: output matches Claude Code and is LLM-parseable
+i_want: console-like output that faithfully replicates Claude Code's default display
+so_that: output is recognizable and parseable by other LLMs (Gemini)
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: 1e83-L101-200.yaml
+    finding: F004
+    quote: "In the truncated mode, we are trying to replicate the normal Claude code console output. But since that one is interactive, the instructions like control + R to expand, which are meant for users, were deliberately left out from our truncated mode output."
+    context: "Truncated mode = CC console replica minus interactive elements"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: 1e83-L101-200.yaml
+    finding: F003
+    quote: "The full console output is equal to our truncated mode. And our compact mode is compressing each event into a single line."
+    context: "User clarifying mode semantics: truncated = CC console; compact = one-line per event"
+
+  - file: b475-L1601-1700.yaml
+    finding: F002
+    quote: "The `--truncated` mode gets its name from the way CC normally truncates the tool output to the console"
+    context: "Name rationale: CC truncates tool output by default in its console"
+
+  - file: b475-L901-1000.yaml
+    finding: F002
+    quote: "adding emojis and cltering how the truncated mode works, where it was supopsed to be a high fidelity replication of the Claude COde Output like you achieved previously in @claude-dev-log-diary/tools/reconstruct.jq"
+    context: "reconstruct.jq is the authoritative reference for truncated mode format"
+
+  - file: b475-L901-1000.yaml
+    finding: F003
+    quote: "No emojis! The truncated mode should be a faithful reproduction of Claude Code's console output."
+    context: "Symbols: > for user, ⏺ for assistant/tool, ⎿ for tool results; no emojis"
+
+  - file: b475-L101-200.yaml
+    finding: F001
+    quote: "No sequence numbers in truncated mode"
+    context: "Truncated mode does not show sequence numbers by default"
+
+  - file: b475-L101-200.yaml
+    finding: F003
+    quote: "these messages aren't (by design!) truncated (only tool calls are) so I vas getting flodded"
+    context: "Only tool call results are truncated; assistant text messages show full content"
+
+  - file: 943d-L201-300.yaml
+    finding: F001
+    quote: "the Bash tool's output is presented as truncated 3 line excerpt with \" ... +47 lines (ctrl+r to expand)\""
+    context: "User describing CC console truncation format: first 3 lines + '... +N lines' suffix"
+
+  - file: day-021-L11001-11200.yaml
+    finding: F002
+    quote: "it's showing just the first 3 lines of the output and then the collapse indicator"
+    context: "Truncation rule: show first 3 lines of tool result then collapse indicator"
+
+  - file: day-021-L11201-11400.yaml
+    finding: F001
+    quote: "So the total is 39 lines. When I show the first 3 lines and say \"+36 more\", that's correct (3 + 36 = 39). But the expected output says \"+39 lines\". This suggests that the count in the expected output is the total number of lines, not the remaining lines."
+    context: "Truncation count shows TOTAL line count, not remaining count"
+
+  - file: b475-L1601-1700.yaml
+    finding: F001
+    quote: "this part we should not replicate, that's instruction for user which is relevant only in interactive mode and is noise in static log output"
+    context: "User explicitly correcting: (ctrl+r to expand) must NOT appear in truncated output"
+
+  - file: b475-L1201-1300.yaml
+    finding: F002
+    quote: "in truncated mode we need to add newlines in specific places to replicate yout output"
+    context: "Truncated mode requires blank lines between certain items matching CC console spacing"
+
+  - file: b475-L1-100.yaml
+    finding: F004
+    quote: "Tool calls: `⏺ ToolName(parameter)`"
+    context: "reconstruct.jq format: tool use lines start with ⏺ followed by ToolName(parameter)"
+
+  - file: b475-L1-100.yaml
+    finding: F005
+    quote: "Tool results: `  ⎿  Waiting...` then `  ⎿  [content]`"
+    context: "reconstruct.jq format: tool result lines use ⎿ prefix with 2-space indent"
+
+  - file: 0841-L1401-1500.yaml
+    finding: F002
+    quote: "The reconstruct.jq format is: No sequence numbers in the left margin, Tool calls: ⏺ ToolName(parameter), Tool results: ⎿ Waiting... then ⎿ [content], No > prefix for user messages, just direct text"
+    context: "Agent reading reconstruct.jq; note disagreement on user message prefix (> vs no prefix) — later resolved to use >"
+
+  - file: b475-L1601-1700.yaml
+    finding: F005
+    quote: "Use ⏺ for all assistant messages as is done in Claude Code console, which I have repeatedly pasted in several previous messages to illustrate how it should be formatted correctly"
+    context: "All assistant output uses ⏺ consistently — no other bullet symbols"
+
+  - file: b475-L901-1000.yaml
+    finding: F001
+    quote: "can we not truncate it to 60 and just try outputting full line?"
+    context: "Bash commands in truncated mode: show full first line, not arbitrarily truncated to 60 chars"
+
+  - file: 1e83-L1-100.yaml
+    finding: F002
+    quote: "the thinking in compact mode and also in truncated mode is not that full fidelity"
+    context: "Thinking blocks need proper fidelity in truncated mode"
+
+  - file: 1e83-L501-600.yaml
+    finding: F001
+    quote: "Change thinking blocks from '⏺ <thinking>' to '✻ Thinking...' format"
+    context: "Thinking blocks use ✻ symbol, not ⏺"
+
+  - file: b475-L1501-1600.yaml
+    finding: F003
+    quote: "The main goal is to separate \"what to show\" (filtering) from \"how to show it\" (display modes). This will eliminate the special cases"
+    context: "Architecture principle: display modes control rendering format independently from filters"
+
+  - file: day-021-L11001-11200.yaml
+    finding: F003
+    quote: "The indentation is off - I have 3 spaces before ⎿ but should have 2"
+    context: "Tool result indentation: exactly 2 spaces before ⎿ symbol"
+
+  - file: a40c-L1-100.yaml
+    finding: F006
+    quote: "Show truncated console-style output (3-line preview)"
+    context: "CLI help text: --truncated shows console-style output with 3-line preview"
+
+acceptance_criteria:
+  - id: DSP-002-AC1
+    given: a parsed session timeline
+    when: rendered with --truncated flag
+    then: "output faithfully replicates Claude Code console appearance using symbols: > for user, ⏺ for assistant/tool, ⎿ for tool results, ✻ for thinking"
+
+  - id: DSP-002-AC2
+    given: a tool_result with more than 3 lines of content in truncated mode
+    when: rendered
+    then: "shows first 3 lines of tool result content, followed by '... +N lines' where N is total line count (not remaining)"
+
+  - id: DSP-002-AC3
+    given: truncated mode output
+    when: rendered
+    then: "no interactive elements appear (no '(ctrl+r to expand)', no 'ctrl+r to see all')"
+
+  - id: DSP-002-AC4
+    given: truncated mode output
+    when: rendered
+    then: "no sequence numbers appear in the left margin (by default, without --show-numbers)"
+
+  - id: DSP-002-AC5
+    given: an assistant text message (not tool_use or tool_result) in truncated mode
+    when: rendered
+    then: full text content is shown without truncation (only tool results are truncated)
+
+  - id: DSP-002-AC6
+    given: a Bash tool_use event in truncated mode
+    when: rendered
+    then: "first line of command shown in full (not truncated to 60 chars): '⏺ Bash(full_command_first_line)'"
+
+  - id: DSP-002-AC7
+    given: truncated mode output
+    when: rendered
+    then: blank lines inserted between items matching Claude Code console spacing
+
+  - id: DSP-002-AC8
+    given: a tool_result line in truncated mode
+    when: rendered
+    then: "indented with exactly 2 spaces before ⎿ symbol: '  ⎿  content'"
+
+  - id: DSP-002-AC9
+    given: truncated mode output
+    when: rendered
+    then: "no section headers (=== TIMELINE ===, etc.) appear in output"
+
+  - id: DSP-002-AC10
+    given: truncated mode output
+    when: rendered
+    then: "no emojis in output; only CC console symbols (⏺, ⎿, ✻, >) used"
 
 depends_on:
-  - FMT-001
-  - FMT-002
+  - FMT-001  # User message formatting
+  - FMT-002  # Assistant message formatting
+
 related:
-  - PRIN-001  # Console fidelity
+  - DSP-001  # Compact derives format from truncated
+  - DSP-003  # Full mode is truncated without the truncation
+  - DSP-004  # --show-numbers can force sequence numbers
+  - PRIN-001  # Console fidelity principle
+  - CONF-001  # 1.x vs 2.x format differences
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Core requirement with extensive evidence across sessions b475, 0841, 1e83, 943d, day-021, a40c, caf2.
+  Truncated mode replicates CC console output using reconstruct.jq as reference.
+  Key decisions: no (ctrl+r to expand), no sequence numbers by default, 3-line tool result
+  preview with TOTAL line count, full assistant text messages (only tool results truncated),
+  blank lines for CC console spacing, 2-space indent before tool result symbol.
+  The (ctrl+r to expand) was first added then explicitly reversed by user as "noise in static output".

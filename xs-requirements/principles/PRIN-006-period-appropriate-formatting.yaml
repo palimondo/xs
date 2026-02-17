@@ -1,0 +1,36 @@
+id: PRIN-006
+title: Period-Appropriate Formatting (1.x vs 2.x)
+
+statement: |
+  Claude Code's JSONL format and console output evolved between versions
+  1.x and 2.x. xs should detect the format version and apply period-appropriate
+  rendering so that older sessions look correct for their era.
+
+rationale: |
+  The user has sessions from both CC 1.x and 2.x eras. Format differences
+  include content block structure, tool output format, and available metadata
+  fields. Applying 2.x formatting to 1.x sessions produces incorrect output.
+  The parser already needs version detection (PRS-006); formatting should
+  follow the same version signal.
+
+implications:
+  - Format version detection based on system event fields (PRS-006)
+  - Tool format may differ between versions (e.g., "Bash: $ command" vs "Bash(command)")
+  - Content block structure differs between versions
+  - Both formats must be supported; neither can be dropped
+  - This creates two code paths in formatting, which is a known complexity cost
+
+applies_to:
+  - PRS-006 # Format version detection
+  - FMT-*   # All formatting stories (rendering differences)
+  - DSP-*   # Display modes must respect version
+
+evidence:
+  - "jsonl-parsing report: format version detection via version field in system events"
+  - "console-formatting report: compact-vs-truncated tool format tension (b475:2301 vs b475:1142)"
+  - "CLAUDE.md: CONF-001 template — 1.x vs 2.x format differences"
+
+conflicts:
+  - CONF-001  # 1.x vs 2.x format differences
+
+status: draft

@@ -1,4 +1,4 @@
-# Story: Search and Timeline Flag Interaction
+# Story: Search and Timeline/Display Mode Interaction
 
 id: SRC-005
 title: Search results displayed in timeline mode
@@ -6,42 +6,86 @@ epic: search
 theme: local-exploration
 
 as_a: developer searching session content
-i_want: search results shown in timeline format when -t is specified
-so_that: I can see matches in chronological context
+i_want: search results shown correctly regardless of display mode
+so_that: search works with -t, --truncated, --full, and other display flags
 
 sources:
-  - file: xs-requirements/findings/xs-usage-best-practices.md
-    section: BUG-002
-    context: "Current implementation ignores -S when -t is present"
+  - session: caf2:801-900
+    finding: F003
+    quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode, which shows the timeline first, THEN the search runs and shows its own results. This is a major bug!"
+    context: "Search + implicit timeline caused duplicate output. Search must suppress implicit timeline activation."
+
+  - session: caf2:901-1000
+    finding: F002
+    quote: "We still have the double output issue! The -M filter is triggering implicit timeline."
+    context: "When search is active, implicit timeline mode must NOT activate separately."
+
+  - session: e583:201-300
+    finding: F006
+    quote: "Traceback (most recent call last):"
+    context: "Search combined with --full flag causes crash. Search must work across all display modes."
+
+  - session: e583:1601-1700
+    finding: F002
+    quote: "We should verify those `xs` commands we're telling sub-agent to use... it should probably read it in --full mode not in the implied -t which outputs compact format by default, right?"
+    context: "User expects search to work with --full mode for detailed content recovery."
+
+  - session: caf2:1001-1100
+    finding: F003
+    quote: "Search now properly applies the complete filter chain as specified"
+    context: "After bug fix: search applies full filter chain (search -> range -> include -> exclude -> context)."
 
 acceptance_criteria:
   - id: SRC-005-AC1
     given: search term and -t flag
-    when: running `xs session -S "term" -t`
-    then: shows ONLY matching entries in timeline format
+    when: running `xs <session> -S "term" -t`
+    then: shows ONLY matching entries in timeline format (not all entries then search results)
 
   - id: SRC-005-AC2
     given: search term with -t and range
-    when: running `xs session -S "term" -t 1-500`
+    when: running `xs <session> -S "term" -t 1-500`
     then: shows matching entries within range in timeline format
 
   - id: SRC-005-AC3
     given: search term with -t and context
-    when: running `xs session -S "term" -t -C 2`
-    then: shows matching entries with N lines context before/after
+    when: running `xs <session> -S "term" -t -C 2`
+    then: shows matching entries with 2 entries of context before and after
+
+  - id: SRC-005-AC4
+    given: search term with --full flag
+    when: running `xs <session> -S "term" --full`
+    then: shows matching entries in full display mode without crashing
+
+  - id: SRC-005-AC5
+    given: search with implicit timeline (filters or range present)
+    when: search is combined with filters or range that trigger implicit timeline
+    then: search results are shown once, not duplicated by implicit timeline activation
+
+  - id: SRC-005-AC6
+    given: search with include/exclude filters
+    when: running `xs <session> -S "keyword" -i Tool -x Read`
+    then: search matches are further filtered by include/exclude per pipeline ordering
 
 current_behavior: |
-  BUG: -t flag completely overrides -S flag.
-  xs e583 -S "filter" -t shows ALL timeline entries, not filtered.
-
-  Workaround: Use -S without -t, optionally with range.
-  xs e583 -S "filter" 1-500 correctly limits search to range.
+  BUG: -t flag completely overrides -S flag in some implementations.
+  BUG: Implicit timeline mode activates alongside search, causing duplicate output.
+  BUG: --full mode with -S crashes.
 
 depends_on:
-  - SRC-001
+  - SRC-001  # Basic search
+
 related:
-  - CLI-002
+  - CLI-002  # CLI flag interactions
+  - DSP-001  # Display modes
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
 
 priority: should
-status: draft
-validation_notes: "Bug discovered during Pass 1 validation testing"
+status: mined
+validation_notes: |
+  Multiple bugs found around search + display mode interaction.
+  Key principle: search is the primary output mode when active; implicit timeline must not
+  override or duplicate search output.
+  Search must work with all display modes: truncated (default), --full, -t, --json.
+  Bug discovered during Pass 1 validation testing and confirmed by multiple session findings.

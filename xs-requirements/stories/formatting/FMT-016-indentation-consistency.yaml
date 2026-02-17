@@ -6,17 +6,54 @@ epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: consistent 2-space indentation
+i_want: consistent 2-space indentation for tool results and continuations
 so_that: output matches Claude Code console style
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:348"
+    quote: "The indentation is tricky if we are not displaying line numbers. We should use the indentation from golden. But when we introduce the line numbers, maybe we should also increase the indentation so that it all works."
+    context: "Indentation follows golden output; may increase when line numbers shown"
+  - session: "day-021:11321"
+    quote: "I see 4 spaces after the X (which replaced ⎿). So the format is: 2 spaces + ⎿ + 4 spaces + content"
+    context: "Agent working out exact spacing pattern for tool results"
+  - session: "day-021:11402"
+    quote: "So the pattern is: 2 spaces + ⎿ + 1 space, not 2 spaces as I had. Let me fix this:"
+    context: "Correcting tool result indentation to 2 spaces + ⎿ + spaces"
+  - session: "day-021:11099"
+    quote: "The indentation is off - I have 3 spaces before ⎿ but should have 2"
+    context: "Agent identifying indentation error: 3 spaces instead of 2"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-016-AC1
+    given: tool result line
+    when: rendered in truncated mode without line numbers
+    then: "Indent with exactly 2 spaces before ⎿ symbol"
+
+  - id: FMT-016-AC2
+    given: tool result continuation lines
+    when: rendered in truncated mode
+    then: "Indent consistently with tool result first line"
+
+  - id: FMT-016-AC3
+    given: any formatted output
+    when: line numbers [N] are shown
+    then: "Increase indentation to accommodate line number prefix"
+
+  - id: FMT-016-AC4
+    given: todo items under TodoWrite/TodoRead result
+    when: rendered
+    then: "Indent todo items with 5 spaces for continuation lines"
 
 depends_on: []
 related:
-  - PRIN-001
+  - PRIN-001  # Console fidelity
+  - FMT-007  # Tool result formatting
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Tool result indentation: 2 spaces + ⎿ + spaces + content.
+  Indentation increases when line numbers are present.
+  Todo item continuation lines: 5-space indent.
+  Agent struggled repeatedly with exact spacing (day-021:11099-11402).
+  Source: 1e83:348, day-021:11321, day-021:11402

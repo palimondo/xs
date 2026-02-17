@@ -9,14 +9,50 @@ as_a: power user
 i_want: -a as shortcut for -i Assistant
 so_that: I can quickly see what Claude said
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "caf2:301-400"
+    line: 316
+    speaker: user
+    type: user_correction
+    quote: "the `grep`/`rg` parameters are capital A, B, C, so we are free to use `-a` as shortcut for `-i Assistant`"
+    context: "User explicitly chose lowercase -a for assistant because uppercase -A is reserved for grep-style 'after' context lines"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "a40c:501-600"
+    line: 521
+    speaker: agent
+    type: agent_proposal
+    quote: "Test assistant message filtering"
+    context: "Virtual entity filtering: -a flag filters to show only assistant messages"
+
+  - file: "1e83:801-900"
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works"
+    context: "User combining -U and -a (user + assistant) to get all messages, confirming both shortcuts work"
+
+acceptance_criteria:
+  - id: FLT-008-AC1
+    given: session with mixed content
+    when: -a flag is specified
+    then: equivalent to --include Assistant (shows only assistant text messages)
+
+  - id: FLT-008-AC2
+    given: -a flag
+    when: specified
+    then: implies timeline display mode
+
+  - id: FLT-008-AC3
+    given: -a flag
+    when: combined with -U
+    then: shows both user and assistant messages (equivalent to -M)
 
 depends_on:
   - FLT-003
-related: []
+related:
+  - FLT-006  # -M shortcut
+  - FLT-007  # -U shortcut
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Lowercase -a deliberately chosen because uppercase -A reserved for grep-style context. User explicitly discussed this."

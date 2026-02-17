@@ -1,23 +1,72 @@
-# Story: Multi-line Truncation Rules
+# Story: Multi-line Truncation Rules for Truncated Mode
 
 id: FMT-015
-title: Apply consistent multi-line truncation rules
+title: Apply consistent multi-line truncation rules in truncated mode
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: consistent truncation rules for multi-line content
-so_that: output is readable and predictable
+i_want: consistent truncation rules for multi-line tool output in truncated mode
+so_that: output is readable and matches Claude Code console truncation behavior
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "943d:202"
+    quote: "the Bash tool's output is presented as truncated 3 line excerpt with ' ... +47 lines (ctrl+r to expand)'"
+    context: "User describing CC console truncation format"
+  - session: "b475:1659"
+    quote: "The --truncated mode gets its name from the way CC normally truncates the tool output to the console"
+    context: "User explaining truncated mode design rationale"
+  - session: "b475:1659"
+    quote: "this part we should not replicate, that's instruction for user which is relevant only in interactive mode and is noise in static log output"
+    context: "User rejecting (ctrl+r to expand) from truncated output"
+  - session: "day-021:11234"
+    quote: "the count in the expected output is the total number of lines, not the remaining lines"
+    context: "Line count in truncation indicator is TOTAL lines, not remaining"
+  - session: "b475:2087"
+    quote: "... +19 lines"
+    context: "Truncated mode output showing truncation indicator format"
+  - session: "a40c:1698"
+    quote: "There are still some places using simple character truncation instead of our [...] pattern"
+    context: "Truncation must use consistent pattern, not arbitrary char limits"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-015-AC1
+    given: tool result with more than 3 lines of content
+    when: rendered in truncated mode
+    then: "Show first 3 lines followed by '     ... +{total_lines} lines'"
+
+  - id: FMT-015-AC2
+    given: tool result with 3 or fewer lines
+    when: rendered in truncated mode
+    then: "Show all lines without truncation indicator"
+
+  - id: FMT-015-AC3
+    given: truncation indicator line
+    when: displayed
+    then: "Line count is TOTAL lines (not remaining after preview)"
+
+  - id: FMT-015-AC4
+    given: truncated tool output
+    when: rendered in truncated mode
+    then: "Do NOT include '(ctrl+r to expand)' text (interactive-only element)"
+
+  - id: FMT-015-AC5
+    given: assistant text messages
+    when: rendered in truncated mode
+    then: "Show FULL text (assistant text is NOT truncated, only tool results are)"
 
 depends_on:
-  - FMT-008
+  - FMT-007  # Tool result formatting
 related:
-  - DSP-002
+  - FMT-008  # Compact mode truncation (different pattern: first [...] last)
+  - PRIN-001  # Console fidelity
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Truncated mode truncation:
+  - Tool results: first 3 lines + '... +N lines' (N = total line count)
+  - Assistant text: shown in full (NOT truncated) per b475:166
+  - NO '(ctrl+r to expand)' per b475:1659
+  - No arbitrary character truncation per a40c:1698
+  Source: 943d:202, b475:1659, day-021:11234, b475:166

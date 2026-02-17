@@ -9,16 +9,64 @@ as_a: developer exploring sessions
 i_want: to include or exclude sidechain events
 so_that: I can focus on main conversation or delegated work
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: e583:1001-1100
+    finding: F002
+    quote: "xs does display sidechain events - they appear in the timeline as regular events without any special marking"
+    context: "Current behavior: sidechain events appear without special marking, meaning there is no way to distinguish or filter them from main-thread events"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: e583:901-1000
+    finding: F002
+    quote: "So xs strips the metadata! Let me look directly at the raw JSONL file"
+    context: "xs --jsonl output transforms JSONL and omits raw metadata fields such as isSidechain, parentUuid, userType; these fields would be needed for filtering"
+
+  - session: e583:1101-1200
+    finding: F001
+    quote: "Does the --json and/or --jsonl output just output the raw segments from session transcript that passed the filters and ranges? That's what its meant to do -- it shouldn't mess with the JSON objects in any way/shape/form."
+    context: "User clarifying that --json/--jsonl should pass through raw JSONL objects unchanged; this would preserve isSidechain field for downstream filtering"
+
+acceptance_criteria:
+  - id: SID-003-AC1
+    given: a session JSONL containing both main-thread and sidechain events
+    when: a sidechain exclusion flag is used (e.g., --no-sidechain or -x Sidechain)
+    then: only main-thread events are displayed; sidechain events are hidden
+    notes: "No flag syntax was discussed or decided; this is a future feature"
+
+  - id: SID-003-AC2
+    given: a session JSONL containing both main-thread and sidechain events
+    when: a sidechain-only flag is used (e.g., --sidechain-only or -i Sidechain)
+    then: only sidechain events are displayed; main-thread events are hidden
+    notes: "No flag syntax was discussed or decided; this is a future feature"
+
+  - id: SID-003-AC3
+    given: a session JSONL containing sidechain events
+    when: --json or --jsonl output mode is used
+    then: isSidechain field is preserved in output (raw JSONL passthrough)
+    notes: "User explicitly requires --json/--jsonl to not strip metadata (e583:1101-1200)"
 
 depends_on:
-  - SID-001
+  - SID-001  # Sidechain events must be parsed and displayed first
+  - PRS-005  # Must parse isSidechain field from JSONL
+
 related:
-  - FLT-001
-  - FLT-002
+  - FLT-001  # General include/exclude filtering
+  - FLT-002  # Entity type filtering
+  - DSP-003  # JSON/JSONL output modes
 
 priority: could
-status: draft
-validation_notes: "Future feature - not in current implementation"
+status: mined
+validation_notes: |
+  No explicit user request for a sidechain filter flag was found in the extracted
+  findings. The current state is:
+  1. Sidechain events appear as regular events without marking (e583:1001-1100)
+  2. xs --jsonl strips isSidechain metadata, making downstream filtering impossible (e583:901-1000)
+  3. User explicitly stated --json/--jsonl should pass through raw JSONL unchanged (e583:1101-1200)
+
+  The filtering capability is a natural extension once sidechain events are properly
+  identified. AC3 (raw JSONL passthrough preserving isSidechain) is the highest priority
+  acceptance criterion as it was explicitly requested. AC1 and AC2 are speculative
+  future features with no direct user request.
+
+  This story should potentially be split: AC3 (metadata preservation) may belong in
+  DSP-003 or PRS-005 rather than here. The dedicated filter flag (AC1/AC2) is the
+  true "could" priority item.

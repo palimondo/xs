@@ -1,4 +1,4 @@
-# Story: Substring Search
+# Story: Basic Substring Search
 
 id: SRC-001
 title: Basic substring search
@@ -6,17 +6,137 @@ epic: search
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to search for text in the session
-so_that: I can find specific content
+i_want: to search for text across all timeline content
+so_that: I can find specific content in large sessions without reading everything
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: caf2:501-600
+    finding: F002
+    quote: "the --search argument already exists but seems to be limited to bash commands"
+    context: "Original --search only searched Bash tool commands. Upgraded to full text search across all timeline content."
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: caf2:801-900
+    finding: F001
+    quote: "The search is a simple substring search, not using `rg`."
+    context: "Search uses simple substring matching, not ripgrep. User asked about rg delegation; agent confirmed it is simple substring."
+
+  - session: caf2:301-400
+    finding: F004
+    quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events"
+    context: "User defined search as step 0 of filter pipeline. Initially proposed rg delegation but implementation uses simple substring."
+
+  - session: caf2:701-800
+    finding: F007
+    quote: "does it delegate to `rg` and we therefore mention that the search pattern supports all that `rg` does?"
+    context: "User questioned whether search uses rg under the hood. Answer: no, it is simple substring match."
+
+  - session: caf2:701-800
+    finding: F005
+    quote: "I don't see short form of `--search` the `-E PATTERN` in --help, do we have it implemented?"
+    context: "User initially proposed -E as short form; was later resolved as -S."
+
+  - session: caf2:801-900
+    finding: F001
+    quote: "parser.add_argument('-S', '--search', help='Full text search across all content (simple substring match)')"
+    context: "Short form resolved as -S (not -E). Help text describes it as simple substring match."
+
+  - session: e583:901-1000
+    finding: F001
+    quote: "parser.add_argument('-S', '--search', help='Full text search across all content"
+    context: "Confirms -S/--search as the CLI flag for full text search."
+
+  - session: 760a:401-500
+    finding: F003
+    quote: "future session can: `./xs 760a9954 -S \"commit|tdd-guard|decision block\"`"
+    context: "xs -S flag used for searching session content in compaction recovery workflow."
+
+  - session: a40c:201-300
+    finding: F004
+    quote: "./explore_session.py 943dff12 --search \"interrupted\" -B 2 120-150"
+    context: "User confirms search combined with before-context and range as a real usage pattern."
+
+  - session: e583:1-100
+    finding: F002
+    quote: "I'm satisfied by the CLI we designed, which should build on your knowledge of conceptualy related tools like grep, rg, etc."
+    context: "CLI designed to feel familiar to grep/rg users."
+
+acceptance_criteria:
+  - id: SRC-001-AC1
+    given: a session with timeline events containing various text
+    when: running `xs <session> -S "keyword"`
+    then: shows only timeline events whose content contains "keyword" as a substring
+
+  - id: SRC-001-AC2
+    given: a session timeline
+    when: running `xs <session> -S "keyword"` with no matches
+    then: outputs nothing (or an appropriate "no matches" message)
+
+  - id: SRC-001-AC3
+    given: a search pattern
+    when: search is performed
+    then: matching is case-insensitive substring matching (simple, not regex)
+
+  - id: SRC-001-AC4
+    given: timeline events with non-string content (e.g., tool_result with list content)
+    when: running `xs <session> -S "keyword"`
+    then: search handles non-string content gracefully without crashing
+    notes: "Bug found: AttributeError when content is a list not a string (e583:201-300, a40c:901-1000)"
+
+  - id: SRC-001-AC5
+    given: a search pattern starting with -- (e.g., "--conversation")
+    when: running `xs <session> -S "--conversation"`
+    then: argparse does not interpret it as a flag; use `--search=--pattern` or `-S=--pattern` syntax
+    notes: "Known CLI constraint: patterns starting with -- require = assignment syntax (e583:801-900)"
+
+  - id: SRC-001-AC6
+    given: search results from the filter pipeline
+    when: search is combined with other filters or ranges
+    then: search is step 0 of the pipeline (search -> range -> include -> exclude -> context expansion)
+    notes: "Pipeline ordering defined by user in caf2:301-400 and caf2:901-1000"
+
+bugs_found:
+  - id: SRC-001-BUG1
+    description: "AttributeError when content is a list (tool_result entries)"
+    source: "e583:201-300 F002, e583:301-400 F002"
+    quote: "AttributeError: 'list' object has no attribute 'lower'"
+
+  - id: SRC-001-BUG2
+    description: "Search for patterns starting with -- treated as argparse flags"
+    source: "e583:201-300 F001, e583:401-500 F004, e583:801-900 F003"
+    quote: "xs: error: argument -S/--search: expected one argument"
+
+  - id: SRC-001-BUG3
+    description: "Search with --full flag causes crash"
+    source: "e583:201-300 F006"
+    quote: "Traceback (most recent call last):"
+
+  - id: SRC-001-BUG4
+    description: "Search ignores -i/-x include/exclude filters"
+    source: "caf2:1001-1100 F002"
+    quote: "Currently search ignores -i/-x filters"
+
+  - id: SRC-001-BUG5
+    description: "Search with range causes duplicate output (implicit timeline conflict)"
+    source: "caf2:801-900 F003, caf2:901-1000 F002"
+    quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode, which shows the timeline first, THEN the search runs and shows its own results. This is a major bug!"
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Unified timeline data structure
+
+related:
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
+  - SRC-002  # After context
+  - SRC-003  # Before context
+  - SRC-004  # Combined context
+  - CLI-002  # CLI flag design
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Search is simple substring match, not regex/rg delegation.
+  Short form is -S (not -E as initially proposed by user).
+  Must handle non-string content (lists), patterns starting with --.
+  Pipeline ordering: search -> range -> include -> exclude -> context.
+  Known interaction bugs with implicit timeline mode and filters.

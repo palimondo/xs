@@ -12,32 +12,71 @@ so_that: I extract meaningful context not just surface matches
 sources:
   - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/context_recovery_pattern.md
     lines: 1-121
+  - session: e583:501-600
+    quote: "OK, you remembered nothing of the meta meta context that we were dealing with. I want you to read @claude-dev-log-diary/tools/xs_scout_v2.md and understand how you delegate the context gathering to a sub-agent using `Task` in order to preserve your own context for the high level work"
+    context: "xs scout workflow: delegate context gathering to sub-agent via Task, preserve parent agent's context for high-level work"
+  - session: e583:501-600
+    quote: "I'm noticing a repeated failure mode, where after a forced compaction (we ran out of context) the model picks up a first Todo item prom our list and just runs away with implementation, even though we werer just in a process of planning and analysis"
+    context: "Core motivation: without recovery, agent jumps to implementation instead of understanding context"
+  - session: f9c7:901-1000
+    quote: "Then we compacted several times. In this current session I've used a feature to continue from previous session, but you no longer know all the details from there. Think hard about a strategy to get the important information from our conversations without blowing out your context window with irrelevant stuff."
+    context: "User articulates the compaction recovery problem: recover important info without blowing context"
+  - session: 760a:201-300
+    quote: "Aha! You're right - I **did** read `hooks.md` at event [48]! But it's not in my current context after the compaction."
+    context: "Real example: xs reveals a file read pre-compaction that was dropped from compaction summary"
+  - session: 760a:201-300
+    quote: "I think we should consult the claude-dev-log-diary/tools/compaction_recovery_hooks_setup.md ? I think this is a writeup of our reasoning from the previous session"
+    context: "User advocates using xs to explore previous sessions for design rationale rather than polluting context with direct file reads"
+  - session: 760a:301-400
+    quote: "re-run the Subagent that I interrupted (Explore) with more precise instructions to only look at previous session -- the one I mentioned by ID, and use `xs` and not to rummage around all markdown files"
+    context: "xs should be the primary tool for session analysis in recovery, not direct filesystem exploration"
+  - session: 760a:401-500
+    quote: "I see you've used Bash(xs ...) to check current session for TODOs. That's not what I meant -- you should be using your native todo tools"
+    context: "xs is for exploring past/other sessions; current session state should use native Claude Code tools"
 
 acceptance_criteria:
   - id: CRH-006-AC1
     given: recovery methodology
     when: starting
-    then: scan timeline to understand session flow first
+    then: scan timeline to understand session flow first (use xs -t for overview)
 
   - id: CRH-006-AC2
     given: recovery methodology
     when: extracting context
-    then: focus on WHY behind decisions, not just WHAT
+    then: focus on WHY behind decisions, not just WHAT was done
 
   - id: CRH-006-AC3
     given: recovery methodology
     when: searching
-    then: avoid over-specification, let patterns emerge
+    then: use xs as primary tool for session analysis, avoid direct filesystem exploration
 
   - id: CRH-006-AC4
     given: recovery methodology
     when: using Task delegation
-    then: emphasize thinking between tool uses
+    then: delegate context gathering to sub-agent via Task, preserve parent agent's context
+
+  - id: CRH-006-AC5
+    given: recovery methodology
+    when: recovering from compaction
+    then: do NOT jump to implementation from TODO list; understand context first
+
+  - id: CRH-006-AC6
+    given: recovery scope
+    when: using xs in current session
+    then: xs is for past/other sessions; use native Claude Code tools for current session state
 
 depends_on:
   - CRH-005
-related: []
+related:
+  - CRH-007
 
 priority: should
-status: draft
-validation_notes: "Documented from session 84db real-world test"
+status: mined
+validation_notes: |
+  Documented from multiple sessions showing the xs scout workflow in practice.
+  Key principle: xs + Task delegation preserves parent agent context while
+  sub-agent does the heavy lifting of sifting through session history.
+  The failure mode (agent jumping to implementation post-compaction) is the
+  core motivation documented in e583:501-600.
+  Scope boundary (AC6): xs for past sessions, native tools for current state,
+  confirmed by user correction in 760a:401-500.

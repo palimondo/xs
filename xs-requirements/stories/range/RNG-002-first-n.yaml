@@ -6,17 +6,78 @@ epic: range-selection
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to view the first N items
+i_want: to view the first N items using +N syntax
 so_that: I can see how the session started
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: a40c-L1-100.yaml
+    finding: F003
+    quote: "Indices/ranges: 5 (item 5), +10 (first 10), -20 (last 20), 10-30 (range), 60+ (from 60 onwards)"
+    context: "Help text defining +10 as first 10 items (head)"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L201-300.yaml
+    finding: F003
+    quote: "if single negative numberis tail, maybe single positive should be head?"
+    context: "User proposed +N as head syntax to resolve ambiguity with bare positive integer"
+
+  - file: b475-L201-300.yaml
+    finding: F005
+    quote: "Hmm, that discrepancy between specific index in case of single positive integer vs. last N messages in case of negative number bothers me. Can we do +5 as head?"
+    context: "User explicitly requested +N syntax for head to avoid conflict with single index selection"
+
+  - file: b475-L201-300.yaml
+    finding: F006
+    quote: "`+5` = first 5 items (head)"
+    context: "Agent confirmed final agreed syntax: +5 means first 5 items"
+
+  - file: a40c-L101-200.yaml
+    finding: F001
+    quote: "runnning `./explore_session.py pr-14` is fine. But this is how to reproduce the issue you discovered: `./explore_session.py pr-14 +5`"
+    context: "User confirms +N syntax is expected to work as a range positional argument"
+
+  - file: 1e83-L701-800.yaml
+    finding: F003
+    quote: "`./explore_session.py 943dff12 +14` works\n`./explore_session.py 943dff12 -U -a -x Tool +14` doesn't work"
+    context: "Bug report: +N range works alone but fails when combined with filter flags due to argparse issue"
+
+  - file: 1e83-L801-900.yaml
+    finding: F001
+    quote: "This works as designed: When indices are provided (like +14), they are applied to the FULL timeline first, then filtering happens."
+    context: "User confirms +N applies to full timeline before filters; this is intentional"
+
+acceptance_criteria:
+  - id: RNG-002-AC1
+    given: a timeline with 39 items
+    when: user specifies +10 as a positional argument
+    then: the first 10 items (indices 1-10) are displayed
+
+  - id: RNG-002-AC2
+    given: a timeline with 39 items
+    when: user specifies +50 (exceeds timeline length)
+    then: all 39 items are displayed without error
+
+  - id: RNG-002-AC3
+    given: a timeline with 39 items and filters -U -a -x Tool
+    when: user specifies +14
+    then: first 14 items from full timeline are selected, then filters applied to those 14
+
+  - id: RNG-002-AC4
+    given: a timeline with 39 items
+    when: user specifies +14 after filter flags (e.g. -U -a -x Tool session +14)
+    then: parsing succeeds without argparse error
 
 depends_on:
   - PRS-005
-related: []
+
+related:
+  - RNG-001  # Bare integer is single index, not head
+  - RNG-003  # -N is the symmetric tail counterpart
+  - FLT-001  # Range applies before filters (pipeline ordering)
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Evolution documented in b475:201-300: user initially considered bare positive
+  integer as head, then resolved ambiguity by requiring + prefix for head.
+  Pipeline ordering confirmed in 1e83:801-900: +N applies to full timeline
+  BEFORE filtering. The user explicitly stated "this works as designed."

@@ -1,0 +1,133 @@
+# Epic Synthesis Report: Sidechain Handling
+
+epic: sidechain-handling
+synthesized_by: opus
+timestamp: 2026-02-17T22:00:00Z
+
+summary: |
+  The sidechain-handling epic covers how xs treats events from Task sub-agent
+  sessions (marked with isSidechain=true in the raw JSONL). The primary source
+  of findings is session e583, which contains an extended investigation into
+  sidechain event visibility that went through three phases: initial incorrect
+  conclusion that sub-agent actions are invisible, discovery that xs --jsonl
+  strips metadata, and final resolution confirming sidechain events DO appear
+  in timeline output as regular events.
+
+stories_populated:
+  - id: SID-001
+    title: Display sidechain events in timeline
+    status: mined
+    sources_count: 7
+    acceptance_criteria_count: 4
+    key_insight: |
+      Sidechain events ARE displayed in xs timeline as regular events without
+      special marking. This was confirmed by characterization test after
+      extensive investigation. Summary counts include sidechain actions.
+
+  - id: SID-002
+    title: Search includes sidechain content
+    status: mined
+    sources_count: 4
+    acceptance_criteria_count: 2
+    key_insight: |
+      Search finds content within sidechain events (confirmed by test). However,
+      a search crash (AttributeError on list content) was discovered during
+      sidechain investigation. The crash is a general search robustness bug,
+      not sidechain-specific, but it blocks reliable sidechain content search.
+
+  - id: SID-003
+    title: Filter sidechain events with dedicated flag
+    status: mined
+    sources_count: 3
+    acceptance_criteria_count: 3
+    key_insight: |
+      No explicit user request for a sidechain filter flag exists. The most
+      concrete finding is that xs --jsonl strips isSidechain metadata, while
+      user explicitly requires raw JSONL passthrough. AC3 (metadata preservation)
+      has the strongest source backing. AC1/AC2 (include/exclude flags) are
+      speculative future features.
+
+new_stories_proposed: []
+  # No new SID stories proposed. Rationale:
+  # - Task delegation workflow for replay (day-025 chunks) belongs to EXP epic
+  # - Task sub-agents using xs exclusively (e583:601-700) is a usage constraint, not sidechain handling
+  # - Raw JSONL passthrough requirement (e583:1101-1200) is best served by DSP/PRS epics
+  #   but is cross-referenced in SID-003-AC3
+
+findings_analyzed:
+  directly_relevant:
+    - source: e583:1001-1100
+      findings: [F001, F002, F003]
+      relevance: "PRIMARY - Resolution of sidechain visibility investigation"
+
+    - source: e583:301-400
+      findings: [F001, F002, F003]
+      relevance: "Initial sidechain investigation; search crash discovery"
+
+    - source: e583:201-300
+      findings: [F002, F004, F005]
+      relevance: "User questioning Task sub-agent transcript visibility"
+
+    - source: e583:901-1000
+      findings: [F002]
+      relevance: "xs --jsonl strips isSidechain metadata; 130 sidechain events not surfaced"
+
+    - source: e583:1101-1200
+      findings: [F001]
+      relevance: "--json/--jsonl must pass through raw JSONL unchanged"
+
+    - source: b475:901-1000
+      findings: [F005]
+      relevance: "Task tool missing from compact display parameters"
+
+  contextually_relevant:
+    - source: e583:601-700
+      findings: [F002, F003]
+      relevance: "Task sub-agent xs workflow pattern; Task agents must use xs exclusively"
+      assigned_to: "Not SID - belongs to CLI/usage constraints"
+
+    - source: day-025:5801-6000
+      findings: [F006, F007]
+      relevance: "Task delegation for replay; explore_session output consumed by Task"
+      assigned_to: "Not SID - belongs to EXP (export/replay) epic"
+
+    - source: day-025:6201-6400
+      findings: [F006]
+      relevance: "Task delegation workflow documentation"
+      assigned_to: "Not SID - belongs to EXP (export/replay) epic"
+
+    - source: day-025:6601-6800
+      findings: [F002]
+      relevance: "Design philosophy: direct integration with Task tool"
+      assigned_to: "Not SID - belongs to CLI/design principles"
+
+    - source: 760a:301-400
+      findings: [F001]
+      relevance: "User corrects sub-agent to use xs, not direct filesystem"
+      assigned_to: "Not SID - usage constraint"
+
+cross_epic_references:
+  - story: SID-003-AC3
+    cross_ref: DSP-003
+    note: "Raw JSONL passthrough (preserving isSidechain) is a DSP requirement that enables SID-003 filtering"
+
+  - story: SID-001-AC3
+    cross_ref: FMT-021
+    note: "Task tool compact display format is a FMT requirement that SID-001 depends on"
+
+  - story: SID-002-AC2
+    cross_ref: SRC-001
+    note: "Search crash on list content is a general SRC robustness issue, not SID-specific"
+
+open_questions:
+  - question: "Should sidechain events have visual marking (indentation, prefix, color) in timeline?"
+    evidence: "No user request for marking found. Current behavior is unmarked inline display."
+    resolution: pending
+
+  - question: "Should SID-003-AC3 (metadata preservation) be moved to DSP-003 or PRS-005?"
+    evidence: "The --json/--jsonl raw passthrough requirement is broader than sidechain filtering."
+    resolution: pending
+
+  - question: "Is the sidechain-handling epic large enough to justify being separate from filtering (FLT)?"
+    evidence: "Only 3 stories, two of which are 'should' and one 'could'. Most findings are about confirming current behavior works, not requesting new features."
+    resolution: pending

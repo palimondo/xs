@@ -6,17 +6,110 @@ epic: display-modes
 theme: local-exploration
 
 as_a: developer exploring filtered results
-i_want: sequence numbers shown for discontinuous fragments
-so_that: I know which events I'm looking at
+i_want: sequence numbers shown for discontinuous fragments and controllable via --show-numbers
+so_that: I know which events I am looking at and can reference them by index
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L1101-1200.yaml
+    finding: F003
+    quote: "Compact mode should also have the dot it simply has the additional number at the front."
+    context: "Compact mode always shows [seq] prefix"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L1101-1200.yaml
+    finding: F006
+    quote: "we were previously discussing if we should add option to add it to truncated mode as well."
+    context: "Sequence numbers in truncated mode discussed as optional feature"
+
+  - file: b475-L101-200.yaml
+    finding: F001
+    quote: "No sequence numbers in truncated mode"
+    context: "Default for truncated mode: no sequence numbers"
+
+  - file: b475-L1-100.yaml
+    finding: F003
+    quote: "No sequence numbers in the left margin"
+    context: "reconstruct.jq format has no sequence numbers"
+
+  - file: a40c-L1-100.yaml
+    finding: F009
+    quote: "Show sequence numbers in truncated mode even without filtering"
+    context: "CLI help text: --show-numbers forces sequence number display in truncated mode"
+
+  - file: caf2-L1-100.yaml
+    finding: F009
+    quote: "Implement CLI flags for controlling timeline display (--no-tool-results, --show-numbers)"
+    context: "--show-numbers as a display control flag"
+
+  - file: 0841-L1001-1100.yaml
+    finding: F002
+    quote: "we shoudl end with `[...]` when it's multiline, but otherwise don't truncate it at all. This way we can rely on head/tail/grep to get the correct sequence number from our responses"
+    context: "Sequence numbers enable grep/head/tail workflows on output"
+
+  - file: e583-L1501-1600.yaml
+    finding: F004
+    quote: "the JSON events/messages do not include sequence number?"
+    context: "User expects sequence numbers in JSON export too; they are assigned by xs, not present in raw JSONL"
+
+  - file: b475-L101-200.yaml
+    finding: F005
+    quote: "the indexing isn't stable, or rather in --truncated mode it is't stable and as I different START and same END, I get different last message"
+    context: "Index stability concern: sequence numbers must be stable regardless of display mode or filters"
+
+  - file: a40c-L801-900.yaml
+    finding: F003
+    quote: "usage: explore_session.py [-h] [-s] [-t] [-g] [-f] [-c] [-S SEARCH]\n                          [--export-json RANGE OUTPUT] [--json] [--jsonl]\n                          [-i FILTERS] [-x FILTERS] [--truncated] [--full]\n                          [--no-tool-results] [--show-numbers] [-A NUM]\n                          [-B NUM] [-C NUM] [-M] [-U] [-a] [-T]\n                          session [indices ...]"
+    context: "--show-numbers in the full CLI interface snapshot"
+
+acceptance_criteria:
+  - id: DSP-004-AC1
+    given: compact mode output
+    when: rendered
+    then: "sequence numbers always shown as '[seq]' prefix before each event"
+
+  - id: DSP-004-AC2
+    given: truncated mode output without --show-numbers
+    when: rendered
+    then: no sequence numbers appear in output
+
+  - id: DSP-004-AC3
+    given: truncated mode output with --show-numbers flag
+    when: rendered
+    then: "sequence numbers appear as '[seq]' prefix before each event"
+
+  - id: DSP-004-AC4
+    given: full mode output without --show-numbers
+    when: rendered
+    then: no sequence numbers appear in output
+
+  - id: DSP-004-AC5
+    given: full mode output with --show-numbers flag
+    when: rendered
+    then: "sequence numbers appear as '[seq]' prefix before each event"
+
+  - id: DSP-004-AC6
+    given: sequence numbers assigned to events
+    when: filtering is applied (e.g. -U, -i, range selection)
+    then: sequence numbers remain stable (same event always has same number regardless of what is displayed)
+
+  - id: DSP-004-AC7
+    given: filtered output with discontinuous sequence numbers in compact mode
+    when: rendered
+    then: sequence number gaps are visible, enabling user to identify which events were filtered out
 
 depends_on:
-  - DSP-001
-related: []
+  - DSP-001  # Compact mode always shows sequence numbers
+  - DSP-002  # Truncated mode hides them by default
+
+related:
+  - DSP-005  # Discontinuous separator related to sequence number gaps
+  - RNG-001  # Range selection uses sequence numbers
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Evidence from b475, a40c, caf2, 0841, e583.
+  Compact mode: always shows [seq] prefix.
+  Truncated/full mode: no sequence numbers by default; --show-numbers forces display.
+  Sequence numbers must be stable (assigned once from timeline position, not affected by filters).
+  User explicitly values sequence numbers for grep/head/tail workflows and for referencing events.
+  Potential future addition of sequence numbers to JSON export (e583 finding).

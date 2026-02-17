@@ -1,23 +1,72 @@
 # Story: Assistant Message Formatting
 
 id: FMT-002
-title: Format assistant messages with play button
+title: Format assistant text messages with play button symbol
 epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: assistant messages displayed matching Claude Code console
+i_want: assistant text messages displayed with play button symbol matching Claude Code console
 so_that: output is recognizable and parseable by other LLMs
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "day-021:10835"
+    quote: '"⏺ \\($line.message.content[0].text)"'
+    context: "reconstruct.jq renders assistant text with ⏺ prefix"
+  - session: "day-021:10908"
+    quote: '"⏺ \\($line.message.content[0].text)\\n\\n"'
+    context: "Assistant text messages followed by blank line separator"
+  - session: "b475:1628"
+    quote: "Use ⏺ for all assistant messages as is done in Claude Code console, which I have repeatedly pasted in several previous messages to illustrate how it should be formatted correctly"
+    context: "User correcting agent to use ⏺ consistently for ALL assistant output"
+  - session: "b475:981"
+    quote: "No emojis! The truncated mode should be a faithful reproduction of Claude Code's console output."
+    context: "Agent confirms: > for user, ⏺ for assistant/tool, ⎿ for tool results; no emojis"
+  - session: "0841:1034"
+    quote: "for User and the dot for Claude"
+    context: "User specifies > for user messages, bullet/dot (⏺) for Claude"
+  - session: "b475:2087"
+    quote: "⏺ I'll run the tests for you now and show the results."
+    context: "Truncated mode showing ⏺ prefix for assistant text"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-002-AC1
+    given: assistant message with text content in JSONL
+    when: rendered in truncated mode
+    then: "Display as '⏺ {message_text}' followed by a blank line"
+
+  - id: FMT-002-AC2
+    given: assistant message with text content in JSONL
+    when: rendered in compact mode
+    then: "Display as '[N] ⏺ {first_line}' on a single line; append '[...] {last_line}' if multiline"
+
+  - id: FMT-002-AC3
+    given: assistant message with text content in JSONL
+    when: rendered in full mode
+    then: "Display as '[N] ⏺ {full_message_text}' with complete content"
+
+  - id: FMT-002-AC4
+    given: assistant message with only tool_use content (no text)
+    when: rendered in compact mode
+    then: "Display as '[N] ⏺ [Tools: ToolName1, ToolName2]'"
+
+  - id: FMT-002-AC5
+    given: multiline assistant message
+    when: rendered in truncated mode
+    then: "Show full text (by design, assistant text is NOT truncated in truncated mode)"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse JSONL assistant messages
 related:
   - PRIN-001  # Console fidelity
+  - FMT-008  # Multiline truncation (compact mode only)
+  - FMT-006  # Thinking blocks (special assistant content)
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  ⏺ symbol used for ALL assistant output (text, tool calls, tool-only messages).
+  User repeatedly corrected agent to use ⏺ consistently, not • or emojis.
+  Assistant text messages show full content in truncated mode (not truncated).
+  Tool-only assistant messages show as [Tools: ToolName] in compact mode.
+  Source: b475:1628, b475:981, 1e83:901-967

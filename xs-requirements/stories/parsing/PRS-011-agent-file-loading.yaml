@@ -12,12 +12,23 @@ so_that: I can search and view subagent activity
 sources:
   - file: xs-requirements/bugs/BUG-003-no-agent-files.md
     context: "xs currently only supports main session files"
+
   - file: docs/claude_code_jsonl_format_reference.md
     section: "Subagent and Sidechain Behavior"
 
+  - session: e583:1001-1100
+    finding: F002
+    quote: "xs does display sidechain events - they appear in the timeline as regular events without any special marking"
+    context: "Currently sidechain events appear in timeline without special marking"
+
+  - session: e583:1001-1100
+    finding: F003
+    quote: "Task sub-agent actions ARE visible in xs output, contrary to what we thought earlier"
+    context: "Sidechain events from Task sub-agents are visible in timeline output; summary counts also include them"
+
 acceptance_criteria:
   - id: PRS-011-AC1
-    given: session with associated agent-*.jsonl files
+    given: session with associated agent-*.jsonl files in the same directory
     when: exploring the session
     then: agent files are automatically discovered and loaded
 
@@ -39,6 +50,8 @@ acceptance_criteria:
 current_behavior: |
   xs only parses main session JSONL files (UUID-based names).
   Agent files (agent-{agentId}.jsonl) are not discovered or parsed.
+  However, sidechain events DO appear in the main session timeline
+  as regular events without special marking.
   This is a Claude Code 2.x feature gap.
 
 file_patterns:
@@ -57,10 +70,15 @@ discovery_method: |
 
 depends_on:
   - PRS-001  # Basic JSONL loading
+
 related:
   - SID-001  # Display sidechain events
   - SID-002  # Search includes sidechain content
 
 priority: should
-status: draft
-validation_notes: "Required for sidechain stories to work"
+status: mined
+validation_notes: |
+  Required for sidechain stories to work. Evidence from e583 session
+  confirms that sidechain events already appear in main session timeline
+  as regular events without special marking. Agent files (separate JSONL
+  files) contain the full subagent transcripts. This is a CC 2.x feature.

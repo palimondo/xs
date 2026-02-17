@@ -1,0 +1,94 @@
+# Story: Search Position in Filter Pipeline
+
+id: SRC-007
+title: Search as step 0 of the filter pipeline
+epic: search
+theme: local-exploration
+
+as_a: developer combining search with filters and ranges
+i_want: search to execute as the first step of a well-defined pipeline
+so_that: search, range, include, exclude, and context interact predictably
+
+sources:
+  - session: caf2:301-400
+    finding: F004
+    quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events\n1. Filter events by range\n2. Filter by `-i --include`\n3. Filter by `-x --exclude`\n4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines, since this expansion can produce overlaps)"
+    context: "User defines the canonical 5-step filter pipeline: search -> range -> include -> exclude -> context expansion."
+
+  - session: caf2:901-1000
+    finding: F001
+    quote: "the behavior shoudl be chain of: (0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events 1. Filter events by range 2. Filter by `-i --include` 3. Filter by `-x -- exclude` 4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines"
+    context: "User repeated the canonical pipeline ordering in a second session, confirming it is the intended design."
+
+  - session: caf2:1001-1100
+    finding: F002
+    quote: "Currently search ignores -i/-x filters"
+    context: "Bug: search was not applying include/exclude filters. After fix, the full filter chain is applied."
+
+  - session: caf2:1001-1100
+    finding: F003
+    quote: "Search now properly applies the complete filter chain as specified"
+    context: "Filter chain confirmed as: 0. Search, 1. Range, 2. Include, 3. Exclude, 4. Context expansion."
+
+  - session: e583:1601-1700
+    finding: F003
+    quote: "our -N for tail is being applied before the search, not after... looks like we are hitting a gap in our functionality"
+    context: "User discovered that range selection (-N for tail) applies before search, making it impossible to get the last N search results. This is a known gap."
+
+  - session: e583:1601-1700
+    finding: F005
+    quote: "I am worried that we might accidentally create conflicting mess of exclusive parameter sets. We shoudl think hardest about interactions between all our filtering and range options, so that we have coherent UX."
+    context: "User raised concern about filter pipeline coherence. Wants careful design of all flag interactions."
+
+acceptance_criteria:
+  - id: SRC-007-AC1
+    given: -S search with range and include/exclude filters
+    when: running `xs <session> -S "keyword" 100-200 -i Tool -x Read`
+    then: pipeline executes in order: (0) search for "keyword", (1) filter to range 100-200, (2) include only Tool, (3) exclude Read, (4) apply context expansion
+
+  - id: SRC-007-AC2
+    given: -S search with range
+    when: running `xs <session> -S "keyword" 100-200`
+    then: search finds matches first, then range limits results to items 100-200
+
+  - id: SRC-007-AC3
+    given: -S search with include filter
+    when: running `xs <session> -S "keyword" -i Bash`
+    then: search finds matches first, then only Bash-type matches are shown
+
+  - id: SRC-007-AC4
+    given: -S search with context expansion
+    when: running `xs <session> -S "keyword" -i Tool -C 1`
+    then: context expansion adds neighbors AFTER include/exclude filtering, using deduplicated merge
+
+design_notes: |
+  The pipeline is strictly ordered:
+    0. Search: filter events by -S pattern (or take all if no -S)
+    1. Range: apply positional index range (100-200, +50, -30)
+    2. Include: keep only events matching -i filters
+    3. Exclude: remove events matching -x filters
+    4. Context: expand with -A/-B/-C, merging overlaps without duplication
+
+  Known gap: -N (tail) applies at step 1 (range) before search results are known,
+  so "last N search results" is not directly expressible. User proposed --tail flag
+  to apply AFTER filtering (e583:1601-1700).
+
+depends_on:
+  - SRC-001  # Basic search
+  - FLT-001  # Include filter
+  - FLT-002  # Exclude filter
+  - RNG-001  # Range selection
+
+related:
+  - SRC-002  # After context (step 4)
+  - SRC-003  # Before context (step 4)
+  - SRC-004  # Combined context (step 4)
+  - SRC-005  # Display mode interaction
+
+priority: must
+status: mined
+validation_notes: |
+  Pipeline ordering stated twice by user (caf2:301-400 and caf2:901-1000).
+  Implementation bug confirmed and fixed: search was ignoring -i/-x.
+  Known gap: tail-of-search-results not expressible with current pipeline ordering.
+  User requested careful UX coherence design for all filter interactions.

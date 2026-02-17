@@ -1,0 +1,99 @@
+# Epic Synthesis Report: jsonl-parsing
+# Generated: 2026-02-17
+
+epic_id: jsonl-parsing
+epic_name: JSONL Parsing and Session Loading
+synthesized_by: opus
+
+summary: |
+  The jsonl-parsing epic is the foundation layer for all xs functionality.
+  It covers loading session files, parsing multi-line JSON format, building
+  a unified chronological timeline, handling format version differences,
+  and extracting structured data from JSONL event objects.
+
+stories_populated: 13
+stories_original: 11
+stories_new: 2
+
+new_stories:
+  - id: PRS-012
+    title: Preserve raw JSONL objects for JSON/JSONL export
+    rationale: |
+      Multiple user corrections (a40c:501-600, e583:1101-1200) explicitly
+      require that --json/--jsonl export modes output raw JSONL objects
+      unmodified. The parser must retain the original objects alongside
+      the parsed/structured timeline. This is a must-priority requirement.
+
+  - id: PRS-013
+    title: Extract content blocks from message objects
+    rationale: |
+      Content block extraction is a distinct parsing concern from timeline
+      building. Assistant messages contain arrays of typed content blocks
+      (text, tool_use, thinking); user messages contain either strings or
+      arrays with tool_result blocks. The user corrected the parser when
+      thinking blocks were ignored (a40c:201-300). This step transforms
+      raw JSONL objects into the structured entries that timeline building
+      uses.
+
+story_status:
+  - PRS-001: mined (6 sources, 5 acceptance criteria)
+  - PRS-002: mined (7 sources, 9 acceptance criteria)
+  - PRS-003: mined (6 sources, 4 acceptance criteria)
+  - PRS-004: mined (2 sources, 4 acceptance criteria)
+  - PRS-005: mined (13 sources, 7 acceptance criteria)
+  - PRS-006: mined (6 sources, 5 acceptance criteria)
+  - PRS-007: mined (8 sources, 5 acceptance criteria)
+  - PRS-008: mined (3 sources, 3 acceptance criteria)
+  - PRS-009: mined (8 sources, 5 acceptance criteria)
+  - PRS-010: mined (6 sources, 5 acceptance criteria)
+  - PRS-011: mined (2+2 sources, 4 acceptance criteria)
+  - PRS-012: mined (5 sources, 4 acceptance criteria)
+  - PRS-013: mined (6 sources, 6 acceptance criteria)
+
+findings_reviewed: 237
+findings_used: ~95
+findings_sources:
+  sessions:
+    - 0841 (7 chunks: L301-400, L601-700, L701-800, L801-900, L901-1000, L1101-1200, L1201-1300)
+    - a40c (5 chunks: L1-100, L201-300, L501-600, L601-700, L1401-1500)
+    - b475 (2 chunks: L1-100, L401-500)
+    - e583 (4 chunks: L801-900, L1001-1100, L1101-1200, L1501-1600)
+    - f9c7 (1 chunk: L801-900)
+    - fa1a (2 chunks: L601-700, L1001-1100)
+    - 760a (2 chunks: L501-600, L601-643)
+    - 06a0 (3 chunks: L301-400, L401-500, L501-522)
+    - 1e83 (3 chunks: L201-300, L301-400, L701-800)
+    - caf2 (1 chunk: L201-300)
+  day_logs:
+    - day-021 (3 chunks: L12001-12200, L12201-12400, L12201-12423)
+    - day-024 (1 chunk: L48001-48200)
+    - day-025 (8 chunks: L801-1000, L1001-1200, L3001-3200, L3401-3600, L3601-3800, L3801-4000, L4001-4200, L6601-6800)
+
+key_requirements_discovered:
+  - Multi-line JSON is the critical parsing challenge (not standard JSONL)
+  - Unified timeline with gapless sequence numbers is the central data structure
+  - Substring matching for session discovery (NOT type-specific parsing)
+  - All content types must appear in timeline (text, tool_use, tool_result, thinking)
+  - Raw JSONL objects must be preserved for passthrough export
+  - isMeta, isCompactSummary, and userType fields require distinct handling
+  - Format version detection via version field in system events
+  - Tool results arrive as user messages with tool_result content blocks
+  - Slash commands use XML tags (<command-message>, <command-name>)
+  - Two types of interruption patterns in JSONL
+
+cross_epic_dependencies:
+  - FMT-*: All formatting stories depend on parsed content blocks
+  - FLT-*: Filtering stories depend on timeline and content classification
+  - RNG-*: Range selection stories depend on timeline sequence numbers
+  - DSP-*: Display mode stories depend on timeline and content blocks
+  - SUM-*: Summary stories depend on timeline statistics
+  - CRH-*: Compaction recovery depends on isCompactSummary detection
+  - GFH-*: GitHub fetch produces session files that parsing loads
+  - SID-*: Sidechain stories depend on agent file loading (PRS-011)
+  - EXP-*: Export stories depend on raw JSONL passthrough (PRS-012)
+
+unresolved_questions:
+  - Exact XML structure for ! (bash) and @ (context drop) user messages (PRS-008)
+  - Whether sequence numbers should be injected into JSON export (PRS-012-AC4)
+  - How to handle format version differences in content block structure (PRS-006 + PRS-013)
+  - Agent file discovery method preference (directory scan vs sessionId match vs agent_transcript_path)

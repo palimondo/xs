@@ -9,14 +9,58 @@ as_a: power user
 i_want: -M as shortcut for -i Message
 so_that: I can quickly filter to messages
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "a40c:1-100"
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Include all messages (shortcut for"
+    context: "CLI help text showing -M as shortcut for --include Message"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "caf2:301-400"
+    line: 316
+    speaker: user
+    type: user_correction
+    quote: "the `grep`/`rg` parameters are capital A, B, C, so we are free to use `-a` as shortcut for `-i Assistant`"
+    context: "Lowercase -a used for Assistant (grep uses uppercase -A/-B/-C); uppercase -M for Message"
+
+  - file: "caf2:801-900"
+    line: 824
+    speaker: agent
+    type: agent_proposal
+    quote: "parser.add_argument('-M', dest='include_message'"
+    context: "Virtual entity filter shortcuts: -M (message), -U (user), -T (tool), -a (assistant)"
+
+  - file: "caf2:601-700"
+    line: 687
+    speaker: agent
+    type: agent_proposal
+    quote: "Note: --conversation is deprecated. Use -t -m (or --timeline --include Message)"
+    context: "-M replaces the deprecated --conversation flag for showing only messages"
+
+acceptance_criteria:
+  - id: FLT-006-AC1
+    given: session with mixed content
+    when: -M flag is specified
+    then: equivalent to --include Message (shows user + assistant text messages)
+
+  - id: FLT-006-AC2
+    given: -M flag
+    when: combined with other filters like -x Tool
+    then: works as part of the filter chain (same as --include Message -x Tool)
+
+  - id: FLT-006-AC3
+    given: -M flag
+    when: specified
+    then: implies timeline display mode (no need for explicit -t)
 
 depends_on:
   - FLT-003
-related: []
+related:
+  - FLT-007  # -U shortcut
+  - FLT-008  # -a shortcut
+  - FLT-012  # -M -x Tool interaction
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Uppercase -M chosen because lowercase -a/-b/-c are free (grep uses capitals -A/-B/-C for context)."

@@ -7,17 +7,45 @@ theme: console-replay
 
 as_a: developer reviewing session output
 i_want: local bash commands shown with ! prefix
-so_that: I can distinguish user-executed commands from Claude's
+so_that: I can distinguish user-executed commands from Claude's tool calls
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:667"
+    quote: "[32] ! ./explore_session.py a40c\n  ⎿  (eval):1: no such file or directory: ./explore_session.py"
+    context: "Local bash commands use ! prefix; output uses ⎿ prefix"
+  - session: "1e83:629"
+    quote: "[32] > <bash-input>./explore_session.py a40c</bash-input>"
+    context: "Before fix: raw XML tags were shown instead of parsed format"
+  - session: "0841:1052"
+    quote: "one unhandled case would be bash command invocation: !command and context load using @filename"
+    context: "User identifies local bash commands as edge case needing handling"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-013-AC1
+    given: local bash command user message (containing <bash-input> tags)
+    when: rendered in compact mode
+    then: "Display as '[N] ! {command}' on a single line"
+
+  - id: FMT-013-AC2
+    given: local bash command user message
+    when: rendered in truncated mode
+    then: "Display as '! {command}' with output on next line as '  ⎿  {output}'"
+
+  - id: FMT-013-AC3
+    given: local bash command with stdout and stderr
+    when: rendered
+    then: "Parse <bash-input>, <bash-stdout>, <bash-stderr> tags and display appropriately"
 
 depends_on:
-  - PRS-008
+  - PRS-008  # Must parse bash command messages
 related:
-  - FMT-003
+  - FMT-003  # Bash tool (Claude's bash calls use ⏺)
+  - FMT-007  # Tool results (output uses ⎿ prefix)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Local user bash commands use ! prefix (distinct from Claude's ⏺ Bash() calls).
+  Output uses ⎿ prefix with indentation (same as tool results).
+  Must parse <bash-input>, <bash-stdout>, <bash-stderr> XML tags.
+  Source: 1e83:667, 1e83:629, 0841:1052

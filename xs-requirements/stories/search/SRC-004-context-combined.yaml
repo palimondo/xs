@@ -1,4 +1,4 @@
-# Story: Combined Context
+# Story: Combined Context Lines (-C)
 
 id: SRC-004
 title: Show lines before and after match (-C)
@@ -6,17 +6,63 @@ epic: search
 theme: local-exploration
 
 as_a: developer searching a session
-i_want: to see lines around each match
-so_that: I get full context
+i_want: to see N timeline entries both before and after each match
+so_that: I get full surrounding context in one flag
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: caf2:301-400
+    finding: F004
+    quote: "4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines, since this expansion can produce overlaps)"
+    context: "User specifies -C for combined before+after context. Must not produce duplicate lines when expansions overlap."
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: caf2:501-600
+    finding: F001
+    quote: "- -C NUM: Show NUM lines before and after each match"
+    context: "Committed implementation confirms -C NUM semantics: equivalent to -A NUM -B NUM."
+
+  - session: e583:1201-1300
+    finding: F003
+    quote: "xs session -i TodoWrite -C 1 | tail -5"
+    context: "Real usage: -C 1 with tool filter to show 1 entry before and after each TodoWrite invocation."
+
+  - session: caf2:1001-1100
+    finding: F004
+    quote: "outputting same message multiple times or out of order is a serious bug that must be fixed immediately."
+    context: "User correction: duplicate or out-of-order output from overlapping context expansions is a critical bug, not a minor enhancement."
+
+acceptance_criteria:
+  - id: SRC-004-AC1
+    given: a search with matches and -C 2 specified
+    when: running `xs <session> -S "keyword" -C 2`
+    then: shows 2 entries before and 2 entries after each match (equivalent to -B 2 -A 2)
+
+  - id: SRC-004-AC2
+    given: multiple matches close together causing context overlap
+    when: context windows overlap between adjacent matches
+    then: no duplicate entries are shown; overlapping regions are merged into a single contiguous block
+
+  - id: SRC-004-AC3
+    given: -C used with include filter
+    when: running `xs <session> -i TodoWrite -C 1`
+    then: shows each TodoWrite event with 1 entry before and 1 entry after
+
+  - id: SRC-004-AC4
+    given: -C used together with -A or -B
+    when: -C and -A (or -B) are both specified
+    then: behavior is well-defined (either error, or -C sets both and -A/-B override one side)
+    notes: "Interaction between -C and -A/-B not explicitly documented in findings; needs design decision."
 
 depends_on:
-  - SRC-001
-related: []
+  - SRC-001  # Basic search
+
+related:
+  - SRC-002  # After context
+  - SRC-003  # Before context
+  - SRC-006  # Gap separators between non-contiguous results
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  -C NUM is shorthand for -A NUM -B NUM (grep convention).
+  Overlapping context windows must be merged, never producing duplicates.
+  User explicitly flagged duplicate/out-of-order output as a critical bug.

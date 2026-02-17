@@ -1,0 +1,111 @@
+epic: export
+agent: opus
+timestamp: 2026-02-17T22:00:00Z
+
+assigned_findings:
+  total: 47
+  by_story:
+    EXP-001: 9
+    EXP-002: 8
+    EXP-003: 19
+    EXP-004: 3
+
+  source_files:
+    - a40c-L1-100.yaml        # F010, F011 - CLI help showing --json, --export-json
+    - a40c-L101-200.yaml       # F003 - --json used for diagnostics
+    - a40c-L501-600.yaml       # F006, F007 - user correction: --json must output raw JSONL
+    - a40c-L601-700.yaml       # F001, F002 - --json and --export-json confirmed working with raw objects
+    - a40c-L1201-1300.yaml     # F004 - CLI usage string [--export-json RANGE OUTPUT] [--json] [--jsonl]
+    - 0841-L601-700.yaml       # F004, F005 - rename --export to --export-json, format is JSON array
+    - 0841-L901-1000.yaml      # F003 - --export for snippet extraction
+    - b475-L1-100.yaml         # F010 - rename --export to --export-json
+    - b475-L1601-1700.yaml     # F004 - unresolved: --json as formatting flag vs --export-json
+    - b475-L1801-1900.yaml     # F004 - --export-json RANGE OUTPUT (2 args)
+    - b475-L2101-2200.yaml     # F001, F003, F005 - --json implementation, --jsonl proposed, naming conflict
+    - b475-L2201-2300.yaml     # F001, F002 - --json and --jsonl summaries
+    - b722-L1-100.yaml         # F002 - --export with range, stdout, --include
+    - b722-L101-200.yaml       # F002, F003 - --export with filters for replay
+    - b722-L201-300.yaml       # F001, F002 - --export usage in replay workflow
+    - caf2-L1-100.yaml         # F008 - JSON/JSONL output formats confirmed
+    - cc2d-L601-700.yaml       # F004 - --export renamed to --export-json (duplicate of 0841)
+    - day-025-L4601-4800.yaml  # F005, F008, F010 - export with filters genesis
+    - day-025-L5001-5200.yaml  # F006 - Tool(glob) filter syntax for export
+    - day-025-L5201-5400.yaml  # F003, F006 - filter semantics, stdout output with '-'
+    - e583-L1101-1200.yaml     # F001 - raw passthrough contract for --json/--jsonl
+    - e583-L1501-1600.yaml     # F003, F004 - --json/--jsonl working, sequence numbers missing
+    - fa1a-L901-1000.yaml      # F004, F005 - export for sub-agent replay
+
+new_stories_proposed:
+  - id: EXP-004
+    title: "Include sequence numbers in JSON/JSONL export"
+    rationale: >
+      User noticed (e583:1587) that JSON/JSONL export does not include sequence
+      numbers. Agent acknowledged the limitation and proposed adding a sequence/index
+      field. UNRESOLVED: there is a tension with the raw-passthrough contract
+      (objects must be verbatim from transcript). Needs user decision. Priority: could.
+
+cross_epic_candidates:
+  - finding_file: a40c-L101-200.yaml
+    finding_id: F003
+    suggested_epic: display-modes
+    reason: "User uses --json to diagnose missing events in compact mode; this is about compact mode display, not export"
+
+  - finding_file: e583-L1501-1600.yaml
+    finding_id: F002
+    suggested_epic: filtering
+    reason: "User asking about jq filtering integration in xs; relates to filtering epic, not export"
+
+key_design_decisions:
+  - decision: "--json outputs raw JSONL objects, not transformed timeline data"
+    evidence: "a40c:545 (user correction), e583:1103 (user reconfirmation)"
+    affects: [EXP-001, EXP-002]
+    confidence: high
+
+  - decision: "--export renamed to --export-json"
+    evidence: "0841:672 (user request), b475:72 (agent task list)"
+    affects: [EXP-003]
+    confidence: high
+
+  - decision: "--export-json takes RANGE OUTPUT (2 args, not START END OUTPUT 3 args)"
+    evidence: "b475:1877 (range syntax unification)"
+    affects: [EXP-003]
+    confidence: high
+
+  - decision: "OUTPUT='-' sends export to stdout"
+    evidence: "day-025:5303 (implementation), b722:49 (real usage)"
+    affects: [EXP-003]
+    confidence: high
+
+  - decision: "Export format is JSON array (not JSONL)"
+    evidence: "0841:678 (agent clarification approved by user)"
+    affects: [EXP-003]
+    confidence: high
+
+  - decision: "Include/exclude filter semantics: include=OR whitelist, then exclude=AND blacklist"
+    evidence: "day-025:5216-5245 (user confirmed mental model)"
+    affects: [EXP-003]
+    confidence: high
+
+unresolved_questions:
+  - question: "Should --json/--jsonl include sequence numbers?"
+    evidence: "e583:1587-1595"
+    tension: "Adding sequence numbers modifies raw objects, conflicting with passthrough contract"
+    affects: [EXP-001, EXP-002, EXP-004]
+
+  - question: "Should --export-json OUTPUT be optional (making --json redundant)?"
+    evidence: "b475:1659"
+    tension: "--json is a display format flag to stdout; --export-json is a file-oriented command. User floated merging but did not resolve."
+    affects: [EXP-001, EXP-003]
+
+coverage_assessment: |
+  All three original stories (EXP-001, EXP-002, EXP-003) are well-evidenced with
+  multiple sources each. The raw-passthrough contract is the strongest requirement,
+  established via user correction (a40c:545) and reconfirmed (e583:1103).
+
+  EXP-003 has the deepest evidence with real-world usage across b722, day-025,
+  and fa1a sessions showing the export-for-replay workflow. The filter integration
+  with --include/--exclude is well-documented.
+
+  One new story proposed (EXP-004) for sequence numbers in export, but marked as
+  "could" priority since it conflicts with the raw-passthrough contract and was
+  never resolved by the user.

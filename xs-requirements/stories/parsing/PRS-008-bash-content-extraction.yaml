@@ -6,18 +6,53 @@ epic: jsonl-parsing
 theme: local-exploration
 
 as_a: developer exploring sessions
-i_want: bash commands extracted from XML structure
-so_that: local commands are identifiable
+i_want: bash commands from user messages with ! prefix extracted from XML structure
+so_that: local commands are identifiable and correctly categorized
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: 0841:1001-1100
+    finding: F003 (via TSV)
+    quote: "I guess one unhandled case would be bash command invocation: !command and context drop @file"
+    context: "User identifies unhandled case: ! prefix for bash commands in user messages"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: b475:401-500
+    finding: F008
+    quote: "where are we counting slash-commands? will we get a correct counts? waht about ! commands?"
+    context: "User asks about handling of ! commands (bash mode) in summary counts"
+
+  - session: 1e83:201-300
+    finding: F006
+    quote: "Have you noticed special message type when I used just single @filename ?"
+    context: "CC has special prefix characters: ! (bash), / (slash command), @ (context drop), # (unknown)"
+
+acceptance_criteria:
+  - id: PRS-008-AC1
+    given: a user message containing bash command content (! prefix mode)
+    when: parsed
+    then: the bash command is extracted and the message is classified as a bash command
+
+  - id: PRS-008-AC2
+    given: a user message with @ prefix (context drop)
+    when: parsed
+    then: the context file reference is extracted
+
+  - id: PRS-008-AC3
+    given: a user message that is a regular text input (no special prefix)
+    when: parsed
+    then: no bash/command extraction is attempted
 
 depends_on:
   - PRS-001
+
 related:
-  - FMT-013
+  - PRS-007  # Similar XML parsing for slash commands
+  - FMT-013  # Bash command display formatting
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Limited evidence in sessions. The ! prefix for bash commands and @ prefix for
+  context drops are Claude Code user message modes that have distinct XML
+  structures in the JSONL. User explicitly asked about ! commands in the
+  summary counting context. The exact XML structure for these modes needs
+  verification against real session files.

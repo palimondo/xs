@@ -9,15 +9,64 @@ as_a: developer exploring a session
 i_want: to show all messages (user + assistant)
 so_that: I can see the conversation without tools
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "caf2:101-200"
+    line: 160
+    speaker: user
+    type: user_request
+    quote: "support for Meta/virtual tools, so that we can say things like `--exclude Tools` or `--include Message`, maybe even patametrized `--include Message(User),Message(Assistant)` help me explore this alternative design space, considering all existing features. We are searching for unifying principle that can reduce the number of special syntax cases / parameters"
+    context: "User wants virtual entities (Message, Tool) as a unifying design that replaces ad-hoc special flags"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "caf2:101-200"
+    line: 165
+    speaker: user
+    type: user_correction
+    quote: "Tools shoudl be a virtual category without parameters, we already have short syntax for including tool calls: -i Bash,Grep don't overcomplicate it -- parameters are there for finetuning combinations"
+    context: "Virtual categories take no parameters; they are coarse filters. Parameters are for specific tools."
+
+  - file: "caf2:601-700"
+    line: 687
+    speaker: agent
+    type: agent_proposal
+    quote: "Note: --conversation is deprecated. Use -t -m (or --timeline --include Message)"
+    context: "--include Message replaces the deprecated --conversation flag"
+
+  - file: "a40c:501-600"
+    line: 518
+    speaker: agent
+    type: agent_proposal
+    quote: "Test user message filtering"
+    context: "Virtual entity filtering verified: -U flag filters to user messages, -a flag to assistant messages"
+
+  - file: "1e83:801-900"
+    line: 870
+    speaker: user
+    type: user_request
+    quote: "I was trying to recreate the old use case of option --conversation, which should have displayed only user messages and text responses from the assistant. The -x Tools should have removed the tools calls... IIRC."
+    context: "User recalls --conversation as showing user+assistant text, which is equivalent to -i Message (or -M)"
+
+acceptance_criteria:
+  - id: FLT-003-AC1
+    given: session with user messages, assistant messages, and tool calls
+    when: --include "Message" is specified
+    then: only user messages and assistant text messages are shown
+
+  - id: FLT-003-AC2
+    given: session with assistant messages containing only tool_use content
+    when: --include "Message" is specified
+    then: assistant messages with only tool_use content are excluded (they have no text)
+
+  - id: FLT-003-AC3
+    given: "Message" virtual entity
+    when: used in --include or --exclude
+    then: it matches both User and Assistant message types
 
 depends_on:
   - PRS-005
 related:
   - FLT-006  # -M shortcut
+  - FLT-012  # -M -x Tool interaction
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Message virtual entity replaces deprecated --conversation. Key user requirement for unified filtering design."

@@ -1,7 +1,7 @@
 # Story: Empty Content Display
 
 id: FMT-009
-title: Show "(No content)" for empty results
+title: Show "(No content)" for empty tool results
 epic: console-formatting
 theme: console-replay
 
@@ -9,14 +9,32 @@ as_a: developer reviewing session output
 i_want: empty tool results shown as "(No content)"
 so_that: I know the tool ran but returned nothing
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "b475:1596"
+    quote: "Excellent! Empty results now show"
+    context: "Agent confirms empty tool results now display placeholder"
+  - session: "b475:1568"
+    quote: "fix the empty tool results in truncated mode"
+    context: "Empty tool results needed a fix in truncated mode"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-009-AC1
+    given: tool result with empty content
+    when: rendered in truncated mode
+    then: "Display '  ⎿  (No content)' placeholder"
+
+  - id: FMT-009-AC2
+    given: tool result with empty content
+    when: rendered in compact mode
+    then: "Display '[N] ⎿  (No content)' on a single line"
 
 depends_on:
-  - PRS-005
+  - FMT-007  # Tool result formatting
 related: []
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Empty tool results must show a placeholder, not blank output.
+  Placeholder text: "(No content)".
+  Source: b475:1596, b475:1568

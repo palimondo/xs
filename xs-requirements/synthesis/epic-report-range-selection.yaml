@@ -1,0 +1,166 @@
+# Epic Synthesis Report: range-selection
+
+epic: range-selection
+name: Timeline Range Selection
+synthesized_by: opus
+timestamp: 2026-02-17T22:00:00Z
+
+summary: |
+  The range-selection epic covers all positional argument syntax for slicing
+  the timeline by index. Five original story stubs (RNG-001 through RNG-005)
+  were populated with sources and acceptance criteria. Two new stories were
+  added: RNG-006 (multiple range arguments) and RNG-007 (pipeline ordering).
+
+stories:
+  existing:
+    - id: RNG-001
+      title: Select single item by index
+      status: mined
+      sources_count: 4
+      acceptance_criteria_count: 3
+      key_finding: "Bare positive integer N = specific item at index N (not head)"
+
+    - id: RNG-002
+      title: Select first N items with +N syntax
+      status: mined
+      sources_count: 7
+      acceptance_criteria_count: 4
+      key_finding: "+N means first N items (head); user explicitly chose + prefix to avoid ambiguity with single index"
+
+    - id: RNG-003
+      title: Select last N items with -N syntax
+      status: mined
+      sources_count: 6
+      acceptance_criteria_count: 3
+      key_finding: "-N means last N items (tail); applies to full timeline before filters"
+
+    - id: RNG-004
+      title: Select range with N-M syntax
+      status: mined
+      sources_count: 7
+      acceptance_criteria_count: 5
+      key_finding: "N-M is inclusive range; out-of-bounds produces empty output; indices must be gapless"
+
+    - id: RNG-005
+      title: Select from N onwards with N+ syntax
+      status: mined
+      sources_count: 5
+      acceptance_criteria_count: 4
+      key_finding: "Both N+ and N- syntaxes supported for open-ended ranges; user hesitated on naming"
+
+  new:
+    - id: RNG-006
+      title: Combine multiple indices and ranges as free positional arguments
+      status: mined
+      priority: should
+      sources_count: 6
+      acceptance_criteria_count: 5
+      rationale: |
+        User explicitly requested free positional range arguments supporting multiple
+        values (e.g. "1 5 10-20 -5"). This was discussed in b475:201-300 and confirmed
+        by agent. It also encompasses the requirement that ranges be independent of
+        display mode flags and use consistent parse_range syntax across all features.
+
+    - id: RNG-007
+      title: Range selection applies to full timeline before filtering
+      status: mined
+      priority: must
+      sources_count: 8
+      acceptance_criteria_count: 4
+      rationale: |
+        The pipeline ordering (range before filters) was explicitly confirmed by the
+        user as intentional design in 1e83:801-900. The canonical pipeline was defined
+        in caf2:901-1000. The centralized implementation requirement came from
+        b475:501-600. This is a cross-cutting concern affecting all range stories
+        and the filtering epic.
+
+key_design_decisions:
+  - decision: "Bare positive integer = specific index, +N = head, -N = tail"
+    source: b475-L201-300.yaml
+    resolved: true
+    notes: "User initially considered positive int as head, then rejected due to ambiguity"
+
+  - decision: "Range applies to full timeline BEFORE filtering"
+    source: 1e83-L801-900.yaml
+    resolved: true
+    notes: "User stated 'this works as designed' — intentional, not a bug"
+
+  - decision: "Range is independent of display mode and filter flags"
+    source: b475-L201-300.yaml
+    resolved: true
+    notes: "User corrected overloaded --timeline parameter design"
+
+  - decision: "Timestamp-based ranges are out of scope"
+    source: b475-L2201-2300.yaml
+    resolved: true
+    notes: "User explicitly deferred as future extension"
+
+  - decision: "Both N+ and N- syntax for open-ended ranges"
+    source: caf2-L1001-1100.yaml
+    resolved: true
+    notes: "N- existed first; N+ added as more intuitive alias"
+
+  - decision: "Canonical pipeline: search -> range -> include -> exclude -> context"
+    source: caf2-L901-1000.yaml
+    resolved: true
+    notes: "User-defined pipeline ordering"
+
+known_gaps:
+  - id: GAP-001
+    description: "No post-filter tail selection"
+    detail: |
+      -N range applies before search/filter, so 'last N search results' is impossible.
+      User proposed --tail flag for post-filter slicing but deferred it (e583:1601-1700).
+    affects: [RNG-003, RNG-007]
+    resolution: "Proposed --tail flag; unresolved — may become FLT-015 or new story"
+
+  - id: GAP-002
+    description: "+N parsing fails when combined with filter flags"
+    detail: |
+      argparse nargs='*' for indices conflicts with flag parsing when flags
+      appear before the range argument (1e83:701-800). Workaround: options
+      must precede session positional argument.
+    affects: [RNG-002, RNG-006, CLI-001]
+    resolution: "CLI ordering constraint: options -> session -> ranges"
+
+cross_epic_references:
+  - epic: cli-interface
+    stories: [CLI-001]
+    relationship: "Range arguments are free positional args after session; CLI must handle argparse ordering"
+
+  - epic: filtering
+    stories: [FLT-001, FLT-015]
+    relationship: "Range selection in pipeline before include/exclude filters; --tail proposed for post-filter"
+
+  - epic: jsonl-parsing
+    stories: [PRS-005]
+    relationship: "All range stories depend on PRS-005 (timeline with gapless indices)"
+
+  - epic: display-modes
+    stories: [DSP-001, DSP-002, DSP-003]
+    relationship: "Range is orthogonal to display mode; must work with compact, truncated, and full"
+
+findings_files_consulted:
+  - a40c-L1-100.yaml
+  - a40c-L101-200.yaml
+  - b475-L101-200.yaml
+  - b475-L201-300.yaml
+  - b475-L501-600.yaml
+  - b475-L1801-1900.yaml
+  - b475-L2101-2200.yaml
+  - b475-L2201-2300.yaml
+  - b475-L2301-2400.yaml
+  - caf2-L1-100.yaml
+  - caf2-L101-200.yaml
+  - caf2-L901-1000.yaml
+  - caf2-L1001-1100.yaml
+  - caf2-L1101-1199.yaml
+  - 0841-L801-900.yaml
+  - 1e83-L701-800.yaml
+  - 1e83-L801-900.yaml
+  - e583-L1601-1700.yaml
+  - day-021-L10001-10200.yaml
+  - day-025-L2001-2200.yaml
+  - day-025-L3601-3800.yaml
+  - day-025-L4601-4800.yaml
+  - day-025-L4801-5000.yaml

@@ -9,15 +9,121 @@ as_a: developer exploring a session
 i_want: multiple filters to combine
 so_that: I can create precise queries
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: "caf2:301-400"
+    line: 316
+    speaker: user
+    type: user_request
+    quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events\n1. Filter events by range\n2. Filter by `-i --include`\n3. Filter by `-x --exclude`\n4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines, since this expansion can produce overlaps)"
+    context: "User defines canonical filter pipeline ordering: search, range, include, exclude, context expansion"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: "caf2:901-1000"
+    line: 936
+    speaker: user
+    type: user_request
+    quote: "the behavior shoudl be chain of: (0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events 1. Filter events by range 2. Filter by `-i --include` 3. Filter by `-x -- exclude` 4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines"
+    context: "User repeated the pipeline ordering in a later session, confirming it is intentional"
+
+  - file: "day-025:5201-5400"
+    line: 5233
+    speaker: agent
+    type: agent_response
+    quote: "1. Start with all tool calls in range 1-46\n2. Keep only those matching ANY include filter\n3. Remove any that match ANY exclude filter"
+    context: "Filter logic: start with range, keep any matching include (OR), remove any matching exclude (OR)"
+
+  - file: "1e83:801-900"
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "This works as designed: \"When indices are provided (like +14), they are applied to the FULL timeline first, then filtering happens. So +14 gets the first 14 items from timeline, THEN filters them for User and Assistant (excluding Tools).\""
+    context: "Range applied first to full timeline, then include/exclude filters applied to the range result"
+
+  - file: "caf2:1001-1100"
+    line: 1026
+    speaker: agent
+    type: agent_error
+    quote: "Currently search ignores -i/-x filters"
+    context: "Bug found and fixed: search must also apply the full filter chain (search, range, include, exclude, context)"
+
+  - file: "caf2:1001-1100"
+    line: 1069
+    speaker: agent
+    type: agent_proposal
+    quote: "Search now properly applies the complete filter chain as specified"
+    context: "After fix: search applies full pipeline - pattern match, range, include, exclude, context expansion"
+
+  - file: "caf2:1001-1100"
+    line: 1079
+    speaker: user
+    type: user_correction
+    quote: "outputting same message multiple times or out of order is a serious bug that must be fixed immediately."
+    context: "Duplicate output from overlapping context expansion is a critical bug, not an enhancement"
+
+  - file: "b475:1501-1600"
+    line: 1542
+    speaker: agent
+    type: agent_proposal
+    quote: "The main goal is to separate \"what to show\" (filtering) from \"how to show it\" (display modes). This will eliminate the special cases"
+    context: "Architecture principle: filters and display are orthogonal. Filters compose into a pipeline."
+
+  - file: "caf2:201-300"
+    line: 299
+    speaker: user
+    type: user_request
+    quote: "I think the presence of include or exclude parameters implies that we are requesting timeline display instead of summary, so -t is probably implied on tese cases and we need to keep it only for displaying of full timeline. Alsos pecifying range is clearly requesting timeline."
+    context: "Any filter or range parameter implies timeline mode automatically; no need for explicit -t"
+
+  - file: "caf2:301-400"
+    line: 305
+    speaker: user
+    type: user_request
+    quote: "We shoudl make the timeline implied."
+    context: "Explicit: timeline mode is implied when any filter/range arg present"
+
+acceptance_criteria:
+  - id: FLT-011-AC1
+    given: filter pipeline
+    when: multiple stages are active
+    then: "pipeline ordering is: search -> range -> include -> exclude -> context expansion"
+
+  - id: FLT-011-AC2
+    given: --include "Bash" and range "10-30"
+    when: both specified
+    then: first selects events 10-30 from full timeline, then filters to Bash only
+
+  - id: FLT-011-AC3
+    given: multiple include patterns
+    when: --include "Edit,Bash" specified
+    then: events matching ANY include pattern pass (OR semantics within include)
+
+  - id: FLT-011-AC4
+    given: include and exclude both specified
+    when: --include "Edit,Bash" --exclude "Bash(git *)"
+    then: first include whitelist, then exclude removes from included set
+
+  - id: FLT-011-AC5
+    given: filter or range parameters present
+    when: no explicit -t flag
+    then: timeline display mode is implied automatically
+
+  - id: FLT-011-AC6
+    given: context expansion with -A/-B/-C
+    when: expanded ranges overlap
+    then: no duplicate events in output; merge overlapping ranges
+
+  - id: FLT-011-AC7
+    given: --search with -i/-x filters
+    when: all specified together
+    then: search results are filtered by include/exclude (not shown raw)
 
 depends_on:
   - FLT-001
   - FLT-002
-related: []
+related:
+  - RNG-001  # Range selection
+  - SRC-001  # Search
+  - CLI-001  # CLI interface
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Pipeline ordering explicitly defined by user twice in separate sessions. Implicit timeline mode confirmed. Context dedup is critical requirement."

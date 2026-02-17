@@ -1,4 +1,4 @@
-# Story: Before Context
+# Story: Before Context Lines (-B)
 
 id: SRC-003
 title: Show lines before match (-B)
@@ -6,17 +6,64 @@ epic: search
 theme: local-exploration
 
 as_a: developer searching a session
-i_want: to see lines before each match
-so_that: I get context about what preceded
+i_want: to see N timeline entries before each matching entry
+so_that: I get context about what preceded a match
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: caf2:301-400
+    finding: F004
+    quote: "4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines, since this expansion can produce overlaps)"
+    context: "User specifies context expansion with -B for before-context, must not produce duplicate lines."
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: caf2:301-400
+    finding: F005
+    quote: "the `grep`/`rg` parameters are capital A, B, C, so we are free to use `-a` as shortcut for `-i Assistant`"
+    context: "Context flags are uppercase -A/-B/-C (matching grep/rg convention)."
+
+  - session: caf2:501-600
+    finding: F001
+    quote: "- -B NUM: Show NUM lines before each match"
+    context: "Committed implementation confirms -B NUM semantics."
+
+  - session: a40c:201-300
+    finding: F004
+    quote: "./explore_session.py 943dff12 --search \"interrupted\" -B 2 120-150"
+    context: "Real usage: search with -B 2 (2 lines before context) combined with range 120-150."
+
+  - session: a40c:201-300
+    finding: T002
+    quote: "Found 1 matches for 'interrupted':\n[128] ⏺ Edit: → /Users/palimondo/Developer/BookMinder/bookminder/cli.py\n[129] ⎿  [Tool rejected]\n[130] [Interrupted by user]"
+    context: "Example output showing -B 2 before context: 2 entries (128, 129) shown before the match (130)."
+
+acceptance_criteria:
+  - id: SRC-003-AC1
+    given: a search with matches and -B 2 specified
+    when: running `xs <session> -S "keyword" -B 2`
+    then: shows the 2 timeline entries immediately preceding each match, plus the match itself
+
+  - id: SRC-003-AC2
+    given: -B used with search and range
+    when: running `xs <session> -S "keyword" -B 2 120-150`
+    then: search is scoped to range 120-150, and -B 2 expands results to include 2 entries before each match
+    notes: "Per pipeline ordering: search -> range -> include -> exclude -> context expansion"
+
+  - id: SRC-003-AC3
+    given: -B context that would extend before the first event
+    when: a match is near the beginning of the timeline
+    then: shows available entries without error (no negative index crash)
 
 depends_on:
-  - SRC-001
-related: []
+  - SRC-001  # Basic search
+
+related:
+  - SRC-002  # After context
+  - SRC-004  # Combined context
+  - SRC-006  # Gap separators between non-contiguous results
+  - RNG-001  # Range selection (search + range interaction)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  -B NUM follows grep convention (uppercase, takes numeric argument).
+  Real usage example: `--search "interrupted" -B 2 120-150` confirmed working.
+  Output shows before-context entries with their sequence numbers.

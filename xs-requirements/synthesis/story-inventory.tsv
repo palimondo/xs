@@ -1,0 +1,88 @@
+story_id	epic	filename	title
+CLI-001	cli-interface	CLI-001-summary-mode.yaml	Summary mode (default)
+CLI-002	cli-interface	CLI-002-timeline-mode.yaml	Timeline mode (-t/--timeline)
+CLI-003	cli-interface	CLI-003-git-mode.yaml	Git operations mode (-g/--git)
+CLI-004	cli-interface	CLI-004-files-mode.yaml	File changes mode (-f/--files)
+CLI-005	cli-interface	CLI-005-created-mode.yaml	Created files mode (-c/--created)
+CLI-006	cli-interface	CLI-006-implicit-timeline.yaml	Implicit timeline mode activation
+CLI-007	cli-interface	CLI-007-multi-index.yaml	Support multiple index selection
+CRH-001	context	CRH-001-flag-creation.yaml	Create flag file when compaction occurs
+CRH-002	context	CRH-002-flag-detection.yaml	Detect compaction flag on tool use
+CRH-004	context	CRH-004-multi-instance-safety.yaml	Handle multiple Claude instances safely
+CRH-005	context	CRH-005-xs-operations.yaml	xs operations used by recovery prompt
+CRH-006	context	CRH-006-recovery-methodology.yaml	Deep context recovery methodology
+CRH-007	context	CRH-007-test-findings.yaml	Apply lessons from real-world recovery test
+DSP-001	display-modes	DSP-001-compact-mode.yaml	Compact display mode (one line per event)
+DSP-002	display-modes	DSP-002-truncated-mode.yaml	Truncated display mode (console-like)
+DSP-003	display-modes	DSP-003-full-mode.yaml	Full display mode (no truncation)
+DSP-004	display-modes	DSP-004-sequence-numbers.yaml	Sequence number display control
+DSP-005	display-modes	DSP-005-discontinuous-separator.yaml	Show separator between non-contiguous sections
+EXP-001	export	EXP-001-json-stdout.yaml	JSON array output to stdout
+EXP-002	export	EXP-002-jsonl-stdout.yaml	JSONL output to stdout
+EXP-003	export	EXP-003-export-to-file.yaml	Export range to JSON file
+GFH-001	fetch	GFH-001-workflow-listing.yaml	List workflow runs from GitHub Actions
+GFH-002	fetch	GFH-002-log-fetching.yaml	Fetch logs for specific workflow run
+GFH-003	fetch	GFH-003-jsonl-extraction.yaml	Extract JSONL content from Claude execution logs
+GFH-004	fetch	GFH-004-metadata-extraction.yaml	Extract issue or PR number from log XML
+GFH-005	fetch	GFH-005-deduplication.yaml	Skip already-downloaded workflow runs
+GFH-006	fetch	GFH-006-timestamp-setting.yaml	Set file timestamps to session times
+GFH-007	fetch	GFH-007-file-naming.yaml	Name output files with structured convention
+FLT-001	filtering	FLT-001-include-tool-name.yaml	Filter to include specific tools by name
+FLT-002	filtering	FLT-002-exclude-tool-name.yaml	Filter to exclude specific tools by name
+FLT-003	filtering	FLT-003-virtual-entity-message.yaml	Filter by Message virtual entity
+FLT-004	filtering	FLT-004-virtual-entity-tool.yaml	Filter by Tool virtual entity
+FLT-005	filtering	FLT-005-glob-patterns.yaml	Support glob patterns in tool filters
+FLT-006	filtering	FLT-006-shortcut-M.yaml	-M shortcut for all messages
+FLT-007	filtering	FLT-007-shortcut-U.yaml	-U shortcut for user messages
+FLT-008	filtering	FLT-008-shortcut-a.yaml	-a shortcut for assistant messages
+FLT-009	filtering	FLT-009-shortcut-T.yaml	-T shortcut for all tools
+FLT-010	filtering	FLT-010-no-tool-results.yaml	--no-tool-results flag
+FLT-011	filtering	FLT-011-filter-composition.yaml	Compose multiple filters with AND semantics
+FLT-012	filtering	FLT-012-conversation-mode-interaction.yaml	Handle -M -x Tool interaction correctly
+FMT-001	console-formatting	FMT-001-user-message.yaml	Format user messages with > prefix
+FMT-002	console-formatting	FMT-002-assistant-message.yaml	Format assistant messages with play button
+FMT-003	console-formatting	FMT-003-bash-tool.yaml	Format Bash tool calls with command
+FMT-004	console-formatting	FMT-004-edit-tool.yaml	Format Edit tool calls with file path
+FMT-005	console-formatting	FMT-005-read-tool.yaml	Format Read tool calls with file path
+FMT-006	console-formatting	FMT-006-thinking-block.yaml	Format thinking blocks
+FMT-007	console-formatting	FMT-007-tool-result.yaml	Format tool results with indentation
+FMT-008	console-formatting	FMT-008-multiline-truncation.yaml	Truncate multiline content with [...]
+FMT-009	console-formatting	FMT-009-empty-content.yaml	Show "(No content)" for empty results
+FMT-010	console-formatting	FMT-010-task-tool.yaml	Format Task tool calls (subagents)
+FMT-011	console-formatting	FMT-011-thinking-truncated.yaml	Display thinking blocks in truncated mode
+FMT-012	console-formatting	FMT-012-slash-command.yaml	Format slash commands distinctively
+FMT-013	console-formatting	FMT-013-local-bash.yaml	Display local bash commands with ! prefix
+FMT-014	console-formatting	FMT-014-file-reference.yaml	Display file references with @ prefix
+FMT-015	console-formatting	FMT-015-multiline-truncation-rules.yaml	Apply consistent multi-line truncation rules
+FMT-016	console-formatting	FMT-016-indentation-consistency.yaml	Use 2-space indentation consistently
+FMT-017	console-formatting	FMT-017-sequence-number-logic.yaml	Display sequence numbers appropriately
+FMT-018	console-formatting	FMT-018-discontinuous-separator.yaml	Show -- separator for discontinuous sections
+FMT-019	console-formatting	FMT-019-meta-caveat.yaml	Handle isMeta and caveat messages
+FMT-020	console-formatting	FMT-020-todo-detection.yaml	Detect and format todo-related content
+FMT-021	console-formatting	FMT-021-interrupted-reason.yaml	Display user interruption reason in timeline
+PRS-001	jsonl-parsing	PRS-001-load-session-file.yaml	Load session file by path
+PRS-002	jsonl-parsing	PRS-002-fuzzy-session-discovery.yaml	Discover session by substring match
+PRS-003	jsonl-parsing	PRS-003-multiline-json-parsing.yaml	Parse multi-line JSON objects in JSONL
+PRS-004	jsonl-parsing	PRS-004-graceful-parse-errors.yaml	Continue processing despite parse errors
+PRS-005	jsonl-parsing	PRS-005-timeline-building.yaml	Build unified chronological timeline
+PRS-006	jsonl-parsing	PRS-006-format-version-handling.yaml	Handle Claude Code format versions (1.x vs 2.x)
+PRS-007	jsonl-parsing	PRS-007-slash-command-parsing.yaml	Parse slash commands from XML tags
+PRS-008	jsonl-parsing	PRS-008-bash-content-extraction.yaml	Extract bash content from XML tags
+PRS-009	jsonl-parsing	PRS-009-interruption-detection.yaml	Detect user interruptions in session
+PRS-010	jsonl-parsing	PRS-010-meta-caveat-tracking.yaml	Track isMeta and caveat message flags
+RNG-001	range-selection	RNG-001-single-item.yaml	Select single item by index
+RNG-002	range-selection	RNG-002-first-n.yaml	Select first N items with +N syntax
+RNG-003	range-selection	RNG-003-last-n.yaml	Select last N items with -N syntax
+RNG-004	range-selection	RNG-004-range.yaml	Select range with N-M syntax
+RNG-005	range-selection	RNG-005-from-onwards.yaml	Select from N onwards with N+ syntax
+SRC-001	search	SRC-001-substring-search.yaml	Basic substring search
+SRC-002	search	SRC-002-context-after.yaml	Show lines after match (-A)
+SRC-003	search	SRC-003-context-before.yaml	Show lines before match (-B)
+SRC-004	search	SRC-004-context-combined.yaml	Show lines before and after match (-C)
+SRC-005	search	SRC-005-search-timeline-interaction.yaml	Search results displayed in timeline mode
+SID-001	sidechain-handling	SID-001-display-sidechain.yaml	Display sidechain events in timeline
+SID-002	sidechain-handling	SID-002-search-sidechain.yaml	Search includes sidechain content
+SID-003	sidechain-handling	SID-003-filter-sidechain.yaml	Filter sidechain events with dedicated flag
+SUM-001	summary	SUM-001-summary-statistics.yaml	Summary mode shows session statistics
+SUM-002	summary	SUM-002-mcp-grouping.yaml	Group MCP tools in summary display
+SUM-003	summary	SUM-003-git-detection.yaml	Detect and show git commits in summary

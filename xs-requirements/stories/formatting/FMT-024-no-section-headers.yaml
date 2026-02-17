@@ -1,0 +1,46 @@
+# Story: Remove Section Headers From Output
+
+id: FMT-024
+title: No section headers (=== TIMELINE ===) in output
+epic: console-formatting
+theme: console-replay
+
+as_a: developer reviewing session output
+i_want: clean output without section headers
+so_that: output contains only session content without metadata noise
+
+sources:
+  - session: "b475:1224"
+    quote: "Drop the === TIMELINE ==="
+    context: "User requesting removal of TIMELINE header"
+  - session: "caf2:12"
+    quote: "there's still header CONVERSATION"
+    context: "User correcting agent that failed to remove headers"
+  - session: "caf2:66"
+    quote: "is ther a different mode where you still output anything that starts or ends with"
+    context: "User questioning whether any mode should produce === headers"
+  - session: "b475:2395"
+    quote: "remove the headers as requested"
+    context: "Agent removing all section headers per user request"
+
+acceptance_criteria:
+  - id: FMT-024-AC1
+    given: timeline display in any mode
+    when: rendered
+    then: "No === TIMELINE === header"
+
+  - id: FMT-024-AC2
+    given: any display output
+    when: rendered
+    then: "No === CONVERSATION ===, === FILE CHANGES ===, or === GIT OPERATIONS === headers"
+
+depends_on: []
+related:
+  - PRIN-001  # Console fidelity (CC console has no such headers)
+
+priority: must
+status: mined
+validation_notes: |
+  User repeatedly requested removal of all === SECTION === headers.
+  No mode should produce these headers.
+  Source: b475:1224, caf2:12, caf2:66, b475:2395

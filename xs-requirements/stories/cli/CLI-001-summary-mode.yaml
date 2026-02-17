@@ -6,17 +6,101 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to see a summary by default
-so_that: I get an overview before diving in
+i_want: to see a summary by default when invoking xs with only a session identifier
+so_that: I get an overview of the session content and learn what flags to use for deeper exploration
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: e583-L1-100.yaml
+    finding: F004
+    line: 70
+    speaker: user
+    type: user_request
+    quote: "Also, `-s` is implied parameter so `xs <session_id_prefix>` should be the minimal starting invocation."
+    context: "Summary mode (-s) is the default when no output mode flag is given"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: e583-L1-100.yaml
+    finding: F003
+    line: 70
+    speaker: user
+    type: user_request
+    quote: "We've tried to design the summary view for a session as a kind of tutorial fo using the tool, mentioning specific parameters/options to retrieve or exclude specific evetn/message type from the session."
+    context: "Summary view must include inline hints about available flags to guide further exploration"
+
+  - file: a40c-L1-100.yaml
+    finding: F001
+    line: 100
+    speaker: user
+    type: user_request
+    quote: "Explore Claude session logs. Shows summary by default."
+    context: "Default mode is summary; session file is required positional argument"
+
+  - file: a40c-L801-900.yaml
+    finding: F002
+    line: 875
+    speaker: agent
+    type: agent_proposal
+    quote: "Session: 20250726-1349-pr-14_run-16540466941_session-99def08d-ffb0-4df3-bf17-8159d017252f.jsonl\n\nTimeline:                     # to show specific event types:\n  Events: 105                 # -t\n  User inputs: 0              # -U\n  Tool results: 31            # (shown after -T events, use --no-tool-results to exclude)\n  Assistant: 43               # -a"
+    context: "Summary mode output format showing session filename plus hierarchical event type counts with inline CLI flag comments"
+
+  - file: caf2-L301-400.yaml
+    finding: F006
+    line: 332
+    speaker: user
+    type: user_request
+    quote: "Note that the `Assistant messages` children are ordere by count, descending. (Default) Tools with 0 counts should be left out from the listing."
+    context: "Summary output: tool counts sorted by descending count; zero-count tools omitted"
+
+  - file: caf2-L901-1000.yaml
+    finding: F003
+    line: 974
+    speaker: user
+    type: user_correction
+    quote: "Comments are not aligned properly (probably due to dynamic count lengths."
+    context: "Summary output must use fixed column positions for the # comment annotations"
+
+  - file: 1e83-L901-967.yaml
+    finding: F004
+    line: 932
+    speaker: user
+    type: user_request
+    quote: "Text: 188                 # -a -x Tool"
+    context: "Summary output includes assistant event breakdown with inline comments documenting which flags produce each count"
+
+acceptance_criteria:
+  - id: CLI-001-AC1
+    given: a valid session file
+    when: invoked as `xs <session_id>` with no mode flags
+    then: displays summary output (same as explicit -s/--summary)
+
+  - id: CLI-001-AC2
+    given: a valid session file
+    when: summary mode is displayed
+    then: shows session filename on the first line
+
+  - id: CLI-001-AC3
+    given: a valid session file
+    when: summary mode is displayed
+    then: shows hierarchical event type counts (Events, User inputs, Tool results, Assistant) with inline CLI flag comments (e.g. "# -t", "# -U")
+
+  - id: CLI-001-AC4
+    given: a session with tool call activity
+    when: summary mode is displayed
+    then: tool call breakdown under Assistant messages is sorted by count descending, omitting tools with zero count
+
+  - id: CLI-001-AC5
+    given: a session with varying count widths
+    when: summary mode is displayed
+    then: inline # comments are aligned at a fixed column position regardless of count value widths
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Unified timeline data structure
+related:
+  - CLI-002  # Timeline mode (summary guides user toward -t)
+  - CLI-006  # Implicit timeline activation
+  - SUM-001  # Summary content generation
+  - SUM-002  # Summary hierarchical counts
+  - SUM-003  # Summary inline parameter hints
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "Summary view serves double duty: session overview AND self-documenting tutorial for xs CLI flags. User explicitly designed it this way (e583:70)."

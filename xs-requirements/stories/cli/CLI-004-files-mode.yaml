@@ -6,17 +6,70 @@ epic: cli-interface
 theme: local-exploration
 
 as_a: developer exploring a session
-i_want: to see a summary of file changes
-so_that: I know what was modified
+i_want: to see a summary of file changes grouped by file
+so_that: I know what was modified during the session
 
-sources: []  # To be mined in Pass 2
+sources:
+  - file: b475-L201-300.yaml
+    finding: F002
+    line: 214
+    speaker: user
+    type: user_correction
+    quote: "range must be independet and not a param to some other sub command. I ran --files and was surprised ti does summary of edits per files, which is interested, But I wasn't even aware of this feature"
+    context: "--files produces a summary of edits per file; user found it useful but discovered it accidentally (discoverability issue)"
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - file: b475-L2301-2400.yaml
+    finding: F009
+    line: 2379
+    speaker: agent
+    type: agent_proposal
+    quote: "Note: --files is deprecated. Use --timeline --include"
+    context: "At one point --files was deprecated in favor of --include 'Edit,Write,MultiEdit', but user later reinstated it"
+
+  - file: caf2-L601-700.yaml
+    finding: F006
+    line: 694
+    speaker: agent
+    type: agent_proposal
+    quote: "DEPRECATED: Use --timeline --include \"Edit,Write,MultiEdit\" instead."
+    context: "The deprecation message reveals that --files was equivalent to filtering for Edit, Write, MultiEdit tools"
+
+  - file: caf2-L701-800.yaml
+    finding: F001
+    line: 709
+    speaker: user
+    type: user_request
+    quote: "remove deprication, keep the unique functionality."
+    context: "User explicitly reinstated --files: deprecation warning removed, unique grouped-by-file display preserved. --files is NOT just a timeline filter shortcut; it has its own distinct display format."
+
+acceptance_criteria:
+  - id: CLI-004-AC1
+    given: a valid session file
+    when: invoked with -f or --files
+    then: displays a summary of file changes grouped by file path
+
+  - id: CLI-004-AC2
+    given: --files mode
+    when: a session has Edit, Write, and MultiEdit operations
+    then: all file-modifying operations are included in the file change summary
+
+  - id: CLI-004-AC3
+    given: --files mode
+    when: displayed
+    then: output format is distinct from timeline mode (grouped by file, not chronological); this is its unique value compared to --include "Edit,Write,MultiEdit"
+
+  - id: CLI-004-AC4
+    given: --files mode
+    when: displayed
+    then: no deprecation warning is shown (--files is a supported first-class mode)
 
 depends_on:
-  - PRS-005
-related: []
+  - PRS-005  # Unified timeline data structure
+related:
+  - CLI-005  # Created files mode (related file operation view)
+  - CLI-003  # Git mode (similar convenience shortcut pattern)
+  - FLT-001  # Include filter (--files was briefly equivalent to -i "Edit,Write,MultiEdit")
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: "--files was deprecated then reinstated by user at caf2:709. User values its unique grouped-by-file display format that cannot be replicated by simple timeline filtering. It was accidentally discovered during exploration (b475:214), suggesting it should be more prominent in summary hints."

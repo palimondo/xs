@@ -6,18 +6,45 @@ epic: console-formatting
 theme: console-replay
 
 as_a: developer reviewing session output
-i_want: Read tool calls displayed with file path
+i_want: Read tool calls displayed as Read(filepath) matching Claude Code console
 so_that: I can see what files were read
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: "1e83:348"
+    quote: "We had this issue also with read file and write file that you've added arrows there."
+    context: "User rejecting arrow decorations for Read tool"
+  - session: "e583:456"
+    quote: "The tests are expecting the OLD format with arrows (Read: ← /target.py) but you already changed the implementation to match Claude Code's format (Read(/target.py))"
+    context: "Confirms migration from 'Read: ← file' to 'Read(file)'"
+  - session: "e583:494"
+    quote: "assert 'Read(/target.py)' in stdout"
+    context: "User chose to update tests to match new CC-style format"
+  - session: "b475:98"
+    quote: "if input.command? then input.command elif input.file_path? then input.file_path elif input.path? then input.path elif input.pattern? then input.pattern else tostring end"
+    context: "reconstruct.jq tool input extraction: Read uses .file_path or .path"
 
-acceptance_criteria: []  # To be mined in Pass 2
+acceptance_criteria:
+  - id: FMT-005-AC1
+    given: Read tool_use entry in JSONL
+    when: rendered in truncated mode
+    then: "Display as '⏺ Read({file_path})' where file_path is .input.file_path"
+
+  - id: FMT-005-AC2
+    given: Read tool_use entry
+    when: rendered in compact mode
+    then: "Display as '[N] ⏺ Read({file_path})' on a single line"
 
 depends_on:
-  - PRS-005
+  - PRS-005  # Must parse JSONL tool_use entries
 related:
-  - PRIN-001
+  - PRIN-001  # Console fidelity
+  - FMT-004  # Edit tool (same pattern)
+  - FMT-007  # Tool results
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  User rejected 'Read: ← file' arrow format (1e83:348).
+  Correct format is Read(file_path) matching Claude Code console.
+  Test assertion confirms: 'Read(/target.py)' (e583:494).
+  Source: 1e83:348, e583:456, e583:494

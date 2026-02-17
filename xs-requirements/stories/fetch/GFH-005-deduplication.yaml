@@ -7,33 +7,48 @@ theme: github-fetch
 
 as_a: developer running fetch regularly
 i_want: already-downloaded runs skipped
-so_that: I don't re-download existing data
+so_that: I don't re-download existing data or waste network requests
 
 sources:
-  - file: ~/Developer/BookMinder/claude-dev-log-diary/tools/fetch_logs.py
-    function: get_existing_run_ids
-    lines: 241-256
+  - session: f9c7:1601-1700
+    finding: F002
+    quote: "now that we have run id in filenames, maybe we can not fetch what we already have?"
+    context: "User proposed deduplication after run IDs were added to filenames"
+
+  - session: cc2d:501-600
+    finding: F005
+    quote: "The deduplication logic works (shell script won't re-download what Python already fetched)"
+    context: "Deduplication must work across both Python and shell script versions"
+
+  - session: 3636:501-600
+    finding: F002
+    quote: "Saved JSONL to /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/github/20250729-1706-pr-18_run-16602666423_session-3cb480e6-79b3-4834-9cd8-b998719ad24b.jsonl"
+    context: "Filename contains run ID — used for deduplication. Example shows 19 existing runs found, 15 skipped."
 
 acceptance_criteria:
   - id: GFH-005-AC1
     given: github/ directory with existing JSONL files
-    when: listing runs
-    then: extracts run IDs from filenames
+    when: listing runs to fetch
+    then: extracts run IDs from existing filenames
 
   - id: GFH-005-AC2
     given: filename pattern *_run-{run_id}_session-*.jsonl
     when: parsing
-    then: correctly extracts run_id
+    then: correctly extracts run_id from filename
 
   - id: GFH-005-AC3
-    given: existing run IDs
-    when: fetching
-    then: skips runs already in set
+    given: existing run IDs on disk
+    when: fetching new runs
+    then: skips runs whose run_id already exists in local files, avoiding redundant network requests
 
 depends_on:
   - GFH-001
-related: []
+related:
+  - GFH-007
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Deduplication uses run ID embedded in filename (e.g., _run-16433029102_).
+  Must work when invoked repeatedly without parameters (default --limit 20).
+  Both .py and .sh versions must share deduplication logic consistently.

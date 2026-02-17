@@ -12,6 +12,15 @@ so_that: recovery is triggered immediately
 sources:
   - file: ~/Developer/BookMinder/.claude/hooks/pretooluse_context_recovery_hook.py
     lines: 17-28
+  - session: 760a:201-300
+    quote: "can you try using `xs` to check current session (you should know the session-id from the compaction hook's temp file I think?) and see if you read it?"
+    context: "User expects session_id to be available from the flag file for passing to xs"
+  - session: e583:1301-1400
+    quote: "OK, I think that in order for these hooks to work, they need to be on project's .claude in hooks something something, check @hooks.md"
+    context: "Hooks must be placed in project's .claude/hooks/ directory per Claude Code conventions"
+  - session: e583:1401-1500
+    quote: "the robust way to find compaction events is to look for JSON events with \"isCompactSummary\": true"
+    context: "JSONL format has dedicated isCompactSummary boolean field for detecting compaction events"
 
 acceptance_criteria:
   - id: CRH-002-AC1
@@ -29,11 +38,20 @@ acceptance_criteria:
     when: complete
     then: deletes flag to prevent repeated triggers
 
+  - id: CRH-002-AC4
+    given: hook placement
+    when: configuring hooks
+    then: hook scripts reside in project's .claude/hooks/ directory
+
 depends_on:
   - CRH-001
 related:
   - CRH-003
+  - CRH-004
 
 priority: must
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  Confirmed via 760a:201-300 that session_id from flag file is used to invoke xs.
+  Hook placement in .claude/hooks/ confirmed in e583:1301-1400.
+  isCompactSummary field documented in e583:1401-1500 as robust detection method.

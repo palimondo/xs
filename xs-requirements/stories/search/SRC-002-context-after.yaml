@@ -1,4 +1,4 @@
-# Story: After Context
+# Story: After Context Lines (-A)
 
 id: SRC-002
 title: Show lines after match (-A)
@@ -6,17 +6,64 @@ epic: search
 theme: local-exploration
 
 as_a: developer searching a session
-i_want: to see lines after each match
-so_that: I get context about what followed
+i_want: to see N timeline entries after each matching entry
+so_that: I get context about what followed a match
 
-sources: []  # To be mined in Pass 2
+sources:
+  - session: caf2:301-400
+    finding: F004
+    quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events\n1. Filter events by range\n2. Filter by `-i --include`\n3. Filter by `-x --exclude`\n4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines, since this expansion can produce overlaps)"
+    context: "User defines context expansion as step 4 of filter pipeline. -A/-B/-C must not produce duplicate lines when expansions overlap."
 
-acceptance_criteria: []  # To be mined in Pass 2
+  - session: caf2:301-400
+    finding: F005
+    quote: "the `grep`/`rg` parameters are capital A, B, C, so we are free to use `-a` as shortcut for `-i Assistant`"
+    context: "Context flags are uppercase -A/-B/-C (matching grep/rg convention). Lowercase -a is reserved for assistant filter shortcut."
+
+  - session: caf2:401-500
+    finding: F003
+    quote: "Now let me implement context lines support (-A/-B/-C) as requested by the user"
+    context: "Context lines support like grep's -A (after), -B (before), -C (context) for timeline filtering."
+
+  - session: caf2:501-600
+    finding: F001
+    quote: "feat: add context lines support (-A/-B/-C)\n\nImplemented grep-style context lines for timeline filtering:\n- -A NUM: Show NUM lines after each match\n- -B NUM: Show NUM lines before each match\n- -C NUM: Show NUM lines before and after each match"
+    context: "Committed implementation confirms -A NUM semantics."
+
+  - session: a40c:801-900
+    finding: F003
+    quote: "usage: explore_session.py [-h] [-s] [-t] [-g] [-f] [-c] [-S SEARCH]\n                          [--export-json RANGE OUTPUT] [--json] [--jsonl]\n                          [-i FILTERS] [-x FILTERS] [--truncated] [--full]\n                          [--no-tool-results] [--show-numbers] [-A NUM]\n                          [-B NUM] [-C NUM] [-M] [-U] [-a] [-T]\n                          session [indices ...]"
+    context: "CLI help confirms -A NUM as after-context flag."
+
+acceptance_criteria:
+  - id: SRC-002-AC1
+    given: a search with matches and -A 3 specified
+    when: running `xs <session> -S "keyword" -A 3`
+    then: shows each matching entry plus the 3 timeline entries immediately following it
+
+  - id: SRC-002-AC2
+    given: -A used with include/exclude filters (not just search)
+    when: running `xs <session> -i Tool -A 2`
+    then: shows each matching Tool entry plus 2 entries after it
+    notes: "Context expansion applies to filter results too, not just search"
+
+  - id: SRC-002-AC3
+    given: -A context that would extend beyond the last event
+    when: a match is near the end of the timeline
+    then: shows available entries without error (no out-of-bounds crash)
 
 depends_on:
-  - SRC-001
-related: []
+  - SRC-001  # Basic search
+
+related:
+  - SRC-003  # Before context
+  - SRC-004  # Combined context
+  - SRC-006  # Gap separators between non-contiguous results
+  - FLT-001  # Include filter (context applies to filter results too)
 
 priority: should
-status: draft
-validation_notes: null
+status: mined
+validation_notes: |
+  -A NUM follows grep convention (uppercase, takes numeric argument).
+  Context expansion is step 4 of filter pipeline (after search, range, include, exclude).
+  Must not produce duplicate lines when expansions overlap.

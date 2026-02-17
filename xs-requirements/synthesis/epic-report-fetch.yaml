@@ -1,0 +1,135 @@
+# Epic Synthesis Report: fetch (GitHub Workflow Log Fetching)
+
+epic: fetch
+synthesized_by: opus
+timestamp: 2026-02-17T21:00:00Z
+
+summary: |
+  The fetch epic covers GitHub Actions log retrieval — the original raison d'etre
+  of xs. Requirements were recovered from 30+ findings files across sessions f9c7,
+  0841, cc2d, e2f7, fa0d, fa1a, 3636 and day logs 023, 024, 025. The fetch_logs
+  tool evolved from a Python script (fetch_logs.py) to a parallel bash rewrite
+  (fetch_logs.sh) with strict parity requirements. Core workflow: list Claude Code
+  workflow runs -> fetch raw logs via gh CLI -> extract JSONL using AWK -> set
+  timestamps -> save with structured naming.
+
+stories:
+  existing:
+    - id: GFH-001
+      title: List workflow runs from GitHub Actions
+      status: mined
+      findings_used: 7
+      key_insight: "Must combine runs from both claude.yml and claude-code-review.yml; filter by success status server-side"
+
+    - id: GFH-002
+      title: Fetch logs for specific workflow run
+      status: mined
+      findings_used: 4
+      key_insight: "Uses `gh run view --log` exclusively; original motivation was preserving logs before CI retention deletes them"
+
+    - id: GFH-003
+      title: Extract JSONL content from Claude execution logs
+      status: mined
+      findings_used: 13
+      key_insight: "AWK with index() at ~2-3ms is winner; constant 49-char prefix; user rejected Python in favor of Unix tools"
+
+    - id: GFH-004
+      title: Extract issue or PR number from log XML tags
+      status: mined
+      findings_used: 12
+      key_insight: "XML tags (<issue_number>, <pr_number>, <is_pr>) are authoritative and always present; title parsing explicitly rejected"
+
+    - id: GFH-005
+      title: Skip already-downloaded workflow runs
+      status: mined
+      findings_used: 3
+      key_insight: "Run ID embedded in filename enables deduplication; works across both .py and .sh versions"
+
+    - id: GFH-006
+      title: Set file timestamps to session times
+      status: mined
+      findings_used: 6
+      key_insight: "Creation time = session start, modification time = session end; macOS needs SetFile (os.utime cannot set birth time)"
+
+    - id: GFH-007
+      title: Name output files with structured convention
+      status: mined
+      findings_used: 13
+      key_insight: "Flat github/ directory, date-time prefix for sort, issue/PR type + number + run_id + session_id; user was extremely insistent on no subdirectories"
+
+    - id: GFH-008
+      title: Command-line interface for fetch
+      status: mined
+      findings_used: 7
+      key_insight: "Three flags: --limit N (default 20), --run-id ID, --save-raw-logs; default runs fetch+deduplicate+extract"
+
+  new:
+    - id: GFH-009
+      title: Fetch workflow runs by issue or PR number
+      status: mined
+      findings_used: 6
+      priority: could
+      rationale: |
+        Planned but never implemented feature, mentioned as TODO in 4+ sessions.
+        Mechanism: parse Claude bot sticky comments for run links.
+        Priority is 'could' since it was aspirational, never built.
+
+    - id: GFH-010
+      title: Maintain feature parity between fetch_logs.py and fetch_logs.sh
+      status: mined
+      findings_used: 6
+      priority: should
+      rationale: |
+        User repeatedly insisted both Python and shell versions behave identically.
+        Cross-script deduplication verified as working behavior.
+        Bash was performance-motivated rewrite of Python original.
+
+findings_sources:
+  sessions:
+    - f9c7 (Jul 25): Primary fetch_logs development session — naming, timestamps, XML tags, dedup, Unix tools
+    - 0841 (Jul 27): Dual workflow discovery, directory location fix, script parity
+    - cc2d (Jul 27): Parallel to 0841 — same fixes, dedup verification
+    - e2f7 (Jul 27): Parallel to 0841/cc2d — directory location, session lookup
+    - fa0d (Jul 23): Early fetch_logs.py — gh CLI mechanism
+    - fa1a (Jul 27): Fetch-by-issue/PR TODO, tools consolidation
+    - 3636 (Jul 28): CLI help output, actual run output with filenames
+
+  day_logs:
+    - day-023 (L8001-8200): GHA runner destroys work — motivation for log preservation
+    - day-024 (L20401-49000): Massive fetch_logs redesign — extraction, naming, timestamps, benchmarking
+    - day-025 (L1-7600): Compaction summary, tools consolidation, fetch-by-issue TODO
+
+cross_references:
+  - GFH-003 depends on PRS-001 (JSONL parsing) at the format level — extracted JSONL must be parseable
+  - GFH-007 naming convention enables SRC-001/SRC-002 (session file discovery in explore_session)
+  - GFH-004 XML tags are format-specific to GitHub Actions and not reusable elsewhere
+  - GFH-009 (fetch by issue) would need SID-001 (session identification) for matching
+
+design_tensions:
+  - id: DT-001
+    description: "Python vs bash implementation — user wanted bash for performance but maintained both"
+    resolution: "Both maintained in parity (GFH-010); bash preferred for extraction (AWK), Python for API calls"
+
+  - id: DT-002
+    description: "Filename timestamp: workflow createdAt vs session start time from raw log"
+    resolution: "Use workflow createdAt for filename but also extract session start from log as metadata to ensure consistency"
+
+  - id: DT-003
+    description: "Whether to support UNKNOWN STEP edge cases in older logs"
+    resolution: "User explicitly scoped this out — handle manually, script does not need to support anomalies"
+
+  - id: DT-004
+    description: "Log archival strategy: orphan branch + Git LFS vs local fetch + flat files"
+    resolution: "Local fetch won — automated archival workflow (archive-claude-logs.yml) was disabled due to commit churn concerns"
+
+unresolved:
+  - "Self-fetch from within GHA using GITHUB_RUN_ID env var (f9c7:701-800) — explored but never concluded"
+  - "Orphan branch + Git LFS for log storage (f9c7:2101-2200) — proposed but not implemented"
+  - "PR number format: user questioned whether PRs always use <pr_number> or <issue_number>+<is_pr> — agent claimed both exist"
+
+counts:
+  total_stories: 10
+  existing_populated: 8
+  new_proposed: 2
+  total_findings_referenced: 77
+  total_acceptance_criteria: 37

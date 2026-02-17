@@ -1,0 +1,147 @@
+# Epic Report: Context Recovery Post-Compaction
+
+epic: context
+name: Context Recovery Post-Compaction
+themes: [compaction-recovery]
+synthesized_by: opus
+timestamp: 2026-02-17T23:00:00Z
+
+## Summary
+
+The context recovery epic covers the automated detection of compaction events
+and the orchestrated recovery of lost context using xs as the primary data
+access tool. The two-hook architecture (PreCompact creates flag, PreToolUse
+detects flag and blocks tool use with recovery prompt) was developed iteratively
+across sessions e583 and 760a, with multiple API format explorations before
+settling on permissionDecision/permissionDecisionReason.
+
+## Stories
+
+stories:
+  - id: CRH-001
+    title: Create flag file when compaction occurs
+    status: mined
+    priority: must
+    sources_count: 6
+    key_finding: "Wildcard matcher for both auto and manual compaction (e583:1701-1785)"
+
+  - id: CRH-002
+    title: Detect compaction flag on tool use
+    status: mined
+    priority: must
+    sources_count: 4
+    key_finding: "Hook placement must be in project's .claude/hooks/ (e583:1301-1400)"
+
+  - id: CRH-003
+    title: Block tool use and inject recovery prompt
+    status: mined
+    priority: must
+    sources_count: 6
+    key_finding: "permissionDecision/deny is correct API; decision/block caused 400 errors (760a:401-500, e583:1701-1785)"
+
+  - id: CRH-004
+    title: Handle multiple Claude instances safely
+    status: mined
+    priority: should
+    sources_count: 3
+    key_finding: "session_id[:8] in filename; full session_id in JSON contents (760a:101-200)"
+
+  - id: CRH-005
+    title: xs operations used by recovery prompt
+    status: mined
+    priority: should
+    sources_count: 13
+    key_finding: "Rich CLI usage evidence: -S, -i, --full, event index, --jq/--tail requested (760a, e583)"
+
+  - id: CRH-006
+    title: Deep context recovery methodology
+    status: mined
+    priority: should
+    sources_count: 8
+    key_finding: "xs scout workflow via Task delegation; xs for past sessions, native tools for current (e583:501-600, 760a:401-500)"
+
+  - id: CRH-007
+    title: Apply lessons from real-world recovery test
+    status: mined
+    priority: could
+    sources_count: 7
+    key_finding: "Pipeline ordering gap: tail applies before search, blocking 'last N results' pattern (e583:1601-1700)"
+
+## Findings Coverage
+
+primary_sessions:
+  - id: 760a
+    chunks_used: [101-200, 201-300, 301-400, 401-500, 501-600, 601-643]
+    relevance: "Primary hook testing and xs compaction recovery workflow session"
+
+  - id: e583
+    chunks_used: [501-600, 901-1000, 1101-1200, 1201-1300, 1301-1400, 1401-1500, 1501-1600, 1601-1700, 1701-1785]
+    relevance: "Primary compaction detection, hook implementation, and xs operations session"
+
+  - id: f9c7
+    chunks_used: [901-1000]
+    relevance: "First user articulation of compaction recovery problem"
+
+  - id: 0841
+    chunks_used: [1401-1500]
+    relevance: "Real-world compaction regression example"
+
+secondary_sessions:
+  - id: day-018
+    chunks_used: [3001-3200, 4001-4200, 6601-6800, 6801-7000, 7001-7200]
+    relevance: "PreToolUse hook design principles (hard vs soft constraints); not directly CRH but informs hook architecture"
+
+  - id: day-017
+    chunks_used: [2401-2600]
+    relevance: "Initial hooks backlog item creation; minimal direct relevance"
+
+  - id: fa0d
+    chunks_used: [2501-2532]
+    relevance: "Compaction failure edge case (empty assistant message); parsing robustness"
+
+## Cross-Epic Dependencies
+
+outbound:
+  - epic: filtering
+    stories: [FLT-001]
+    reason: "CRH-005 xs operations depend on -S search and -i tool filter"
+  - epic: range-selection
+    stories: [RNG-001]
+    reason: "CRH-005/CRH-007 depend on range selection; pipeline ordering gap affects recovery"
+  - epic: display-modes
+    stories: [DSP-003]
+    reason: "CRH-005 uses --full display mode for reading compaction summaries"
+  - epic: sources
+    stories: [SRC-001]
+    reason: "CRH-002/CRH-005 need session_id resolution from flag file"
+
+inbound: []
+
+## New Stories Proposed
+
+new_stories: none
+rationale: |
+  The existing 7 stories adequately cover the compaction recovery workflow.
+  The isCompactSummary JSONL field detection belongs in PRS (parsing) epic.
+  The hook design principle (hard constraints vs soft preferences from day-018)
+  is a cross-cutting concern better captured as a principle than a story.
+
+## Open Questions
+
+  - The --jq and --tail flags (e583:1601-1700) are requested features that may
+    not exist in the current implementation. Their absence creates a gap in the
+    compaction recovery workflow (cannot get "last compaction event").
+  - The pipeline ordering issue (tail before search vs after) needs resolution
+    in the filtering/range-selection epics before CRH-005 AC1 can be fully met.
+  - Hook format correctness (permissionDecision vs decision/block) was resolved
+    in e583 but the 400 errors in 760a suggest the fix may not have been tested
+    successfully in a single session.
+
+## Confidence Assessment
+
+confidence: high
+notes: |
+  The context recovery epic is well-documented across two primary sessions (760a, e583)
+  with clear evidence trails. The two-hook architecture, flag file mechanism, and xs
+  operations are all directly attested in user requests and agent proposals.
+  The main uncertainty is whether --jq/--tail features exist in the implementation.

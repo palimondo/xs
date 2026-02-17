@@ -1,0 +1,100 @@
+epic: filtering
+agent: opus
+timestamp: 2026-02-17T18:00:00Z
+
+assigned_findings:
+  total: 97
+  by_story:
+    FLT-001: 9
+    FLT-002: 6
+    FLT-003: 5
+    FLT-004: 5
+    FLT-005: 13
+    FLT-006: 4
+    FLT-007: 3
+    FLT-008: 3
+    FLT-009: 3
+    FLT-010: 6
+    FLT-011: 10
+    FLT-012: 6
+    FLT-013: 2
+    FLT-014: 5
+    FLT-015: 2
+
+new_stories_proposed:
+  - id: FLT-013
+    title: "Filter by Thinking virtual entity"
+    rationale: "User explicitly requested --include Thinking to filter assistant messages with extended reasoning. Agent questioned whether thinking blocks appear in JSONL but this remains unresolved. Priority: could."
+
+  - id: FLT-014
+    title: "--git as convenience alias for --include Bash(git *)"
+    rationale: "User explicitly required --git to delegate to centralized filtering system rather than having a separate implementation. Known issue with cd-prefixed git commands."
+
+  - id: FLT-015
+    title: "Timeline shows all events when no filters specified"
+    rationale: "User called out implicit filtering as a 'serious issue'. Without explicit filter flags, no events should be hidden from the timeline. This is an architectural constraint on the filtering system."
+
+cross_epic_candidates:
+  - finding_file: "caf2-L301-400.yaml"
+    finding_id: "F004"
+    suggested_epic: "cli-interface"
+    reason: "Filter pipeline ordering (search->range->include->exclude->context) is both a filtering requirement AND a CLI interface architectural decision"
+
+  - finding_file: "caf2-L201-300.yaml"
+    finding_id: "F004"
+    suggested_epic: "cli-interface"
+    reason: "Implicit timeline mode when filter/range params present is a CLI behavior decision, not just filtering"
+
+  - finding_file: "caf2-L201-300.yaml"
+    finding_id: "F002"
+    suggested_epic: "summary"
+    reason: "Summary output with parameter hints showing CLI flags for each count relates to both summary display and filtering"
+
+  - finding_file: "e583-L701-800.yaml"
+    finding_id: "F001"
+    suggested_epic: "console-formatting"
+    reason: "Tool announcement suppression during display is a display/formatting concern triggered by -x Tool filter"
+
+  - finding_file: "a40c-L201-300.yaml"
+    finding_id: "F002"
+    suggested_epic: "jsonl-parsing"
+    reason: "Parsing thinking content from JSONL is a parsing requirement that enables filtering by thinking type"
+
+  - finding_file: "caf2-L601-700.yaml"
+    finding_id: "F006"
+    suggested_epic: "cli-interface"
+    reason: "--files deprecation pointing to --include Edit,Write,MultiEdit is a CLI migration/deprecation concern"
+
+  - finding_file: "b475-L2301-2400.yaml"
+    finding_id: "F007"
+    suggested_epic: "cli-interface"
+    reason: "--git shortcut pattern matching failure with cd-prefixed commands is both a filtering and CLI design issue"
+
+  - finding_file: "day-025-L3201-3400.yaml"
+    finding_id: "F001"
+    suggested_epic: "export"
+    reason: "Filtering tool calls for replay/export is primarily an export use case that relies on filtering"
+
+  - finding_file: "1e83-L801-900.yaml"
+    finding_id: "F001"
+    suggested_epic: "range-selection"
+    reason: "Range applied before filtering (design decision) is primarily a range-selection concern"
+
+  - finding_file: "caf2-L1001-1100.yaml"
+    finding_id: "F004"
+    suggested_epic: "search"
+    reason: "Duplicate/out-of-order output from context expansion overlaps is a search+context concern"
+
+uncovered:
+  - finding_file: "b475-L801-900.yaml"
+    finding_id: "F004"
+    quote_snippet: "This is still failing: (shell quoting for glob patterns)"
+    reason: "Shell quoting interaction with glob filter patterns - edge case not fully resolved; may need documentation or handling"
+
+  - finding_file: "0841-L801-900.yaml"
+    finding_id: "F001"
+    quote_snippet: "unified timeline with filter modes: tools, conversation, all"
+    reason: "Early design had named filter modes (tools, conversation, all) as --timeline parameters. This was later superseded by virtual entity design but shows evolution."
+
+coverage_gaps:
+  - "No gaps. All 12 original stories plus 3 new stories have findings assigned."
