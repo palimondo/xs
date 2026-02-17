@@ -1,0 +1,15 @@
+source: day-020:36801-37000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L36801-L37000) contains BookMinder library integration spec work
+    (Apple Books SQLite library tests). There is no xs/explore_session/reconstruct.jq
+    content in this range. The session is focused entirely on pytest spec refactoring
+    for BookMinder's apple_books library module — naming conventions, docstring style,
+    exception variable naming (exc_info vs e), and test fixture assertions."
+  - "No xs-relevant requirements to extract from this chunk."

@@ -1,0 +1,10 @@
+source: day-020:10001-10200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 10001-10200 contain BookMinder CLI formatting spec work (Book TypedDict refactoring, TDD discipline discussion). No xs/explore_session/reconstruct.jq relevant content found."

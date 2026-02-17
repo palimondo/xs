@@ -1,0 +1,13 @@
+source: "day-019:2801-3000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2801-3000 contain BookMinder CLI development only: renaming a Python decorator
+    from common_list_options to with_common_list_options, discussion of Python private
+    function conventions, type annotations (Any vs Callable[..., Any]), and a git commit.
+    No xs tool requirements present in this chunk."

@@ -1,0 +1,12 @@
+source: day-020:7401-7600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L7401-L7600 contains BookMinder coverage analysis work (pytest coverage
+    reporting, missing line analysis for apple_books/library.py and cli.py). No xs/explore_session
+    relevant content found."

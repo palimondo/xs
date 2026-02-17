@@ -1,0 +1,12 @@
+source: day-024:1401-1600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1401-1600 contain ripgrep output of day-020.md content (BookMinder test
+    refactoring work: test pyramid, library integration tests for Apple Books CLI).
+    No xs/explore_session/reconstruct.jq requirements found in this chunk."

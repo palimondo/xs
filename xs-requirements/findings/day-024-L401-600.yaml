@@ -1,0 +1,14 @@
+source: day-024:401-600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 401-600 of day-024.md consist entirely of embedded ripgrep output from day-020.md
+    (lines reference '/Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-020.md:').
+    The content is BookMinder project work: test restructuring for Apple Books library
+    (moving edge case tests from CLI tests to library integration tests, test pyramid
+    discussion). No xs/explore_session/reconstruct.jq requirements found in this range."

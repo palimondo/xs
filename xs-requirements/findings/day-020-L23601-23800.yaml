@@ -1,0 +1,11 @@
+source: day-020:23601-23800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 23601-23800 contain BookMinder TDD refactoring work (Book TypedDict, list_books,
+    CLI formatting tests). No xs/explore_session/reconstruct.jq content found."

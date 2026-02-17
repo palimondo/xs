@@ -1,0 +1,10 @@
+source: "day-020:20001-20200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 20001-20200 contain BookMinder fixture cleanup/debugging work and test fixture investigations. No xs/explore_session/reconstruct.jq requirements present."

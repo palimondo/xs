@@ -1,0 +1,13 @@
+source: "day-018:2401-2600"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2401-2600 contain exclusively BookMinder/Apple Books content: investigation
+    of ZBKLIBRARYASSET ZSTATE values, sample reading progress storage in AEAnnotation
+    database, and fixture script bug fixes. No xs, explore_session, reconstruct.jq,
+    or session replay content found in this chunk."

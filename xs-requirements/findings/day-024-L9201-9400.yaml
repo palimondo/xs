@@ -1,0 +1,14 @@
+source: day-024:9201-9400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 9201-9400 contain no xs/explore_session requirements. The entire range
+    covers BookMinder CI verification (53 tests passing, coverage upload to Codecov)
+    and fixture directory reorganization (moving specs/apple_books under specs/integration/).
+    No xs tool, explore_session, reconstruct.jq, session replay, filtering, formatting,
+    or CLI interface topics appear in this chunk."

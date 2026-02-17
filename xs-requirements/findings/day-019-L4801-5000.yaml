@@ -1,0 +1,12 @@
+source: day-019:4801-5000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk is entirely BookMinder/Apple Books implementation work (unit tests for
+    _row_to_book, cloud/sample detection fix, test helper patterns). No xs/explore_session
+    /reconstruct.jq content found in lines L4801-L5000."

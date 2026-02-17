@@ -1,0 +1,12 @@
+source: day-020:32401-32600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 32401-32600 contain BookMinder library.py SQL query test coupling discussion
+    (ZISSAMPLE column, _row_to_book coupling, expert council debate on test architecture).
+    No xs/explore_session/reconstruct.jq requirements found in this range."

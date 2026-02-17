@@ -1,0 +1,9 @@
+source: day-022:3401-3600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Content is entirely about BookMinder development: ATDD/TDD methodology discussion (expert council on mocking in acceptance tests, GOOS Chapter 5 diagram), CLI filter validation for BookMinder library (SUPPORTED_FILTERS constant), and library_spec.py unit test writing. No xs/explore_session/reconstruct.jq work present."

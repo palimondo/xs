@@ -1,0 +1,17 @@
+source: "day-020:34801-35000"
+extracted_by: sonnet
+extraction_date: "2026-02-17"
+context_lines: "34751-34800"
+primary_lines: "34801-35000"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L34801-L35000 contains BookMinder CLI formatting spec refactoring work
+    (Book data model, _format_book_output, format_book_list tests). No xs/explore_session/
+    reconstruct.jq requirements present."
+  - "Content: Claude adds _book() helper to reduce test repetition, removes unnecessary
+    Book constructor fields, runs pytest (11 passed), commits refactoring. User requests
+    commit with meaningful message for learning trail. Entirely BookMinder domain."

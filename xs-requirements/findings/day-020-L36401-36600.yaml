@@ -1,0 +1,12 @@
+source: day-020:36401-36600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L36401-L36600) is entirely about BookMinder Apple Books library
+    integration test restructuring (test pyramid, mocking strategy, fixture-based
+    edge case tests). No xs/explore_session/reconstruct.jq content present."

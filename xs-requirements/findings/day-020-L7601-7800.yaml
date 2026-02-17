@@ -1,0 +1,11 @@
+source: "day-020:7601-7800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 7601-7800 contain BookMinder CLI spec code (cli_spec.py listing) and Apple Books
+    fixture directory structure. No xs/explore_session relevant content in this range."

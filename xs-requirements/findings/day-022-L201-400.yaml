@@ -1,0 +1,9 @@
+source: day-022:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 201-400 cover BookMinder CLI filter validation debugging (pytest runs, BookMinder list command behavior) and a discussion about Claude Code custom slash command syntax and permissions. No references to xs, explore_session, or reconstruct.jq."

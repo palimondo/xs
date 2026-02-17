@@ -1,0 +1,10 @@
+source: day-020:52201-52400
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk. Content is entirely about BookMinder Apple Books library integration tests and fixture management (never_opened_user fixture discovery, git history investigation, fixture directory cleanup)."

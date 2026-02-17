@@ -1,0 +1,13 @@
+source: "day-020:17801-18000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 17801-18000 contain exclusively BookMinder work: Apple Books database schema
+    documentation (BKLibrary fields, asset IDs, timestamp formats), investigation of
+    user state scenarios for BookMinder test fixtures, and Gemini CLI help output.
+    No xs, explore_session, or reconstruct.jq requirements found in this range."

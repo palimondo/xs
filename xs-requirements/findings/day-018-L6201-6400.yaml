@@ -1,0 +1,17 @@
+source: "day-018:6201-6400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+context_lines: "6151-6200"
+primary_lines: "6201-6400"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder apple_books.md documentation work: Apple Books UI
+    section documentation (Continue, Want to Read, Series, Books Read This Year), image
+    reorganization, ZSTATE=5 series entity discovery, and git commit/push operations.
+    No xs, explore_session, reconstruct.jq, or session tool content found."
+  - "The chunk begins mid-Gemini-answer about recovering lost Apple Books UI documentation
+    and ends with a git add command for apple_books.md."

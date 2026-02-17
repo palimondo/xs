@@ -1,0 +1,14 @@
+source: "day-024:2801-3000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2801-3000 consist entirely of rg/grep output embedded from day-020.md,
+     showing BookMinder (Apple Books CLI) test architecture refactoring. The content
+     discusses moving edge case tests from subprocess-based CLI tests to library
+     integration tests, and keeping one end-to-end integration test. No xs,
+     explore_session, or reconstruct.jq requirements appear in this range."

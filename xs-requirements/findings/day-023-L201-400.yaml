@@ -1,0 +1,9 @@
+source: day-023:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 201-400 contain BookMinder development work: analysis of Apple Books library SQL conditions (ZISSAMPLE), test organization in cli_spec.py, and discussion of YOLO mode TDD violations. No xs/explore_session/reconstruct.jq content."

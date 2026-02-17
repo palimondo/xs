@@ -1,0 +1,18 @@
+source: "day-020:41201-41400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+context_lines: "41151-41200"
+primary_lines: "41201-41400"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This range contains BookMinder Apple Books fixture investigation. Claude is
+    examining `never_opened_user` test fixture, discovering it was never committed
+    to the repository, and mapping what each real fixture (corrupted_db_user,
+    fresh_books_user, legacy_books_user, dummy_relative_user) tests. The user
+    then instructs Claude to use ripgrep on claude-dev-log-diary to research the
+    ground truth about Library containers. No xs/explore_session/reconstruct.jq
+    requirements appear in this range — content is entirely BookMinder internals."

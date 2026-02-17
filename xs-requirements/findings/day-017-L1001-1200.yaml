@@ -1,0 +1,15 @@
+source: day-017:1001-1200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1001-1200 contain BookMinder filtering system redesign content (--flag to --filter,
+    cloud/sample/reading-status filters for Apple Books library). No xs, explore_session,
+    reconstruct.jq, or session transcript tooling content found in this chunk."
+  - "The chunk covers: user rejecting Claude's plan for updating BookMinder filter system,
+    TDD-compliant ordering discussion, and an expert council review of filter system design
+    (Kent Beck, Dave Farley, Dan North, Freeman & Pryce). All BookMinder-specific, not xs."

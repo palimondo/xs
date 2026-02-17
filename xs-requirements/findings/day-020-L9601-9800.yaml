@@ -1,0 +1,12 @@
+source: day-020:9601-9800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 9601-9800 contain BookMinder CLI formatting refactoring work (format_book_list, cli_formatting_spec.py)"
+  - "No xs/explore_session/reconstruct.jq relevant findings in this range"
+  - "Content is entirely BookMinder Apple Books library and CLI test work"

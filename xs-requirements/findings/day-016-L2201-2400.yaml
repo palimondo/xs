@@ -1,0 +1,13 @@
+source: day-016:2201-2400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2201-2400 contain BookMinder project directory listing (file tree) and
+    pytest output for BookMinder specs (Apple Books library tests). No xs/explore_session/
+    reconstruct.jq content found in this range. Content is entirely BookMinder-specific
+    (Apple Books SQLite database paths, library_spec.py, cli_spec.py test failures)."

@@ -1,0 +1,12 @@
+source: day-020:50401-50600
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder apple_books/library.py TDD work on _get_user_path function"
+  - "Content covers test design discussion for user path resolution in Apple Books library module"

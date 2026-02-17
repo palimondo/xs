@@ -1,0 +1,18 @@
+source: "day-020:44601-44800"
+extracted_by: sonnet
+extraction_date: "2026-02-17"
+
+summary: >
+  This chunk contains BookMinder project work: investigating which Claude model
+  created empty fixture directories without .gitkeep files (in day-010), then
+  fixing the fixture structure. No xs/explore_session/reconstruct.jq content present.
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L44601-44800) covers BookMinder Apple Books fixture debugging."
+  - "Content: tracing mkdir commands in day-010 log, determining Claude Opus was responsible,"
+  - "then creating never_opened_user fixture with .gitkeep files and verifying tests pass."
+  - "No xs, explore_session, or reconstruct.jq requirements present in this chunk."

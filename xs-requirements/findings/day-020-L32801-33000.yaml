@@ -1,0 +1,13 @@
+source: "day-020:32801-33000"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L32801-L33000) contains BookMinder CLI refactoring work only."
+  - "Content covers ZISSAMPLE column removal, CLI formatting extraction, acceptance test restructuring for BookMinder's list commands."
+  - "No xs, explore_session, or reconstruct.jq content found in primary range."
+  - "Context range L32751-L32800 also contains BookMinder CLI discussion (no xs content)."

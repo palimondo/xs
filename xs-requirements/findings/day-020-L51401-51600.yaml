@@ -1,0 +1,10 @@
+source: day-020:51401-51600
+extracted_by: sonnet
+timestamp: "2026-02-17"
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder/Apple Books library.py code coverage debugging (uncovered exception paths at lines 32, 82, 163)"
+  - "User pushes back on abandoning coverage pursuit, wants to understand why integration tests are not covering exception raise paths"
+  - "Entirely BookMinder context, no xs/explore_session/reconstruct.jq content"

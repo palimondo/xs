@@ -1,0 +1,81 @@
+source: day-018:801-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "TDD commit discipline - when to commit in RED-GREEN-REFACTOR cycle"
+    status: resolved
+    events:
+      - line: 817
+        type: introduced
+        speaker: user
+        quote: "OK, and what does `git_workflow` say about GREEN? Maybe CLAUDE.md is missing hint to commit after reaching GREEN before we start to refactor?"
+      - line: 819
+        type: resolved
+        speaker: agent
+        quote: "You're absolutely right! Looking at git_workflow in CLAUDE.md:"
+
+  - id: T002
+    topic: "TODO.md story completion tracking process"
+    status: resolved
+    events:
+      - line: 866
+        type: introduced
+        speaker: user
+        quote: "Shoudl that's not how you mark the story as complete in TODO.md -- there's a section for that. Maybe add a rule to CLAUDE.md to enforce process?"
+      - line: 893
+        type: resolved
+        speaker: agent
+        quote: "Now let me update CLAUDE.md to add the missing commit step in the TDD workflow:"
+
+  - id: T003
+    topic: "Keeping CLAUDE.md, AGENTS.md, GEMINI.md in sync"
+    status: resolved
+    events:
+      - line: 915
+        type: introduced
+        speaker: agent
+        quote: "Since CLAUDE.md is duplicated in AGENTS.md for other agentic coding systems, should I apply these same changes to AGENTS.md?"
+      - line: 917
+        type: resolved
+        speaker: user
+        quote: "Please do, and probably same for GEMINI.md (and add **it** to the same place that reminded you to update AGENTS.md)"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 817
+    type: user_correction
+    speaker: user
+    quote: "OK, and what does `git_workflow` say about GREEN? Maybe CLAUDE.md is missing hint to commit after reaching GREEN before we start to refactor?"
+    note: "User identified missing step in TDD workflow: commit after GREEN before refactoring. Process finding relevant to xs development."
+
+  - id: F002
+    thread: T001
+    line: 819
+    type: user_request
+    speaker: agent
+    quote: "You're absolutely right! Looking at git_workflow in CLAUDE.md:"
+    note: "Established TDD commit discipline: two commits per cycle (after GREEN, after REFACTOR). Applies to xs development process."
+
+  - id: F003
+    thread: T002
+    line: 866
+    type: user_correction
+    speaker: user
+    quote: "Shoudl that's not how you mark the story as complete in TODO.md -- there's a section for that. Maybe add a rule to CLAUDE.md to enforce process? Same with the `tdd_discipline` add the commit between Run All Tests and Refactor?"
+    note: "User corrects story completion process. Relevant to xs project process: stories should be moved to completed section in TODO.md."
+
+  - id: F004
+    thread: T003
+    line: 917
+    type: user_request
+    speaker: user
+    quote: "Please do, and probably same for GEMINI.md (and add **it** to the same place that reminded you to update AGENTS.md)"
+    note: "User requires keeping all AI assistant instruction files (CLAUDE.md, AGENTS.md, GEMINI.md) in sync. Process requirement for xs project."
+
+notes:
+  - "Lines 801-866: BookMinder cloud filter feature completion — GREEN phase, coverage check (96%), committing. Not directly xs-relevant."
+  - "Lines 866-1000: BookMinder project process improvements — TDD commit discipline, TODO.md story tracking, keeping CLAUDE/AGENTS/GEMINI.md in sync. Process-level findings relevant to xs development approach."
+  - "No xs-specific tool requirements, formatting, or CLI requirements in this chunk. Content is BookMinder TDD discipline and project process."

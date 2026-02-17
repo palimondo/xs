@@ -1,0 +1,13 @@
+source: "day-020:39601-39800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L39601-L39800) contains BookMinder/Apple Books library coverage work
+    (pytest CliRunner conversion, sqlite fixture investigation, coverage tracking for
+    library.py exception paths). No xs, explore_session, or reconstruct.jq requirements
+    found in the primary range."

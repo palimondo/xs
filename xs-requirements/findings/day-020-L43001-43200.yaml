@@ -1,0 +1,14 @@
+source: day-020:43001-43200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains exclusively BookMinder project activity: investigating the
+    git/day-log history of the 'never_opened_user' fixture across days 010-018.
+    The Claude agent uses Gemini to search day-012.md and day-018.md for references
+    to this fixture, summarizes findings, then queries git log. No xs, explore_session,
+    or reconstruct.jq requirements appear in this range."

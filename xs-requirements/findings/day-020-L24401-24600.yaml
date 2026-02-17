@@ -1,0 +1,14 @@
+source: day-020:24401-24600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+context_lines: 24351-24400
+primary_lines: 24401-24600
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder CLI refactoring work (renaming _format_book_output,
+    discussing TypedDict vs dataclass design). No xs/explore_session/reconstruct.jq
+    content found."

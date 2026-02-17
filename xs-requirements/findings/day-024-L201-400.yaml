@@ -1,0 +1,15 @@
+source: day-024:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 201-400 of day-024.md are entirely ripgrep output from day-020.md, showing
+    BookMinder test architecture refactoring (ZISSAMPLE SQL column, CLI formatting
+    extraction, fixture-based edge case tests). No xs/explore_session/reconstruct.jq
+    content found in this range."
+  - "The content is about BookMinder's testing layers (acceptance vs integration vs unit)
+    for the BookMinder CLI, not the xs session tool."

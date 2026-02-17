@@ -1,0 +1,12 @@
+source: day-020:30601-30800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 30601-30800 contain BookMinder Apple Books library integration testing work (fixture
+    structure for never_opened_user/legacy_books_user, coverage analysis, assertion specificity
+    improvement). No xs/explore_session/reconstruct.jq requirements found in this range."

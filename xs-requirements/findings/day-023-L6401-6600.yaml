@@ -1,0 +1,17 @@
+source: day-023:6401-6600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains discussion about configuring GitHub Actions CI/CD for
+    BookMinder (claude-code-review.yml and claude.yml workflows, ubuntu vs macos
+    runner selection, allowed_tools configuration for ruff/mypy/pre-commit).
+    No xs/explore_session/reconstruct.jq requirements found."
+  - "Topics covered: @claude GitHub comment workflow triggering, macos-latest vs
+    ubuntu-latest runner tradeoffs, allowed_tools for CI self-checking, security
+    restriction that workflows must exist on main branch before @claude triggers work."
+  - "All content is BookMinder CI infrastructure, not xs tool requirements."

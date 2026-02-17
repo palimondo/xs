@@ -1,0 +1,14 @@
+source: day-018:1801-2000
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1801-2000 contain only BookMinder (Apple Books) fixture management work."
+  - "Content covers: shell script variable naming bug ($USERNAME env conflict), fixing
+    create_fixture.sh and copy_book_to_fixture.sh to use $FIXTURE_USER, and copying
+    books to test fixtures."
+  - "No xs/explore_session/reconstruct.jq requirements present in this chunk."

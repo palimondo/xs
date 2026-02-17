@@ -1,0 +1,12 @@
+source: day-023:1801-2000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1801-2000 contain discussion about BookMinder test architecture decisions
+    (ONE integration test rule, CLI test strategy, filesystem structure as living
+    documentation). No xs/explore_session/reconstruct.jq requirements present."

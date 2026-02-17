@@ -1,0 +1,13 @@
+source: day-020:48401-48600
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI refactoring work: renaming format_book_output to format,
+    fixing the all command to use format_book_list instead of a loop, and running pytest
+    to verify. This is unrelated to xs/explore_session/reconstruct.jq."

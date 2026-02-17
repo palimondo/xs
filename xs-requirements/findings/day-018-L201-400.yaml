@@ -1,0 +1,14 @@
+source: day-018:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 201-400 contain BookMinder git hook development (validate_git_commands.py)."
+  - "Content covers regex patterns for blocking dangerous 'git add .' commands in BookMinder."
+  - "Also covers a false-positive bug where the commit message itself mentioned the blocked pattern."
+  - "No xs, explore_session, or reconstruct.jq content found in this range."
+  - "Context lines 151-200 were also about git hook regex explanation — not xs-relevant."

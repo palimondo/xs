@@ -1,0 +1,10 @@
+source: day-020:22801-23000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder CLI testing architecture discussion (acceptance tests, mocking, formatting logic). No xs/explore_session/reconstruct.jq requirements found."

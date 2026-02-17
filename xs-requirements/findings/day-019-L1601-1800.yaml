@@ -1,0 +1,11 @@
+source: "day-019:1601-1800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1601-1800 contain exclusively BookMinder CLI design discussion about 'bookminder list' vs 'bookminder list all' command structure for sample filtering. No xs (explore-session) tool content present."
+  - "Context lines 1551-1600 were also BookMinder content (sample filtering story, --filter flag options). No xs relevance."

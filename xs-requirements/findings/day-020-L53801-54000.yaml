@@ -1,0 +1,11 @@
+source: day-020:53801-54000
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder fixture debugging: investigation of missing never_opened_user test fixture directory, git history analysis, blame assignment for AI not adding .gitkeep files to empty directories"

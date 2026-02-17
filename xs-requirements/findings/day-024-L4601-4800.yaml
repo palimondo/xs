@@ -1,0 +1,10 @@
+source: day-024:4601-4800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 4601-4800 cover BookMinder test reorganization planning (cli_spec.py, library_spec.py, integration test directory structure). No xs/explore_session/reconstruct.jq requirements found in this range."

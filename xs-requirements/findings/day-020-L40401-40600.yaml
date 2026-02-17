@@ -1,0 +1,14 @@
+source: "day-020:40401-40600"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+context_start: 40351
+primary_start: 40401
+end: 40600
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder Apple Books library code and tests (fixture paths,
+    pytest runs, _get_user_path analysis). No xs/explore_session/reconstruct.jq content found."

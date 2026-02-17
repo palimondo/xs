@@ -1,0 +1,12 @@
+source: day-018:1201-1400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1201-1400 contain BookMinder Apple Books project content only: TDD workflow
+    for filter-by-sample-flag story, fixture script debugging, and Apple Books database
+    operations. No xs/explore_session/reconstruct.jq related content found."

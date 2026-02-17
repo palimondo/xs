@@ -1,0 +1,12 @@
+source: day-020:3601-3800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3601-3800 cover BookMinder CLI testing refactoring: converting subprocess
+    tests to Click CliRunner, achieving 100% CLI coverage, error boundary tests.
+    No xs/explore_session/reconstruct.jq related content found."

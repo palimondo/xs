@@ -1,0 +1,14 @@
+source: day-024:1601-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1601-1800 of day-024.md contain embedded content from day-020.md (prefixed
+    with '/Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-020.md').
+    The content discusses BookMinder test architecture: CLI test pyramid, CliRunner vs
+    subprocess tests, coverage gaps in library.py exception paths. No xs/explore_session/
+    reconstruct.jq requirements found in this range."

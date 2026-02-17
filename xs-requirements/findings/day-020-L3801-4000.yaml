@@ -1,0 +1,10 @@
+source: day-020:3801-4000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3801-4000 contain BookMinder CLI test refactoring (subprocess to CliRunner) and coverage debugging for Apple Books library exception paths. No xs/explore_session/reconstruct.jq relevant content found."

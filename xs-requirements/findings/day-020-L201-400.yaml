@@ -1,0 +1,12 @@
+source: day-020:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 201-400 contain exclusively BookMinder Apple Books library coverage discussion
+    and CLI test architecture analysis (subprocess coverage, Path.home() testing, expert
+    council on test layers). No xs/explore_session/reconstruct.jq relevant content found."

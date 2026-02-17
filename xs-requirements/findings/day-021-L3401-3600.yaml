@@ -1,0 +1,14 @@
+source: day-021:3401-3600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI test refactoring work: converting subprocess-based
+    tests to use mock patches (list_all_books, format), removing unnecessary
+    mock return_value assignments, and TDD discipline (run tests after each
+    Write/Update). Entirely BookMinder domain, no xs tool requirements."

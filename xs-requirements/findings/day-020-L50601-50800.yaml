@@ -1,0 +1,11 @@
+source: day-020:50601-50800
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder Apple Books library refactoring work: moving path resolution from CLI to library layer, test coverage discussion (subprocess vs mocked tests), and expert council debate on testing philosophy"

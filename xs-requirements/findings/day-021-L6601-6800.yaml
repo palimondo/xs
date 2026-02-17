@@ -1,0 +1,13 @@
+source: day-021:6601-6800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 6601-6800 are entirely
+  BookMinder work: investigating Apple Books SQLite database to understand Continue
+  section logic (which books appear, ZISFINISHED vs ZREADINGPROGRESS criteria), and
+  updating apple_books.md documentation accordingly. No xs/explore_session/reconstruct.jq
+  content present."

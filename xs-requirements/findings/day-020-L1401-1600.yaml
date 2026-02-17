@@ -1,0 +1,12 @@
+source: day-020:1401-1600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1401-1600 contain BookMinder-only work: TDD refactoring of Book TypedDict
+    (making path and updated fields optional after tests revealed they were unused in
+    formatting functions). No xs/explore_session/reconstruct.jq relevant content found."

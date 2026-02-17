@@ -1,0 +1,13 @@
+source: day-024:6601-6800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L6601-L6800) contains BookMinder apple_books library spec
+    refactoring: moving tests between specs/apple_books/ and specs/unit/ directories,
+    fixing test paths, and a user correction about using a fake path vs. TEST_HOME.
+    No xs-related content found."

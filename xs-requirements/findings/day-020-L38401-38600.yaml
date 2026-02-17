@@ -1,0 +1,12 @@
+source: "day-020:38401-38600"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder library_spec.py TDD work for _get_user_path function (Apple Books)."
+  - "No xs/explore_session/reconstruct.jq requirements found in primary range L38401-L38600."
+  - "Content is entirely about BookMinder's user path resolution for macOS Apple Books integration."

@@ -1,0 +1,18 @@
+source: day-020:41801-42000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 41801-42000 contain BookMinder documentation (Apple Books database schemas,
+    asset ID correlation, user state edge cases, sample book lifecycle) and a conversation
+    about using the Gemini CLI as a semantic search tool on day-010.md."
+  - "No xs/explore_session/reconstruct.jq requirements appear in this range. This is
+    BookMinder domain content only."
+  - "The one potentially relevant observation (L41965-L41967) is the user explaining
+    that `gemini` CLI follows project instructions from `GEMINI.md` the same way Claude
+    follows `CLAUDE.md` — a meta-observation about the development workflow, not an
+    xs requirement."

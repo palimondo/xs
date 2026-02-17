@@ -1,0 +1,12 @@
+source: day-020:12001-12200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 12001-12200 contain only BookMinder CLI refactoring work: renaming
+    format_book_output to format, removing a redundant test, and pytest output.
+    No xs/explore_session/reconstruct.jq content present. Zero relevant findings."

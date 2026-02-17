@@ -1,0 +1,9 @@
+source: day-022:3801-4000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Content is BookMinder TDD work: correcting commit order (test-before-implementation discipline), git reset/stage/commit operations for BookMinder filter validation feature (SUPPORTED_FILTERS, library.py, cli_spec.py). No xs, explore_session, or reconstruct.jq content present."

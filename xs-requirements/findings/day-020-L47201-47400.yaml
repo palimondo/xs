@@ -1,0 +1,9 @@
+source: day-020:47201-47400
+extracted_by: sonnet
+timestamp: 2026-02-17
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content is entirely BookMinder CLI formatting tests and TDD discipline discussion"
+  - "Topics: test ordering by complexity, ruff linting fixes, Book TypedDict refactoring"

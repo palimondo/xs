@@ -1,0 +1,8 @@
+source: day-020:52001-52200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content covers BookMinder library integration test fixture path issues (absolute vs relative paths, FIXTURE_PATH.absolute() fix, Apple Books containers)"

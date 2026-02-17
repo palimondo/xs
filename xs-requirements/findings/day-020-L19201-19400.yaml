@@ -1,0 +1,12 @@
+source: day-020:19201-19400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L19201-L19400) contains BookMinder/Apple Books fixture investigation
+    (never_opened_user fixture git history). No xs, explore_session, or reconstruct.jq
+    content found."

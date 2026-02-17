@@ -1,0 +1,16 @@
+source: day-024:7201-7400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L7201-L7388) contains BookMinder internal test refactoring: converting
+    two subprocess-based CLI integration tests (it_filters_recent_books_by_sample_status,
+    it_excludes_samples_from_recent_books) to use mocks via pytest fixtures. 100% coverage
+    maintained across 53 tests. No xs-relevant requirements present."
+  - "L7390-L7400 begins a context-continuation summary referencing 'YOLO mode'
+    violations of TDD/ATDD principles in BookMinder, but no xs-specific requirements
+    are stated in this range."

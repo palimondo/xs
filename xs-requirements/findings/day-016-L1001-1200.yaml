@@ -1,0 +1,12 @@
+source: day-016:1001-1200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1001-1200 are entirely about BookMinder Apple Books fixture scripts (create_fixture.sh,
+    copy_book_to_fixture.sh, SQLite schema management). No xs/explore_session/reconstruct.jq
+    content present in this range. Zero relevant findings."

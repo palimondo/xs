@@ -1,0 +1,10 @@
+source: day-020:5201-5400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 5201-5400 contain BookMinder work: investigating the never_opened_user test fixture for Apple Books database. No xs/explore_session/reconstruct.jq requirements found."

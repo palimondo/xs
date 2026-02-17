@@ -1,0 +1,15 @@
+source: day-016:1401-1600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L1401-L1600) contains only BookMinder/Apple Books fixture creation
+    debugging. An agent had created a stray 0-byte SQLite file in the user's real
+    Apple Books library directory due to swapped paths (FIXTURE_DB_PATH pointed to
+    ~/Library instead of the project's specs/ directory). The chunk documents
+    diagnosing and cleaning up this mistake. No xs/explore_session/reconstruct.jq
+    content present."

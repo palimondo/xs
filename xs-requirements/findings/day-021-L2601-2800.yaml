@@ -1,0 +1,13 @@
+source: day-021:2601-2800
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk. Content is entirely BookMinder
+    internal refactoring: introducing pytest fixtures for CliRunner, converting CLI
+    tests from subprocess-based to mock-based patterns, and simplifying Book model
+    test data. No xs tool features, behaviors, or requirements discussed."

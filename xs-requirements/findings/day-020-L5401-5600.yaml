@@ -1,0 +1,16 @@
+source: day-020:5401-5600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 5401-5600 contain BookMinder-specific investigation into 'never_opened_user'
+    fixture evolution across day-010 through day-018. This is Apple Books fixture
+    research (BookMinder project), not xs/explore_session/reconstruct.jq related."
+  - "Agent uses Gemini to research fixture history in other day logs — a meta-pattern
+    visible here but the content is BookMinder domain, not xs requirements."
+  - "User corrections observed (L5405, L5432, L5593) are about showing full Gemini
+    responses for the record, not about xs feature requirements."

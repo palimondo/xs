@@ -1,0 +1,13 @@
+source: day-018:1601-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1601-1800 cover BookMinder fixture creation and git hook setup (validate_git_commands.py)."
+  - "No xs/explore_session/reconstruct.jq requirements present in this chunk."
+  - "Content: Claude moved validate_git_commands.py hook to ~/.claude/, updated settings.json, debugged create_fixture.sh script argument handling."
+  - "User reacted strongly (L1741) to an ambiguous rm -rf command that looked dangerous without full path context."

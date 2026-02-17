@@ -1,0 +1,12 @@
+source: day-020:20401-20600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L20401-L20600) contains BookMinder debugging content only."
+  - "Topic: investigating lost never_opened_user test fixture and Gemini CLI model switch (Pro->Flash)."
+  - "No xs, explore_session, or reconstruct.jq requirements found in this range."

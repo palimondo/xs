@@ -1,0 +1,13 @@
+source: day-020:33201-33400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 33201-33400 contain BookMinder CLI work only: pytest failures from type annotation
+     clash (list[Book] vs Click's 'list' group), the fix using typing.List, ruff pre-commit
+     hook rejecting deprecated typing.List, and the beginning of the proper fix. No xs,
+     explore_session, or reconstruct.jq content present in this range."

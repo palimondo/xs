@@ -1,0 +1,12 @@
+source: day-023:801-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 801-1000 are entirely BookMinder development work (YOLO mode retrospective,
+    CLI spec reorganization, sample filter acceptance tests). No xs/explore_session/
+    reconstruct.jq content present in this range."

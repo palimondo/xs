@@ -1,0 +1,12 @@
+source: day-020:25601-25800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 25601-25800 contain BookMinder work only: Apple Books library integration
+    tests (list_recent_books, list_all_books), pytest runs, coverage checks, and
+    commit activity. No xs/explore_session/reconstruct.jq content found."

@@ -1,0 +1,13 @@
+source: day-021:1801-2000
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L1801-L2000 covers BookMinder CLI spec refactoring: converting subprocess-based tests
+    to mock-based tests for cli_spec.py, testing coordination between library and formatter
+    rather than output strings. All activity is BookMinder project work, not xs tool work."

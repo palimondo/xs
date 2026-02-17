@@ -1,0 +1,9 @@
+source: day-021:3601-3800
+extracted_by: sonnet
+timestamp: "2026-02-17"
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI test refactoring work (subprocess to mock-based
+    tests, ZISSAMPLE column experiment, TDD process discussion)"

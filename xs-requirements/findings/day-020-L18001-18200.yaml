@@ -1,0 +1,12 @@
+source: day-020:18001-18200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L18001-L18200 contains BookMinder/Apple Books work only."
+  - "Content covers: testing Gemini CLI with @filename syntax, GEMINI.md rules, BookMinder fixture research."
+  - "No xs, explore_session, or reconstruct.jq requirements found in this range."

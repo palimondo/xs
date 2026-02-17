@@ -1,0 +1,14 @@
+source: day-023:3001-3200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3001-3200 contain BookMinder test suite refactoring work (organizing pytest
+    specs into unit/integration/acceptance/e2e subdirectories). No xs/explore_session/
+    reconstruct.jq requirements found in this chunk."
+  - "Content covers: git mv of spec files, pytest run verification, commit messages
+    for test reorganization. Entirely BookMinder-internal, no xs relevance."

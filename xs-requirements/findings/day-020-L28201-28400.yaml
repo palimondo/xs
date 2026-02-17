@@ -1,0 +1,12 @@
+source: day-020:28201-28400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 28201-28400 contain exclusively BookMinder Apple Books library integration test work."
+  - "Content: fixture path absoluteness bug discovery and fix (FIXTURE_PATH.absolute())."
+  - "No xs/explore_session/reconstruct.jq requirements found in this range."

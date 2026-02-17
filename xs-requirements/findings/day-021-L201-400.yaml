@@ -1,0 +1,15 @@
+source: day-021:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 201-400 contain BookMinder test architecture analysis: pytest run results,
+    test isolation discussion (_row_to_book unit test vs integration tests), and the
+    beginning of an Expert Council analysis (Kent Beck perspective) about BookMinder
+    CLI subprocess tests and SQLite database coupling. All BookMinder-domain content,
+    no xs tool requirements."

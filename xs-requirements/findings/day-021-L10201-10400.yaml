@@ -1,0 +1,91 @@
+source: day-021:10201-10400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "reconstruct.jq tool_use display format"
+    status: open
+    events:
+      - line: 10384
+        speaker: agent
+        type: introduced
+        quote: "\"⏺ \\($line.message.content[0].name | format_tool_name)(\\($line.message.content[0].input | format_tool_input))\""
+
+  - id: T002
+    topic: "reconstruct.jq tool_result display with toolUseResult field"
+    status: open
+    events:
+      - line: 10385
+        speaker: agent
+        type: introduced
+        quote: "elif $line.type == \"user\" and ($line.message.content | type) == \"array\" and $line.message.content[0].type == \"tool_result\" then"
+      - line: 10386
+        speaker: agent
+        type: refined
+        quote: "if $line.toolUseResult? then"
+
+  - id: T003
+    topic: "filter out command-message system entries from user messages"
+    status: open
+    events:
+      - line: 10378
+        speaker: agent
+        type: introduced
+        quote: "| if $line.type == \"user\" and ($line.message.content | type) == \"string\" and ($line.message.content | startswith(\"<command-message>\") |"
+
+  - id: T004
+    topic: "silently skip unknown/unhandled line types"
+    status: open
+    events:
+      - line: 10397
+        speaker: agent
+        type: introduced
+        quote: "+ else"
+
+findings:
+  - id: F001
+    thread: T003
+    line: 10378
+    type: agent_proposal
+    speaker: agent
+    quote: "| if $line.type == \"user\" and ($line.message.content | type) == \"string\" and ($line.message.content | startswith(\"<command-message>\") |"
+    summary: "User messages with string content are displayed as \"> text\", but only if they do NOT start with \"<command-message>\" — system/tool injection messages are filtered out and produce no output"
+
+  - id: F002
+    thread: T001
+    line: 10384
+    type: agent_proposal
+    speaker: agent
+    quote: "\"⏺ \\($line.message.content[0].name | format_tool_name)(\\($line.message.content[0].input | format_tool_input))\""
+    summary: "Tool use entries (assistant type, tool_use content) are displayed as \"⏺ ToolName(input)\" — the bullet symbol followed by tool name and primary input argument in parentheses"
+
+  - id: F003
+    thread: T002
+    line: 10386
+    type: agent_proposal
+    speaker: agent
+    quote: "if $line.toolUseResult? then"
+    summary: "Tool result entries should prefer the top-level toolUseResult field when present, falling back to message.content[0].content — toolUseResult provides richer structured output"
+
+  - id: F004
+    thread: T002
+    line: 10387
+    type: agent_proposal
+    speaker: agent
+    quote: "if $line.toolUseResult | type == \"string\" then"
+    summary: "toolUseResult field can be either a string (display directly as \"  ⎿ value\") or an object with stdout/stderr fields (display stdout when non-empty as \"  ⎿ stdout\"); tool result output is prefixed with \"  ⎿ \" (two spaces + hook symbol)"
+
+  - id: F005
+    thread: T004
+    line: 10397
+    type: agent_proposal
+    speaker: agent
+    quote: "+ else"
+    summary: "JSONL entries that do not match any known pattern (not user string message, not assistant text, not tool_use, not tool_result) are silently skipped using jq 'empty' — produce no output"
+
+notes:
+  - "This chunk is entirely agent debugging reconstruct.jq — fixing jq function definition order (functions must be defined before use in jq). The xs-relevant content is the reconstruct.jq script structure itself, not the debugging mechanics."
+  - "The reconstruct.jq script architecture in this chunk defines the core JSONL-to-console-output mapping: user strings -> '> text', assistant text -> verbatim, tool_use -> '⏺ Name(input)', tool_result -> '  ⎿ output'"
+  - "T001-T004 are all 'open' because this chunk shows the script being written but not yet validated by user; the design decisions were established in prior context (day-020 era)"
+  - "format_tool_name and format_tool_input are helper functions: tool names map to their display names (Bash->Bash, Read->Read, others pass through); tool input extracts the primary parameter (command, file_path, path, or pattern field)"

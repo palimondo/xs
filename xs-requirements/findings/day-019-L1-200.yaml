@@ -1,0 +1,14 @@
+source: "day-019:1-200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1-200 contain no xs-relevant content. The entire chunk covers BookMinder
+    sample filtering feature development (ZISSAMPLE field, Apple Books --filter option,
+    pytest/BDD implementation). The session log shows repeated session restarts (L2-8,
+    L76-81, L114-120) all in the BookMinder project, working on filter-by-sample-flag
+    story with no xs/explore_session tooling discussion."

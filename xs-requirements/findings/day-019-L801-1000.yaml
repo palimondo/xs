@@ -1,0 +1,14 @@
+source: "day-019:801-1000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 751-1000 are entirely about BookMinder's Apple Books sample detection logic
+    (ZISSAMPLE vs ZSTATE=6), TDD process issues, and Gemini's documentation gap analysis.
+    No xs-relevant content found in this chunk."
+  - "Content: Gemini summary of Book Samples investigation, Expert Council analysis of
+    incomplete sample filter implementation, user correction that documentation needs updating."

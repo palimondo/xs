@@ -1,0 +1,13 @@
+source: day-020:47801-48000
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI formatting test refactoring: adding _book() helper,
+    inlining book creation, renaming _format_book_output function for shorter test lines.
+    All BookMinder domain, no xs/explore_session/reconstruct.jq content."

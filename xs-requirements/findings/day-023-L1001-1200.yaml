@@ -1,0 +1,12 @@
+source: day-023:1001-1200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "L1001-L1200 contains BookMinder CLI spec refactoring (parameterized filter tests,
+    ruff lint fixes, cli_spec.py reorganization). No xs/explore_session/reconstruct.jq
+    content present."

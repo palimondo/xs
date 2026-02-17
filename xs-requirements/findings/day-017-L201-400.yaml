@@ -1,0 +1,14 @@
+source: day-017:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 201-400 of day-017.md contain BookMinder project work unrelated to xs/explore_session/reconstruct.jq."
+  - "Content covers: Gemini's Apple Books cloud filtering implementation review, ZSTATE database cleanup validation, Git commit operations in BookMinder project."
+  - "User corrects Claude about accessing claude-dev-log-diary without explicit permission (L284-L287) — a workflow note, not an xs requirement."
+  - "Gemini summary of day-016 (L311-L373) covers BookMinder database surgery and model downgrade issues, no xs content."
+  - "No xs-relevant requirements found in this primary range."

@@ -1,0 +1,12 @@
+source: day-016:601-800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L601-L800) contains only BookMinder fixture database work: refactoring
+    create_fixture.sh and copy_book_to_fixture.sh shell scripts for Apple Books SQLite
+    test databases. No xs, explore_session, reconstruct.jq, or session tool content found."

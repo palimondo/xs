@@ -1,0 +1,13 @@
+source: day-016:5401-5600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 5401-5600 contain BookMinder-specific content only: git operations on
+    docs/apple_books.md, Apple Books SQLite database schema documentation (ZSTATE
+    field research, BKLibrary database fields), and file restoration work. No xs,
+    explore_session, or reconstruct.jq content found."

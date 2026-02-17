@@ -1,0 +1,9 @@
+source: "day-022:5001-5200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Entire range covers BookMinder Apple Books work: implementing !sample filter in list_all_books, fixing ruff linting errors, staging/committing, then beginning list_recent_books sample filter tests."

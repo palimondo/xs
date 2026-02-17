@@ -1,0 +1,13 @@
+source: day-020:48001-48200
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content is BookMinder CLI refactoring: renaming _format_book_output to format_book,
+    inlining test assertions, and a discussion about Python vs Swift naming philosophy.
+    No xs/explore_session/reconstruct.jq content."

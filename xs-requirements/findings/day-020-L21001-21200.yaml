@@ -1,0 +1,12 @@
+source: "day-020:21001-21200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 21001-21200 contain only BookMinder work: pytest coverage analysis, fixture
+    debugging, and test assertion improvements for the Apple Books library integration
+    spec. No xs/explore_session/reconstruct.jq content present in this range."

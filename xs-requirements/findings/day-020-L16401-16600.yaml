@@ -1,0 +1,11 @@
+source: "day-020:16401-16600"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L16401-L16600) covers BookMinder Apple Books library integration
+    tests and fixture directory structures. No xs/explore_session/reconstruct.jq content present."

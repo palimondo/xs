@@ -1,0 +1,13 @@
+source: day-024:9601-9800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 9601-9800 contain BookMinder project work only: moving apple_books test
+    fixtures from specs/apple_books/ to specs/integration/apple_books/, fixing a
+    ruff line-length error, committing, pushing to GitHub, and monitoring CI run
+    16423056241. No xs/explore_session/reconstruct.jq requirements present."

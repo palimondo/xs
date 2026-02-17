@@ -1,0 +1,9 @@
+source: "day-020:14001-14200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+notes:
+  - "This chunk contains BookMinder refactoring work (CLI/library separation, test architecture) and a context compaction summary of that work. No xs/explore_session/reconstruct.jq requirements found."
+
+threads: []
+
+findings: []

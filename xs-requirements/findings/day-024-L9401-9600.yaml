@@ -1,0 +1,10 @@
+source: day-024:9401-9600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L9401-9600) covers BookMinder fixture reorganization: moving specs/apple_books to specs/integration/apple_books, updating fixture paths in test files, running tests (53 passed, 100% coverage), then a git commit attempt that failed due to a ruff E501 line-too-long violation in cli_wiring_spec.py. No xs/explore_session/reconstruct.jq requirements content present."

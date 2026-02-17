@@ -1,0 +1,12 @@
+source: day-020:28601-28800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains exclusively BookMinder work: Apple Books fixture debugging,
+    investigation of never_opened_user test fixture, and Library containers research.
+    No xs/explore_session/reconstruct.jq requirements found."

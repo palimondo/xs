@@ -1,0 +1,8 @@
+source: day-024:8201-8400
+extracted_by: sonnet
+timestamp: 2026-02-17
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder test organization refactoring: moving subprocess integration test to specs/e2e/cli_wiring_spec.py, fixing relative paths after directory restructure, passing ruff linter. Entirely BookMinder work, no xs/explore_session content."

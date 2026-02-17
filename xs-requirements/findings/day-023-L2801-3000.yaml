@@ -1,0 +1,9 @@
+source: day-023:2801-3000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 2801-3000 cover BookMinder test structure reorganization: splitting library_spec.py into unit/integration subdirectories, naming conventions for library_containers_spec.py vs library_sqlite_spec.py, converting subprocess tests to mocks. All discussion is about BookMinder's Apple Books library code, not xs/explore_session/reconstruct.jq."

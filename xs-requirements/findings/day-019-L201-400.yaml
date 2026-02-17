@@ -1,0 +1,12 @@
+source: day-019:201-400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 151-400 are entirely about BookMinder Apple Books sample filtering
+    feature (ZISSAMPLE database field, --filter sample CLI option, Book TypedDict
+    updates). No xs tool requirements found in this chunk."

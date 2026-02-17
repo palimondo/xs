@@ -1,0 +1,10 @@
+source: day-020:50201-50400
+extracted_by: sonnet
+timestamp: 2026-02-17
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content is BookMinder Apple Books library refactoring: moving _get_user_path from
+    CLI to library, test structure improvements, and architecture discussion. Unrelated
+    to xs/explore_session/reconstruct.jq."

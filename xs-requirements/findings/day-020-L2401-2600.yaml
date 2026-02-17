@@ -1,0 +1,12 @@
+source: day-020:2401-2600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L2401-L2600) is BookMinder Apple Books SQLite test restructuring
+    work (library integration tests, CLI acceptance test mocking, pytest conventions).
+    No xs/explore_session/reconstruct.jq content found."

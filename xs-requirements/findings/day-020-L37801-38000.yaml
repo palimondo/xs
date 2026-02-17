@@ -1,0 +1,13 @@
+source: "day-020:37801-38000"
+extracted_by: sonnet
+extraction_date: "2026-02-17"
+context_range: "37751-38000"
+primary_range: "37801-38000"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range contains BookMinder internal refactoring: moving _get_user_path from cli.py to library.py. No xs, explore_session, or reconstruct.jq content present."
+  - "Chunk ends with a compaction summary at L37976 about BookMinder test architecture decoupling."

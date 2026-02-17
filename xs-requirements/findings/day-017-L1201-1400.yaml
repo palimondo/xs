@@ -1,0 +1,14 @@
+source: "day-017:1201-1400"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+notes:
+  - "This chunk is from day-017.md and covers BookMinder (not xs) development."
+  - "Lines 1201-1400 show TDD workflow, filter CLI design, and expert council
+    discussion. No xs/explore_session/reconstruct.jq content found."
+  - "Filtered output focuses on filter syntax design patterns that may be
+    analogous to xs filtering requirements."
+
+threads: []
+
+findings: []

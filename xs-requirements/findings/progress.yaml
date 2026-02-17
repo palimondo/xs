@@ -14,2303 +14,2303 @@ daylogs:
   day-016:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-016.md
     total_lines: 7718
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L5201-5400.yaml
     - context_start: 5351
       primary_start: 5401
       end: 5600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L5401-5600.yaml
     - context_start: 5551
       primary_start: 5601
       end: 5800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L5601-5800.yaml
     - context_start: 5751
       primary_start: 5801
       end: 6000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L5801-6000.yaml
     - context_start: 5951
       primary_start: 6001
       end: 6200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L6001-6200.yaml
     - context_start: 6151
       primary_start: 6201
       end: 6400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L6201-6400.yaml
     - context_start: 6351
       primary_start: 6401
       end: 6600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L6401-6600.yaml
     - context_start: 6551
       primary_start: 6601
       end: 6800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L6601-6800.yaml
     - context_start: 6751
       primary_start: 6801
       end: 7000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L6801-7000.yaml
     - context_start: 6951
       primary_start: 7001
       end: 7200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L7001-7200.yaml
     - context_start: 7151
       primary_start: 7201
       end: 7400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L7201-7400.yaml
     - context_start: 7351
       primary_start: 7401
       end: 7600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L7401-7600.yaml
     - context_start: 7551
       primary_start: 7601
       end: 7718
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-016-L7601-7718.yaml
   day-017:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-017.md
     total_lines: 2620
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2620
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-017-L2601-2620.yaml
   day-018:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-018.md
     total_lines: 7344
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L5201-5400.yaml
     - context_start: 5351
       primary_start: 5401
       end: 5600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L5401-5600.yaml
     - context_start: 5551
       primary_start: 5601
       end: 5800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L5601-5800.yaml
     - context_start: 5751
       primary_start: 5801
       end: 6000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L5801-6000.yaml
     - context_start: 5951
       primary_start: 6001
       end: 6200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L6001-6200.yaml
     - context_start: 6151
       primary_start: 6201
       end: 6400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L6201-6400.yaml
     - context_start: 6351
       primary_start: 6401
       end: 6600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L6401-6600.yaml
     - context_start: 6551
       primary_start: 6601
       end: 6800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L6601-6800.yaml
     - context_start: 6751
       primary_start: 6801
       end: 7000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L6801-7000.yaml
     - context_start: 6951
       primary_start: 7001
       end: 7200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L7001-7200.yaml
     - context_start: 7151
       primary_start: 7201
       end: 7344
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-018-L7201-7344.yaml
   day-019:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-019.md
     total_lines: 5384
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5384
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-019-L5201-5384.yaml
   day-020:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-020.md
     total_lines: 56185
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L5201-5400.yaml
     - context_start: 5351
       primary_start: 5401
       end: 5600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L5401-5600.yaml
     - context_start: 5551
       primary_start: 5601
       end: 5800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L5601-5800.yaml
     - context_start: 5751
       primary_start: 5801
       end: 6000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L5801-6000.yaml
     - context_start: 5951
       primary_start: 6001
       end: 6200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L6001-6200.yaml
     - context_start: 6151
       primary_start: 6201
       end: 6400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L6201-6400.yaml
     - context_start: 6351
       primary_start: 6401
       end: 6600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L6401-6600.yaml
     - context_start: 6551
       primary_start: 6601
       end: 6800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L6601-6800.yaml
     - context_start: 6751
       primary_start: 6801
       end: 7000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L6801-7000.yaml
     - context_start: 6951
       primary_start: 7001
       end: 7200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L7001-7200.yaml
     - context_start: 7151
       primary_start: 7201
       end: 7400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L7201-7400.yaml
     - context_start: 7351
       primary_start: 7401
       end: 7600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L7401-7600.yaml
     - context_start: 7551
       primary_start: 7601
       end: 7800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L7601-7800.yaml
     - context_start: 7751
       primary_start: 7801
       end: 8000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L7801-8000.yaml
     - context_start: 7951
       primary_start: 8001
       end: 8200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L8001-8200.yaml
     - context_start: 8151
       primary_start: 8201
       end: 8400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L8201-8400.yaml
     - context_start: 8351
       primary_start: 8401
       end: 8600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L8401-8600.yaml
     - context_start: 8551
       primary_start: 8601
       end: 8800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L8601-8800.yaml
     - context_start: 8751
       primary_start: 8801
       end: 9000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L8801-9000.yaml
     - context_start: 8951
       primary_start: 9001
       end: 9200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L9001-9200.yaml
     - context_start: 9151
       primary_start: 9201
       end: 9400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L9201-9400.yaml
     - context_start: 9351
       primary_start: 9401
       end: 9600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L9401-9600.yaml
     - context_start: 9551
       primary_start: 9601
       end: 9800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L9601-9800.yaml
     - context_start: 9751
       primary_start: 9801
       end: 10000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L9801-10000.yaml
     - context_start: 9951
       primary_start: 10001
       end: 10200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L10001-10200.yaml
     - context_start: 10151
       primary_start: 10201
       end: 10400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L10201-10400.yaml
     - context_start: 10351
       primary_start: 10401
       end: 10600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L10401-10600.yaml
     - context_start: 10551
       primary_start: 10601
       end: 10800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L10601-10800.yaml
     - context_start: 10751
       primary_start: 10801
       end: 11000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L10801-11000.yaml
     - context_start: 10951
       primary_start: 11001
       end: 11200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L11001-11200.yaml
     - context_start: 11151
       primary_start: 11201
       end: 11400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L11201-11400.yaml
     - context_start: 11351
       primary_start: 11401
       end: 11600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L11401-11600.yaml
     - context_start: 11551
       primary_start: 11601
       end: 11800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L11601-11800.yaml
     - context_start: 11751
       primary_start: 11801
       end: 12000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L11801-12000.yaml
     - context_start: 11951
       primary_start: 12001
       end: 12200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L12001-12200.yaml
     - context_start: 12151
       primary_start: 12201
       end: 12400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L12201-12400.yaml
     - context_start: 12351
       primary_start: 12401
       end: 12600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L12401-12600.yaml
     - context_start: 12551
       primary_start: 12601
       end: 12800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L12601-12800.yaml
     - context_start: 12751
       primary_start: 12801
       end: 13000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L12801-13000.yaml
     - context_start: 12951
       primary_start: 13001
       end: 13200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L13001-13200.yaml
     - context_start: 13151
       primary_start: 13201
       end: 13400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L13201-13400.yaml
     - context_start: 13351
       primary_start: 13401
       end: 13600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L13401-13600.yaml
     - context_start: 13551
       primary_start: 13601
       end: 13800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L13601-13800.yaml
     - context_start: 13751
       primary_start: 13801
       end: 14000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L13801-14000.yaml
     - context_start: 13951
       primary_start: 14001
       end: 14200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L14001-14200.yaml
     - context_start: 14151
       primary_start: 14201
       end: 14400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L14201-14400.yaml
     - context_start: 14351
       primary_start: 14401
       end: 14600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L14401-14600.yaml
     - context_start: 14551
       primary_start: 14601
       end: 14800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L14601-14800.yaml
     - context_start: 14751
       primary_start: 14801
       end: 15000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L14801-15000.yaml
     - context_start: 14951
       primary_start: 15001
       end: 15200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L15001-15200.yaml
     - context_start: 15151
       primary_start: 15201
       end: 15400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L15201-15400.yaml
     - context_start: 15351
       primary_start: 15401
       end: 15600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L15401-15600.yaml
     - context_start: 15551
       primary_start: 15601
       end: 15800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L15601-15800.yaml
     - context_start: 15751
       primary_start: 15801
       end: 16000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L15801-16000.yaml
     - context_start: 15951
       primary_start: 16001
       end: 16200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L16001-16200.yaml
     - context_start: 16151
       primary_start: 16201
       end: 16400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L16201-16400.yaml
     - context_start: 16351
       primary_start: 16401
       end: 16600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L16401-16600.yaml
     - context_start: 16551
       primary_start: 16601
       end: 16800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L16601-16800.yaml
     - context_start: 16751
       primary_start: 16801
       end: 17000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L16801-17000.yaml
     - context_start: 16951
       primary_start: 17001
       end: 17200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L17001-17200.yaml
     - context_start: 17151
       primary_start: 17201
       end: 17400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L17201-17400.yaml
     - context_start: 17351
       primary_start: 17401
       end: 17600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L17401-17600.yaml
     - context_start: 17551
       primary_start: 17601
       end: 17800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L17601-17800.yaml
     - context_start: 17751
       primary_start: 17801
       end: 18000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L17801-18000.yaml
     - context_start: 17951
       primary_start: 18001
       end: 18200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L18001-18200.yaml
     - context_start: 18151
       primary_start: 18201
       end: 18400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L18201-18400.yaml
     - context_start: 18351
       primary_start: 18401
       end: 18600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L18401-18600.yaml
     - context_start: 18551
       primary_start: 18601
       end: 18800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L18601-18800.yaml
     - context_start: 18751
       primary_start: 18801
       end: 19000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L18801-19000.yaml
     - context_start: 18951
       primary_start: 19001
       end: 19200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L19001-19200.yaml
     - context_start: 19151
       primary_start: 19201
       end: 19400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L19201-19400.yaml
     - context_start: 19351
       primary_start: 19401
       end: 19600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L19401-19600.yaml
     - context_start: 19551
       primary_start: 19601
       end: 19800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L19601-19800.yaml
     - context_start: 19751
       primary_start: 19801
       end: 20000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L19801-20000.yaml
     - context_start: 19951
       primary_start: 20001
       end: 20200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L20001-20200.yaml
     - context_start: 20151
       primary_start: 20201
       end: 20400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L20201-20400.yaml
     - context_start: 20351
       primary_start: 20401
       end: 20600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L20401-20600.yaml
     - context_start: 20551
       primary_start: 20601
       end: 20800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L20601-20800.yaml
     - context_start: 20751
       primary_start: 20801
       end: 21000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L20801-21000.yaml
     - context_start: 20951
       primary_start: 21001
       end: 21200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L21001-21200.yaml
     - context_start: 21151
       primary_start: 21201
       end: 21400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L21201-21400.yaml
     - context_start: 21351
       primary_start: 21401
       end: 21600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L21401-21600.yaml
     - context_start: 21551
       primary_start: 21601
       end: 21800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L21601-21800.yaml
     - context_start: 21751
       primary_start: 21801
       end: 22000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L21801-22000.yaml
     - context_start: 21951
       primary_start: 22001
       end: 22200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L22001-22200.yaml
     - context_start: 22151
       primary_start: 22201
       end: 22400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L22201-22400.yaml
     - context_start: 22351
       primary_start: 22401
       end: 22600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L22401-22600.yaml
     - context_start: 22551
       primary_start: 22601
       end: 22800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L22601-22800.yaml
     - context_start: 22751
       primary_start: 22801
       end: 23000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L22801-23000.yaml
     - context_start: 22951
       primary_start: 23001
       end: 23200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L23001-23200.yaml
     - context_start: 23151
       primary_start: 23201
       end: 23400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L23201-23400.yaml
     - context_start: 23351
       primary_start: 23401
       end: 23600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L23401-23600.yaml
     - context_start: 23551
       primary_start: 23601
       end: 23800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L23601-23800.yaml
     - context_start: 23751
       primary_start: 23801
       end: 24000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L23801-24000.yaml
     - context_start: 23951
       primary_start: 24001
       end: 24200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L24001-24200.yaml
     - context_start: 24151
       primary_start: 24201
       end: 24400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L24201-24400.yaml
     - context_start: 24351
       primary_start: 24401
       end: 24600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L24401-24600.yaml
     - context_start: 24551
       primary_start: 24601
       end: 24800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L24601-24800.yaml
     - context_start: 24751
       primary_start: 24801
       end: 25000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L24801-25000.yaml
     - context_start: 24951
       primary_start: 25001
       end: 25200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L25001-25200.yaml
     - context_start: 25151
       primary_start: 25201
       end: 25400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L25201-25400.yaml
     - context_start: 25351
       primary_start: 25401
       end: 25600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L25401-25600.yaml
     - context_start: 25551
       primary_start: 25601
       end: 25800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L25601-25800.yaml
     - context_start: 25751
       primary_start: 25801
       end: 26000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L25801-26000.yaml
     - context_start: 25951
       primary_start: 26001
       end: 26200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L26001-26200.yaml
     - context_start: 26151
       primary_start: 26201
       end: 26400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L26201-26400.yaml
     - context_start: 26351
       primary_start: 26401
       end: 26600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L26401-26600.yaml
     - context_start: 26551
       primary_start: 26601
       end: 26800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L26601-26800.yaml
     - context_start: 26751
       primary_start: 26801
       end: 27000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L26801-27000.yaml
     - context_start: 26951
       primary_start: 27001
       end: 27200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L27001-27200.yaml
     - context_start: 27151
       primary_start: 27201
       end: 27400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L27201-27400.yaml
     - context_start: 27351
       primary_start: 27401
       end: 27600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L27401-27600.yaml
     - context_start: 27551
       primary_start: 27601
       end: 27800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L27601-27800.yaml
     - context_start: 27751
       primary_start: 27801
       end: 28000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L27801-28000.yaml
     - context_start: 27951
       primary_start: 28001
       end: 28200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L28001-28200.yaml
     - context_start: 28151
       primary_start: 28201
       end: 28400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L28201-28400.yaml
     - context_start: 28351
       primary_start: 28401
       end: 28600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L28401-28600.yaml
     - context_start: 28551
       primary_start: 28601
       end: 28800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L28601-28800.yaml
     - context_start: 28751
       primary_start: 28801
       end: 29000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L28801-29000.yaml
     - context_start: 28951
       primary_start: 29001
       end: 29200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L29001-29200.yaml
     - context_start: 29151
       primary_start: 29201
       end: 29400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L29201-29400.yaml
     - context_start: 29351
       primary_start: 29401
       end: 29600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L29401-29600.yaml
     - context_start: 29551
       primary_start: 29601
       end: 29800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L29601-29800.yaml
     - context_start: 29751
       primary_start: 29801
       end: 30000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L29801-30000.yaml
     - context_start: 29951
       primary_start: 30001
       end: 30200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L30001-30200.yaml
     - context_start: 30151
       primary_start: 30201
       end: 30400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L30201-30400.yaml
     - context_start: 30351
       primary_start: 30401
       end: 30600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L30401-30600.yaml
     - context_start: 30551
       primary_start: 30601
       end: 30800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L30601-30800.yaml
     - context_start: 30751
       primary_start: 30801
       end: 31000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L30801-31000.yaml
     - context_start: 30951
       primary_start: 31001
       end: 31200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L31001-31200.yaml
     - context_start: 31151
       primary_start: 31201
       end: 31400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L31201-31400.yaml
     - context_start: 31351
       primary_start: 31401
       end: 31600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L31401-31600.yaml
     - context_start: 31551
       primary_start: 31601
       end: 31800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L31601-31800.yaml
     - context_start: 31751
       primary_start: 31801
       end: 32000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L31801-32000.yaml
     - context_start: 31951
       primary_start: 32001
       end: 32200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L32001-32200.yaml
     - context_start: 32151
       primary_start: 32201
       end: 32400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L32201-32400.yaml
     - context_start: 32351
       primary_start: 32401
       end: 32600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L32401-32600.yaml
     - context_start: 32551
       primary_start: 32601
       end: 32800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L32601-32800.yaml
     - context_start: 32751
       primary_start: 32801
       end: 33000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L32801-33000.yaml
     - context_start: 32951
       primary_start: 33001
       end: 33200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L33001-33200.yaml
     - context_start: 33151
       primary_start: 33201
       end: 33400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L33201-33400.yaml
     - context_start: 33351
       primary_start: 33401
       end: 33600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L33401-33600.yaml
     - context_start: 33551
       primary_start: 33601
       end: 33800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L33601-33800.yaml
     - context_start: 33751
       primary_start: 33801
       end: 34000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L33801-34000.yaml
     - context_start: 33951
       primary_start: 34001
       end: 34200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L34001-34200.yaml
     - context_start: 34151
       primary_start: 34201
       end: 34400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L34201-34400.yaml
     - context_start: 34351
       primary_start: 34401
       end: 34600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L34401-34600.yaml
     - context_start: 34551
       primary_start: 34601
       end: 34800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L34601-34800.yaml
     - context_start: 34751
       primary_start: 34801
       end: 35000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L34801-35000.yaml
     - context_start: 34951
       primary_start: 35001
       end: 35200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L35001-35200.yaml
     - context_start: 35151
       primary_start: 35201
       end: 35400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L35201-35400.yaml
     - context_start: 35351
       primary_start: 35401
       end: 35600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L35401-35600.yaml
     - context_start: 35551
       primary_start: 35601
       end: 35800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L35601-35800.yaml
     - context_start: 35751
       primary_start: 35801
       end: 36000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L35801-36000.yaml
     - context_start: 35951
       primary_start: 36001
       end: 36200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L36001-36200.yaml
     - context_start: 36151
       primary_start: 36201
       end: 36400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L36201-36400.yaml
     - context_start: 36351
       primary_start: 36401
       end: 36600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L36401-36600.yaml
     - context_start: 36551
       primary_start: 36601
       end: 36800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L36601-36800.yaml
     - context_start: 36751
       primary_start: 36801
       end: 37000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L36801-37000.yaml
     - context_start: 36951
       primary_start: 37001
       end: 37200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L37001-37200.yaml
     - context_start: 37151
       primary_start: 37201
       end: 37400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L37201-37400.yaml
     - context_start: 37351
       primary_start: 37401
       end: 37600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L37401-37600.yaml
     - context_start: 37551
       primary_start: 37601
       end: 37800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L37601-37800.yaml
     - context_start: 37751
       primary_start: 37801
       end: 38000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L37801-38000.yaml
     - context_start: 37951
       primary_start: 38001
       end: 38200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L38001-38200.yaml
     - context_start: 38151
       primary_start: 38201
       end: 38400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L38201-38400.yaml
     - context_start: 38351
       primary_start: 38401
       end: 38600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L38401-38600.yaml
     - context_start: 38551
       primary_start: 38601
       end: 38800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L38601-38800.yaml
     - context_start: 38751
       primary_start: 38801
       end: 39000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L38801-39000.yaml
     - context_start: 38951
       primary_start: 39001
       end: 39200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L39001-39200.yaml
     - context_start: 39151
       primary_start: 39201
       end: 39400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L39201-39400.yaml
     - context_start: 39351
       primary_start: 39401
       end: 39600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L39401-39600.yaml
     - context_start: 39551
       primary_start: 39601
       end: 39800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L39601-39800.yaml
     - context_start: 39751
       primary_start: 39801
       end: 40000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L39801-40000.yaml
     - context_start: 39951
       primary_start: 40001
       end: 40200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L40001-40200.yaml
     - context_start: 40151
       primary_start: 40201
       end: 40400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L40201-40400.yaml
     - context_start: 40351
       primary_start: 40401
       end: 40600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L40401-40600.yaml
     - context_start: 40551
       primary_start: 40601
       end: 40800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L40601-40800.yaml
     - context_start: 40751
       primary_start: 40801
       end: 41000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L40801-41000.yaml
     - context_start: 40951
       primary_start: 41001
       end: 41200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L41001-41200.yaml
     - context_start: 41151
       primary_start: 41201
       end: 41400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L41201-41400.yaml
     - context_start: 41351
       primary_start: 41401
       end: 41600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L41401-41600.yaml
     - context_start: 41551
       primary_start: 41601
       end: 41800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L41601-41800.yaml
     - context_start: 41751
       primary_start: 41801
       end: 42000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L41801-42000.yaml
     - context_start: 41951
       primary_start: 42001
       end: 42200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L42001-42200.yaml
     - context_start: 42151
       primary_start: 42201
       end: 42400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L42201-42400.yaml
     - context_start: 42351
       primary_start: 42401
       end: 42600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L42401-42600.yaml
     - context_start: 42551
       primary_start: 42601
       end: 42800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L42601-42800.yaml
     - context_start: 42751
       primary_start: 42801
       end: 43000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L42801-43000.yaml
     - context_start: 42951
       primary_start: 43001
       end: 43200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L43001-43200.yaml
     - context_start: 43151
       primary_start: 43201
       end: 43400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L43201-43400.yaml
     - context_start: 43351
       primary_start: 43401
       end: 43600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L43401-43600.yaml
     - context_start: 43551
       primary_start: 43601
       end: 43800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L43601-43800.yaml
     - context_start: 43751
       primary_start: 43801
       end: 44000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L43801-44000.yaml
     - context_start: 43951
       primary_start: 44001
       end: 44200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L44001-44200.yaml
     - context_start: 44151
       primary_start: 44201
       end: 44400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L44201-44400.yaml
     - context_start: 44351
       primary_start: 44401
       end: 44600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L44401-44600.yaml
     - context_start: 44551
       primary_start: 44601
       end: 44800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L44601-44800.yaml
     - context_start: 44751
       primary_start: 44801
       end: 45000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L44801-45000.yaml
     - context_start: 44951
       primary_start: 45001
       end: 45200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L45001-45200.yaml
     - context_start: 45151
       primary_start: 45201
       end: 45400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L45201-45400.yaml
     - context_start: 45351
       primary_start: 45401
       end: 45600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L45401-45600.yaml
     - context_start: 45551
       primary_start: 45601
       end: 45800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L45601-45800.yaml
     - context_start: 45751
       primary_start: 45801
       end: 46000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L45801-46000.yaml
     - context_start: 45951
       primary_start: 46001
       end: 46200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L46001-46200.yaml
     - context_start: 46151
       primary_start: 46201
       end: 46400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L46201-46400.yaml
     - context_start: 46351
       primary_start: 46401
       end: 46600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L46401-46600.yaml
     - context_start: 46551
       primary_start: 46601
       end: 46800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L46601-46800.yaml
     - context_start: 46751
       primary_start: 46801
       end: 47000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L46801-47000.yaml
     - context_start: 46951
       primary_start: 47001
       end: 47200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L47001-47200.yaml
     - context_start: 47151
       primary_start: 47201
       end: 47400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L47201-47400.yaml
     - context_start: 47351
       primary_start: 47401
       end: 47600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L47401-47600.yaml
     - context_start: 47551
       primary_start: 47601
       end: 47800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L47601-47800.yaml
     - context_start: 47751
       primary_start: 47801
       end: 48000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L47801-48000.yaml
     - context_start: 47951
       primary_start: 48001
       end: 48200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L48001-48200.yaml
     - context_start: 48151
       primary_start: 48201
       end: 48400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L48201-48400.yaml
     - context_start: 48351
       primary_start: 48401
       end: 48600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L48401-48600.yaml
     - context_start: 48551
       primary_start: 48601
       end: 48800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L48601-48800.yaml
     - context_start: 48751
       primary_start: 48801
       end: 49000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L48801-49000.yaml
     - context_start: 48951
       primary_start: 49001
       end: 49200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L49001-49200.yaml
     - context_start: 49151
       primary_start: 49201
       end: 49400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L49201-49400.yaml
     - context_start: 49351
       primary_start: 49401
       end: 49600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L49401-49600.yaml
     - context_start: 49551
       primary_start: 49601
       end: 49800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L49601-49800.yaml
     - context_start: 49751
       primary_start: 49801
       end: 50000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L49801-50000.yaml
     - context_start: 49951
       primary_start: 50001
       end: 50200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L50001-50200.yaml
     - context_start: 50151
       primary_start: 50201
       end: 50400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L50201-50400.yaml
     - context_start: 50351
       primary_start: 50401
       end: 50600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L50401-50600.yaml
     - context_start: 50551
       primary_start: 50601
       end: 50800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L50601-50800.yaml
     - context_start: 50751
       primary_start: 50801
       end: 51000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L50801-51000.yaml
     - context_start: 50951
       primary_start: 51001
       end: 51200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L51001-51200.yaml
     - context_start: 51151
       primary_start: 51201
       end: 51400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L51201-51400.yaml
     - context_start: 51351
       primary_start: 51401
       end: 51600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L51401-51600.yaml
     - context_start: 51551
       primary_start: 51601
       end: 51800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L51601-51800.yaml
     - context_start: 51751
       primary_start: 51801
       end: 52000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L51801-52000.yaml
     - context_start: 51951
       primary_start: 52001
       end: 52200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L52001-52200.yaml
     - context_start: 52151
       primary_start: 52201
       end: 52400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L52201-52400.yaml
     - context_start: 52351
       primary_start: 52401
       end: 52600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L52401-52600.yaml
     - context_start: 52551
       primary_start: 52601
       end: 52800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L52601-52800.yaml
     - context_start: 52751
       primary_start: 52801
       end: 53000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L52801-53000.yaml
     - context_start: 52951
       primary_start: 53001
       end: 53200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L53001-53200.yaml
     - context_start: 53151
       primary_start: 53201
       end: 53400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L53201-53400.yaml
     - context_start: 53351
       primary_start: 53401
       end: 53600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L53401-53600.yaml
     - context_start: 53551
       primary_start: 53601
       end: 53800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L53601-53800.yaml
     - context_start: 53751
       primary_start: 53801
       end: 54000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L53801-54000.yaml
     - context_start: 53951
       primary_start: 54001
       end: 54200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L54001-54200.yaml
     - context_start: 54151
       primary_start: 54201
       end: 54400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L54201-54400.yaml
     - context_start: 54351
       primary_start: 54401
       end: 54600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L54401-54600.yaml
     - context_start: 54551
       primary_start: 54601
       end: 54800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L54601-54800.yaml
     - context_start: 54751
       primary_start: 54801
       end: 55000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L54801-55000.yaml
     - context_start: 54951
       primary_start: 55001
       end: 55200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L55001-55200.yaml
     - context_start: 55151
       primary_start: 55201
       end: 55400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L55201-55400.yaml
     - context_start: 55351
       primary_start: 55401
       end: 55600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L55401-55600.yaml
     - context_start: 55551
       primary_start: 55601
       end: 55800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L55601-55800.yaml
     - context_start: 55751
       primary_start: 55801
       end: 56000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L55801-56000.yaml
     - context_start: 55951
       primary_start: 56001
       end: 56185
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-020-L56001-56185.yaml
   day-021:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-021.md
     total_lines: 12423
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L5201-5400.yaml
     - context_start: 5351
       primary_start: 5401
       end: 5600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L5401-5600.yaml
     - context_start: 5551
       primary_start: 5601
       end: 5800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L5601-5800.yaml
     - context_start: 5751
       primary_start: 5801
       end: 6000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L5801-6000.yaml
     - context_start: 5951
       primary_start: 6001
       end: 6200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L6001-6200.yaml
     - context_start: 6151
       primary_start: 6201
       end: 6400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L6201-6400.yaml
     - context_start: 6351
       primary_start: 6401
       end: 6600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L6401-6600.yaml
     - context_start: 6551
       primary_start: 6601
       end: 6800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L6601-6800.yaml
     - context_start: 6751
       primary_start: 6801
       end: 7000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L6801-7000.yaml
     - context_start: 6951
       primary_start: 7001
       end: 7200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L7001-7200.yaml
     - context_start: 7151
       primary_start: 7201
       end: 7400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L7201-7400.yaml
     - context_start: 7351
       primary_start: 7401
       end: 7600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L7401-7600.yaml
     - context_start: 7551
       primary_start: 7601
       end: 7800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L7601-7800.yaml
     - context_start: 7751
       primary_start: 7801
       end: 8000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L7801-8000.yaml
     - context_start: 7951
       primary_start: 8001
       end: 8200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L8001-8200.yaml
     - context_start: 8151
       primary_start: 8201
       end: 8400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L8201-8400.yaml
     - context_start: 8351
       primary_start: 8401
       end: 8600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L8401-8600.yaml
     - context_start: 8551
       primary_start: 8601
       end: 8800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L8601-8800.yaml
     - context_start: 8751
       primary_start: 8801
       end: 9000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L8801-9000.yaml
     - context_start: 8951
       primary_start: 9001
       end: 9200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L9001-9200.yaml
     - context_start: 9151
       primary_start: 9201
       end: 9400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L9201-9400.yaml
     - context_start: 9351
       primary_start: 9401
       end: 9600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L9401-9600.yaml
     - context_start: 9551
       primary_start: 9601
       end: 9800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L9601-9800.yaml
     - context_start: 9751
       primary_start: 9801
       end: 10000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L9801-10000.yaml
     - context_start: 9951
       primary_start: 10001
       end: 10200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L10001-10200.yaml
     - context_start: 10151
       primary_start: 10201
       end: 10400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L10201-10400.yaml
     - context_start: 10351
       primary_start: 10401
       end: 10600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L10401-10600.yaml
     - context_start: 10551
       primary_start: 10601
       end: 10800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L10601-10800.yaml
     - context_start: 10751
       primary_start: 10801
       end: 11000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L10801-11000.yaml
     - context_start: 10951
       primary_start: 11001
       end: 11200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L11001-11200.yaml
     - context_start: 11151
       primary_start: 11201
       end: 11400
@@ -2339,388 +2339,388 @@ daylogs:
     - context_start: 12151
       primary_start: 12201
       end: 12400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L12201-12400.yaml
     - context_start: 12351
       primary_start: 12401
       end: 12423
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-021-L12401-12423.yaml
   day-022:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-022.md
     total_lines: 5377
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5377
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-022-L5201-5377.yaml
   day-023:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-023.md
     total_lines: 9190
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L5201-5400.yaml
     - context_start: 5351
       primary_start: 5401
       end: 5600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L5401-5600.yaml
     - context_start: 5551
       primary_start: 5601
       end: 5800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L5601-5800.yaml
     - context_start: 5751
       primary_start: 5801
       end: 6000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L5801-6000.yaml
     - context_start: 5951
       primary_start: 6001
       end: 6200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L6001-6200.yaml
     - context_start: 6151
       primary_start: 6201
       end: 6400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L6201-6400.yaml
     - context_start: 6351
       primary_start: 6401
       end: 6600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L6401-6600.yaml
     - context_start: 6551
       primary_start: 6601
       end: 6800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L6601-6800.yaml
     - context_start: 6751
       primary_start: 6801
       end: 7000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L6801-7000.yaml
     - context_start: 6951
       primary_start: 7001
       end: 7200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L7001-7200.yaml
     - context_start: 7151
       primary_start: 7201
       end: 7400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L7201-7400.yaml
     - context_start: 7351
       primary_start: 7401
       end: 7600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L7401-7600.yaml
     - context_start: 7551
       primary_start: 7601
       end: 7800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L7601-7800.yaml
     - context_start: 7751
       primary_start: 7801
       end: 8000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L7801-8000.yaml
     - context_start: 7951
       primary_start: 8001
       end: 8200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L8001-8200.yaml
     - context_start: 8151
       primary_start: 8201
       end: 8400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L8201-8400.yaml
     - context_start: 8351
       primary_start: 8401
       end: 8600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L8401-8600.yaml
     - context_start: 8551
       primary_start: 8601
       end: 8800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L8601-8800.yaml
     - context_start: 8751
       primary_start: 8801
       end: 9000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L8801-9000.yaml
     - context_start: 8951
       primary_start: 9001
       end: 9190
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-023-L9001-9190.yaml
   day-024:
     file: /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/day-024.md
     total_lines: 49894
@@ -2729,408 +2729,408 @@ daylogs:
     - context_start: 1
       primary_start: 1
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L1-200.yaml
     - context_start: 151
       primary_start: 201
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L201-400.yaml
     - context_start: 351
       primary_start: 401
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L401-600.yaml
     - context_start: 551
       primary_start: 601
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L601-800.yaml
     - context_start: 751
       primary_start: 801
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L801-1000.yaml
     - context_start: 951
       primary_start: 1001
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L1001-1200.yaml
     - context_start: 1151
       primary_start: 1201
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L1201-1400.yaml
     - context_start: 1351
       primary_start: 1401
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L1401-1600.yaml
     - context_start: 1551
       primary_start: 1601
       end: 1800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L1601-1800.yaml
     - context_start: 1751
       primary_start: 1801
       end: 2000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L1801-2000.yaml
     - context_start: 1951
       primary_start: 2001
       end: 2200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L2001-2200.yaml
     - context_start: 2151
       primary_start: 2201
       end: 2400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L2201-2400.yaml
     - context_start: 2351
       primary_start: 2401
       end: 2600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L2401-2600.yaml
     - context_start: 2551
       primary_start: 2601
       end: 2800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L2601-2800.yaml
     - context_start: 2751
       primary_start: 2801
       end: 3000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L2801-3000.yaml
     - context_start: 2951
       primary_start: 3001
       end: 3200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L3001-3200.yaml
     - context_start: 3151
       primary_start: 3201
       end: 3400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L3201-3400.yaml
     - context_start: 3351
       primary_start: 3401
       end: 3600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L3401-3600.yaml
     - context_start: 3551
       primary_start: 3601
       end: 3800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L3601-3800.yaml
     - context_start: 3751
       primary_start: 3801
       end: 4000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L3801-4000.yaml
     - context_start: 3951
       primary_start: 4001
       end: 4200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L4001-4200.yaml
     - context_start: 4151
       primary_start: 4201
       end: 4400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L4201-4400.yaml
     - context_start: 4351
       primary_start: 4401
       end: 4600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L4401-4600.yaml
     - context_start: 4551
       primary_start: 4601
       end: 4800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L4601-4800.yaml
     - context_start: 4751
       primary_start: 4801
       end: 5000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L4801-5000.yaml
     - context_start: 4951
       primary_start: 5001
       end: 5200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L5001-5200.yaml
     - context_start: 5151
       primary_start: 5201
       end: 5400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L5201-5400.yaml
     - context_start: 5351
       primary_start: 5401
       end: 5600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L5401-5600.yaml
     - context_start: 5551
       primary_start: 5601
       end: 5800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L5601-5800.yaml
     - context_start: 5751
       primary_start: 5801
       end: 6000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L5801-6000.yaml
     - context_start: 5951
       primary_start: 6001
       end: 6200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L6001-6200.yaml
     - context_start: 6151
       primary_start: 6201
       end: 6400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L6201-6400.yaml
     - context_start: 6351
       primary_start: 6401
       end: 6600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L6401-6600.yaml
     - context_start: 6551
       primary_start: 6601
       end: 6800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L6601-6800.yaml
     - context_start: 6751
       primary_start: 6801
       end: 7000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L6801-7000.yaml
     - context_start: 6951
       primary_start: 7001
       end: 7200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L7001-7200.yaml
     - context_start: 7151
       primary_start: 7201
       end: 7400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L7201-7400.yaml
     - context_start: 7351
       primary_start: 7401
       end: 7600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L7401-7600.yaml
     - context_start: 7551
       primary_start: 7601
       end: 7800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L7601-7800.yaml
     - context_start: 7751
       primary_start: 7801
       end: 8000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L7801-8000.yaml
     - context_start: 7951
       primary_start: 8001
       end: 8200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L8001-8200.yaml
     - context_start: 8151
       primary_start: 8201
       end: 8400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L8201-8400.yaml
     - context_start: 8351
       primary_start: 8401
       end: 8600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L8401-8600.yaml
     - context_start: 8551
       primary_start: 8601
       end: 8800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L8601-8800.yaml
     - context_start: 8751
       primary_start: 8801
       end: 9000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L8801-9000.yaml
     - context_start: 8951
       primary_start: 9001
       end: 9200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L9001-9200.yaml
     - context_start: 9151
       primary_start: 9201
       end: 9400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L9201-9400.yaml
     - context_start: 9351
       primary_start: 9401
       end: 9600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L9401-9600.yaml
     - context_start: 9551
       primary_start: 9601
       end: 9800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L9601-9800.yaml
     - context_start: 9751
       primary_start: 9801
       end: 10000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L9801-10000.yaml
     - context_start: 9951
       primary_start: 10001
       end: 10200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L10001-10200.yaml
     - context_start: 10151
       primary_start: 10201
       end: 10400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L10201-10400.yaml
     - context_start: 10351
       primary_start: 10401
       end: 10600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L10401-10600.yaml
     - context_start: 10551
       primary_start: 10601
       end: 10800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L10601-10800.yaml
     - context_start: 10751
       primary_start: 10801
       end: 11000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L10801-11000.yaml
     - context_start: 10951
       primary_start: 11001
       end: 11200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L11001-11200.yaml
     - context_start: 11151
       primary_start: 11201
       end: 11400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L11201-11400.yaml
     - context_start: 11351
       primary_start: 11401
       end: 11600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L11401-11600.yaml
     - context_start: 11551
       primary_start: 11601
       end: 11800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L11601-11800.yaml
     - context_start: 11751
       primary_start: 11801
       end: 12000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L11801-12000.yaml
     - context_start: 11951
       primary_start: 12001
       end: 12200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L12001-12200.yaml
     - context_start: 12151
       primary_start: 12201
       end: 12400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L12201-12400.yaml
     - context_start: 12351
       primary_start: 12401
       end: 12600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L12401-12600.yaml
     - context_start: 12551
       primary_start: 12601
       end: 12800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L12601-12800.yaml
     - context_start: 12751
       primary_start: 12801
       end: 13000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L12801-13000.yaml
     - context_start: 12951
       primary_start: 13001
       end: 13200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L13001-13200.yaml
     - context_start: 13151
       primary_start: 13201
       end: 13400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L13201-13400.yaml
     - context_start: 13351
       primary_start: 13401
       end: 13600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L13401-13600.yaml
     - context_start: 13551
       primary_start: 13601
       end: 13800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L13601-13800.yaml
     - context_start: 13751
       primary_start: 13801
       end: 14000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L13801-14000.yaml
     - context_start: 13951
       primary_start: 14001
       end: 14200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L14001-14200.yaml
     - context_start: 14151
       primary_start: 14201
       end: 14400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L14201-14400.yaml
     - context_start: 14351
       primary_start: 14401
       end: 14600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L14401-14600.yaml
     - context_start: 14551
       primary_start: 14601
       end: 14800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L14601-14800.yaml
     - context_start: 14751
       primary_start: 14801
       end: 15000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L14801-15000.yaml
     - context_start: 14951
       primary_start: 15001
       end: 15200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L15001-15200.yaml
     - context_start: 15151
       primary_start: 15201
       end: 15400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L15201-15400.yaml
     - context_start: 15351
       primary_start: 15401
       end: 15600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L15401-15600.yaml
     - context_start: 15551
       primary_start: 15601
       end: 15800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L15601-15800.yaml
     - context_start: 15751
       primary_start: 15801
       end: 16000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L15801-16000.yaml
     - context_start: 15951
       primary_start: 16001
       end: 16200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L16001-16200.yaml
     - context_start: 16151
       primary_start: 16201
       end: 16400
@@ -3144,13 +3144,13 @@ daylogs:
     - context_start: 16551
       primary_start: 16601
       end: 16800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L16601-16800.yaml
     - context_start: 16751
       primary_start: 16801
       end: 17000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: day-024-L16801-17000.yaml
     - context_start: 16951
       primary_start: 17001
       end: 17200

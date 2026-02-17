@@ -1,0 +1,15 @@
+source: "day-020:37601-37800"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+context_lines: "37551-37600"
+primary_lines: "37601-37800"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder CLI refactoring (moving _get_user_path to library,
+    mocked unit tests for CLI). No xs/explore_session/reconstruct.jq requirements
+    present. Content is entirely about BookMinder architecture decisions (path
+    resolution belongs in library not CLI, thin CLI layer, separation of concerns)."

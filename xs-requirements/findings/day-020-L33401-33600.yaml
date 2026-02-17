@@ -1,0 +1,13 @@
+source: day-020:33401-33600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L33401-L33600) contains BookMinder CLI refactoring work: type annotation
+    fixes (List -> list), renaming click group to avoid name clash, pytest runs showing
+    20 passed/1 skipped, and a rejected Write for cli_formatting_spec.py. No xs,
+    explore_session, or reconstruct.jq content present."

@@ -1,0 +1,11 @@
+source: day-021:4201-4400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 4201-4400 contain BookMinder CLI test refactoring work: converting subprocess-based CLI tests to use mocking pattern, verifying contract between CLI layer and library layer (list_all_books vs list_recent_books). No xs tool requirements present."

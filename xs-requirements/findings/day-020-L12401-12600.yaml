@@ -1,0 +1,12 @@
+source: day-020:12401-12600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 12401-12600 contain BookMinder CLI testing refactoring work (test pyramid,
+    CLI acceptance tests vs library integration tests, mocking strategy). No xs,
+    explore_session, or reconstruct.jq content found. Not relevant to xs requirements."

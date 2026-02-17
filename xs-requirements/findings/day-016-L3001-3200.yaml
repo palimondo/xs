@@ -1,0 +1,13 @@
+source: day-016:3001-3200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3001-3200 show Claude working on BookMinder (Apple Books library) project:
+    fixing a failing test about book ordering in specs/cli_spec.py, examining
+    BKLibrary-fixture.sqlite for test_reader user. No xs/explore_session/reconstruct.jq
+    content present in this chunk."

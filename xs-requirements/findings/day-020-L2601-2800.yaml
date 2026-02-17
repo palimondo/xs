@@ -1,0 +1,12 @@
+source: day-020:2601-2800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder work (Apple Books library integration tests,
+    CLI spec refactoring, code coverage). No xs/explore_session/reconstruct.jq
+    relevant content found."

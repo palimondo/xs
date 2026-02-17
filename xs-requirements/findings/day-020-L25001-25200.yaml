@@ -1,0 +1,12 @@
+source: "day-020:25001-25200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+chunk_type: daylog
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire range is BookMinder work: CLI formatting tests, test pyramid discussion,
+    and BookMinder test restructuring. No xs/explore_session/reconstruct.jq content."

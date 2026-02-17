@@ -1,0 +1,12 @@
+source: day-020:1201-1400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1201-1400 contain only BookMinder CLI formatting refactoring work (extracting
+    format_book_list(), writing cli_formatting_spec.py, TDD discipline discussion).
+    No xs/explore_session/reconstruct.jq relevant content found."

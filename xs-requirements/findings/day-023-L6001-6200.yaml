@@ -1,0 +1,12 @@
+source: day-023:6001-6200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L6001-L6200 contains no xs/explore_session/reconstruct.jq requirements."
+  - "Content is entirely about setting up Claude GitHub Actions integration for BookMinder project: creating .github/workflows directory, adding workflow scope to GitHub auth, /install-github-app command, comparing ubuntu-latest vs macos-latest runners for BookMinder CI vs Claude action, and reviewing PR #5 comments."
+  - "This is BookMinder CI infrastructure work, not xs tool requirements."

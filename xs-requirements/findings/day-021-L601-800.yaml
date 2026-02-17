@@ -1,0 +1,11 @@
+source: day-021:601-800
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L601-L800 is entirely about BookMinder CLI test refactoring: creating mocked CLI unit tests (specs/cli_unit_spec.py), test isolation improvements (mock vs subprocess), pytest coverage checks, and incremental TDD practices for BookMinder library. Not related to xs session replay, JSONL parsing, or any xs feature."

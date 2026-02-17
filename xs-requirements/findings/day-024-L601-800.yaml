@@ -1,0 +1,16 @@
+source: day-024:601-800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 601-800 contain no xs/explore_session/reconstruct.jq relevant content."
+  - "This chunk is entirely about BookMinder (Apple Books CLI) testing architecture:"
+  - "  - CLI test pyramid refactoring (subprocess → CliRunner → mocked tests)"
+  - "  - Coverage tracking issues with subprocess isolation"
+  - "  - Moving edge case tests from CLI to library integration tests"
+  - "  - TDD discipline and separation of concerns between CLI and library layers"
+  - "This content is from day-020.md (via ripgrep output) embedded in day-024.md, not xs-related."

@@ -1,0 +1,21 @@
+source: "day-024:3601-3800"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+context_lines: "3551-3600"
+primary_lines: "3601-3800"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains an Expert Council discussion (Kent Beck, Dave Farley, Dan North,
+    Steve Freeman) about how to retain architectural decisions between coding sessions
+    for the BookMinder project."
+  - "Specific topic: 'ONE integration test' rule for CLI testing in BookMinder. The
+    conversation is about where to document the decision (CLAUDE.md, code structure,
+    ADRs) and using filesystem layout to make architecture self-documenting."
+  - "The entire chunk is BookMinder project meta-discussion (test architecture, specs/
+    directory structure) — no xs/explore_session/reconstruct.jq requirements found."
+  - "No user requests, corrections, or requirements related to xs tool functionality
+    appear in lines 3601-3800."

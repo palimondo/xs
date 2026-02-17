@@ -1,0 +1,13 @@
+source: day-017:801-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 801-1000 contain no xs/explore_session/reconstruct.jq relevant content."
+  - "This entire range is BookMinder filtering CLI discussion: renaming --flag to --filter,
+    Apple Books UI use cases, and ! prefix for exclusion filters in bookminder list command."
+  - "No xs precursor tools, session replay, or log fetching topics appear in this range."

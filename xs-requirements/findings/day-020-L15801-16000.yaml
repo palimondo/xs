@@ -1,0 +1,11 @@
+source: day-020:15801-16000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder Apple Books library coverage debugging work.
+    No xs/explore_session/reconstruct.jq requirements found."

@@ -1,0 +1,12 @@
+source: "day-020:26801-27000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 26801-27000 contain exclusively BookMinder work: Apple Books library
+    refactoring (path resolution, test coverage, CLI mocking). No xs,
+    explore_session, or reconstruct.jq content found in this range."

@@ -1,0 +1,13 @@
+source: day-022:801-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 801-1000 contain
+  BookMinder development work: manual edits to /hi slash command, user correcting
+  agent for failing to report on a modified file (think harder), removal of outdated
+  TDD lessons from TODO.md, and committing /hi command improvements. No
+  xs/explore_session/reconstruct.jq requirements or discussions present."

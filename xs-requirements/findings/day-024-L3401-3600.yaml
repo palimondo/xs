@@ -1,0 +1,12 @@
+source: "day-024:3401-3600"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3351-3510 are embedded excerpts from day-020.md (visible via file path prefixes in the content), discussing BookMinder CLI test architecture decisions (ONE integration test principle, test pyramid, ZISSAMPLE filter). No xs/explore_session content."
+  - "Lines 3511-3600 contain a session discussion about how to retain architectural decisions between coding sessions, referencing CLAUDE.md. The context is BookMinder project knowledge management, not xs requirements."
+  - "No xs-relevant findings in this chunk. Entire range is BookMinder-specific content."

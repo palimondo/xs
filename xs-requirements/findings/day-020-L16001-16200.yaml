@@ -1,0 +1,10 @@
+source: day-020:16001-16200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder debugging work (coverage issues with Apple Books library tests, missing fixture directories). No xs/explore_session/reconstruct.jq requirements found."

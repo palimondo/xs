@@ -1,0 +1,13 @@
+source: day-020:28001-28200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+context_lines: 27951-28000
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder Apple Books library integration testing work."
+  - "Topics: test fixture misconfiguration, coverage gaps in library.py exception paths, CliRunner migration."
+  - "No xs, explore_session, or reconstruct.jq content found in primary range L28001-L28200."

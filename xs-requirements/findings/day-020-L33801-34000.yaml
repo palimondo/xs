@@ -1,0 +1,20 @@
+source: "day-020:33801-34000"
+extracted_by: sonnet
+extraction_timestamp: "2026-02-17T00:00:00Z"
+
+context_lines: "33751-33800"
+primary_lines: "33801-34000"
+
+summary: >
+  This chunk contains BookMinder project content only — pytest specs for
+  CLI formatting functions (format_book_list, _format_book_output), a
+  failed ruff lint fix, and a successful git commit. No xs, explore_session,
+  or reconstruct.jq material is present in this range.
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L33801-L34000) is BookMinder CLI formatting spec code and pytest output."
+  - "No xs-relevant requirements found."

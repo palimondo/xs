@@ -1,0 +1,8 @@
+source: day-020:45801-46000
+extracted_by: sonnet
+timestamp: 2026-02-17
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI test architecture discussion (subprocess coverage, Path.home() unit testing, layered test strategy) — unrelated to xs/explore_session/reconstruct.jq"

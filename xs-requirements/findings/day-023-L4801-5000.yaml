@@ -1,0 +1,13 @@
+source: day-023:4801-5000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder test reorganization: moving pytest spec files into
+    unit/, integration/, acceptance/, and e2e/ subdirectories. No xs/explore_session/
+    reconstruct.jq requirements present. Content is entirely BookMinder refactoring
+    (git mv, path fixups, ruff linting errors)."

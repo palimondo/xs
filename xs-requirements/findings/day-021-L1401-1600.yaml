@@ -1,0 +1,12 @@
+source: day-021:1401-1600
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder CLI spec refactoring (specs/cli_spec.py) — discussion of mock vs subprocess testing patterns, acceptance test design philosophy for BookMinder CLI"
+  - "Content is entirely BookMinder-domain: CLI invokes library with correct parameters, uses formatting functions, preserves library-returned order"

@@ -1,0 +1,10 @@
+source: day-023:1601-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1601-1800 are entirely about BookMinder (not xs/explore_session). Content covers: completing YOLO mode fix todos (SQL simplification, test cleanup), discussion about how many CLI integration tests BookMinder's cli_spec.py should have, user correcting Claude to ONE integration test principle (decided in day-020/021), and beginning of knowledge retention discussion about preserving architectural decisions between sessions. No xs, explore_session, or reconstruct.jq requirements present."

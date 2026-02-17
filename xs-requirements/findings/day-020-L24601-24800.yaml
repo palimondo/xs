@@ -1,0 +1,10 @@
+source: day-020:24601-24800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder CLI formatting work (renaming format_book to format, updating specs). No xs/explore_session/reconstruct.jq content found."

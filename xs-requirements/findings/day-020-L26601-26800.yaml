@@ -1,0 +1,10 @@
+source: "day-020:26601-26800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder work: updating CLI to use new library API and writing unit tests for _get_user_path. No xs/explore_session/reconstruct.jq content found."

@@ -1,0 +1,12 @@
+source: day-020:11001-11200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder CLI formatting spec refactoring work (test helper
+    functions, function naming, TDD discipline discussion). No xs/explore_session/
+    reconstruct.jq relevant content found."

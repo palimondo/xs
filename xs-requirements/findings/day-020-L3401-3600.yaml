@@ -1,0 +1,10 @@
+source: day-020:3401-3600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder CLI test strategy discussion (TDD debate about mocking vs subprocess tests, expert council on 100% coverage). No xs/explore_session/reconstruct.jq requirements found."

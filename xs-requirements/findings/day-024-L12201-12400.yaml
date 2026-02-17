@@ -1,0 +1,14 @@
+source: day-024:12201-12400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers lines 12201-12400 of day-024.md. Content is entirely about
+    BookMinder GitHub Actions workflow configuration: manually triggering the
+    claude-code-review workflow via workflow_dispatch, author_association permission
+    checks for @claude triggering security. No xs/explore_session/reconstruct.jq
+    requirements found."

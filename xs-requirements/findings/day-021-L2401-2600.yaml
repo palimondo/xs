@@ -1,0 +1,12 @@
+source: day-021:2401-2600
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk. Content is BookMinder CLI spec
+    refactoring discussion about pytest fixtures (CliRunner) and test organization —
+    unrelated to xs tool."

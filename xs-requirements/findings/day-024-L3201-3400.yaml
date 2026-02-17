@@ -1,0 +1,16 @@
+source: day-024:3201-3400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3201-3400 of day-024.md contain content from day-020.md (via ripgrep/grep output
+    embedding). The content is entirely about BookMinder test architecture refactoring:
+    test pyramid patterns, CLI acceptance tests with mocked library functions, and
+    Apple Books database testing. No xs/explore_session/reconstruct.jq requirements found."
+  - "Specifically: discussion of keeping one end-to-end CLI integration test, moving
+    edge case tests to library integration tests, mocking library functions in CLI tests.
+    This is BookMinder project work, not xs tool requirements."

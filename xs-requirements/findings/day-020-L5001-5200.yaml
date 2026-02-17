@@ -1,0 +1,12 @@
+source: day-020:5001-5200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder development work: testing the gemini CLI tool with
+    @filename syntax, and investigating the 'never_opened_user' Apple Books test fixture.
+    No xs/explore_session/reconstruct.jq relevant content found."

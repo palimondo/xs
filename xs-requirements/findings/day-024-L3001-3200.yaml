@@ -1,0 +1,15 @@
+source: day-024:3001-3200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3001-3200 of day-024.md contain ripgrep search results from day-020.md embedded
+    in the day-024 log. The content is entirely about BookMinder (Apple Books CLI) test
+    refactoring: moving edge case tests from CLI spec to library integration tests, mocking
+    library functions in CLI acceptance tests, and keeping one end-to-end subprocess test.
+    This is BookMinder project work, not xs/explore_session/reconstruct.jq requirements."
+  - "No xs-relevant findings in this chunk."

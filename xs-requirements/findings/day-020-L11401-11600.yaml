@@ -1,0 +1,10 @@
+source: day-020:11401-11600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk is entirely about BookMinder CLI naming decisions (format_book vs book_to_line vs format, TypedDict vs dataclass). No xs/explore_session/reconstruct.jq content present."

@@ -1,0 +1,14 @@
+source: day-020:11801-12000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L11801-L12000) contains BookMinder CLI refactoring work unrelated to xs/explore_session."
+  - "Content: pytest test runs, a NameError bug fix in bookminder/cli.py (_format_book_output -> format),
+    then a user correction requesting use of format_book_list (list comprehension pattern) and
+    questioning unnecessary error handling added by agent. No xs/explore_session/reconstruct.jq
+    requirements present in this range."

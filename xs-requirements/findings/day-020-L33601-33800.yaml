@@ -1,0 +1,12 @@
+source: day-020:33601-33800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder cli_formatting_spec.py test refactoring activity."
+  - "User requested test cases ordered by rising complexity (simplest to most complex), and collection tests ordered 0, 1, n."
+  - "No xs/explore_session/reconstruct.jq requirements present in this range."

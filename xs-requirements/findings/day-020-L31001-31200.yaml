@@ -1,0 +1,12 @@
+source: day-020:31001-31200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L31001-31200) is entirely BookMinder session content unrelated to xs/explore_session/reconstruct.jq."
+  - "Content covers: git revert of CliRunner→subprocess refactor, pytest coverage at 98%, compact session separator at L31111, then /hi command and coverage discussion for BookMinder CLI."
+  - "No xs-relevant requirements found in primary range."

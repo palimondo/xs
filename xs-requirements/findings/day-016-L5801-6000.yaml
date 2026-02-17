@@ -1,0 +1,13 @@
+source: day-016:5801-6000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder/Apple Books domain content only: ZSTATE cloud
+    mapping documentation, BKLibrary.sqlite schema documentation, CLI domain
+    language mapping, and a commit workflow interaction. No xs/explore_session/
+    reconstruct.jq requirements found in this range."

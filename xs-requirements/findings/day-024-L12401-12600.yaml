@@ -1,0 +1,14 @@
+source: day-024:12401-12600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines L12401-L12600 contain a discussion about GitHub Actions workflow configuration
+     for Claude Code Action — specifically security checks using author_association to
+     restrict who can trigger @claude mentions (OWNER/COLLABORATOR only), and GitHub
+     Actions expression syntax (contains(fromJSON(...)) vs verbose == checks). No
+     xs/explore_session/reconstruct.jq requirements found in this range."

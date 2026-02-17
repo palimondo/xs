@@ -1,0 +1,8 @@
+source: day-020:47001-47200
+extracted_by: sonnet
+timestamp: 2026-02-17
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI formatting spec work (cli_formatting_spec.py) and Book object test ordering discussion — unrelated to xs/explore_session/reconstruct.jq"

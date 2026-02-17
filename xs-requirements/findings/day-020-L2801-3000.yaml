@@ -1,0 +1,12 @@
+source: day-020:2801-3000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder library/CLI refactoring (moving _get_user_path from cli.py
+    to library.py, test coverage improvements, mocking strategy discussion). No xs/explore_session/
+    reconstruct.jq content present in L2801-L3000."

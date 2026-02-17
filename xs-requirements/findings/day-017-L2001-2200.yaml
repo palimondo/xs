@@ -1,0 +1,10 @@
+source: day-017:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2001-2200 contain BookMinder discovery filter story organization and pytest naming discussions. No xs/explore_session/reconstruct.jq relevant content found."

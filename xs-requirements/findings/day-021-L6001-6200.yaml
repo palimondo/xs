@@ -1,0 +1,9 @@
+source: day-021:6001-6200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Content is entirely BookMinder-specific: expert council discussion on BDD/TDD approach to filter validation, story YAML creation for BookMinder CLI filter input validation, and user discovery about sample books appearing in Continue section of Apple Books UI."

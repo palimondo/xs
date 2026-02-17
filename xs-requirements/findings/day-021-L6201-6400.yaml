@@ -1,0 +1,12 @@
+source: day-021:6201-6400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Content is entirely BookMinder
+  Apple Books database investigation — querying SQLite for sample books, ZISSAMPLE and
+  ZSTATE fields, and Continue section behavior. No xs/explore_session/reconstruct.jq
+  material present."

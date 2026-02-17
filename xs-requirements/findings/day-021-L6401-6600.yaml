@@ -1,0 +1,9 @@
+source: day-021:6401-6600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Content is entirely about BookMinder iBooks database investigation — reverse-engineering Apple's Continue section query logic (ZREADINGPROGRESS, ZSTATE, ZISSAMPLE fields)."

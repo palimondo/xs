@@ -1,0 +1,12 @@
+source: day-018:3401-3600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L3401-L3600) covers development of validate_bash_commands.py — a git/bash
+    validation hook that enforces tool preferences (rg over grep, Glob over find, explicit
+    git staging). No xs/explore_session/reconstruct.jq content found."

@@ -1,0 +1,12 @@
+source: day-020:38601-38800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 38601-38800 contain BookMinder library refactoring only: moving _get_user_path()
+    from cli.py to library.py, updating list_recent_books/list_all_books signatures, adding
+    unit tests, and committing the change. No xs, explore_session, or reconstruct.jq content."

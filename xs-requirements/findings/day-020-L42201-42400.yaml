@@ -1,0 +1,15 @@
+source: day-020:42201-42400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 42201-42400 contain no xs/explore_session/reconstruct.jq relevant content."
+  - "This range covers a BookMinder discussion about Apple Books fixture testing:"
+  - "  - Claude (via gemini CLI) analyzing never_opened_user test scenario from day-010"
+  - "  - Discussion of fixture creation rationale for BookMinder user scenarios"
+  - "  - Apple Books container structure (BKAgentService, iBooksX) investigation"
+  - "  - This is unrelated to session replay, log fetching, or CLI design for xs"

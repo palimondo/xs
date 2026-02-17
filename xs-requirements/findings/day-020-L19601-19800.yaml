@@ -1,0 +1,10 @@
+source: "day-020:19601-19800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range L19601-L19800 contains exclusively BookMinder work: Apple Books fixture analysis, never_opened_user test assertions, cli_spec.py editing. No xs/explore_session/reconstruct.jq content found."

@@ -1,0 +1,15 @@
+source: "day-020:39201-39400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+context_start: 39151
+primary_start: 39201
+end: 39400
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains exclusively BookMinder project work (CLI test refactoring,
+    coverage improvements, CliRunner migration). No xs, explore_session, or
+    reconstruct.jq requirements found in this range."

@@ -1,0 +1,11 @@
+source: day-020:53601-53800
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content is entirely about BookMinder Apple Books test fixture investigation (never_opened_user directory mystery, git history analysis)"

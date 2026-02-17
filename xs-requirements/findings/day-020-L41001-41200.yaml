@@ -1,0 +1,12 @@
+source: day-020:41001-41200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 41001-41200 contain BookMinder project work only: fixture management,
+    CLI spec test migration, and Apple Books library integration testing. No
+    xs/explore_session/reconstruct.jq requirements found in this range."

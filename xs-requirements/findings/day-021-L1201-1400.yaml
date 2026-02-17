@@ -1,0 +1,14 @@
+source: day-021:1201-1400
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Content is BookMinder CLI test refactoring discussion (expert panel opinions on mocking
+    strategies, reverting mistaken test file creation, and planning subprocess-to-mock
+    test conversion for cli_spec.py). No session parsing, formatting, filtering, display
+    modes, or CLI interface topics for xs."

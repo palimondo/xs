@@ -1,0 +1,12 @@
+source: day-020:20201-20400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder work: investigating missing test fixture
+    (never_opened_user directory) via git reflog and day log search. No xs/explore_session/reconstruct.jq
+    content found in primary range L20201-L20400."

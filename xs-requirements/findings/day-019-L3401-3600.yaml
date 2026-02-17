@@ -1,0 +1,13 @@
+source: day-019:3401-3600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3401-3600 contain BookMinder (Apple Books) development: CLI refactoring
+    (eliminating duplication in list_recent_books/list_all_books, _get_user_path,
+    _format_book_output helpers), TDD cycle for sample filtering feature, ruff linting
+    fixes. No xs-related content in this chunk."

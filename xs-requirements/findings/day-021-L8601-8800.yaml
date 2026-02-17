@@ -1,0 +1,9 @@
+source: day-021:8601-8800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 8601-8800 contain BookMinder project work: managing story YAML status fields (filter-by-sample-flag, filter-by-reading-status, pagination), updating TODO.md with completed/in-progress/backlog sections, and committing BookMinder changes. No xs/explore_session/reconstruct.jq content present."

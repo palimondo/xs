@@ -1,0 +1,12 @@
+source: day-020:27801-28000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 27801-28000 contain only BookMinder Apple Books test coverage debugging
+     (fixture paths, exception handling, CliRunner discussion). No xs/explore_session/
+     reconstruct.jq requirements found in this range."

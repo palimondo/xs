@@ -1,0 +1,12 @@
+source: day-020:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2001-2200 contain BookMinder CLI refactoring work only (renaming format_book_output,
+    fixing 'all' command to use format_book_list). No xs/explore_session/reconstruct.jq
+    content found in this range."

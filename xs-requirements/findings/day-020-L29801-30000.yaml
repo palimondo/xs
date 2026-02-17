@@ -1,0 +1,12 @@
+source: day-020:29801-30000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L29801-L30000) covers BookMinder fixture investigation: analysis of
+    never_opened_user test fixture, git tracking of empty directories, and BKLibrary
+    path resolution logic. No xs/explore_session/reconstruct.jq requirements found."

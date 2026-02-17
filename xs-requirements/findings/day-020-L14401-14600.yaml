@@ -1,0 +1,11 @@
+source: day-020:14401-14600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire chunk is BookMinder Apple Books library spec work (testing _get_user_path
+    and _row_to_book). No xs/explore_session/reconstruct.jq content found."

@@ -1,0 +1,15 @@
+source: day-024:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2001-2200 are the output of a ripgrep/Search tool call that searched
+    for 'ONE.*integration test' across the BookMinder claude-dev-log-diary directory.
+    The results span content from gemini-summary-day-020-021.md and day-020.md and
+    day-021.md — all about BookMinder's Apple Books CLI test architecture (test pyramid,
+    mocking strategy, subprocess vs CliRunner, ZISSAMPLE column). No xs/explore_session
+    or reconstruct.jq requirements appear in this range."

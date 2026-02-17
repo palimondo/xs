@@ -1,0 +1,11 @@
+source: day-024:4201-4400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains exclusively BookMinder test organization discussion (unit vs integration vs acceptance tests, pytest structure). No xs/explore_session/reconstruct.jq requirements present."
+  - "Expert council discussion about test directory structure for BookMinder CLI - entirely BookMinder-internal, not xs-relevant."

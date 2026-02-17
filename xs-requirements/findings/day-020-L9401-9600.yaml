@@ -1,0 +1,12 @@
+source: day-020:9401-9600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire range is BookMinder-specific work: pytest runs for Apple Books library,
+    CLI refactoring (extract format_book_list, rename list group to list_cmd),
+    and git commits. No xs/explore_session/reconstruct.jq content found."

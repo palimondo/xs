@@ -1,0 +1,12 @@
+source: day-023:7401-7600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder GitHub Actions workflow configuration discussion
+    (draft PR handling, workflow_dispatch, Claude code review security). No xs,
+    explore_session, or reconstruct.jq requirements present."

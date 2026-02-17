@@ -1,0 +1,11 @@
+source: day-020:10201-10400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder Book TypedDict refactoring (making path/updated optional),
+    git blame investigation, and pytest run. No xs/explore_session/reconstruct.jq content."

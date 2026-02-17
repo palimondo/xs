@@ -1,0 +1,12 @@
+source: "day-016:3801-4000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 3801-4000 contain BookMinder project work: removing duplicate SQLite records
+    from BKLibrary fixture, fixing test assertion for book ordering, and reviewing
+    git status for commit staging. No xs/explore_session/reconstruct.jq content found."

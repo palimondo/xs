@@ -1,0 +1,12 @@
+source: "day-020:17401-17600"
+extracted_by: sonnet
+extraction_date: "2026-02-17"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains exclusively BookMinder work (Apple Books library integration tests,
+    never_opened_user fixture research, Gemini summaries for day-010-011 about BookMinder
+    ATDD). No xs/explore_session/reconstruct.jq requirements found."

@@ -1,0 +1,12 @@
+source: day-020:12801-13000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire primary range (L12801-L13000) contains BookMinder Apple Books integration
+    spec refactoring — docstring wording, variable naming (exc_info vs e), and test
+    structure. No xs/explore_session/reconstruct.jq relevant content."

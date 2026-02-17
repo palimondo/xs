@@ -1,0 +1,12 @@
+source: "day-020:44201-44400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 44201-44400 contain a BookMinder debugging session investigating missing test fixture directories and git blame analysis (AI vs user responsibility for untracked empty directories)."
+  - "Content is entirely about BookMinder project internals (test fixtures, .gitkeep files, git reflog analysis) with no xs/explore_session/reconstruct.jq requirements."
+  - "No xs-relevant findings extracted from this range."

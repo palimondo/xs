@@ -1,0 +1,14 @@
+source: day-020:601-800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L601-L800 contains no xs-relevant content. Entire section is
+    BookMinder library.py test coupling analysis (ZISSAMPLE SQL column coupling,
+    expert council on TDD test isolation, Pythonic repository pattern discussion).
+    No mention of reconstruct.jq, explore_session, xs, JSONL parsing, session
+    replay, or any xs-related feature requirements."

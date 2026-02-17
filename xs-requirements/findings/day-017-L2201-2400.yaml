@@ -1,0 +1,15 @@
+source: day-017:2201-2400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder test naming conventions (L2151-2237), git accident
+    recovery (L2206-2237), and CLAUDE.md backlog management updates (L2239-2400).
+    No xs/explore_session/reconstruct.jq requirements found."
+  - "The only tool-adjacent content is a mention of Claude Code Hooks feature
+    (L2243, L2279-2306) in the context of preventing accidental git add -A staging
+    in BookMinder — not an xs requirement."

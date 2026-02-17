@@ -1,0 +1,12 @@
+source: "day-020:38801-39000"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L38801-L39000) is entirely from a BookMinder TDD session, not xs/explore_session/reconstruct.jq work."
+  - "Content covers: refactoring BookMinder CLI tests, achieving 100% coverage with mocks, expert-council slash command on testing philosophy (Kent Beck, Dave Farley, Dan North, Freeman & Pryce perspectives)."
+  - "No xs, explore_session, or reconstruct.jq requirements appear in this range."

@@ -1,0 +1,12 @@
+source: day-020:7801-8000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 7801-8000 contain BookMinder CLI test coverage discussion (subprocess/pytest-cov issue,
+    expert council analysis on test architecture, user message about --user parameter and
+    Apple Books library testing). No xs/explore_session/reconstruct.jq relevant content found."

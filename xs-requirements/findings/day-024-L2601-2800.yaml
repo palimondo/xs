@@ -1,0 +1,14 @@
+source: day-024:2601-2800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2601-2800 contain ripgrep output showing content from day-020.md embedded
+    within day-024.md. The content is entirely about BookMinder's test architecture
+    refactoring (CLI test pyramid, library integration tests, ZISSAMPLE SQL column,
+    CliRunner vs subprocess). No xs/explore_session/reconstruct.jq requirements found."
+  - "Context lines 2551-2600 also show day-020.md content with the same BookMinder focus."

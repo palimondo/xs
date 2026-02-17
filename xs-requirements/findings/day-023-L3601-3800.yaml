@@ -1,0 +1,12 @@
+source: day-023:3601-3800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder Apple Books library spec refactoring work (splitting
+    integration tests from unit tests in library_spec.py). No xs, explore_session, or
+    reconstruct.jq content found. Entire range is off-topic for xs requirements extraction."

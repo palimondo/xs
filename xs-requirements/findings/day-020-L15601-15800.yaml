@@ -1,0 +1,10 @@
+source: day-020:15601-15800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 15601-15800 contain exclusively BookMinder work: CLI test refactoring (subprocess to CliRunner), pytest coverage analysis for library.py. No xs/explore_session/reconstruct.jq content found."

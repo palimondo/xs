@@ -1,0 +1,13 @@
+source: day-020:42801-43000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 42801-43000 contain BookMinder never_opened_user fixture research via Gemini queries."
+  - "Claude is helping investigate Apple Books user state (BKAgentService, iBooksX containers) for BookMinder test fixtures."
+  - "Content is entirely BookMinder-domain (fixture creation, user state detection, pytest spec design)."
+  - "No xs/explore_session/reconstruct.jq requirements present in this range."

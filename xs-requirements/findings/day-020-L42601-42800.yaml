@@ -1,0 +1,14 @@
+source: day-020:42601-42800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines L42601-L42800 contain content from gemini-summary-day-018-019.md being read
+    by an agent (BookMinder PreToolUse hook refinement summary, day-019 TDD/ATDD summary).
+    Followed by a session where an agent investigates BookMinder's never_opened_user fixture
+    across day logs (L42746-L42800). None of this content is xs/explore_session/reconstruct.jq
+    related — it is BookMinder-specific content embedded in the day-020 replay."

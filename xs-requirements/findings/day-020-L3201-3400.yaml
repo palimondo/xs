@@ -1,0 +1,10 @@
+source: "day-020:3201-3400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder library refactoring (moving _get_user_path from CLI to library). No xs/explore_session/reconstruct.jq content found."

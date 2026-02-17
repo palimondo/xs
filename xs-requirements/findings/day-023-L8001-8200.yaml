@@ -1,0 +1,89 @@
+source: day-023:8001-8200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "GitHub Actions workflow permissions for Claude Code Action"
+    status: resolved
+    events:
+      - line: 8004
+        speaker: user
+        type: introduced
+        quote: "Can you create this issue using `gh` for me? and then check whether it triggers the workflow and monitor its progress?"
+      - line: 8024
+        speaker: user
+        type: refined
+        quote: "don't give it extra guidelines in the issue, we want to verify it will follow everything from CLAUDE.md on its own"
+      - line: 8034
+        speaker: user
+        type: refined
+        quote: "let's be trully minimal, it should be able to find the YAML..."
+      - line: 8180
+        speaker: user
+        type: resolved
+        quote: "Let's fix the permissons and try again. The work that previous workflow did is lost, I presume?"
+      - line: 8194
+        speaker: user
+        type: resolved
+        quote: "This is running on a cloud virtual machine... can't we just give it Bash(*) and rely on GitHubs's sandbox for isolation?"
+
+  - id: T002
+    topic: "Claude Code Action autonomy: reading CLAUDE.md and story YAMLs independently"
+    status: resolved
+    events:
+      - line: 8024
+        speaker: user
+        type: introduced
+        quote: "don't give it extra guidelines in the issue, we want to verify it will follow everything from CLAUDE.md on its own"
+      - line: 8157
+        speaker: agent
+        type: resolved
+        quote: "Claude actually implemented the feature! It: Read and understood CLAUDE.md, Found the story YAML file"
+
+  - id: T003
+    topic: "GitHub Actions runner destroys work if Claude cannot push branch"
+    status: resolved
+    events:
+      - line: 8165
+        speaker: agent
+        type: introduced
+        quote: "But it couldn't complete the task because: No Bash permissions to run tests, No git permissions to create branches/commits"
+      - line: 8180
+        speaker: user
+        type: resolved
+        quote: "The work that previous workflow did is lost, I presume?"
+      - line: 8183
+        speaker: agent
+        type: resolved
+        quote: "Yes, the work is lost because Claude ran on a GitHub Actions runner that gets destroyed after the job completes."
+
+findings:
+  - id: F001
+    thread: T002
+    line: 8024
+    type: user_request
+    speaker: user
+    quote: "don't give it extra guidelines in the issue, we want to verify it will follow everything from CLAUDE.md on its own"
+    note: "User wants Claude Code Action to discover CLAUDE.md and story YAML paths autonomously — no hand-holding in issue body"
+
+  - id: F002
+    thread: T001
+    line: 8194
+    type: user_request
+    speaker: user
+    quote: "This is running on a cloud virtual machine... can't we just give it Bash(*) and rely on GitHubs's sandbox for isolation?"
+    note: "User prefers unrestricted Bash in GitHub Actions (trusting runner sandbox) over whitelisting individual git commands"
+
+  - id: F003
+    thread: T003
+    line: 8183
+    type: design_rationale
+    speaker: agent
+    quote: "Yes, the work is lost because Claude ran on a GitHub Actions runner that gets destroyed after the job completes. Without git permissions to push a branch, all the changes disappeared."
+    note: "Claude Code Action must have git push permissions to persist its work; otherwise changes are lost when the runner terminates"
+
+notes:
+  - "This chunk is entirely about BookMinder's GitHub Actions / Claude Code Action setup (CI integration), not about xs/explore_session CLI tool behavior."
+  - "No xs-specific formatting, filtering, parsing, or display-mode requirements found in this range."
+  - "Findings captured are about the GitHub Actions workflow that runs Claude Code autonomously — relevant to xs use case 1 (Fetch sessions from GitHub Actions) only at the meta-level of how the CI environment works."

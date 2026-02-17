@@ -1,0 +1,12 @@
+source: day-017:1401-1600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L1401-L1600) covers BookMinder --filter flag implementation for the list/recent command.
+    Content is entirely about renaming --flag to --filter with negation syntax (!cloud, !sample),
+    updating story files, specs, and CLI code. No xs/explore_session/reconstruct.jq content found."

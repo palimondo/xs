@@ -1,0 +1,10 @@
+source: day-020:4401-4600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire chunk covers BookMinder Apple Books library integration test debugging (fixture path resolution, _get_user_path, coverage gaps). No xs/explore_session/reconstruct.jq requirements present."

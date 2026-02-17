@@ -1,0 +1,17 @@
+source: "day-022:1201-1400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes: >
+  No xs-relevant requirements found in this chunk. Lines 1201-1400 contain a
+  BookMinder-specific discussion about where to implement filter value validation
+  (CLI layer vs library layer) for the bookminder CLI tool. The content includes
+  an /expert-council analysis (Kent Beck, Dan North, Dave Farley, Steve Freeman &
+  Nat Pryce perspectives) debating CLI vs library layer placement for filter
+  validation, followed by the user asking the agent to use Gemini to recover
+  context from day-020 and day-021 about a previous related discussion. This is
+  entirely about the BookMinder project's architecture, not about xs requirements.

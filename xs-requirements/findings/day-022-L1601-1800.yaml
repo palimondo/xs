@@ -1,0 +1,9 @@
+source: day-022:1601-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 1601-1800 contain a BookMinder discussion about filter validation architecture (CLI vs. library validation, shared constants/enums), the ATTD outside-in TDD process, and an expert council analysis of where to place filter validation logic. All content is specific to BookMinder's --filter flag for listing books, with no mention of xs, explore_session, session transcripts, JSONL parsing, or xs filtering features."

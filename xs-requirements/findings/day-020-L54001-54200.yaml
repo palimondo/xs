@@ -1,0 +1,14 @@
+source: day-020:54001-54200
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder project content: detective work tracing which AI model
+    (Claude Opus) created a test fixture directory without .gitkeep files, causing
+    the directory to be lost during a git working directory cleanup. Entirely about
+    BookMinder fixture management, not xs tool requirements."

@@ -1,0 +1,12 @@
+source: "day-022:3601-3800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 3551-3800 cover
+  BookMinder ATDD/TDD work: writing and committing unit tests for SUPPORTED_FILTERS
+  in apple_books/library_spec.py and library.py. No xs, explore_session, or
+  reconstruct.jq content present."

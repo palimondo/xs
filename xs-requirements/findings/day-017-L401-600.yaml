@@ -1,0 +1,14 @@
+source: day-017:401-600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 401-600 cover BookMinder project activity: reviewing BookMinder's --flag
+    filtering system design for Apple Books library, analyzing story YAML files for
+    cloud/local/sample/reading-status filters, and a critical design review proposing
+    boolean flags instead of the generic --flag approach. No xs, explore_session,
+    reconstruct.jq, or GitHub Actions log fetching content appears in this range."

@@ -1,0 +1,14 @@
+source: day-017:1801-2000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines L1801-L2000 contain no xs/explore_session/reconstruct.jq relevant content."
+  - "The entire chunk covers BookMinder filter refactoring: renaming --flag to --filter,"
+  - "updating documentation for filter syntax, creating combine-multiple-filters.yaml story,"
+  - "and mapping the implementation path in TODO.md."
+  - "No session transcript tools, CLI design, output formatting, or GitHub Actions content present."

@@ -1,0 +1,10 @@
+source: day-020:9201-9400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder CLI debugging: Python type annotation error (list[Book] clashing with Click group named 'list'), fix using List from typing module, and test run showing all 20 tests passing. No xs/explore_session related content."

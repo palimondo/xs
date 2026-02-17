@@ -1,0 +1,12 @@
+source: day-020:41401-41600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder project content unrelated to xs/explore_session/reconstruct.jq."
+  - "Lines 41401-41600 cover: BookMinder ATDD testing for Apple Books library (never_opened_user scenarios), day-010/011 Gemini summary content (library.py refactoring, story card migration), and a user correction at L41594 about following instructions precisely."
+  - "No xs tool requirements found in this range."

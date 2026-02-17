@@ -1,0 +1,95 @@
+source: day-022:2801-3000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "library as source of truth for supported filters"
+    status: resolved
+    events:
+      - line: 2806
+        type: introduced
+        speaker: user
+        quote: "I was hoping that forcing you to follow the ATDD process and listening to the tests would cause you to arrive at a revelation that it's the library that should be source of truth about supported filters"
+      - line: 2871
+        type: refined
+        speaker: user
+        quote: "we said the library is the source of truth. The point we wanted to show by mocking this is CLI doesn't know which -- it will learn at runtime from the library"
+      - line: 2931
+        type: resolved
+        speaker: user
+        quote: "I still think ultrathink that we should be adding this mock setup in the `def it_validates_filter_values_and_shows_helpful_error(runner)` and not a new acceptance test"
+
+  - id: T002
+    topic: "mock with fake filter names to prove delegation"
+    status: resolved
+    events:
+      - line: 2962
+        type: introduced
+        speaker: user
+        quote: "when we're mocking, it would be more proper to NOT use real filter name in the mock, so that it's clear the delegation is complete -- library owns these"
+      - line: 2965
+        type: resolved
+        speaker: agent
+        quote: "The mock should use completely different filter names to prove that the CLI truly delegates to the library and has no hardcoded knowledge"
+
+  - id: T003
+    topic: "agent tendency to add extra tests instead of evolving existing ones"
+    status: resolved
+    events:
+      - line: 2931
+        type: introduced
+        speaker: user
+        quote: "Why do you keep adding extras?"
+      - line: 2951
+        type: resolved
+        speaker: agent
+        quote: "I keep adding unnecessary tests instead of evolving the existing one"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 2806
+    type: user_request
+    speaker: user
+    quote: "I was hoping that forcing you to follow the ATDD process and listening to the tests would cause you to arrive at a revelation that it's the library that should be source of truth about supported filters -- that's where the list of constants must live. And CLI should collaborate with the library to get it."
+
+  - id: F002
+    thread: T001
+    line: 2813
+    type: user_request
+    speaker: user
+    quote: "My mental model was that `library.py` is somehow equivalent to `class Library` which has a field with `.supported_filters`, that translates to an exported constant (I'm not even sure that's something that exists as a concept in Python)."
+
+  - id: F003
+    thread: T001
+    line: 2871
+    type: user_correction
+    speaker: user
+    quote: "we said the library is the source of truth. The point we wanted to show by mocking this is CLI doesn't know which -- it will learn at runtime from the library."
+
+  - id: F004
+    thread: T003
+    line: 2931
+    type: user_correction
+    speaker: user
+    quote: "I think we're getting closer, but I still think ultrathink that we should be adding this mock setup in the `def it_validates_filter_values_and_shows_helpful_error(runner)` and not a new acceptance test. Why do you keep adding extras?"
+
+  - id: F005
+    thread: T002
+    line: 2962
+    type: user_correction
+    speaker: user
+    quote: "when we're mocking, it would be more proper to NOT use real filter name in the mock, so that it's clear the delegation is complete -- library owns these"
+
+  - id: F006
+    thread: T001
+    line: 2984
+    type: agent_proposal
+    speaker: agent
+    quote: "Mock with fake filter names to prove CLI gets them from library: with patch('bookminder.apple_books.library.SUPPORTED_FILTERS', {'alpha', 'beta', 'gamma'})"
+
+notes:
+  - "This chunk is about BookMinder's ATDD process for filter validation in BookMinder CLI, NOT xs tool requirements."
+  - "T001/T003: The debate about ATDD test structure, mocking strategy, and module-as-source-of-truth is BookMinder context. No xs-specific requirements found."
+  - "The session documents a BookMinder development session covering Python module constants and CLI filter validation — unrelated to xs session replay/fetch/filtering features."

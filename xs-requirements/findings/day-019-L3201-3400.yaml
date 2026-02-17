@@ -1,0 +1,13 @@
+source: day-019:3201-3400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "L3201-L3400 contains only BookMinder library.py and cli.py refactoring
+    (DRY elimination between list_recent_books/list_all_books and recent/all
+    CLI commands). No xs tool, session replay, console output, JSONL parsing,
+    GitHub Actions fetch, or any other xs-relevant content found in this range."

@@ -1,0 +1,14 @@
+source: day-019:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder 'list all' command development (L2001-L2200)."
+  - "Content is exclusively about ATDD process for BookMinder CLI: Click decorator
+    sharing for common options (--user, --filter), unit test scaffolding for
+    list_all_books, and test fixture comments distinguishing cloud vs local samples."
+  - "No xs tool requirements appear in this chunk."

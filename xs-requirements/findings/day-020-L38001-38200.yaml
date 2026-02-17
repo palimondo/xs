@@ -1,0 +1,14 @@
+source: day-020:38001-38200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 38001-38200 contain a context continuation summary block (L37976-L38165)
+    followed by BookMinder CLI/library refactoring work (L38166-L38200). The summary
+    describes moving _get_user_path from CLI to library, test architecture decoupling,
+    and coverage improvements — all BookMinder-specific work with no xs, explore_session,
+    or reconstruct.jq content in the primary range."

@@ -1,0 +1,14 @@
+source: "day-020:35401-35600"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+chunk_primary_range: [35401, 35600]
+chunk_context_range: [35351, 35600]
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder CLI code discussion about renaming format_book() to format()
+    and TypedDict vs dataclass design decisions. No xs, explore_session, or reconstruct.jq
+    content is present in this range. Zero relevant findings."

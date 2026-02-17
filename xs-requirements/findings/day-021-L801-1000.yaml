@@ -1,0 +1,12 @@
+source: day-021:801-1000
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L801-L1000 contains BookMinder CLI unit test refactoring discussion (BookBuilder
+    pattern, mock context managers, assertion helpers) — unrelated to xs tool"

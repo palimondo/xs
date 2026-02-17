@@ -1,0 +1,10 @@
+source: day-020:31601-31800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder Apple Books CLI specs (describe_bookminder_list_with_filter, describe_bookminder_list_all_command) and a discussion about subprocess coverage measurement in pytest. No xs/explore_session/reconstruct.jq requirements found."

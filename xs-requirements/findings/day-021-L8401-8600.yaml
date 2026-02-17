@@ -1,0 +1,9 @@
+source: day-021:8401-8600
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 8401-8600 contain BookMinder story status management work — adding status fields (done/backlog/in_progress) to Apple Books feature YAML stories (filter-by-sample-flag, filter-by-multiple-criteria, list-recent-books-enhanced, pagination). No xs/explore_session/reconstruct.jq content."

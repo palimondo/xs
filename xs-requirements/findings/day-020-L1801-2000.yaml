@@ -1,0 +1,12 @@
+source: day-020:1801-2000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1801-2000 are entirely BookMinder CLI formatting and refactoring work:
+     renaming _format_book_output, discussing TypedDict vs dataclass, and inline
+     test refactoring. No xs/explore_session/reconstruct.jq content present."

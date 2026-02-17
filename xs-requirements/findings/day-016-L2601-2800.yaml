@@ -1,0 +1,15 @@
+source: day-016:2601-2800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L2601-L2800) contains exclusively BookMinder development content:
+     test fixture ordering issues for Apple Books CLI specs (L2601-L2643),
+     a user correction about book title in test fixture (L2642),
+     a /stats command showing session used gemini-2.5-flash model (L2736-L2759),
+     and a user request to investigate duplicate Apple Books database records (L2762-L2800).
+     No xs/explore_session/reconstruct.jq requirements present."

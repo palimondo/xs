@@ -1,0 +1,14 @@
+source: day-024:801-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 801-1000 of day-024.md contain embedded ripgrep output from day-020.md
+    (indicated by filename prefixes on each line). The content covers BookMinder test
+    architecture: coverage gaps in library.py exception paths, CliRunner vs subprocess
+    test migration, fixture path resolution bugs, and test hallucination concerns.
+    None of this is xs/explore_session/reconstruct.jq related. Zero findings extracted."

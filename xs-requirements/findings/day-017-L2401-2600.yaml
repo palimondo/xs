@@ -1,0 +1,81 @@
+source: day-017:2401-2600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "story file naming conventions"
+    status: resolved
+    events:
+      - line: 2403
+        type: introduced
+        speaker: user
+        quote: "I'm not fully on board with the verb-attribute rule for naming the stories. Are you sure this is flexible enough?"
+      - line: 2419
+        type: refined
+        speaker: agent
+        quote: "Story file names should be descriptive and action-oriented where it makes sense"
+      - line: 2425
+        type: resolved
+        speaker: user
+        quote: "Yes. and maybe make the connection to naming the acceptance test functions `describe` and `it`?"
+
+  - id: T002
+    topic: "test function naming: describe vs it"
+    status: resolved
+    events:
+      - line: 2425
+        type: introduced
+        speaker: user
+        quote: "maybe make the connection to naming the acceptance test functions `describe` and `it`?"
+      - line: 2453
+        type: refined
+        speaker: user
+        quote: "Do: `describe_bookminder_list_with_filter()` and `it_filters_by_cloud_status()`; Don't: `describe_filter_by_cloud_status()` and `it_shows_only_cloud_books_when_filter_is_cloud()`"
+      - line: 2504
+        type: resolved
+        speaker: user
+        quote: "yes, but also rename teh `it` as we've jsut discussed and documented"
+
+  - id: T003
+    topic: "Claude Code hooks for preventing accidental git staging"
+    status: resolved
+    events:
+      - line: 2570
+        type: introduced
+        speaker: user
+        quote: "Add the Hooks taks into TODO.md as first point in the backlog, with something like '- chore: use hooks to prevent...'"
+      - line: 2579
+        speaker: agent
+        type: resolved
+        quote: "**Prevent accidental staging**: Use [Claude Code hooks](https://docs.anthropic.com/en/docs/claude-code/hooks) to create a PreToolUse hook that blocks `git"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 2403
+    type: user_correction
+    speaker: user
+    quote: "I'm not fully on board with the verb-attribute rule for naming the stories. Are you sure this is flexible enough? I'm worried it's too dogmatic and rigid"
+    note: "User rejected a rigid verb-by-attribute naming rule for story files; prefers flexibility with clarity taking precedence"
+
+  - id: F002
+    thread: T002
+    line: 2453
+    type: user_correction
+    speaker: user
+    quote: "Do: `describe_bookminder_list_with_filter()` and `it_filters_by_cloud_status()`; Don't: `describe_filter_by_cloud_status()` and `it_shows_only_cloud_books_when_filter_is_cloud()`"
+    note: "Preferred test naming: describe names the feature/command, it is concise and matches story name. Not the other way around."
+
+  - id: F003
+    thread: T003
+    line: 2570
+    type: user_request
+    speaker: user
+    quote: "Add the Hooks taks into TODO.md as first point in the backlog, with something like '- chore: use [hooks](docs URL) to prevent... (you know what I want, so be specific enough about the sketch of HOW, so that you can pick this in new session based on this description)"
+    note: "User wants Claude Code PreToolUse hook to block 'git add .' and 'git add -A' to prevent accidental staging of large files"
+
+notes:
+  - "This chunk (2401-2600) covers BookMinder project conventions for test naming and backlog management — not xs tool itself."
+  - "No xs/explore_session/reconstruct.jq specific requirements found in this range."
+  - "The only xs-adjacent finding is F003 about Claude Code hooks (PreToolUse), which is a general development workflow concern that may apply to xs project too."

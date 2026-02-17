@@ -1,0 +1,14 @@
+source: day-024:1201-1400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 1201-1400 contain embedded ripgrep output from day-020.md (visible from file
+    path prefixes on each line). The content is BookMinder SQL/CLI refactoring work:
+    moving edge case tests from CLI to library integration tests, ZISSAMPLE column
+    discussion, and test pyramid discussion. Zero xs/explore_session/reconstruct.jq
+    requirements found in this range."

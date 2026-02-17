@@ -1,0 +1,13 @@
+source: "day-020:27601-27800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 27601-27800 contain BookMinder/Apple Books library coverage debugging work
+    (agent analyzing uncovered exception paths in library.py). No xs, explore_session,
+    or reconstruct.jq requirements present."
+  - "At L27794 user says STOP! GET SOME HELP! interrupting BookMinder debugging."

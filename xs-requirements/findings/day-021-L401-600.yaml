@@ -1,0 +1,14 @@
+source: day-021:401-600
+extracted_by: sonnet
+timestamp: "2026-02-17"
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "L401-L600 contains BookMinder test architecture discussion: expert council analysis
+    (Kent Beck, Dave Farley, Dan North, Steve Freeman/Nat Pryce) on CLI/library test
+    isolation, ZISSAMPLE SQL column removal experiment, and BookMinder test refactoring
+    plan. Entirely separate project with no xs tool content."

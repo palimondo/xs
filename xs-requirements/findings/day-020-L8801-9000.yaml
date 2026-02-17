@@ -1,0 +1,10 @@
+source: day-020:8801-9000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 8801-9000 contain BookMinder CLI refactoring discussion (ZISSAMPLE SQL column, test architecture, formatting extraction). No xs/explore_session/reconstruct.jq relevant content."

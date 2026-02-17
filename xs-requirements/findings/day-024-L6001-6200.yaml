@@ -1,0 +1,12 @@
+source: day-024:6001-6200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 6001-6200 contain BookMinder Apple Books library integration spec code
+    (list_all_books, list_recent_books, find_book_by_title tests with cloud/sample
+    filters). No xs tool requirements found in this range."

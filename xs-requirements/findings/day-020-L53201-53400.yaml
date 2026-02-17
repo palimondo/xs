@@ -1,0 +1,11 @@
+source: day-020:53201-53400
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder development content: investigation of never_opened_user Apple Books fixture evolution across day-010 through day-018, git history search for missing fixture"

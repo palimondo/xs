@@ -1,0 +1,14 @@
+source: day-019:601-800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 601-800 contain BookMinder TDD process discussion (sample filter feature,
+    expert council anti-pattern analysis, test fixture quality). No xs tool requirements
+    found in this range."
+  - "Line 794 references user querying Gemini about 'full console logs' for BookMinder
+    data model investigation — this is about BookMinder content, not xs tool behavior."

@@ -1,0 +1,20 @@
+source: day-020:29401-29600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L29401-L29600 contains BookMinder investigation into never_opened_user
+    fixture, including gemini responses about Apple Books fixture history across day-010
+    through day-012. No xs/explore_session/reconstruct.jq requirements found."
+  - "Content is entirely about BookMinder Apple Books test fixtures: fixture structure,
+    never_opened_user, fresh_books_user, legacy_books_user. Out of scope for xs requirements."
+  - "User interaction at L29413 and L29442 is requesting verbatim gemini responses for
+    the record (performance evaluation context), not xs requirements."
+  - "User at L29556 instructs agent to proceed with next day log query."
+  - "User at L29569 explains an interrupted command and asks to retry."
+  - "User at L29593-L29595 asks agent to always show full gemini responses for the record,
+    mentioning that this is for evaluating agent performance (referencing vision.md)."

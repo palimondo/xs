@@ -1,0 +1,12 @@
+source: day-023:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2001-2200 discuss BookMinder test directory restructuring (unit/integration/acceptance
+    taxonomy). This is a BookMinder project concern, not xs/explore_session/reconstruct.jq.
+    No xs-relevant requirements found in this range."

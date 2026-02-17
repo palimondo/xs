@@ -1,0 +1,12 @@
+source: day-020:8001-8200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Primary range L8001-L8200 contains exclusively BookMinder/Apple Books testing architecture
+    discussion: Path.home() resolution, ZISSAMPLE SQL column coverage, pytest layering (unit/
+    integration/acceptance). No xs, explore_session, or reconstruct.jq content found."

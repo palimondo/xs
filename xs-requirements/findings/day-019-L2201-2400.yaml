@@ -1,0 +1,12 @@
+source: day-019:2201-2400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Entire chunk (L2201-L2400) is BookMinder Apple Books library development —
+    list_all_books function implementation, test fixtures for cloud/local/sample
+    book distinctions, CLI wiring. No xs tool requirements present."

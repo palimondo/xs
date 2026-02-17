@@ -1,0 +1,13 @@
+source: day-016:6801-7000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder Apple Books development work: ZSTATE cloud
+    filtering (ZSTATE=3 and ZSTATE=6), adding --flag cloud/local CLI option, and
+    TDD discipline discussion about committing when green. No xs/explore_session/
+    reconstruct.jq requirements present."

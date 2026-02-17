@@ -1,0 +1,18 @@
+source: day-018:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2001-2200 contain no xs/explore_session/reconstruct.jq relevant content."
+  - "This chunk covers BookMinder fixture tooling work: fixing copy_book_to_fixture.sh
+    to handle SQL injection (apostrophes in book titles), setting up test_reader fixture
+    with a sample book (What's Our Problem? by Tim Urban, ZISSAMPLE=1), and iterating
+    on a failing test for sample book filtering in the BookMinder CLI."
+  - "The session is working on the Apple Books 'sample' filter feature for BookMinder,
+    not the xs session replay/exploration tool."
+  - "At L2198-L2200 the user corrects the agent: ZSTATE=6 is more common than ZISSAMPLE=1
+    for filtering sample books, but this is BookMinder domain, not xs."

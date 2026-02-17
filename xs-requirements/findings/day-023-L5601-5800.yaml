@@ -1,0 +1,13 @@
+source: "day-023:5601-5800"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 5601-5800 contain only BookMinder fixture reorganization work (moving
+    specs/apple_books to specs/integration/apple_books, fixing test paths, resolving
+    ruff linting errors, committing, and pushing to CI). No xs/explore_session/
+    reconstruct.jq related content found in this range."

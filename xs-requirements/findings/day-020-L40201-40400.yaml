@@ -1,0 +1,14 @@
+source: "day-020:40201-40400"
+context_start: 40151
+primary_start: 40201
+end: 40400
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 40201-40400 contain BookMinder Apple Books library integration test discussion
+    (fixture setup, exception paths in library.py, test quality issues). No xs/explore_session/reconstruct.jq requirements present."

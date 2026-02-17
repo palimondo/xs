@@ -1,0 +1,12 @@
+source: day-020:49201-49400
+extracted_by: sonnet
+timestamp: 2026-02-17
+
+threads: []
+
+findings: []
+
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder Apple Books library integration test development"
+  - "Topics: exc_info vs e naming, docstring style, fixture assertions for list_recent_books/list_all_books"

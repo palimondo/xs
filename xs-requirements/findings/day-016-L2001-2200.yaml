@@ -1,0 +1,12 @@
+source: day-016:2001-2200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 2001-2200 contain the end of a Gemini CLI session on BookMinder (test failures,
+    /about stats, /quit) and the start of a new Gemini CLI session showing the BookMinder
+    project directory tree. No xs/explore_session/reconstruct.jq content found in this range."

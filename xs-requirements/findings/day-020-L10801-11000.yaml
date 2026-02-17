@@ -1,0 +1,12 @@
+source: "day-020:10801-11000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 10801-11000 contain exclusively BookMinder CLI formatting spec refactoring
+    (Book formatting tests, Book helper factory creation). No xs, explore_session,
+    or reconstruct.jq content present in this chunk."

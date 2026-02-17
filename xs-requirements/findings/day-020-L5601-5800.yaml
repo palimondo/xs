@@ -1,0 +1,12 @@
+source: day-020:5601-5800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 5601-5800 contain BookMinder fixture investigation (never_opened_user Apple Books fixture)."
+  - "Content is git history archaeology and test fixture debugging — not xs/explore_session/reconstruct.jq related."
+  - "No xs-relevant findings in this chunk."

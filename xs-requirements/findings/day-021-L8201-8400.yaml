@@ -1,0 +1,12 @@
+source: day-021:8201-8400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes: "No xs-relevant requirements found in this chunk. Lines 8201-8400 are entirely
+  BookMinder project work: adding status fields to story YAML files and updating agent
+  guidelines (CLAUDE.md, AGENTS.md, GEMINI.md) with revised status values (backlog,
+  in_progress, done, reopened, research). No xs/explore_session/reconstruct.jq content."

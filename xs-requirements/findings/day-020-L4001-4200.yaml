@@ -1,0 +1,11 @@
+source: day-020:4001-4200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "L4001-4200: BookMinder library coverage debugging (apple_books library fixture issues). No xs/explore_session/reconstruct.jq content in primary range."
+  - "L4171-4200: User running 'claude -p' CLI commands to commit diary files — not xs-relevant."
