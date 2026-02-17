@@ -473,8 +473,8 @@ Instead of searching for keywords, **read session chunks sequentially** and let 
 
 #### Workflow
 
-1. **EXTRACT**: Haiku subagents read session chunks sequentially
-   - One subagent per chunk (no overlaps - hard boundaries)
+1. **EXTRACT**: Sonnet subagents read session chunks sequentially
+   - One subagent per chunk (overlap-aware: context + primary ranges)
    - Each writes ALL findings to `xs-requirements/findings/{source}.yaml`
    - Findings are tagged by type, NOT separated into multiple files
 
@@ -552,7 +552,7 @@ DO NOT search for keywords. DO NOT skip ahead. Read in order.
 
 ```yaml
 source: 7384:1-156
-extracted_by: haiku
+extracted_by: sonnet
 timestamp: 2026-01-28T02:30:00Z
 
 threads:
@@ -612,11 +612,11 @@ For large sessions (b475 has 2477 lines), use date correlation to identify relev
 | Task | Model | Notes |
 |------|-------|-------|
 | Chunk extraction | Bash/jq | Pre-process before subagent |
-| Sequential reading | Haiku | One per chunk, writes findings YAML |
+| Sequential reading | Sonnet | One per chunk, writes findings YAML |
 | Epic assignment & synthesis | Opus | Reads all findings, assigns to epics |
 | Validation | User | Reviews findings before story synthesis |
 
-**Intermediate artifacts**: Haiku writes findings YAMLs to disk. These persist for
+**Intermediate artifacts**: Sonnet writes findings YAMLs to disk. These persist for
 user inspection and orchestrator consumption. Do not delete after synthesis.
 
 ### Pass 3: Golden File Assembly
