@@ -1,0 +1,62 @@
+source: "day-025:7401-7600"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads:
+  - id: T001
+    topic: "fetch runs by issue/PR number"
+    status: open
+    events:
+      - line: 7413
+        type: introduced
+        speaker: agent
+        quote: "Add ability to fetch runs by issue/PR number via Claude's sticky comments"
+      - line: 7509
+        type: refined
+        speaker: user
+        quote: "fetch tools don't yet support downloading by issue/pr number. Do we have a TODO note somewhere, about a plan to add it? (by browsing the issue/pr by comments to find the sessions..."
+      - line: 7553
+        type: elaborated
+        speaker: agent
+        quote: "This would work by:"
+
+  - id: T002
+    topic: "Tool(glob) filtering in explore_session"
+    status: resolved
+    events:
+      - line: 7401
+        type: resolved
+        speaker: agent
+        quote: "Re-verify tools work after relocation"
+      - line: 7455
+        type: resolved
+        speaker: agent
+        quote: "feat: add explore_session tool with Tool(glob) filtering"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 7509
+    type: user_request
+    speaker: user
+    quote: "fetch tools don't yet support downloading by issue/pr number. Do we have a TODO note somewhere, about a plan to add it? (by browsing the issue/pr by comments to find the sessions..."
+
+  - id: F002
+    thread: T001
+    line: 7553
+    type: agent
+    speaker: agent
+    quote: "This would work by:"
+
+  - id: F003
+    thread: T002
+    line: 7455
+    type: user_request
+    speaker: agent
+    quote: "feat: add explore_session tool with Tool(glob) filtering"
+
+notes:
+  - "This chunk covers the commit of explore_session.py with Tool(glob) filtering and cleanup of redundant tools."
+  - "T001 (fetch by issue/PR number) is explicitly listed as a TODO but not yet implemented — planned feature."
+  - "The mechanism proposed: parse gh issue/PR comments to find Claude sticky comment containing run ID, then fetch that run."
+  - "T002 completed: Tool(glob) filtering implemented, tools moved to claude-dev-log-diary/tools/, docs updated."

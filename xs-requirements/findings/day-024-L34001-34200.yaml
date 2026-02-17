@@ -1,0 +1,102 @@
+source: "day-024:34001-34200"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "GitHub Actions log prefix parsing — UNKNOWN STEP"
+    status: resolved
+    events:
+      - line: 34069
+        type: continued
+        speaker: agent
+        quote: "Length varies due to timestamp, but structure is consistent"
+      - line: 34071
+        type: resolved
+        speaker: agent
+        quote: "All lines between start/end markers have this prefix"
+
+  - id: T002
+    topic: "GitHub Actions session filename / directory naming convention"
+    status: open
+    events:
+      - line: 34076
+        type: continued
+        speaker: agent
+        quote: "User rejected Claude's plan"
+
+  - id: T003
+    topic: "Skipped workflow runs cause — sticky comment update by Claude"
+    status: open
+    events:
+      - line: 34141
+        type: introduced
+        speaker: user
+        quote: "can we correlate the time of skipped run with the claude code execution log?"
+      - line: 34152
+        type: continued
+        speaker: agent
+        quote: "The skipped runs happen ~20 seconds after the successful runs."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 34070
+    type: design_decision
+    speaker: agent
+    quote: "Length varies due to timestamp, but structure is consistent"
+    context: "Claude confirms that the UNKNOWN STEP prefix structure is tab-separated (claude TAB UNKNOWN STEP TAB timestamp). Timestamp length varies so field-split on tabs, not fixed-width slicing."
+
+  - id: F002
+    thread: T001
+    line: 34014
+    type: design_decision
+    speaker: agent
+    quote: "all lines have the standard prefix"
+    context: "Verification result: all lines in the Claude log section between start/end markers consistently carry the UNKNOWN STEP prefix"
+
+  - id: F003
+    thread: T002
+    line: 34072
+    type: design_decision
+    speaker: agent
+    quote: "PR #12 uses branch claude/issue-10-20250723-1710 - same pattern as issues!"
+    context: "PRs that Claude creates reference the underlying ISSUE number in the branch name (claude/issue-{N}-{YYYYMMDD}-{HHMM}), not the PR number — allows robust linking via branch name for both issues and PRs"
+
+  - id: F004
+    thread: T002
+    line: 34074
+    type: design_decision
+    speaker: agent
+    quote: "Session ID: Found in JSONL: \"session_id\":"
+    context: "Session UUID is embedded in JSONL content itself — proposed filename format: {YYYY}-{MM}-{DD}-{HHMM}-issue-{N}_{session_id}.jsonl"
+
+  - id: F005
+    thread: T002
+    line: 34076
+    type: user_correction
+    speaker: agent
+    quote: "User rejected Claude's plan"
+    context: "User rejected the comprehensive plan for improved log archiving. Plan included flat directory structure under claude-dev-log-diary/github/, string-slicing prefix removal, session_id in filename, skipping skipped runs. Rejection reason not stated in this chunk."
+
+  - id: F006
+    thread: T003
+    line: 34141
+    type: user_request
+    speaker: user
+    quote: "can we correlate the time of skipped run with the claude code execution log?"
+    context: "User hypothesizes skipped workflow runs are triggered by Claude's own comment updates on issues/PRs — a self-triggering loop that the workflow's if-condition filters out"
+
+  - id: F007
+    thread: T003
+    line: 34147
+    type: design_decision
+    speaker: agent
+    quote: "2025-07-22T02:44:10Z success issue_comment 16433231237"
+    context: "Confirmed: skipped runs occur ~20 seconds after successful runs, both triggered by issue_comment event — validates hypothesis that Claude's own comment update triggers the skipped run"
+
+notes:
+  - "T002 open — user rejected plan but no counter-proposal given yet in this chunk"
+  - "T003 open — investigation into skipped-run/comment-update correlation continues past line 34200"
+  - "All findings in this chunk relate to GitHub Actions log fetching use case, not xs session replay/display"
+  - "UNKNOWN STEP label in logs comes from GitHub Actions step lacking a name in the claude.yml workflow"

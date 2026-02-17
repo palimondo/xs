@@ -1,0 +1,14 @@
+source: "day-024:21801-22000"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 21801-22000 contain no xs/explore_session/reconstruct.jq content."
+  - "Entire range covers BookMinder YOLO mode retrospective analysis: test organization,
+     ZISSAMPLE SQL condition, CLI spec restructuring with parametrized filter pass-through tests."
+  - "Topics: TDD/BDD process violations, test duplication avoidance, pytest parametrize patterns
+     for filter testing — all BookMinder-specific, not xs requirements."

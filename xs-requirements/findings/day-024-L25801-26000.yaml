@@ -1,0 +1,14 @@
+source: "day-024:25801-26000"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 25801-26000 contain no xs-relevant content. This section documents a BookMinder
+    test reorganization session: moving tests from cli_spec.py into acceptance/cli_spec.py
+    and specs/cli_spec.py (subprocess tests only). The user note at L25801-L25804 mentions
+    context window compaction concerns but in the context of BookMinder work, not xs."
+  - "No xs requirements, design decisions, or tool behavior discussions found in this range."

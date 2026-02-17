@@ -1,0 +1,10 @@
+source: day-024:40601-40800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder fixture reorganization (moving apple_books specs to integration dir), CI run monitoring via gh CLI, and a failed /install-github-app command attempt. No xs-relevant requirements found."

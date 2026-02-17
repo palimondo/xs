@@ -1,0 +1,15 @@
+source: day-024:23201-23400
+extracted_by: claude-sonnet-4-5-20250929
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L23201-23400) is entirely about BookMinder test directory structure
+    reorganization discussion between user and Claude. The conversation covers organizing
+    specs into unit/, integration/, and eventually acceptance test categories. There is
+    no xs tool content in this range — it is a tangential BookMinder project discussion
+    about test architecture (filesystem-as-documentation principle, one-subprocess-test
+    rule, BDD acceptance tests). No xs requirements found."

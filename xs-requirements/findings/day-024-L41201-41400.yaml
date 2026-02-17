@@ -1,0 +1,13 @@
+source: "day-024:41201-41400"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 41201-41400 cover a conversation about GitHub Actions CI configuration
+    for BookMinder — specifically Claude GitHub Action (code review vs interactive
+    mode), ubuntu-latest vs macos-latest runners, and allowed_tools configuration.
+    No xs tool requirements found in this range."

@@ -1,0 +1,187 @@
+source: "day-024:47801-48000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads:
+  - id: T001
+    topic: "fetch_logs.py issue number parsing failure"
+    status: open
+    events:
+      - line: 47905
+        type: introduced
+        speaker: agent
+        quote: "Issue detection - The script didn't parse issue #6 from \"Filter book list by reading status\" title (ended up in unlinked-2025-07-23/)"
+      - line: 47920
+        type: refined
+        speaker: user
+        quote: "the fetch_logs.py was supposed to Parse issue numbers from workflow titles or branch names but it didn't work?"
+
+  - id: T002
+    topic: "unlinked folder for unmatched workflow runs"
+    status: open
+    events:
+      - line: 47828
+        type: introduced
+        speaker: agent
+        quote: "I see it created an unlinked-2025-07-23 directory for runs it couldn't match to issues."
+      - line: 47911
+        type: refined
+        speaker: user
+        quote: "I don't like this unlinked folder at all. We have to improve the linking from issues and PRs to be solid."
+
+  - id: T003
+    topic: "extract JSONL from GHA logs instead of raw logs"
+    status: open
+    events:
+      - line: 47912
+        type: introduced
+        speaker: user
+        quote: "I think we don't need the raw log - instead we should extract just the jsonl of the Claude Code execution."
+      - line: 47913
+        type: refined
+        speaker: user
+        quote: "shoudl extract just the jsonl of the Claude Code execution."
+
+  - id: T004
+    topic: "GHA log extraction boundaries"
+    status: resolved
+    events:
+      - line: 47917
+        type: introduced
+        speaker: user
+        quote: "the tail-end of the log that interests us ends in \"Log saved to /Users/runner/work/_temp/claude-execution-output.json\" and starts with \"Running Claude with prompt from file: /Users/runner/work/_temp/claude-prompts/claude-prompt.txt\""
+      - line: 47976
+        type: resolved
+        speaker: agent
+        quote: "The session_id is in the JSONL: \"c3293867-52b4-421b-8efb-11f4ce2f284f\" ... The format is JSONL with prefix \"claude\\tUNKNOWN STEP\\t2025-07-22T02:29:10.3452300Z \""
+
+  - id: T005
+    topic: "file timestamps should match actual run times"
+    status: open
+    events:
+      - line: 47917
+        type: introduced
+        speaker: user
+        quote: "I'd like if we could get their creation date and last modified dates to match the actual run from the log."
+      - line: 47957
+        type: refined
+        speaker: agent
+        quote: "Start: line 746 at 2025-07-22T02:29:09.4897310Z ... End: line 6275 at 2025-07-22T02:37:13.7085950Z"
+
+  - id: T006
+    topic: "no need to store JSON metadata files"
+    status: open
+    events:
+      - line: 47910
+        type: introduced
+        speaker: user
+        quote: "I'm interested only in the log of the claude code execution for later analysis of agentic coding, so I think we don't need to store the json files at all."
+
+  - id: T007
+    topic: "UNKNOWN STEP prefix edge cases"
+    status: open
+    events:
+      - line: 47915
+        type: introduced
+        speaker: user
+        quote: "UNKNOWN STEP\" prefix before the timestamp -- I think these edge cases could be handled by us manually, and the script for future session transcript extraction does not"
+
+  - id: T008
+    topic: "duplicate/skipped workflow runs pattern"
+    status: open
+    events:
+      - line: 47910
+        type: introduced
+        speaker: user
+        quote: "seeing the duplications in workflow runs we should investigate what there's always one skipped for each one that ran"
+      - line: 47997
+        type: refined
+        speaker: agent
+        quote: "I see the pattern - for each event, there's one successful run and one skipped."
+
+  - id: T009
+    topic: "fetch-depth in GHA workflow"
+    status: open
+    events:
+      - line: 47921
+        type: introduced
+        speaker: user
+        quote: "in the archive-claude-logs.yaml we checkout project's full git history? (fetch-depth: 0 where 1 would suffice?)"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 47920
+    type: user_correction
+    speaker: user
+    quote: "the fetch_logs.py was supposed to Parse issue numbers from workflow titles or branch names but it didn't work?"
+
+  - id: F002
+    thread: T002
+    line: 47911
+    type: user_correction
+    speaker: user
+    quote: "I don't like this unlinked folder at all. We have to improve the linking from issues and PRs to be solid."
+
+  - id: F003
+    thread: T003
+    line: 47912
+    type: user_request
+    speaker: user
+    quote: "I think we don't need the raw log - instead we should extract just the jsonl of the Claude Code execution."
+
+  - id: F004
+    thread: T003
+    line: 47913
+    type: user_request
+    speaker: user
+    quote: "shoudl extract just the jsonl of the Claude Code execution."
+
+  - id: F005
+    thread: T004
+    line: 47917
+    type: user_request
+    speaker: user
+    quote: "the tail-end of the log that interests us ends in \"Log saved to /Users/runner/work/_temp/claude-execution-output.json\" and starts with \"Running Claude with prompt from file: /Users/runner/work/_temp/claude-prompts/claude-prompt.txt\" so these should be the timestamps and line numbers we need to extract the relevant part of the raw log file."
+
+  - id: F006
+    thread: T005
+    line: 47917
+    type: user_request
+    speaker: user
+    quote: "I'd like if we could get their creation date and last modified dates to match the actual run from the log."
+
+  - id: F007
+    thread: T006
+    line: 47910
+    type: user_request
+    speaker: user
+    quote: "I'm interested only in the log of the claude code execution for later analysis of agentic coding, so I think we don't need to store the json files at all."
+
+  - id: F008
+    thread: T007
+    line: 47915
+    type: user_request
+    speaker: user
+    quote: "UNKNOWN STEP\" prefix before the timestamp -- I think these edge cases could be handled by us manually, and the script for future session transcript extraction does not"
+
+  - id: F009
+    thread: T008
+    line: 47910
+    type: user_request
+    speaker: user
+    quote: "seeing the duplications in workflow runs we should investigate what there's always one skipped for each one that ran"
+
+  - id: F010
+    thread: T009
+    line: 47921
+    type: user_correction
+    speaker: user
+    quote: "in the archive-claude-logs.yaml we checkout project's full git history? (fetch-depth: 0 where 1 would suffice?)"
+
+notes:
+  - "T001/T002: fetch_logs.py issue linking is broken - issue #6 ended up in unlinked folder instead of being matched by title parsing"
+  - "T003/T004: Core requirement: extract JSONL portion from raw GHA logs, not entire raw log. Boundaries defined by specific log lines."
+  - "T007: UNKNOWN STEP prefix in older GHA runs is an edge case the script need not handle; manual processing acceptable for historical runs"
+  - "T008: Duplicate runs being investigated - pattern of one success + one skipped per event"
+  - "This chunk covers the user's detailed feedback after initial fetch_logs.py testing, identifying multiple suboptimal behaviors"

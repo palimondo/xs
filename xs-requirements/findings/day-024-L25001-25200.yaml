@@ -1,0 +1,13 @@
+source: day-024:25001-25200
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains BookMinder library spec refactoring (unit vs integration test
+    separation for apple_books/library_spec.py). No xs, explore_session, reconstruct.jq,
+    or session replay content found. The agent is fixing a test that used a fake path
+    and reorganizing specs — unrelated to xs requirements."

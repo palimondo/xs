@@ -1,0 +1,10 @@
+source: day-024:29601-29800
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains GitHub Actions workflow debugging for BookMinder (not xs). The session monitors Claude CI runs with git permissions issues — no xs tool requirements found."

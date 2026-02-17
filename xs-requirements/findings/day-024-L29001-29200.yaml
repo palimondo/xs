@@ -1,0 +1,15 @@
+source: "day-024:29001-29200"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+notes:
+  - "This chunk is entirely about GitHub Actions workflow configuration for Claude Code
+    Action — specifically security (author_association checks) and permissions. NOT
+    directly related to xs tool requirements."
+  - "Context lines L28951-L29000 are continuation of Claude explaining GitHub PR event
+    types (issue_comment vs pull_request_review_comment vs pull_request_review)."
+  - "No xs tool requirements found in this chunk."
+
+threads: []
+
+findings: []

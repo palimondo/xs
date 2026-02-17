@@ -1,0 +1,13 @@
+source: day-024:24201-24400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder test directory refactoring (lines 24201-24400). The
+    content is about reorganizing BookMinder specs into unit/integration/acceptance/e2e
+    subdirectories and performing git mv operations with coverage checks. No xs-relevant
+    requirements are present in this range."

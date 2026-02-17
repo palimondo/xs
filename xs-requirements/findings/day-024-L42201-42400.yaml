@@ -1,0 +1,12 @@
+source: "day-024:42201-42400"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers GitHub Actions workflow configuration for Claude code review
+    on BookMinder PRs — PR author associations (OWNER/COLLABORATOR/CONTRIBUTOR),
+    draft PR feature, and spam/security concerns. No xs tool requirements found."

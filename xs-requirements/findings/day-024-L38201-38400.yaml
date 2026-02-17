@@ -1,0 +1,12 @@
+source: "day-024:38201-38400"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 38201-38400 contain BookMinder library spec refactoring: moving integration
+    tests (list_books, find_book_by_title, list_recent_books, list_all_books) from
+    unit specs to integration specs with updated fixture paths. No xs-relevant content."

@@ -1,0 +1,103 @@
+source: "day-025:7601-7676"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads:
+  - id: T001
+    topic: "todo list items at session close - replay and session management features"
+    status: open
+    events:
+      - line: 7609
+        type: introduced
+        quote: "Create branch claude/issue-13-20250124-1443"
+        speaker: agent
+      - line: 7610
+        type: introduced
+        quote: "Execute full first chunk via Task (RED test commit)"
+        speaker: agent
+      - line: 7616
+        type: introduced
+        quote: "Create script to archive local Claude sessions before 30-day purge"
+        speaker: agent
+      - line: 7617
+        type: introduced
+        quote: "Add ability to fetch runs by issue/PR number via Claude's sticky comments"
+        speaker: agent
+      - line: 7618
+        type: introduced
+        quote: "Create orphan branch for claude-logs storage"
+        speaker: agent
+
+  - id: T002
+    topic: "session restart decision"
+    status: resolved
+    events:
+      - line: 7638
+        type: introduced
+        quote: "This seems like a good point to restart a session...."
+        speaker: user
+      - line: 7659
+        type: resolved
+        quote: "===================================================================== Previous Conversation Compacted ===================================================================="
+        speaker: agent
+
+  - id: T003
+    topic: "explore_session tool production readiness state"
+    status: resolved
+    events:
+      - line: 7644
+        type: introduced
+        quote: "Created explore_session.py with Tool(glob) filtering"
+        speaker: agent
+      - line: 7654
+        type: resolved
+        quote: "python claude-dev-log-diary/tools/explore_session.py issue-13 --export 1 46 - --include \"Edit(*/specs/**),Bash(git add *),Bash(git commit *)\""
+        speaker: agent
+
+findings:
+  - id: F001
+    thread: T001
+    line: 7616
+    type: user_request
+    speaker: agent
+    quote: "Create script to archive local Claude sessions before 30-day purge"
+    note: "Todo item - local Claude sessions are subject to 30-day purge; archiving needed"
+
+  - id: F002
+    thread: T001
+    line: 7617
+    type: user_request
+    speaker: agent
+    quote: "Add ability to fetch runs by issue/PR number via Claude's sticky comments"
+    note: "Planned feature: fetch GitHub Actions run by issue/PR number via sticky comments"
+
+  - id: F003
+    thread: T001
+    line: 7618
+    type: user_request
+    speaker: agent
+    quote: "Create orphan branch for claude-logs storage"
+    note: "Planned storage strategy: orphan branch for session logs in git"
+
+  - id: F004
+    thread: T003
+    line: 7654
+    type: user_request
+    speaker: agent
+    quote: "python claude-dev-log-diary/tools/explore_session.py issue-13 --export 1 46 - --include \"Edit(*/specs/**),Bash(git add *),Bash(git commit *)\""
+    note: "CLI usage example: export with range (1 46) and --include filter for specific tool patterns"
+
+  - id: F005
+    thread: T002
+    line: 7666
+    type: user_request
+    speaker: user
+    quote: "/compact"
+    note: "User triggered /compact - session ends here; remaining lines are UI chrome only"
+
+notes:
+  - "Lines 7601-7619 are agent todo list items summarizing planned features"
+  - "Lines 7621-7657 are agent session summary; no new requirements"
+  - "Lines 7659-7676 are session compaction/exit UI chrome - no requirements content"
+  - "Key CLI usage pattern at L7654: explore_session.py with --export range and --include filter"
+  - "30-day purge risk for local sessions noted (F001) - motivation for xs session archiving"

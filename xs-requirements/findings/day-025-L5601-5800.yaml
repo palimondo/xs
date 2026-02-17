@@ -1,0 +1,115 @@
+source: day-025:5601-5800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "comma-separated filter format support"
+    status: resolved
+    events:
+      - line: 5617
+        type: introduced
+        speaker: agent
+        quote: "so Claude Code supports both space-separated AND comma-separated formats"
+      - line: 5692
+        type: resolved
+        speaker: agent
+        quote: "explore_session.py tool now supports comma-separated Tool(glob) filters, matching Claude Code's syntax"
+
+  - id: T002
+    topic: "short tool name filtering (without glob parameters)"
+    status: resolved
+    events:
+      - line: 5695
+        type: introduced
+        speaker: user
+        quote: "Does it also support both short short list of the tool as well as exporting the full json ?"
+      - line: 5699
+        type: resolved
+        speaker: agent
+        quote: "Yes! The tool already supports both"
+
+  - id: T003
+    topic: "full JSON export via --export flag"
+    status: resolved
+    events:
+      - line: 5695
+        type: introduced
+        speaker: user
+        quote: "Does it also support both short short list of the tool as well as exporting the full json ?"
+      - line: 5708
+        type: resolved
+        speaker: agent
+        quote: "Full JSON export (that's what --export does)"
+
+  - id: T004
+    topic: "test delegation to Task tool with explore_session.py"
+    status: open
+    events:
+      - line: 5780
+        type: introduced
+        speaker: user
+        quote: "So I think you can verify the full JSON works on just a single tool call -- we trust that it would work with bunch of them, so do that."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 5617
+    type: agent_explanation
+    speaker: agent
+    quote: "so Claude Code supports both space-separated AND comma-separated formats"
+
+  - id: F002
+    thread: T001
+    line: 5629
+    type: implementation
+    speaker: agent
+    quote: "# Split comma-separated filters"
+
+  - id: F003
+    thread: T001
+    line: 5692
+    type: resolved
+    speaker: agent
+    quote: "explore_session.py tool now supports comma-separated Tool(glob) filters, matching Claude Code's syntax"
+
+  - id: F004
+    thread: T002
+    line: 5695
+    type: user_request
+    speaker: user
+    quote: "Does it also support both short short list of the tool as well as exporting the full json ?"
+
+  - id: F005
+    thread: T002
+    line: 5701
+    type: agent_explanation
+    speaker: agent
+    quote: "Short tool names (without parameters): # Include all Edit operations --include \"Edit\""
+
+  - id: F006
+    thread: T003
+    line: 5708
+    type: agent_explanation
+    speaker: agent
+    quote: "Full JSON export (that's what --export does)"
+
+  - id: F007
+    thread: T004
+    line: 5780
+    type: user_request
+    speaker: user
+    quote: "So I think you can verify the full JSON works on just a single tool call -- we trust that it would work with bunch of them, so do that."
+
+  - id: F008
+    thread: T004
+    line: 5781
+    type: user_request
+    speaker: user
+    quote: "output to verify we are getting the expected subset of tool calls out from the first chunk. and we can tehn test on a subset (2-3 edits if the Task can be instructed to"
+
+notes:
+  - "L5601-5614: Context-only lines about MCP tool naming conventions (Claude Code documentation excerpt shared by user)"
+  - "T004 open — task delegation testing not completed in this chunk, continues in next chunk"
+  - "Key discovery: --include filter supports both short names (e.g. 'Edit') and full Tool(glob) patterns (e.g. 'Edit(*/specs/**)')"
+  - "Comma-separated filter list implemented by splitting args.include on ',' before passing to export_range"

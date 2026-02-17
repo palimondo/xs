@@ -1,0 +1,12 @@
+source: day-024:26001-26200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains only BookMinder test reorganization activity (pytest spec file
+    moves, acceptance test extraction to acceptance/cli_spec.py, e2e CLI wiring spec
+    setup). No xs-related requirements or discussions are present."

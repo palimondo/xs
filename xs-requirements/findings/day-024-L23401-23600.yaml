@@ -1,0 +1,12 @@
+source: day-024:23401-23600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 23401-23600 contain BookMinder test organization discussion (acceptance/unit/integration
+    test structure, /expert-council session about pytest directory layout). No xs tool
+    requirements present in this chunk."

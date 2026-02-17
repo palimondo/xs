@@ -1,0 +1,11 @@
+source: day-024:41601-41800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers GitHub Actions CI integration for BookMinder (parallel CI vs sequential
+    review, Claude code review workflow configuration). No xs tool requirements present."

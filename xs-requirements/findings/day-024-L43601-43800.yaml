@@ -1,0 +1,11 @@
+source: day-024:43601-43800
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder GitHub Actions workflow debugging and local feature
+    implementation (filter-by-reading-status). No xs-relevant content found."

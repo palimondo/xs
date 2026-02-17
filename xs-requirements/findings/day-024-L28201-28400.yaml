@@ -1,0 +1,14 @@
+source: day-024:28201-28400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk (L28201-L28400) covers a discussion about GitHub Actions Claude Code
+    integration security: who can trigger @claude on GitHub, write permissions, and
+    subscription abuse concerns. Content is entirely about BookMinder project
+    infrastructure setup (Claude Code Action workflow configuration, GitHub permissions
+    model) — not about xs tool requirements. No xs-relevant findings."

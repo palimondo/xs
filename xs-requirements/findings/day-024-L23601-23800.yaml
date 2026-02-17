@@ -1,0 +1,14 @@
+source: day-024:23601-23800
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+notes:
+  - "This chunk is entirely about BookMinder test suite organization (ATDD/BDD spec
+    directory structure), not xs requirements. The user is refactoring BookMinder's
+    specs/ directory into unit/, integration/, acceptance/, and e2e/ subdirectories
+    to enforce the architectural constraint of exactly ONE subprocess end-to-end test."
+  - "No xs-relevant requirements found in this range."
+
+threads: []
+
+findings: []

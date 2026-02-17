@@ -1,0 +1,10 @@
+source: day-024:36201-36400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder CLI spec refactoring: parameterized filter tests, ruff linting fix, git commit"
+  - "Work is entirely about BookMinder filter passthrough tests, not xs/session replay tools"

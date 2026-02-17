@@ -1,0 +1,67 @@
+source: "day-025:1001-1200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads:
+  - id: T001
+    topic: "JSONL parsing — multi-line vs single-line format"
+    status: open
+    events:
+      - line: 1054
+        type: refined
+        speaker: agent
+        quote: "Now I understand! The structure has role, model, and content fields."
+
+  - id: T002
+    topic: "JSONL object structure — role-based vs type-based"
+    status: open
+    events:
+      - line: 1054
+        type: introduced
+        speaker: agent
+        quote: "The structure has role, model, and content fields"
+      - line: 1063
+        type: refined
+        speaker: agent
+        quote: "if obj.get('role') == 'assistant' and 'content' in obj"
+
+  - id: T003
+    topic: "Tool call extraction from JSONL"
+    status: open
+    events:
+      - line: 1131
+        type: introduced
+        speaker: agent
+        quote: "grep -n '\"name\": \"Edit\"'"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1008
+    type: implementation_detail
+    speaker: agent
+    quote: "Extract tool calls from Claude's JSONL session log. Handles the multi-line JSON format efficiently."
+    note: "JSONL session files are multi-line format, not single-line-per-object. Parser must accumulate lines."
+
+  - id: F002
+    thread: T002
+    line: 1054
+    type: implementation_detail
+    speaker: agent
+    quote: "The structure has role, model, and content fields"
+    note: "JSONL entries use 'role' field (not 'type') to identify assistant messages. Top-level fields: role, model, content."
+
+  - id: F003
+    thread: T003
+    line: 1119
+    type: implementation_detail
+    speaker: agent
+    quote: "# Skip MCP tools"
+    note: "MCP tools (mcp__ prefix) should be filtered out from tool call extraction."
+
+notes:
+  - "L1001-1200 shows agent debugging JSONL parsing for a replay/extraction script."
+  - "No explicit user_request or user_correction events in this range — pure agent implementation work."
+  - "Context (L951-L1000) shows parser timing out on large files — the streaming parser is a solution."
+  - "The todo list at L1181-1191 mentions: fetch sessions from GitHub Actions, archive local Claude sessions before 30-day purge, add ability to fetch runs by issue/PR number via Claude's sticky comments — these are xs use cases."
+  - "The chunk is not xs-requirements-rich; it documents agent debugging a JSONL parser for session replay."

@@ -1,0 +1,16 @@
+source: "day-024:27001-27200"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 27001-27200 contain BookMinder fixture reorganization completion and GitHub App
+    (/install-github-app) troubleshooting. No xs-relevant requirements found."
+  - "Content covers: CI run confirming 53 tests pass after fixture move (L27077-L27086),
+    repeated /install-github-app failures with 404 error (L27089-L27142), and Claude
+    helping diagnose missing 'workflow' GitHub token scope (L27157-L27200)."
+  - "The GitHub App installation context (L27089-L27200) is about setting up Claude Code
+    Action on BookMinder, not about xs fetch/replay functionality."

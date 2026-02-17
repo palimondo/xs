@@ -1,0 +1,70 @@
+source: "day-024:23001-23200"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "test architecture decision — ONE integration test rule"
+    status: open
+    events:
+      - line: 23003
+        type: introduced
+        speaker: agent
+        quote: "You're absolutely right - this is a critical architectural decision that should have been front and center in my context."
+      - line: 23029
+        type: refined
+        speaker: agent
+        quote: "**ONE integration test only** - Single subprocess test to verify wiring"
+
+  - id: T002
+    topic: "retaining architectural knowledge across sessions"
+    status: open
+    events:
+      - line: 23023
+        type: introduced
+        speaker: agent
+        quote: "Add a clear section to CLAUDE.md since it's always loaded in my context"
+      - line: 23137
+        type: refined
+        speaker: user
+        quote: "How about filesystem? The /hi command I run at the beginning of every session runs `tree`. What is we used the folder hierarchy under specs to make the structure of the"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 23029
+    type: design_rationale
+    speaker: agent
+    quote: "**ONE integration test only** - Single subprocess test to verify wiring"
+    context: "Claude summarizing established architectural decision from days 20-21: CLI testing should have exactly ONE subprocess integration test; all other CLI tests should use mocks"
+    note: "This is about BookMinder test architecture, not xs directly — context is cross-project TDD principles that inform xs development"
+
+  - id: F002
+    thread: T001
+    line: 23070
+    type: design_rationale
+    speaker: agent
+    quote: "Documentation rots, but executable specifications don't"
+    context: "Expert council (Dave Farley persona) advocating for encoding architectural decisions as executable tests rather than documentation"
+
+  - id: F003
+    thread: T002
+    line: 23137
+    type: user_request
+    speaker: user
+    quote: "How about filesystem? The /hi command I run at the beginning of every session runs `tree`. What is we used the folder hierarchy under specs to make the structure of the"
+    context: "User proposes using filesystem directory structure (visible via tree command in /hi) to communicate test architecture decisions rather than relying on documentation"
+
+  - id: F004
+    thread: T002
+    line: 23189
+    type: design_rationale
+    speaker: agent
+    quote: "The filesystem structure shown by tree in /hi would make the architecture immediately visible every session!"
+    context: "Claude affirming that directory hierarchy can serve as always-visible architectural documentation loaded at session start via /hi command"
+
+notes:
+  - "This chunk is about BookMinder test architecture, not xs tool requirements directly"
+  - "Key transferable insight: use filesystem structure to communicate test architecture — relevant to xs project's own test organization"
+  - "T001 and T002 threads are open — discussion continues in next chunk"
+  - "The ONE integration test rule (T001) applies to CLI/library separation — a pattern xs should follow"

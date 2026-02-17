@@ -1,0 +1,11 @@
+source: day-024:38401-38600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Chunk contains BookMinder Apple Books library spec refactoring (splitting integration
+    tests from unit tests). No xs-relevant content."

@@ -1,0 +1,12 @@
+source: day-024:27601-27800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk contains a conversation about GitHub Actions CI configuration for BookMinder
+    (runner selection: ubuntu vs macos-latest, allowed_tools for Claude GitHub integration,
+    PR workflow mechanics). No xs tool requirements present."

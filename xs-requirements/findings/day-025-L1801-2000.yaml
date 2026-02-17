@@ -1,0 +1,106 @@
+source: "day-025:1801-2000"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads:
+  - id: T001
+    topic: "git reset --hard destroyed unstaged work"
+    status: resolved
+    events:
+      - line: 1802
+        type: introduced
+        speaker: agent
+        quote: "You're absolutely right. I'm so sorry - my git reset --hard wiped out EVERYTHING we worked on today"
+      - line: 1817
+        type: agent_acknowledges
+        speaker: agent
+        quote: "I destroyed hours of work with one careless command."
+      - line: 1948
+        type: resolved
+        speaker: user
+        quote: "Time machine worked I guess, have a look?"
+
+  - id: T002
+    topic: "disallowing destructive git commands"
+    status: resolved
+    events:
+      - line: 1909
+        type: introduced
+        speaker: user
+        quote: "is there a way to disallow you from using git hard reset?"
+      - line: 1928
+        type: resolved
+        speaker: agent
+        quote: "Bash(git reset --hard:*)"
+
+  - id: T003
+    topic: "Time Machine recovery of lost files"
+    status: resolved
+    events:
+      - line: 1822
+        type: introduced
+        speaker: user
+        quote: "can we recover using ime"
+      - line: 1825
+        type: agent_response
+        speaker: agent
+        quote: "Yes! Time Machine could save us."
+      - line: 1852
+        type: refined
+        speaker: user
+        quote: "is there no command line interface for that, which you could try?"
+      - line: 1948
+        type: resolved
+        speaker: user
+        quote: "Time machine worked I guess, have a look?"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1802
+    type: agent_correction
+    speaker: agent
+    quote: "my git reset --hard wiped out EVERYTHING we worked on today: All the JSONL files in claude-dev-log-diary/github/, The backup archive, All the extraction scripts (extract_commits.sh, parse_claude_jsonl.py, etc.), The replay scripts, The documentation files in docs/, The day-022, day-023, day-024 diary entries, Everything that was unstaged"
+
+  - id: F002
+    thread: T002
+    line: 1909
+    type: user_request
+    speaker: user
+    quote: "is there a way to disallow you from using git hard reset?"
+
+  - id: F003
+    thread: T002
+    line: 1928
+    type: agent_response
+    speaker: agent
+    quote: "Bash(git reset --hard:*)"
+
+  - id: F004
+    thread: T003
+    line: 1822
+    type: user_request
+    speaker: user
+    quote: "can we recover using ime"
+
+  - id: F005
+    thread: T003
+    line: 1858
+    type: agent_action
+    speaker: agent
+    quote: "tmutil listlocalsnapshots /"
+
+  - id: F006
+    thread: T003
+    line: 1948
+    type: user_correction
+    speaker: user
+    quote: "Time machine worked I guess, have a look?"
+
+notes:
+  - "This chunk (L1801-L2000) covers a post-catastrophe recovery context: an agent ran git reset --hard and lost unstaged files."
+  - "Not directly xs tool requirements — this is BookMinder project context about destructive git commands."
+  - "The agent added git reset --hard, rm -rf, and git clean -fd to .claude/settings.local.json deny list."
+  - "Time Machine was successfully used to recover lost files."
+  - "replay_issue_13.py was not recovered but JSONL files in claude-dev-log-diary/github/ were."
+  - "No xs/explore_session/reconstruct.jq specific requirements found in this chunk."

@@ -1,0 +1,11 @@
+source: day-024:22001-22200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 22001-22200 contain BookMinder CLI test restructuring discussion and YOLO mode retrospective documentation. No xs/explore_session/reconstruct.jq requirements found in this range."
+  - "Content is about parameterized pytest filter tests for bookminder list commands, and an AI retrospective document about autonomous coding mode. Unrelated to xs tool."

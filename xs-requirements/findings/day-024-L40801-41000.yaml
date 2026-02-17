@@ -1,0 +1,12 @@
+source: day-024:40801-41000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 40801-41000 cover GitHub App installation troubleshooting for Claude Code
+    GitHub Actions integration (gh auth refresh, workflow scope, ubuntu vs macos runner).
+    No xs tool requirements in this range."

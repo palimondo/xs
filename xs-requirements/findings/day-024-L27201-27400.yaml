@@ -1,0 +1,12 @@
+source: day-024:27201-27400
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 27201-27400 cover GitHub App installation troubleshooting (gh auth refresh,
+    workflow scope, .github/workflows directory creation, ubuntu-latest vs macos-latest
+    runner question). No xs tool requirements found in this range."

@@ -1,0 +1,10 @@
+source: day-024:37801-38000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Chunk covers BookMinder test directory restructuring (specs/unit/, integration/, acceptance/, e2e/). No xs-relevant content found."

@@ -1,0 +1,14 @@
+source: day-024:26801-27000
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder project refactoring activity: moving apple_books test
+    fixtures from specs/apple_books/ to specs/integration/apple_books/ and updating
+    fixture paths in library_containers_spec.py and cli_wiring_spec.py. No xs tool
+    requirements are present. Content is entirely BookMinder TDD housekeeping (git mv,
+    path updates, test runs, commit with pre-commit hook lint fix)."

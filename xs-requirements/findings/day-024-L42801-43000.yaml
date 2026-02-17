@@ -1,0 +1,14 @@
+source: day-024:42801-43000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder GitHub Actions workflow configuration — adding write
+    permissions and security checks to claude.yml to allow Claude Code to create PRs
+    and edit code. The content is about configuring the @claude trigger (author_association
+    checks, permissions: write) and testing it by creating a GitHub issue. No xs tool
+    requirements found."

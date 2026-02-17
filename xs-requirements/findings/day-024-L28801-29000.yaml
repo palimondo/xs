@@ -1,0 +1,101 @@
+source: day-024:28801-29000
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "GitHub Actions workflow_dispatch trigger for PR review"
+    status: abandoned
+    events:
+      - line: 28801
+        type: introduced
+        speaker: agent
+        quote: "Honestly, for reviewing first-timer PRs, it might be simpler to just: Comment \"@claude please review this PR\""
+      - line: 28811
+        type: resolved
+        speaker: user
+        quote: "OK. Nevermind then."
+
+  - id: T002
+    topic: "Remote development via GitHub Actions with write permissions"
+    status: open
+    events:
+      - line: 28811
+        type: introduced
+        speaker: user
+        quote: "if we added the write permissions I could trigger remote development from an issue?"
+      - line: 28836
+        type: refined
+        speaker: agent
+        quote: "Change permissions to allow Claude to write code"
+      - line: 28857
+        type: open
+        speaker: agent
+        quote: "Want me to set up these write permissions so you can try it?"
+
+  - id: T003
+    topic: "GitHub Actions security: restricting @claude triggers to authorized users"
+    status: open
+    events:
+      - line: 28860
+        type: introduced
+        speaker: user
+        quote: "can we add similar permission checks to the github action that would verify the comment is coming from OWNER or COLLABORATOR?"
+      - line: 28913
+        type: refined
+        speaker: user
+        quote: "if the issue would be created by somebody else, even I wouldn't be able to trigger @claude coding session? Not exactly what we had in mind, I think..."
+      - line: 28930
+        type: refined
+        speaker: agent
+        quote: "My check looked at: github.event.issue.author_association - who created the issue / But we want to check who's making the @claude comment!"
+      - line: 28962
+        type: open
+        speaker: user
+        quote: "I think harder but I still don't get the logic for PR... explain?"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 28802
+    type: user_correction
+    speaker: agent
+    quote: "Honestly, for reviewing first-timer PRs, it might be simpler to just: Comment \"@claude please review this PR\""
+    note: "Claude recommending against workflow_dispatch complexity; user accepted (Nevermind then)"
+
+  - id: F002
+    thread: T002
+    line: 28811
+    type: user_request
+    speaker: user
+    quote: "if we added the write permissions I could trigger remote development from an issue?"
+    note: "User wants to use GitHub Actions @claude to implement features from issues remotely"
+
+  - id: F003
+    thread: T002
+    line: 28847
+    type: user_request
+    speaker: agent
+    quote: "Create issue: \"Implement filter-by-reading-status story\" / Comment: \"@claude please implement this story following CLAUDE.md guidelines\" / Claude would: Read the story YAML / Create a new branch / Write the code following BDD/TDD / Run tests / Create a PR"
+    note: "This describes the intended remote development workflow via GitHub Actions — not directly an xs requirement"
+
+  - id: F004
+    thread: T003
+    line: 28860
+    type: user_request
+    speaker: user
+    quote: "can we add similar permission checks to the github action that would verify the comment is coming from OWNER or COLLABORATOR?"
+    note: "User wants explicit security check in addition to Claude Action's internal check"
+
+  - id: F005
+    thread: T003
+    line: 28913
+    type: user_correction
+    speaker: user
+    quote: "if the issue would be created by somebody else, even I wouldn't be able to trigger @claude coding session? Not exactly what we had in mind, I think..."
+    note: "User corrected Claude's logic — permission check must apply to the COMMENTER, not the issue creator"
+
+notes:
+  - "This chunk covers GitHub Actions configuration for Claude Code integration, not xs tool requirements directly."
+  - "T002 and T003 are open — continuation likely in subsequent chunks."
+  - "No findings relate to xs CLI features, session parsing, formatting, or filtering."

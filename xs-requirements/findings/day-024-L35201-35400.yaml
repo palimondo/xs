@@ -1,0 +1,10 @@
+source: day-024:35201-35400
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder YOLO mode retrospective: CLI spec reorganization, ZISSAMPLE SQL condition analysis, TDD violations in BookMinder book filter implementation"
+  - "Content is entirely about Apple Books/BookMinder features unrelated to xs session replay tools"

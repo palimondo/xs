@@ -1,0 +1,10 @@
+source: "day-024:37601-37800"
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk is entirely about BookMinder test file reorganization (Apple Books library spec splitting into unit/integration/acceptance/e2e layers). No xs-relevant content found."

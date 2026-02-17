@@ -1,0 +1,12 @@
+source: day-024:21401-21600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 21401-21600 contain BookMinder/Apple Books development work (ZISSAMPLE SQL
+    conditions, cli_spec.py test organization, TDD violation review). No xs/explore_session
+    requirements found in this chunk."

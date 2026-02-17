@@ -1,0 +1,70 @@
+source: day-024:22801-23000
+extracted_by: claude-sonnet-4-5
+timestamp: 2026-02-17T00:00:00Z
+
+threads:
+  - id: T001
+    topic: "number of CLI integration tests"
+    status: resolved
+    events:
+      - line: 22918
+        type: introduced
+        speaker: user
+        quote: "How many integration tests shoudl our CLI spec have?"
+      - line: 22952
+        type: resolved
+        speaker: user
+        quote: "ONE. It should have only one. The rest shoudl be mocked interactions with collaborators."
+
+  - id: T002
+    topic: "retaining architectural decisions between coding sessions"
+    status: open
+    events:
+      - line: 22981
+        type: introduced
+        speaker: user
+        quote: "Since you didn't find this decision in your current context, let's think hard about how to retain this know-how between our coding sessions."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 22952
+    type: user_correction
+    speaker: user
+    quote: "ONE. It should have only one. The rest shoudl be mocked interactions with collaborators. Search for evidence for this earlier decision."
+    context: >
+      User corrects Claude's suggestion of 10 integration tests. The established
+      architectural decision is that CLI spec should have exactly ONE integration
+      test verifying end-to-end wiring; all other tests should use mocks for
+      collaborator interactions.
+
+  - id: F002
+    thread: T001
+    line: 22967
+    type: user_request
+    speaker: agent
+    quote: "Keep ONE CLI integration test that verifies CLI calls library correctly"
+    context: >
+      Claude found evidence from day-020 and day-021 confirming the decision.
+      The rationale: CLI acceptance tests use mocks to verify parameter passing
+      and error handling; library integration tests handle edge cases with
+      fixtures; ONE subprocess integration test verifies everything is wired
+      together.
+
+  - id: F003
+    thread: T002
+    line: 22981
+    type: user_request
+    speaker: user
+    quote: "Since you didn't find this decision in your current context, let's think hard about how to retain this know-how between our coding sessions."
+    context: >
+      User raises the problem of architectural knowledge loss between sessions.
+      Claude had to search for a previously-made decision (ONE integration test)
+      rather than having it in active context. User wants a solution for
+      persisting key architectural decisions.
+
+notes:
+  - "Lines 22801-22917 are BookMinder (not xs) work: refactoring SQL conditions, running tests, committing."
+  - "T001 is a BookMinder architectural decision but the principle (one integration test, rest mocked) is highly relevant to xs test architecture."
+  - "T002 (session knowledge retention) is open at end of chunk — likely continues in subsequent lines."
+  - "No xs-specific requirements in this chunk; content is BookMinder development with one transferable principle."

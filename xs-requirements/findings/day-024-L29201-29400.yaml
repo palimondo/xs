@@ -1,0 +1,80 @@
+source: "day-024:29201-29400"
+extracted_by: sonnet
+timestamp: "2026-02-17T00:00:00Z"
+
+threads:
+  - id: T002
+    topic: "Testing GitHub Actions Claude workflow trigger via minimal issue"
+    status: resolved
+    events:
+      - line: 29249
+        type: introduced
+        speaker: user
+        quote: "Can you create this issue using `gh` for me? and then check whether it triggers the workflow and monitor its progress?"
+      - line: 29269
+        type: refined
+        speaker: user
+        quote: "don't give it extra guidelines in the issue, we want to verify it will follow everything from CLAUDE.md on its own"
+      - line: 29279
+        type: refined
+        speaker: user
+        quote: "let's be trully minimal, it should be able to find the YAML..."
+      - line: 29292
+        type: refined
+        speaker: user
+        quote: "not that minimal! :-) Include the body... or how could it work?"
+      - line: 29305
+        type: refined
+        speaker: user
+        quote: "@stories/discover/filter-by-reading-status.yaml"
+      - line: 29332
+        type: resolved
+        speaker: agent
+        quote: "Filter book list by reading status (finished/unread/in-progress)"
+
+findings:
+  - id: F001
+    thread: T002
+    line: 29249
+    type: user_request
+    speaker: user
+    quote: "Can you create this issue using `gh` for me? and then check whether it triggers the workflow and monitor its progress?"
+    note: "User asking to test GitHub Actions workflow trigger via gh CLI"
+
+  - id: F002
+    thread: T002
+    line: 29269
+    type: user_correction
+    speaker: user
+    quote: "don't give it extra guidelines in the issue, we want to verify it will follow everything from CLAUDE.md on its own"
+    note: "User wants minimal issue body — Claude should follow CLAUDE.md autonomously without extra instructions in the issue"
+
+  - id: F003
+    thread: T002
+    line: 29279
+    type: user_correction
+    speaker: user
+    quote: "let's be trully minimal, it should be able to find the YAML..."
+    note: "User wants Claude (in GHA) to discover the story YAML on its own from the repository"
+
+  - id: F004
+    thread: T002
+    line: 29292
+    type: user_correction
+    speaker: user
+    quote: "not that minimal! :-) Include the body... or how could it work?"
+    note: "User clarifies some body text is needed — @claude mention with reference to the story"
+
+  - id: F005
+    thread: T002
+    line: 29305
+    type: user_request
+    speaker: user
+    quote: "@stories/discover/filter-by-reading-status.yaml"
+    note: "User wants issue title to use the actual story name/file path"
+
+notes:
+  - "This chunk is entirely about BookMinder project (GitHub Actions setup) — not xs tool development"
+  - "No xs-relevant requirements found in primary range L29201-L29400"
+  - "Content: testing GitHub Actions Claude Code workflow trigger with a minimal issue"
+  - "T001 removed — events were in context zone only (L29152/L29185)"

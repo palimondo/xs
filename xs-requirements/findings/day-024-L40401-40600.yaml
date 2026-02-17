@@ -1,0 +1,13 @@
+source: day-024:40401-40600
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 40401-40600 contain BookMinder project work: reorganizing test fixtures
+    (moving specs/apple_books under specs/integration/), updating path references
+    in library_containers_spec.py and cli_wiring_spec.py, running tests, and
+    encountering a pre-commit ruff linting failure. No xs-relevant content."

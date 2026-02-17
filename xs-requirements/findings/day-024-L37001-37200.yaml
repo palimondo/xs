@@ -1,0 +1,11 @@
+source: day-024:37001-37200
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "This chunk covers BookMinder test organization discussion (acceptance vs unit vs integration test structure) and Gemini CLI invocation mechanics."
+  - "No xs/explore_session/reconstruct.jq requirements found in the primary range L37001-L37200."

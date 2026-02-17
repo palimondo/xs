@@ -1,0 +1,11 @@
+source: day-024:25601-25800
+extracted_by: sonnet
+timestamp: 2026-02-17T00:00:00Z
+
+threads: []
+
+findings: []
+
+notes:
+  - "Lines 25601-25800 contain BookMinder test reorganization content (ATDD, test pyramid, CLI spec extraction to acceptance/ and e2e/ directories). This is a compaction recovery summary block and continuation of BookMinder work, with no xs tool requirements present."
+  - "Content covers: parameterized pytest tests, git mv operations, mock-based CLI testing, directory restructuring (unit/integration/acceptance/e2e). No xs-relevant material."
