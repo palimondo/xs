@@ -1,0 +1,9 @@
+source: 1a53:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T10:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder git hook fix (validate_git_commands.py), commit/push, and CLI spec tests for cloud filter feature — unrelated to xs/session-replay/JSONL parsing"

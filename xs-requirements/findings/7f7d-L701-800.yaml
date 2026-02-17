@@ -1,0 +1,9 @@
+source: 7f7d:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T10:40:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 701-800 cover BookMinder Apple Books CLI testing work: converting CLI tests from subprocess to CliRunner, error boundary testing, coverage improvements. No reconstruct.jq, explore_session, fetch_logs, or xs tool work present."

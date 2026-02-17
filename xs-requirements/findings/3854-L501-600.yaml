@@ -1,0 +1,10 @@
+source: 3854:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T11:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder CLI test refactoring (converting subprocess tests to mocks, TDD process discipline)"
+  - "User corrections are about general TDD workflow (run tests after each change, combine test+coverage runs) — not xs requirements"

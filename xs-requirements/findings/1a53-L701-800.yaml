@@ -1,0 +1,9 @@
+source: 1a53:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T10:10:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Entire chunk covers BookMinder Apple Books fixture management: ZSTATE/ZISSAMPLE fields, reading progress sync between Mac and iPhone, SQLite database exploration for sample books. No session replay, log fetching, or xs tool work."

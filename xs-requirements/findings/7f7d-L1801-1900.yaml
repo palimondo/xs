@@ -1,0 +1,10 @@
+source: 7f7d:1801-1900
+extracted_by: sonnet
+timestamp: 2026-02-17T10:50:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder CI debugging: ResourceWarnings from pytest, CliRunner usage in describe_cli_error_boundary test, discussion of mocks vs fakes for CLI error boundary testing, and user asking agent to use Gemini for log research"
+  - "All content is BookMinder-specific (CLI error handling, test coverage, pre-commit hooks) with no relation to xs/explore_session/reconstruct.jq or session replay tools"

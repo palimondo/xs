@@ -1,0 +1,9 @@
+source: 9193:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T10:50:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 81-200 are entirely about BookMinder CLI test refactoring: CliRunner vs subprocess, test coverage gaps in apple_books/library.py error paths, and test architecture (unit/integration/acceptance pyramid). No mention of xs, explore_session, reconstruct.jq, or session replay tools."

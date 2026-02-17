@@ -1,0 +1,9 @@
+source: 50fa:301-400
+extracted_by: sonnet
+timestamp: 2026-02-17T10:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 301-400 are entirely BookMinder CLI development: renaming --flag to --filter, TDD refactoring, story naming conventions for BookMinder's own pytest specs"

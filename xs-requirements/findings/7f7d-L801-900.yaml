@@ -1,0 +1,11 @@
+source: 7f7d:801-900
+extracted_by: sonnet
+timestamp: 2026-02-17T10:40:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder Apple Books library test coverage debugging: exception paths in library.py (lines 32, 82, 163), fixture setup issues, pytest coverage gaps, CliRunner vs subprocess test architecture"
+  - "Lines 839-851 are user-run local bash commands (marked caveat/DO NOT RESPOND) and a /model switch to Sonnet"
+  - "Lines 852-900 continue the same BookMinder coverage debugging with Sonnet's fresh perspective and git history investigation"

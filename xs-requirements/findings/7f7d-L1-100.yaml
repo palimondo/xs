@@ -1,0 +1,8 @@
+source: 7f7d:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T10:30:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk. Lines 1-100 cover BookMinder test architecture work: pytest coverage with subprocess CLI tests, SQL ZISSAMPLE column testing, and test coupling analysis. No reconstruct.jq, explore_session, or session replay tool content."

@@ -1,0 +1,10 @@
+source: 7f7d:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T10:30:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Primary range covers BookMinder CLI formatting refactoring: TDD discipline (RED/GREEN/REFACTOR), making Book TypedDict fields optional (path, updated), and cli_formatting_spec.py cleanup"
+  - "No content related to xs, reconstruct.jq, session replay, log fetching, or console output formatting"

@@ -1,0 +1,9 @@
+source: 7f7d:1301-1400
+extracted_by: sonnet
+timestamp: 2026-02-17T10:40:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder fixture debugging: investigation of who deleted never_opened_user test fixture directory, model switching (Gemini/Claude Opus/Sonnet) attribution, and .gitkeep file management for preserving empty directory structures in git"

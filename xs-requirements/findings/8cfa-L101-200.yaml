@@ -1,0 +1,10 @@
+source: 8cfa:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T10:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Primary range covers BookMinder 'list all' command ATDD development: Click shared options decorator, test fixture design for cloud vs local books, coverage discussion, and expert council consultation about TDD process violations"
+  - "Context range (L81-L100) also covers BookMinder ATDD process corrections, not xs"

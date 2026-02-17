@@ -1,0 +1,11 @@
+source: f1d0:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T10:10:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Entire chunk covers BookMinder documentation review and cleanup (git rm of analysis/ dir)"
+  - "Context zone (L81-L100): agent reading BookMinder docs files"
+  - "Primary zone (L101-L200): tool results from file reads, doc review report, user requests cleanup, agent uses rm then corrected to git rm, commit process, discussion of noting deletions in TODO.md"

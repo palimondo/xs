@@ -1,0 +1,9 @@
+source: 3854:1001-1100
+extracted_by: sonnet
+timestamp: 2026-02-17T11:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Entire chunk covers BookMinder Apple Books documentation updates: Continue section behavior, book progress indicators, sample display quirks, recency cutoff (~7 days), database query deduplication"

@@ -1,0 +1,9 @@
+source: 3854:901-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T11:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder work: investigating Apple Books database behavior for Continue section (samples, reading progress, cloud vs downloaded states)"

@@ -1,0 +1,10 @@
+source: 184e:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T10:10:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Session is about extending a Claude Code PreToolUse hook (validate_git_commands.py) to enforce ripgrep usage over grep/find. This is developer tooling for BookMinder workflow, not xs requirements."
+  - "The chunk covers: BookMinder cruft analysis (L1-L44), then extending the hook to block grep -r and find -name with guidance to use ripgrep/Glob tools instead (L44-L100)."

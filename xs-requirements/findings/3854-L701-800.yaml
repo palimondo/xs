@@ -1,0 +1,9 @@
+source: 3854:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T11:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder TDD work: refactoring CLI tests from subprocess to mocks, SQL query builder extraction, ZISSAMPLE test isolation experiment, BDD anti-pattern discussion, expert council on testing SQL structure. No xs/explore_session/reconstruct.jq content."

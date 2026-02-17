@@ -1,0 +1,9 @@
+source: 0a50:1-25
+extracted_by: sonnet
+timestamp: 2026-02-17T10:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk contains BookMinder housekeeping: /hi command run, checking Swift fixture files in specs/apple_books/fixtures/, git status review — no session replay or xs tool work"

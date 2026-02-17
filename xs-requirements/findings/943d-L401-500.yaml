@@ -1,0 +1,10 @@
+source: 943d:401-500
+extracted_by: sonnet
+timestamp: 2026-02-17T11:10:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 401-500 cover BookMinder ATDD cycle for CLI filter validation feature (SUPPORTED_FILTERS in bookminder/cli.py and apple_books/library.py) — unrelated to xs/explore_session/reconstruct.jq"
+  - "Context lines 381-400 cover git commit ordering mistakes during TDD — also unrelated to xs"

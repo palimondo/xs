@@ -1,0 +1,9 @@
+source: 7f7d:901-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T10:40:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder apple_books library integration test debugging: relative vs absolute fixture paths, agent creating speculative test fixtures not grounded in real observations"

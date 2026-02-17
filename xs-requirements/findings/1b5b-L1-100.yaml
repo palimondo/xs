@@ -1,0 +1,8 @@
+source: 1b5b:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T10:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk. Session is entirely about BookMinder sample filtering feature — implementing --filter sample / --filter !sample for Apple Books CLI using ZISSAMPLE SQLite field. No discussion of xs, explore_session, reconstruct.jq, session JSONL parsing, console output formatting, or GitHub Actions log fetching."

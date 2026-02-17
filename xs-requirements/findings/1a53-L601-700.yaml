@@ -1,0 +1,9 @@
+source: 1a53:601-700
+extracted_by: sonnet
+timestamp: 2026-02-17T10:10:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder Apple Books fixture script development: fixing $USERNAME variable shadowing, SQL escaping for apostrophes in book titles, and copying books to test fixtures. Entirely BookMinder work unrelated to session replay tools."

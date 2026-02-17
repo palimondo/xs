@@ -1,0 +1,11 @@
+source: 943d:301-400
+extracted_by: sonnet
+timestamp: 2026-02-17T11:10:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "This chunk contains BookMinder ATDD work: user correcting agent on code style (no redundant comments) and TDD discipline (commit failing test before implementation)"
+  - "Topics: code_style enforcement, ATDD/GOOS methodology (AccT -> Unit Test -> Implementation), git commit ordering, SUPPORTED_FILTERS library constant"
+  - "All content is BookMinder CLI/library development, not xs/explore_session/reconstruct.jq"

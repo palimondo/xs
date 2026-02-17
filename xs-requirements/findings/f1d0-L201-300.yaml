@@ -1,0 +1,9 @@
+source: f1d0:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T10:20:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 181-300 contain only BookMinder documentation reorganization work: removing AI meta-commentary docs, reorganizing test fixture documentation, and moving screenshot images to ui/apple/ subdirectory. No xs/explore_session/reconstruct.jq content."

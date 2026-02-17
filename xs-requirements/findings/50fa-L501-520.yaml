@@ -1,0 +1,10 @@
+source: 50fa:501-520
+extracted_by: sonnet
+timestamp: 2026-02-17T10:00:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 501-520 contain BookMinder project work: test naming conventions, git commits, and a user request to add a Claude Code PreToolUse hooks task to TODO.md"
+  - "Line 519 shows user invoking /compact command; line 520 shows compaction error — these are BookMinder session events, not xs requirements"

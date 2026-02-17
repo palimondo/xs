@@ -1,0 +1,10 @@
+source: 8cfa:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T10:30:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder library work: ZSTATE=6 cloud sample detection, TDD methodology discussion about unit vs acceptance tests, testing terminology (Mock/Stub/Fake), BDD naming conventions, and expert council consultation about test architecture for database filtering"
+  - "Context zone (L681-L700) and primary range (L701-L800) are entirely about BookMinder apple_books library_spec.py and cli.py - not related to xs, explore_session, reconstruct.jq, or session JSONL tools"

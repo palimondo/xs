@@ -1,0 +1,9 @@
+source: 8cfa:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T10:30:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 481-600 are entirely BookMinder work: Outside-In ATDD session for adding sample book filtering to list_all_books CLI command, including SQL query changes, Book TypedDict updates, and unit/acceptance test cycles"
