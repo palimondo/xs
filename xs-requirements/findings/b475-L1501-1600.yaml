@@ -1,0 +1,119 @@
+source: b475:1501-1600
+extracted_by: sonnet
+timestamp: 2026-02-17T14:10:00Z
+
+threads:
+  - id: T001
+    topic: "Thinking messages — display and filtering"
+    status: open
+    events:
+      - line: 1502
+        speaker: agent
+        type: introduced
+        quote: "These appear to be UI-only in Claude Code, not in the JSONL data"
+
+  - id: T002
+    topic: "Compact mode message display — first and last line with [...] separator"
+    status: resolved
+    events:
+      - line: 1504
+        speaker: user
+        type: introduced
+        quote: "in the compact mode we added support to display first and last lien separated by `[...]` on single line in messages"
+      - line: 1565
+        speaker: agent
+        type: refined
+        quote: "the compact mode for assistant messages is missing the [...] last line display"
+      - line: 1592
+        speaker: agent
+        type: resolved
+        quote: "The [...] separator is now working for assistant messages"
+
+  - id: T003
+    topic: "Architecture cleanup — filters control what to show, display modes control how"
+    status: resolved
+    events:
+      - line: 1510
+        speaker: agent
+        type: introduced
+        quote: "Make filters only control WHAT to show, not HOW"
+      - line: 1512
+        speaker: user
+        type: refined
+        quote: "focus on the Architecture cleanup"
+      - line: 1542
+        speaker: agent
+        type: resolved
+        quote: "The main goal is to separate \"what to show\" (filtering) from \"how to show it\" (display modes)"
+
+  - id: T004
+    topic: "Truncation format — include (ctrl+r to expand) indicator"
+    status: resolved
+    events:
+      - line: 1585
+        speaker: agent
+        type: introduced
+        quote: "The truncation format looks correct but we need to add \"(ctrl+r to expand)\""
+      - line: 1600
+        speaker: agent
+        type: resolved
+        quote: "The truncation format now includes \"(ctrl+r to expand)\""
+
+  - id: T005
+    topic: "Empty tool results display in truncated mode"
+    status: resolved
+    events:
+      - line: 1568
+        speaker: agent
+        type: introduced
+        quote: "fix the empty tool results in truncated mode"
+      - line: 1596
+        speaker: agent
+        type: resolved
+        quote: "Excellent! Empty results now show"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1502
+    speaker: agent
+    type: unresolved
+    quote: "These appear to be UI-only in Claude Code, not in the JSONL data"
+    context: "User (L1484, context zone) asked about --include Thinking flag; agent believes Thinking blocks are UI-only and not present in JSONL. Thread open — user request for --include Thinking not yet resolved."
+
+  - id: F002
+    thread: T002
+    line: 1504
+    speaker: user
+    type: user_request
+    quote: "in the compact mode we added support to display first and last lien separated by `[...]` on single line in messages"
+    context: "User confirming that compact mode should show first line [...] last line for multi-line messages"
+
+  - id: F003
+    thread: T003
+    line: 1542
+    speaker: agent
+    type: agent_proposal
+    quote: "The main goal is to separate \"what to show\" (filtering) from \"how to show it\" (display modes). This will eliminate the special cases"
+    context: "Architecture principle: filters (--include, --tools, etc.) only control which events appear; display modes (compact/truncated/full) control rendering format independently"
+
+  - id: F004
+    thread: T004
+    line: 1600
+    speaker: agent
+    type: agent_proposal
+    quote: "The truncation format now includes \"(ctrl+r to expand)\""
+    context: "Truncated mode output must include (ctrl+r to expand) suffix on the truncation indicator line"
+
+  - id: F005
+    thread: T005
+    line: 1596
+    speaker: agent
+    type: agent_proposal
+    quote: "Excellent! Empty results now show"
+    context: "When tool results have empty content in truncated mode, display '(No content)' placeholder instead of showing nothing"
+
+notes:
+  - "T001 (Thinking messages): User asked about --include Thinking flag (L1502). Context (L1499, before primary range) shows agent believed Thinking is UI-only, not in JSONL. Thread open — needs further investigation."
+  - "T003 architecture insight also noted at L1559: show_conversation should be show_timeline conversation — unification of display functions."
+  - "Much of L1514-1544 is agent doing file edits and git operations — not requirements, skipped."

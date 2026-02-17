@@ -1,0 +1,78 @@
+source: b475:2401-2477
+extracted_by: sonnet
+timestamp: 2026-02-17T14:30:00Z
+
+threads:
+  - id: T001
+    topic: "assistant tool display: no duplicate [Used tools:] messages"
+    status: resolved
+    events:
+      - line: 2401
+        speaker: agent
+        type: introduced
+        quote: "Good, I already removed those earlier. Let's test the changes"
+      - line: 2405
+        speaker: agent
+        type: refined
+        quote: "fix the assistant tool display issue. The problem is that assistant messages with tools are showing \"[Used tools: ...]\" instead of being silent (since the actual tool calls appear separately)"
+      - line: 2456
+        speaker: agent
+        type: resolved
+        quote: "Fixed assistant tool display - No longer shows \"[Used tools: ...]\" for tool-only assistant messages"
+
+  - id: T002
+    topic: "tool result content can be list or dict, not just string"
+    status: open
+    events:
+      - line: 2429
+        speaker: agent
+        type: introduced
+        quote: "There's an error - tool results can be a list. Let me fix this"
+      - line: 2435
+        speaker: agent
+        type: refined
+        quote: "tool_results[0].get('content', '') can return a list instead of a string"
+      - line: 2456
+        speaker: agent
+        type: refined
+        quote: "Added support for list/dict content in tool results (partial fix - some edge cases remain with certain session files)"
+
+  - id: T003
+    topic: "git shortcut pattern limitation"
+    status: resolved
+    events:
+      - line: 2456
+        speaker: agent
+        type: introduced
+        quote: "This could be improved but works as designed"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 2405
+    speaker: agent
+    type: agent_proposal
+    quote: "fix the assistant tool display issue. The problem is that assistant messages with tools are showing \"[Used tools: ...]\" instead of being silent (since the actual tool calls appear separately)"
+    context: "When an assistant message references tools, the tool calls appear as separate timeline entries. The assistant message itself should not emit a '[Used tools: ToolName]' line — doing so creates duplicate display."
+
+  - id: F002
+    thread: T002
+    line: 2429
+    speaker: agent
+    type: agent_error
+    quote: "There's an error - tool results can be a list. Let me fix this"
+    context: "Tool result content field may be a list or dict, not always a string. Robust parsing must handle all three types."
+
+  - id: F003
+    thread: T003
+    line: 2456
+    speaker: agent
+    type: agent_proposal
+    quote: "This could be improved but works as designed"
+    context: "The --git filter shortcut is a glob match on tool name+args. It won't catch compound shell commands that include git. Accepted as known limitation."
+
+notes:
+  - "Primary range is mostly implementation debugging (removing [Used tools:] display, fixing content list handling). Requirements extracted are behavioral: no duplicate tool display, robust content parsing."
+  - "L2458 user asks 'did you commit?' — not xs-relevant."
+  - "L2474-2477: context continuation summary and /compact command — not xs-relevant."
+  - "T002 marked open: the fix was partial; edge cases remain with certain session files having different structures (e.g. issue-13). Full resolution requires understanding format variations."

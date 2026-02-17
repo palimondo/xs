@@ -1,0 +1,64 @@
+source: b475:1401-1500
+extracted_by: sonnet
+timestamp: 2026-02-17T14:10:00Z
+
+threads:
+  - id: T001
+    topic: "tool results must be shown together with tool invocations when filtering"
+    status: resolved
+    events:
+      - line: 1409
+        speaker: user
+        type: introduced
+        quote: "I think we need to include tool responses together with tool invocations, this is incomplete"
+      - line: 1411
+        speaker: agent
+        type: refined
+        quote: "In truncated mode, we should show tool results together with tool invocations, just like reconstruct.jq does"
+
+  - id: T002
+    topic: "Thinking/reasoning messages as filterable type via --include Thinking"
+    status: open
+    events:
+      - line: 1484
+        speaker: user
+        type: introduced
+        quote: "are we outputting the Claude's Thinking? -- This seems like another Meta tool parameter, where we shoul say something like `--include Thinking` to show all assistant messades where it enabled advanced reasoning"
+      - line: 1485
+        speaker: agent
+        type: refined
+        quote: "This is getting way too complicated with all these special cases. We should simplify this"
+      - line: 1499
+        speaker: agent
+        type: refined
+        quote: "This is probably a display-only feature in Claude Code, not part of the actual message data"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1409
+    speaker: user
+    type: user_request
+    quote: "I think we need to include tool responses together with tool invocations, this is incomplete"
+    context: "User filtering with --include Bash in truncated mode only saw tool calls, not tool results. Tool results must accompany tool invocations when filtering for tools."
+
+  - id: F002
+    thread: T002
+    line: 1484
+    speaker: user
+    type: user_request
+    quote: "are we outputting the Claude's Thinking? -- This seems like another Meta tool parameter, where we shoul say something like `--include Thinking` to show all assistant messades where it enabled advanced reasoning"
+    context: "User wants Thinking/extended reasoning blocks to be filterable as a named type via --include Thinking, consistent with how tools are filtered."
+
+  - id: F003
+    thread: T002
+    line: 1499
+    speaker: agent
+    type: agent_proposal
+    quote: "This is probably a display-only feature in Claude Code, not part of the actual message data"
+    context: "Agent suggests Thinking may be display-only in Claude Code console and not present in JSONL; unresolved whether it needs dedicated filtering support."
+
+notes:
+  - "T001 resolved: agent confirmed and implemented tool results being included with tool invocations in truncated mode filtering, noting reconstruct.jq does it this way."
+  - "T002 open: user wants --include Thinking for filtering assistant messages with extended reasoning. Agent questions whether Thinking appears in JSONL or is display-only. Resolution not reached in this chunk."
+  - "Context (L1381-L1400): agent finishing implementation of line numbers in truncated mode when filtering is active."

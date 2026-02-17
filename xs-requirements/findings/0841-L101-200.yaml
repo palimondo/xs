@@ -1,0 +1,9 @@
+source: 0841:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Chunk covers BookMinder ATDD/GOOS process discussion: TDD violations in PR #16 vs PR #9, proper outside-in ATDD cycle from Growing Object-Oriented Software, filter implementation debt in BookMinder, and git worktrees strategy for restoring ATDD practices"

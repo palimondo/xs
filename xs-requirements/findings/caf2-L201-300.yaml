@@ -1,0 +1,94 @@
+source: caf2:201-300
+extracted_by: sonnet
+timestamp: 2026-02-17T14:30:00Z
+
+threads:
+  - id: T001
+    topic: "--no-tool-results flag purpose: suppress separate tool result events"
+    status: resolved
+    events:
+      - line: 288
+        speaker: user
+        type: introduced
+        quote: "you seem to have misunderstood my refference to `--no-tool-results`, This was related to the fact that tool call and tool response are two sepparate events in the timeline."
+      - line: 289
+        speaker: agent
+        type: refined
+        quote: "It's not about hiding the output within a tool call, but about filtering out the separate tool result messages that follow tool calls in the timeline."
+
+  - id: T002
+    topic: "summary output with actionable parameter hints"
+    status: open
+    events:
+      - line: 296
+        speaker: user
+        type: introduced
+        quote: "Can we have a look at the output of summary and maybe add comments after the numbers, that would give you/user hints about how to use the tool, when it's ran without parameters and displays just the summary? Let's sketch the UX mock"
+      - line: 299
+        speaker: user
+        type: refined
+        quote: "we should keep the comment extremely brief, after some introductory comment that makes it clear that below are parameter combinations to display just the specific message type, we shoudl not add much descriptive text. Just the parameter combo."
+
+  - id: T003
+    topic: "implicit -t flag when filtering or range parameters present"
+    status: open
+    events:
+      - line: 299
+        speaker: user
+        type: introduced
+        quote: "I think the presence of include or exclude parameters implies that we are requesting timeline display instead of summary, so -t is probably implied on tese cases and we need to keep it only for displaying of full timeline."
+
+  - id: T004
+    topic: "no-params means summary; any other params means timeline"
+    status: open
+    events:
+      - line: 299
+        speaker: user
+        type: introduced
+        quote: "As I think about it, no params is summary, any other params is timeline or a special option like --files which has it's of display."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 288
+    speaker: user
+    type: user_correction
+    quote: "tool call and tool response are two sepparate events in the timeline. We have decided to include the tool response for each tool call, but we've added option to suppress it, so that we can support the toll call replay use case with --JSON flag"
+    context: "--no-tool-results suppresses the separate tool_result user events that follow each tool call; not about truncating output within a tool result"
+
+  - id: F002
+    thread: T002
+    line: 296
+    speaker: user
+    type: user_request
+    quote: "Can we have a look at the output of summary and maybe add comments after the numbers, that would give you/user hints about how to use the tool, when it's ran without parameters and displays just the summary?"
+    context: "Summary output should include brief parameter-combination hints inline to guide users toward relevant timeline views"
+
+  - id: F003
+    thread: T002
+    line: 299
+    speaker: user
+    type: user_correction
+    quote: "we should keep the comment extremely brief, after some introductory comment that makes it clear that below are parameter combinations to display just the specific message type, we shoudl not add much descriptive text. Just the parameter combo."
+    context: "Summary hints should show only parameter combos, not descriptive text"
+
+  - id: F004
+    thread: T003
+    line: 299
+    speaker: user
+    type: user_request
+    quote: "I think the presence of include or exclude parameters implies that we are requesting timeline display instead of summary, so -t is probably implied on tese cases and we need to keep it only for displaying of full timeline. Alsos pecifying range is clearly requesting timeline."
+    context: "-t flag is only needed when displaying full timeline with no other filters; include/exclude/range parameters imply timeline mode automatically"
+
+  - id: F005
+    thread: T004
+    line: 299
+    speaker: user
+    type: user_request
+    quote: "As I think about it, no params is summary, any other params is timeline or a special option like --files which has it's of display."
+    context: "CLI mode selection: no-params → summary display; any filter/range/include/exclude params → timeline display; special flags like --files have their own display mode"
+
+notes:
+  - "L201-287 is agent implementing virtual entity support and short forms (code editing, testing, committing) - implementation mechanics, not requirements"
+  - "T002, T003, T004 are open threads as L299 cuts off mid-sentence; likely continued in next chunk"
+  - "The --no-tool-results flag purpose clarified: it filters out separate tool_result events (user messages carrying tool output), enabling a tool-call-only replay mode useful with --JSON flag"

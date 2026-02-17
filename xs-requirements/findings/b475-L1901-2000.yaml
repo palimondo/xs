@@ -1,0 +1,95 @@
+source: b475:1901-2000
+extracted_by: sonnet
+timestamp: 2026-02-17T14:30:00Z
+
+threads:
+  - id: T001
+    topic: "full display mode implementation"
+    status: resolved
+    events:
+      - line: 1904
+        speaker: agent
+        type: introduced
+        quote: "Now let's move to Phase 5. Let me start by implementing the --full display mode"
+      - line: 1909
+        speaker: agent
+        type: refined
+        quote: "display_mode: 'compact' (default), 'truncated', or 'full'"
+      - line: 1985
+        speaker: agent
+        type: resolved
+        quote: "python explore_session.py test_conversation.jsonl --timeline --full 1-5"
+
+  - id: T002
+    topic: "timeline header suppression for non-compact modes"
+    status: resolved
+    events:
+      - line: 1954
+        speaker: agent
+        type: introduced
+        quote: "if display_mode not in ['truncated', 'full']:\n            print(\"\\n=== TIMELINE ==="
+      - line: 1960
+        speaker: agent
+        type: resolved
+        quote: "Applied 4 edits to /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/tools/explore_session.py"
+
+  - id: T003
+    topic: "three display modes: compact, truncated, full"
+    status: resolved
+    events:
+      - line: 1992
+        speaker: user
+        type: introduced
+        quote: "Run these commands and compare the output:\n1. python explore_session.py test_full_mode.jsonl --timeline\n2. python explore_session.py test_full_mode.jsonl --timeline --truncated  \n3. python explore_session.py test_full_mode.jsonl --timeline --full"
+      - line: 1995
+        speaker: agent
+        type: refined
+        quote: "=== TIMELINE ==="
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1909
+    speaker: agent
+    type: agent_proposal
+    quote: "display_mode: 'compact' (default), 'truncated', or 'full'"
+    context: "Three distinct display modes defined: compact is default, truncated shows 3-line preview, full shows complete output without truncation"
+
+  - id: F002
+    thread: T001
+    line: 1968
+    speaker: agent
+    type: agent_proposal
+    quote: "display_mode = 'compact'\n        if args.truncated:\n            display_mode = 'truncated'\n        elif args.full:\n            display_mode = 'full'"
+    context: "--full flag selects full display mode, mutually exclusive with --truncated"
+
+  - id: F003
+    thread: T002
+    line: 1954
+    speaker: agent
+    type: agent_proposal
+    quote: "if display_mode not in ['truncated', 'full']:\n            print(\"\\n=== TIMELINE ==="
+    context: "Both truncated and full modes suppress the === TIMELINE === header; only compact mode shows it"
+
+  - id: F004
+    thread: T003
+    line: 1992
+    speaker: user
+    type: user_request
+    quote: "Show the complete output of each command to demonstrate the differences between compact, truncated, and full display modes."
+    context: "User comparing all three display modes: compact (default with header), truncated (console-style 3-line preview), full (complete output without truncation)"
+
+  - id: F005
+    thread: T001
+    line: 1993
+    speaker: agent
+    type: agent_proposal
+    quote: "I'll run these commands to demonstrate the differences between the timeline display modes."
+    context: "Full mode implementation: complete tool output shown without truncation, same console-style format as truncated but without the 3-line limit"
+
+notes:
+  - "Context zone (L1881-L1900): agent finishing export-json commit, verifying truncated mode works correctly without header, committing range syntax changes"
+  - "L1916 is a compaction summary injected as user turn — not a real user message, it summarizes previous context"
+  - "Primary range largely covers implementation mechanics of --full flag; key requirement is the three display modes and their behaviors"
+  - "Full mode: same format as truncated (no === TIMELINE === header, console-style) but shows ALL tool output lines instead of 3-line preview"
+  - "T003 shows compact mode outputs === TIMELINE === header, truncated and full do not"

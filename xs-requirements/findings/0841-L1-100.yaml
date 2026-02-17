@@ -1,0 +1,10 @@
+source: 0841:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T08:09:01Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Lines 1-51: Discussion about setting up a Claude Code notification voice hook (notification_voice_hook.sh) - infrastructure tooling, not xs"
+  - "Lines 52-100: Discussion about BookMinder PRs implementing filter-by-reading-status story and reviewing ATDD/TDD process adherence - BookMinder feature work, not xs"

@@ -1,0 +1,181 @@
+source: caf2:1-100
+extracted_by: sonnet
+timestamp: 2026-02-17T14:30:00Z
+
+threads:
+  - id: T001
+    topic: "remove section headers from output (CONVERSATION, FILE CHANGES, etc.)"
+    status: resolved
+    events:
+      - line: 12
+        speaker: user
+        type: introduced
+        quote: "there's still header CONVERSATION"
+      - line: 26
+        speaker: user
+        type: user_correction
+        quote: "you said that before too..."
+      - line: 66
+        speaker: user
+        type: refined
+        quote: "is ther a different mode where you still output anything that starts or ends with"
+
+  - id: T002
+    topic: "code comment hygiene - remove redundant comments"
+    status: open
+    events:
+      - line: 85
+        speaker: user
+        type: introduced
+        quote: "Go and review all commetns for clarity and necessity, remove if they just restate what the code does, recall code style from @CLAUDE.md"
+
+  - id: T003
+    topic: "separation of concerns: filters vs display modes"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "Focus on Phase 0: Architecture Cleanup - separate filtering (what to show) from display (how to show)"
+
+  - id: T004
+    topic: "display modes: compact, truncated, full"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "Display modes: compact (single line), truncated (3-line preview), full (complete output)"
+
+  - id: T005
+    topic: "range syntax for event selection"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "Consistent range syntax"
+
+  - id: T006
+    topic: "tool parameter formatting with special symbols"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "Tool parameter formatting with special symbols: → (Edit/Write), ← (Read), $ (Bash)"
+
+  - id: T007
+    topic: "Todo result formatting with checkboxes"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "Todo result formatting with checkboxes: ☒ (completed), ◐ (in_progress), ☐ (pending)"
+
+  - id: T008
+    topic: "JSON/JSONL output formats"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "JSON/JSONL output formats for timeline data"
+
+  - id: T009
+    topic: "CLI flags for display control"
+    status: resolved
+    events:
+      - line: 7
+        speaker: user
+        type: introduced
+        quote: "Implement CLI flags for controlling timeline display (--no-tool-results, --show-numbers)"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 12
+    speaker: user
+    type: user_correction
+    quote: "there's still header CONVERSATION"
+    context: "User correcting agent that failed to remove CONVERSATION header from output. From session summary: user explicitly requested 'Please remove the headers FILE CHANGES, CONVERSATION, etc. user knows what flags they sent to the tool'"
+
+  - id: F002
+    thread: T001
+    line: 66
+    speaker: user
+    type: user_correction
+    quote: "is ther a different mode where you still output anything that starts or ends with"
+    context: "User questioning whether any output mode should ever produce === headers. Implies === headers should never appear in xs output."
+
+  - id: F003
+    thread: T003
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Focus on Phase 0: Architecture Cleanup - separate filtering (what to show) from display (how to show)"
+    context: "From session continuation summary. Filters control event selection; display modes control formatting. These are orthogonal concerns."
+
+  - id: F004
+    thread: T004
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Display modes: compact (single line), truncated (3-line preview), full (complete output)"
+    context: "From session continuation summary. Three distinct display modes defined."
+
+  - id: F005
+    thread: T005
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Consistent range syntax"
+    context: "From session continuation summary. Four range syntax forms for event selection."
+
+  - id: F006
+    thread: T006
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Tool parameter formatting with special symbols: → (Edit/Write), ← (Read), $ (Bash)"
+    context: "From session continuation summary. Specific Unicode symbols for tool display in 1.x era format."
+
+  - id: F007
+    thread: T007
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Todo result formatting with checkboxes: ☒ (completed), ◐ (in_progress), ☐ (pending)"
+    context: "From session continuation summary. Checkbox symbols map to TodoWrite status values."
+
+  - id: F008
+    thread: T008
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "JSON/JSONL output formats for timeline data"
+    context: "From session continuation summary. --json and --jsonl flags for structured output."
+
+  - id: F009
+    thread: T009
+    line: 7
+    speaker: user
+    type: user_request
+    quote: "Implement CLI flags for controlling timeline display (--no-tool-results, --show-numbers)"
+    context: "From session continuation summary. Flags to control what appears in output."
+
+  - id: F010
+    thread: T002
+    line: 85
+    speaker: user
+    type: user_request
+    quote: "Go and review all commetns for clarity and necessity, remove if they just restate what the code does, recall code style from @CLAUDE.md"
+    context: "Code style requirement: no redundant comments. From CLAUDE.md: 'Minimal docstrings for complex functions only' and 'Never add redundant comments that restate code'."
+
+notes:
+  - "Lines 1-6 are summary type entries, not user/assistant messages."
+  - "Line 7 is a continuation summary providing context from previous session. Key requirements extracted from that summary."
+  - "This chunk is primarily about implementation mechanics (removing headers, cleaning comments) but the session summary on L7 contains valuable high-level requirement statements."
+  - "T002 is open - comment cleanup is ongoing at end of chunk (L100 shows MultiEdit in progress)."
+  - "The removal of === headers (T001) directly relates to PRIN-001 - console output should not have section headers that don't exist in Claude Code's actual output."

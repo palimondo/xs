@@ -1,0 +1,80 @@
+source: 0841:1001-1100
+extracted_by: sonnet
+timestamp: 2026-02-17T14:00:00Z
+
+threads:
+  - id: T001
+    topic: "tool_result user messages must be recognized and displayed with ⎿ symbol"
+    status: resolved
+    events:
+      - line: 1004
+        speaker: agent
+        type: introduced
+        quote: "I see the issue! Our session explorer is only checking for `type: 'text'` in user messages, completely ignoring `type: 'tool_result'`"
+      - line: 1022
+        speaker: user
+        type: refined
+        quote: "is too heavy. use just the"
+
+  - id: T002
+    topic: "timeline display: full first line, no arbitrary truncation, use >[...] markers"
+    status: resolved
+    events:
+      - line: 1034
+        speaker: user
+        type: introduced
+        quote: "we shoudl end with `[...]` when it's multiline, but otherwise don't truncate it at all. This way we can rely on head/tail/grep to get the correct sequence number from our responses"
+      - line: 1034
+        speaker: user
+        type: refined
+        quote: "for User and the dot for Claude"
+
+  - id: T003
+    topic: "edge cases: slash commands, !command, @filename in session parsing"
+    status: resolved
+    events:
+      - line: 1052
+        speaker: user
+        type: introduced
+        quote: "Is 1, 2, 5 user invocation of slash-command or something? You shoulde again analyze how it looks like in @claude-dev-log-diary/tools/reconstruct.jq I guess one unhandled case would be bash command invocation: !command and context load using @filename -- I think I havent covered these edge cases in reconstruct, so maybe just take a note in redesign doc and we get to then in the end"
+      - line: 1073
+        speaker: user
+        type: refined
+        quote: "I wanted to implement them now, except the once I said that were probably not covered by reconstruct"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1022
+    speaker: user
+    type: user_correction
+    quote: "is too heavy. use just the"
+    context: "Tool results (user messages with tool_result content type) should be displayed with ⎿ symbol only, not a verbose 'TOOL RESULT:' prefix. Matches reconstruct.jq visual style."
+
+  - id: F002
+    thread: T002
+    line: 1034
+    speaker: user
+    type: user_correction
+    quote: "we shoudl end with `[...]` when it's multiline, but otherwise don't truncate it at all. This way we can rely on head/tail/grep to get the correct sequence number from our responses"
+    context: "Timeline display must show full first line without truncation; only append '[...]' when content is multiline. Enables grep/head/tail workflows on output."
+
+  - id: F003
+    thread: T002
+    line: 1034
+    speaker: user
+    type: user_correction
+    quote: "for User and the dot for Claude"
+    context: "Timeline labels: use '> ' prefix for user messages and '•' (dot/bullet) for Claude/assistant messages instead of verbose 'USER:' and 'CLAUDE:' labels."
+
+  - id: F004
+    thread: T003
+    line: 1052
+    speaker: user
+    type: user_request
+    quote: "I guess one unhandled case would be bash command invocation: !command and context load using @filename -- I think I havent covered these edge cases in reconstruct, so maybe just take a note in redesign doc"
+    context: "Slash commands (!command bash invocations and @filename context loads) are edge cases not covered in reconstruct.jq. Need handling in explore_session redesign."
+
+notes:
+  - "Context zone (L981-L1000) establishes that user messages with tool_result content are NOT empty messages - they carry tool call results and must be rendered with ⎿ symbol."
+  - "T003: slash command handling was subsequently implemented (L1073-L1100) - user wanted it done immediately, only deferring the !command and @filename variants."

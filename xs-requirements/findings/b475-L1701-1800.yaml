@@ -1,0 +1,95 @@
+source: b475:1701-1800
+extracted_by: sonnet
+timestamp: 2026-02-17T14:30:00Z
+
+threads:
+  - id: T001
+    topic: "enhanced tool parameter display with special symbols"
+    status: resolved
+    events:
+      - line: 1707
+        speaker: agent
+        type: introduced
+        quote: "According to the redesign document, we want to show \"pattern\" in path"
+      - line: 1716
+        speaker: agent
+        type: refined
+        quote: "there are special symbols for Bash, Edit/Write/MultiEdit, and Read"
+
+  - id: T002
+    topic: "todo item display format and symbols"
+    status: resolved
+    events:
+      - line: 1759
+        speaker: agent
+        type: introduced
+        quote: "Based on the reconstruct.jq code, I can see the expected format for todo items"
+
+  - id: T003
+    topic: "⎿ as first-line-only tool result indicator"
+    status: resolved
+    events:
+      - line: 1765
+        speaker: agent
+        type: introduced
+        quote: "The `⎿` is the tool result indicator, not a prefix for each line"
+
+  - id: T004
+    topic: "explicit CLI flags for show_numbers and include_tool_results"
+    status: open
+    events:
+      - line: 1797
+        speaker: agent
+        type: introduced
+        quote: "we implemented `include_tool_results` and `show_numbers` as parameters in the functions but never exposed them as CLI arguments"
+      - line: 1799
+        speaker: user
+        type: resolved
+        quote: "implement flags"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1707
+    speaker: agent
+    type: agent_proposal
+    quote: "According to the redesign document, we want to show \"pattern\" in path"
+    context: "Tool parameter display format for Grep: show pattern and path rather than raw params"
+
+  - id: F002
+    thread: T001
+    line: 1716
+    speaker: agent
+    type: agent_proposal
+    quote: "there are special symbols for Bash, Edit/Write/MultiEdit, and Read"
+    context: "Special symbols in compact/truncated tool display: Bash ($), Edit/Write/MultiEdit (→), Read (←); Grep shows '\"pattern\" in path'; LS/Glob show path/pattern; Task/WebFetch/WebSearch show quoted arg"
+
+  - id: F003
+    thread: T002
+    line: 1759
+    speaker: agent
+    type: agent_proposal
+    quote: "Format: `<symbol> <content> (<priority>)` where priority is P0/P1/P2"
+    context: "Todo item rendering format in truncated mode: ☒ completed, ◐ in_progress, ☐ pending, with P0/P1/P2 priority suffix; derived from reconstruct.jq code"
+
+  - id: F004
+    thread: T003
+    line: 1765
+    speaker: agent
+    type: agent_proposal
+    quote: "The `⎿` is the tool result indicator, not a prefix for each line"
+    context: "⎿ appears only on the first line of a tool result block; subsequent lines are indented without ⎿"
+
+  - id: F005
+    thread: T004
+    line: 1799
+    speaker: user
+    type: user_request
+    quote: "implement flags"
+    context: "User requests explicit CLI flags for show_numbers (line numbers in output) and include_tool_results (show tool result content); these were implemented as internal function parameters but not exposed as CLI arguments"
+
+notes:
+  - "T001 and T002 requirements come from the redesign document (explore_session_redesign.md), which serves as the authoritative design spec being implemented in this session"
+  - "F003 todo format was derived from reconstruct.jq source code, not directly stated by user — but represents the established format to match"
+  - "F004: The correction about ⎿ being first-line-only appears as agent self-correction (L1765 responds to tool result at L1764), not a user correction"
+  - "L1797 lists currently unexposed features: line numbers (auto-shown when filtering in truncated mode) and tool results (always included when filtering for tools)"
