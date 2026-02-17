@@ -3,8 +3,9 @@ title: Period-Appropriate Formatting (1.x vs 2.x)
 
 statement: |
   Claude Code's JSONL format and console output evolved between versions
-  1.x and 2.x. xs should detect the format version and apply period-appropriate
-  rendering so that older sessions look correct for their era.
+  1.x and 2.x. xs auto-detects the format version and applies period-appropriate
+  rendering by default. An optional --format-style=2x flag forces 2.x rendering
+  on old sessions. No reverse direction (forcing 1.x on 2.x) is needed.
 
 rationale: |
   The user has sessions from both CC 1.x and 2.x eras. Format differences
@@ -13,12 +14,19 @@ rationale: |
   The parser already needs version detection (PRS-006); formatting should
   follow the same version signal.
 
+  Resolved via CONF-001: auto-detect + one-direction override. This keeps
+  the common case simple (correct output with no flags) while allowing
+  forward-migration of old sessions when desired.
+
 implications:
   - Format version detection based on system event fields (PRS-006)
-  - Tool format may differ between versions (e.g., "Bash: $ command" vs "Bash(command)")
+  - Tool format differs between versions (e.g., "Bash: $ command" vs "Bash(command)")
+  - User message prefix differs: > (1.x) vs ❯ (2.x), per CONF-004
   - Content block structure differs between versions
   - Both formats must be supported; neither can be dropped
-  - This creates two code paths in formatting, which is a known complexity cost
+  - Two rendering code paths, selected by auto-detect or --format-style=2x override
+  - Formatter architecture should be modular/pluggable to eventually support
+    other coding agent formats (Codex CLI, Gemini CLI) beyond CC 1.x/2.x
 
 applies_to:
   - PRS-006 # Format version detection
@@ -33,4 +41,4 @@ evidence:
 conflicts:
   - CONF-001  # 1.x vs 2.x format differences
 
-status: draft
+status: mined

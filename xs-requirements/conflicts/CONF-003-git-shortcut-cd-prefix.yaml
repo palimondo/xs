@@ -39,9 +39,13 @@ options:
     pros: [simple, honest]
     cons: [misses significant portion of real git operations]
 
-resolution: pending
-decided_by: null
-decision_rationale: null
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Expand the glob pattern to Bash(*git *) to catch cd-prefixed commands.
+  Accept minor over-matching risk as pragmatic trade-off. Semantic git
+  detection noted as future enhancement if over-matching becomes a problem.
+  Selected option A (expanded glob).
 
 affects:
   - FLT-014 # --git convenience alias

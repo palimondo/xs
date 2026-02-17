@@ -34,9 +34,17 @@ options:
     pros: [user control, flexibility]
     cons: [complexity, decision burden on user, three code paths]
 
-resolution: pending
-decided_by: null
-decision_rationale: null
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Auto-detect format version (period-appropriate rendering) by default.
+  Optional --format-style=2x flag forces 2.x rendering on old sessions.
+  No reverse direction (1x on 2x) needed. Two rendering paths (1.x and 2.x),
+  auto-detect via JSONL version field, with one override direction.
+
+  Architectural note: the formatter should be modular/pluggable, not hardcoded
+  to Claude Code. This enables eventual support for other coding agent formats
+  (Codex CLI, Gemini CLI) in addition to CC 1.x and 2.x.
 
 affects:
   - PRS-006  # Format version detection

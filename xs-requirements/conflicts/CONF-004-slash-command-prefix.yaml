@@ -37,9 +37,16 @@ options:
     pros: [slash commands are self-identifying via '/' start]
     cons: [breaks visual consistency with other user messages]
 
-resolution: pending
-decided_by: null
-decision_rationale: null
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Era-dependent prefix, tied to CONF-001 auto-detect decision. CC 2.x uses
+  ❯ (U+276F) for user message prompts (including slash commands). For 1.x
+  rendering, > is used (matching reconstruct.jq). For 2.x rendering, ❯ is
+  used (matching CC 2.x /export output). "Staying true to what gets
+  /export-ed is the right call." Exact character and applicability to all
+  user messages needs golden file verification during Pass 3. FMT-001 may
+  need updating but deferred until golden files confirm the exact format.
 
 affects:
   - FMT-012 # Slash command display format

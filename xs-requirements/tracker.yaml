@@ -2,7 +2,7 @@
 
 meta:
   last_updated: 2026-02-17T23:45:00Z
-  current_pass: 4_synthesis
+  current_pass: 5_conflicts
   current_step: complete
   pre_pass2_validation: complete
 
@@ -81,8 +81,8 @@ counts:
     status: draft
   conflicts:
     total: 4
-    pending: 4
-    resolved: 0
+    pending: 0
+    resolved: 4
   bugs_documented:
     total: 4
     with_workaround: 4
