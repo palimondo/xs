@@ -1,0 +1,61 @@
+source: e583:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T17:15:00Z
+
+threads:
+  - id: T001
+    topic: "tool announcements must be suppressed when tools are excluded"
+    status: resolved
+    events:
+      - line: 701
+        speaker: agent
+        type: introduced
+        quote: "The tool announcements are generated during display, not during filtering. When an assistant message contains only tool uses, it: 1. Passes the filter because it's a 'Message' (matches `-M`) 2. During display, it shows as `[Tools: ...]` because it has no text content"
+      - line: 777
+        speaker: agent
+        type: resolved
+        quote: "cd /Users/palimondo/Developer/BookMinder && ./xs e583 -M -x Tool | head -20"
+
+  - id: T002
+    topic: "git staging must be done file-by-file, not with printf piped to git add -p"
+    status: resolved
+    events:
+      - line: 787
+        speaker: agent
+        type: introduced
+        quote: "Stage the relevant changes"
+      - line: 791
+        speaker: user
+        type: resolved
+        quote: "What is this printf BS? Add files indivuduallly! Also don't forget to document the much more effective promtping stratedy for context recovery!"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 701
+    speaker: agent
+    type: agent_proposal
+    quote: "The tool announcements are generated during display, not during filtering. When an assistant message contains only tool uses, it: 1. Passes the filter because it's a 'Message' (matches `-M`) 2. During display, it shows as `[Tools: ...]` because it has no text content"
+    context: "Root cause analysis: -x Tool filter operates at data level, but tool announcements are generated at display level; the fix requires passing exclude_filters to the display function"
+
+  - id: F002
+    thread: T001
+    line: 779
+    speaker: agent
+    type: agent_proposal
+    quote: "[1] > We'll continue working on a meta analysis tool we have in @claude-dev-log-diary/tools/explore_session.py"
+    context: "Manual test output from `xs e583 -M -x Tool | head -20` showing the fix works — only conversation text is shown, no [Tools: ...] announcements, with -- separators where tool-only messages were filtered out"
+
+  - id: F003
+    thread: T002
+    line: 791
+    speaker: user
+    type: user_correction
+    quote: "What is this printf BS? Add files indivuduallly! Also don't forget to document the much more effective promtping stratedy for context recovery!"
+    context: "User interrupted agent using printf to pipe answers to interactive git add -p; user prefers explicit per-file git add; also a reminder to document the context recovery prompting pattern"
+
+notes:
+  - "T001 is the key xs requirement: when -x Tool is active, tool announcements (assistant messages with only tool_use content) must be suppressed at display time, not just at filter time"
+  - "T001 confirmed fixed: xs e583 -M -x Tool shows only user/assistant text messages with -- separators for filtered gaps"
+  - "T002 (git staging workflow) is not an xs requirement; it is a developer workflow correction"
+  - "The 'prompting strategy for context recovery' mentioned in F003 may refer to xs use case 3 (compaction recovery) but was not elaborated in this chunk"

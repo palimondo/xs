@@ -6005,13 +6005,13 @@ sessions:
   e583:
     file: bookminder-sessions/e5837401-4f84-46e0-932f-eead7c00c678.jsonl
     total_lines: 1785
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 100
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1-100.yaml
     - context_start: 81
       primary_start: 101
       end: 200
@@ -6020,13 +6020,13 @@ sessions:
     - context_start: 181
       primary_start: 201
       end: 300
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L201-300.yaml
     - context_start: 281
       primary_start: 301
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L301-400.yaml
     - context_start: 381
       primary_start: 401
       end: 500
@@ -6040,63 +6040,63 @@ sessions:
     - context_start: 581
       primary_start: 601
       end: 700
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L601-700.yaml
     - context_start: 681
       primary_start: 701
       end: 800
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L701-800.yaml
     - context_start: 781
       primary_start: 801
       end: 900
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L801-900.yaml
     - context_start: 881
       primary_start: 901
       end: 1000
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L901-1000.yaml
     - context_start: 981
       primary_start: 1001
       end: 1100
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1001-1100.yaml
     - context_start: 1081
       primary_start: 1101
       end: 1200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1101-1200.yaml
     - context_start: 1181
       primary_start: 1201
       end: 1300
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1201-1300.yaml
     - context_start: 1281
       primary_start: 1301
       end: 1400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1301-1400.yaml
     - context_start: 1381
       primary_start: 1401
       end: 1500
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1401-1500.yaml
     - context_start: 1481
       primary_start: 1501
       end: 1600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1501-1600.yaml
     - context_start: 1581
       primary_start: 1601
       end: 1700
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1601-1700.yaml
     - context_start: 1681
       primary_start: 1701
       end: 1785
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: e583-L1701-1785.yaml
   '7192':
     file: bookminder-sessions/7192f39e-c388-4167-a0c8-44508d5dbb6a.jsonl
     total_lines: 3
@@ -6105,43 +6105,43 @@ sessions:
   760a:
     file: bookminder-sessions/760a9954-2673-4e39-8f79-2f2bb58a92b2.jsonl
     total_lines: 643
-    status: pending
+    status: complete
     chunks:
     - context_start: 1
       primary_start: 1
       end: 100
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L1-100.yaml
     - context_start: 81
       primary_start: 101
       end: 200
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L101-200.yaml
     - context_start: 181
       primary_start: 201
       end: 300
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L201-300.yaml
     - context_start: 281
       primary_start: 301
       end: 400
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L301-400.yaml
     - context_start: 381
       primary_start: 401
       end: 500
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L401-500.yaml
     - context_start: 481
       primary_start: 501
       end: 600
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L501-600.yaml
     - context_start: 581
       primary_start: 601
       end: 643
-      status: pending
-      findings_file: null
+      status: complete
+      findings_file: 760a-L601-643.yaml
 summary:
   sessions_total: 60
   sessions_skipped: 13

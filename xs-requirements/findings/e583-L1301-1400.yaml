@@ -1,0 +1,45 @@
+source: e583:1301-1400
+extracted_by: sonnet
+timestamp: 2026-02-17T17:15:00Z
+
+threads:
+  - id: T001
+    topic: "compaction recovery hook placement convention"
+    status: resolved
+    events:
+      - line: 1339
+        speaker: user
+        type: introduced
+        quote: "OK, I think that in order for these hooks to work, they need to be on project's .claude in hooks something something, check @hooks.md"
+      - line: 1343
+        speaker: agent
+        type: refined
+        quote: "You're right! According to the documentation, we need to put our hook scripts in the project's `.claude/hooks/` directory."
+
+  - id: T002
+    topic: "use git mv for tracked file moves"
+    status: resolved
+    events:
+      - line: 1351
+        speaker: user
+        type: introduced
+        quote: "that should have been git mv, right?"
+      - line: 1352
+        speaker: agent
+        type: resolved
+        quote: "Yes, absolutely! You're right - we should use `git mv` to maintain history"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1339
+    speaker: user
+    type: user_correction
+    quote: "OK, I think that in order for these hooks to work, they need to be on project's .claude in hooks something something, check @hooks.md"
+    context: "Compaction recovery hooks for xs use case #3 must be placed in project's .claude/hooks/ directory per Claude Code conventions. The PreCompact + PreToolUse two-hook system (replacing non-existent PostCompact hook) triggers xs compaction recovery workflow."
+
+notes:
+  - "This chunk is mostly git operations, file moves, and linting fixes for BookMinder compaction hook scripts"
+  - "The two-hook architecture (PreCompact sets flag in /tmp/.claude_compaction_{session_id}.json, PreToolUse checks flag and injects recovery prompt) is the triggering infrastructure for xs compaction recovery"
+  - "T002 (git mv correction) is a git workflow correction, not an xs requirement"
+  - "Context range (L1281-L1300) shows completion of hook implementation with /tmp flag file pattern"

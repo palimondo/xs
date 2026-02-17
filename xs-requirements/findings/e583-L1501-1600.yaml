@@ -1,0 +1,109 @@
+source: e583:1501-1600
+extracted_by: sonnet
+timestamp: 2026-02-17T12:30:00Z
+
+threads:
+  - id: T001
+    topic: "isCompactSummary field for detecting compaction events"
+    status: resolved
+    events:
+      - line: 1502
+        speaker: agent
+        type: introduced
+        quote: "The robust way to detect compaction events in JSONL is to look for the **`\"isCompactSummary\": true`** field"
+
+  - id: T002
+    topic: "jq filtering integration into xs"
+    status: open
+    events:
+      - line: 1504
+        speaker: user
+        type: introduced
+        quote: "Are we using `jq` in `xs` yet? I think it could be useful for cases liek this if you could filter events by `jq`?"
+
+  - id: T003
+    topic: "--json and --jsonl export flags"
+    status: resolved
+    events:
+      - line: 1542
+        speaker: user
+        type: introduced
+        quote: "What?!!? --json and --jsonl were definitely working before"
+      - line: 1560
+        speaker: agent
+        type: resolved
+        quote: "Both `--json` and `--jsonl` ARE working! So we can already do: python explore_session.py e583 --jsonl | jq 'select(.isCompactSummary == true)'"
+
+  - id: T004
+    topic: "JSON/JSONL export missing sequence numbers"
+    status: open
+    events:
+      - line: 1587
+        speaker: user
+        type: introduced
+        quote: "the JSON events/messages do not include sequence number?"
+      - line: 1592
+        speaker: agent
+        type: refined
+        quote: "No sequence number! The events don't include their position in the timeline. This is a limitation - when you use `--json` or `--jsonl`, you lose the sequence numbers that xs adds."
+      - line: 1595
+        speaker: agent
+        type: refined
+        quote: "The JSON output should probably include a `sequence` or `index` field to maintain the timeline position information when exporting to JSON/JSONL format."
+
+  - id: T005
+    topic: "context recovery prompt for compaction recovery"
+    status: open
+    events:
+      - line: 1597
+        speaker: user
+        type: introduced
+        quote: "how does our Context recovery prompt deal with recovering the last compaction message in the prompt for the `Task`?"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1502
+    speaker: agent
+    type: agent_proposal
+    quote: "The robust way to detect compaction events in JSONL is to look for the **`\"isCompactSummary\": true`** field"
+    context: "Compaction detection should use the isCompactSummary boolean field rather than text matching"
+
+  - id: F002
+    thread: T002
+    line: 1504
+    speaker: user
+    type: user_request
+    quote: "Are we using `jq` in `xs` yet? I think it could be useful for cases liek this if you could filter events by `jq`?"
+    context: "User wants native jq filtering integration in xs for filtering events by arbitrary jq expressions"
+
+  - id: F003
+    thread: T003
+    line: 1542
+    speaker: user
+    type: user_correction
+    quote: "What?!!? --json and --jsonl were definitely working before"
+    context: "xs has --json and --jsonl export flags that must be maintained; agent incorrectly thought they were broken"
+
+  - id: F004
+    thread: T004
+    line: 1587
+    speaker: user
+    type: user_request
+    quote: "the JSON events/messages do not include sequence number?"
+    context: "User expects sequence/index numbers to be included when exporting events as JSON/JSONL"
+
+  - id: F005
+    thread: T005
+    line: 1597
+    speaker: user
+    type: unresolved
+    quote: "how does our Context recovery prompt deal with recovering the last compaction message in the prompt for the `Task`?"
+    context: "User is investigating how the compaction recovery workflow handles the last compaction event in context"
+
+notes:
+  - "Context zone (L1481-L1500): Established that isCompactSummary:true field is present in JSONL for compaction events"
+  - "T002 (jq integration) is open - user asked if it exists, agent referenced it as a future enhancement in docs"
+  - "T003 resolved: --json and --jsonl work when combined with -t (timeline mode)"
+  - "T004 open: sequence numbers missing from JSON export is a known limitation discussed but not yet resolved"
+  - "T005 open: compaction recovery prompt investigation continues in next chunk"

@@ -44,7 +44,7 @@ threads:
       - line: 70
         speaker: user
         type: refined
-        quote: "a 4-6 char prefix is totally sufficient to uniquely identify a specific session."
+        quote: "a 4-6 char prefix is totally sufficient to uniquely identify a specific session"
 
   - id: T004
     topic: "xs symlink at project root for convenience"
@@ -98,7 +98,7 @@ findings:
     line: 70
     speaker: user
     type: user_request
-    quote: "-s` is implied parameter so `xs <session_id_prefix>` should be the minimal starting invocation."
+    quote: "Also, `-s` is implied parameter so `xs <session_id_prefix>` should be the minimal starting invocation."
     context: "Summary mode (-s) should be the default when no output mode flag is given, making bare `xs <prefix>` show the summary"
 
   - id: F005

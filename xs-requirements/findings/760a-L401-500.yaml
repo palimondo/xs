@@ -1,0 +1,111 @@
+source: 760a:401-500
+extracted_by: sonnet
+timestamp: 2026-02-17T12:30:00Z
+
+threads:
+  - id: T001
+    topic: "xs CLI usage with session UUID and flags"
+    status: resolved
+    events:
+      - line: 402
+        speaker: agent
+        type: introduced
+        quote: "./xs 760a9954 456 --full"
+      - line: 409
+        speaker: user
+        type: refined
+        quote: "I see you've used Bash(xs ...) to check current session for TODOs. That's not what I meant -- you should be using your native todo tools"
+
+  - id: T002
+    topic: "xs as compaction recovery tool — fallback when hook fails"
+    status: resolved
+    events:
+      - line: 425
+        speaker: agent
+        type: introduced
+        quote: "future session can: `./xs 760a9954 -S \"commit|tdd-guard|decision block\"`"
+      - line: 431
+        speaker: user
+        type: resolved
+        quote: "in case of compaction that doesn't trigger the post-compaction context review and recovery using `xs`, read the docs from 1"
+
+  - id: T003
+    topic: "Claude Code 2 UI changes to session display"
+    status: open
+    events:
+      - line: 409
+        speaker: user
+        type: introduced
+        quote: "something has changes in Claude Code 2 about how the TODOs are presented"
+      - line: 416
+        speaker: user
+        type: refined
+        quote: "there was a hint next to prompt line to press Ctrl+T to show Todos"
+
+  - id: T004
+    topic: "PreToolUse hook 400 error — compaction recovery mechanism broken"
+    status: open
+    events:
+      - line: 495
+        speaker: agent
+        type: introduced
+        quote: "API Error: 400 due to tool use concurrency issues. Run /rewind to recover the conversation."
+      - line: 500
+        speaker: user
+        type: refined
+        quote: "That's wrong?"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 402
+    speaker: agent
+    type: agent_proposal
+    quote: "./xs 760a9954 456 --full"
+    context: "xs supports UUID + line number + --full flag to show full content at a specific line. Agent used this to retrieve last TODO state from session transcript."
+
+  - id: F002
+    thread: T001
+    line: 409
+    speaker: user
+    type: user_correction
+    quote: "I see you've used Bash(xs ...) to check current session for TODOs. That's not what I meant -- you should be using your native todo tools (I think TodoRead and TodoWrite?). Do that now!"
+    context: "xs should be used for exploring past/other sessions, not for reading current session state. Current session state should use native Claude Code tools."
+
+  - id: F003
+    thread: T002
+    line: 425
+    speaker: agent
+    type: agent_proposal
+    quote: "future session can: `./xs 760a9954 -S \"commit|tdd-guard|decision block\"`"
+    context: "xs supports -S flag for searching session content with regex/keyword patterns. Used as compaction recovery mechanism to find prior context."
+
+  - id: F004
+    thread: T002
+    line: 431
+    speaker: user
+    type: user_request
+    quote: "in case of compaction that doesn't trigger the post-compaction context review and recovery using `xs`, read the docs from 1"
+    context: "User confirms xs is intended for compaction recovery workflow — when automatic hook-based recovery fails, user manually runs xs to retrieve context from previous session transcript."
+
+  - id: F005
+    thread: T003
+    line: 409
+    speaker: user
+    type: user_request
+    quote: "looking at detailed session (Ctrl+O) I see you've used Bash(xs ...) to check current session for TODOs"
+    context: "Claude Code 2 introduced Ctrl+O for detailed session view. This is how the user observed xs CLI invocations in the session transcript — relevant to xs console fidelity requirements."
+
+  - id: F006
+    thread: T004
+    line: 495
+    speaker: agent
+    type: agent_error
+    quote: "API Error: 400 due to tool use concurrency issues. Run /rewind to recover the conversation."
+    context: "The PreToolUse hook change to deprecated format (decision/reason) still fails with 400 error. The compaction recovery hook that xs feeds into is not working — shows the xs compaction recovery use case depends on working hooks."
+
+notes:
+  - "Context zone (L381-400): Agent synthesized findings from session e583 about compaction recovery hooks design. At L400, agent used xs with -i flag to filter by tool name: './xs 760a9954 -i TodoWrite | tail -1'"
+  - "The -i flag for filtering by tool name (shown in context zone L400) is a significant xs CLI feature not captured in primary range"
+  - "This session demonstrates xs use case #3 (compaction recovery) in practice — xs is explicitly discussed as the fallback when the automatic hook doesn't trigger"
+  - "Claude Code 2 UI changes (Ctrl+T for todos, Ctrl+O for detailed session view) are format-version observations relevant to xs display compatibility"

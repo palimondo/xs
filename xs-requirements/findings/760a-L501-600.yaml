@@ -1,0 +1,35 @@
+source: 760a:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T12:30:00Z
+
+threads:
+  - id: T001
+    topic: "xs must support both CC1 and CC2 transcript formats (backwards/forwards compatibility)"
+    status: open
+    events:
+      - line: 522
+        speaker: user
+        type: introduced
+        quote: "Update the `xs` to support old and new format (we need full backwards/forwads compatibility -- we still need to recover full session transcripts"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 522
+    speaker: user
+    type: user_request
+    quote: "Update the `xs` to support old and new format (we need full backwards/forwads compatibility -- we still need to recover full session transcripts"
+    context: "User listed this as step 5 of their immediate priorities. Steps 3-4 were 'Plan how to make hooks work' and 'Document transcript format changes (we have previously reverse engineered this from our session logs)'. This confirms xs must handle both old (CC1) and new (CC2) JSONL transcript formats."
+
+  - id: F002
+    thread: T001
+    line: 519
+    speaker: user
+    type: user_request
+    quote: "Document transcript format changes (we have previously reverse engineered this from our session logs)"
+    context: "User notes that transcript format changed between CC versions and was previously reverse-engineered from session logs, implying xs requirements must account for format version differences."
+
+notes:
+  - "Session is primarily about compaction recovery hook debugging (BookMinder, not xs). The xs-relevant content is at L519/L522 where user lists 'Update xs' as item 5 in their priority list."
+  - "User also requested researching 'updates to session transcript format' from CC official docs (L522), suggesting xs format requirements need verification against official documentation."
+  - "T001 is open - the actual xs update work does not happen in this chunk (xs work was listed as last priority, session is focused on hook debugging and CC2 research)."

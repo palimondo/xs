@@ -1,0 +1,74 @@
+source: e583:1701-1785
+extracted_by: sonnet
+timestamp: 2026-02-17T12:30:00Z
+
+threads:
+  - id: T001
+    topic: "PreCompact hook trigger configuration — manual vs auto"
+    status: resolved
+    events:
+      - line: 1722
+        speaker: user
+        type: refined
+        quote: "shouldn't that just be * ?"
+        context: "continuation from context zone — user originally requested hook work on manual too (L1698)"
+      - line: 1723
+        speaker: agent
+        type: resolved
+        quote: "Instead of having two separate entries for \"auto\" and \"manual\", we should just use `\"*\"` to match all compaction events"
+
+  - id: T002
+    topic: "PreToolUse hook additionalContext field not supported — correct API for blocking"
+    status: resolved
+    events:
+      - line: 1769
+        speaker: user
+        type: introduced
+        quote: "I think you are incorrect in assumign that using `additionalContext` will do anything on this event hook. I think that field is read only on SessionStart and UserPromptSubmit"
+      - line: 1775
+        speaker: user
+        type: refined
+        quote: "I think we can try to use \"continue\": false, \"stopReason\": \"{our prompt here}\""
+      - line: 1777
+        speaker: agent
+        type: resolved
+        quote: "for PreToolUse we should use `\"permissionDecision\": \"deny\"` with `\"permissionDecisionReason\"` - that message is shown to Claude"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1722
+    speaker: user
+    type: user_correction
+    quote: "shouldn't that just be * ?"
+    context: "User corrects agent's approach of adding two separate hook matcher entries (auto and manual); the correct approach is wildcard matcher to catch all compaction events"
+
+  - id: F002
+    thread: T002
+    line: 1769
+    speaker: user
+    type: user_correction
+    quote: "I think you are incorrect in assumign that using `additionalContext` will do anything on this event hook. I think that field is read only on SessionStart and UserPromptSubmit"
+    context: "User corrects agent's assumption about Claude Code hook API: additionalContext is only supported for SessionStart and UserPromptSubmit hooks, not PreToolUse"
+
+  - id: F003
+    thread: T002
+    line: 1775
+    speaker: user
+    type: user_request
+    quote: "I think we can try to use \"continue\": false, \"stopReason\": \"{our prompt here}\""
+    context: "User proposes mechanism for PreToolUse hook to inject context recovery prompt by blocking tool execution"
+
+  - id: F004
+    thread: T002
+    line: 1777
+    speaker: agent
+    type: agent_proposal
+    quote: "for PreToolUse we should use `\"permissionDecision\": \"deny\"` with `\"permissionDecisionReason\"` - that message is shown to Claude"
+    context: "Agent identifies correct Claude Code hook API for blocking tool use and showing a message to Claude — relevant to compaction recovery hook mechanism"
+
+notes:
+  - "This chunk is the tail end of a session about building compaction recovery hooks for BookMinder"
+  - "The xs compaction recovery use case (use case #3) involves detecting compaction events and injecting context recovery prompts — these findings describe the Claude Code hook API constraints that shape how compaction recovery must work"
+  - "T001 and T002 are about hook API correctness, not xs output formatting or parsing"
+  - "No findings about xs CLI, JSONL parsing, console formatting, or session replay in this chunk"
