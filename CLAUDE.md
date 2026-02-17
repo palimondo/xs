@@ -213,6 +213,14 @@ xs-requirements/
 ├── conflicts/
 │   └── CONF-001-format-1x-vs-2x.yaml
 │
+├── docs/                        # Process documentation
+│   ├── orchestrator-runbook.md  # Extraction loop protocol
+│   ├── extraction-lessons-learned.md
+│   └── compaction-creates-new-files.md
+├── progress.py                  # Orchestrator CLI (next-batch/complete/reset/status)
+├── validate-findings.sh         # Structural YAML validation
+├── validate-quotes.py           # Quote + line + speaker validation
+│
 └── golden-files/
     ├── 1x/
     │   ├── session-fragment.jsonl
@@ -444,6 +452,9 @@ blockers: []
 ### Pass 2: Story Mining — Sequential Reading Approach
 
 **Goal**: Extract requirements from session transcripts, then assign to epics
+
+**Orchestrator tool**: `xs-requirements/progress.py` manages chunk dispatch and validation.
+See `xs-requirements/docs/orchestrator-runbook.md` for full protocol.
 
 #### Methodology: Sequential Reading
 
