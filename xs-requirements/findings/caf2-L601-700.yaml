@@ -1,0 +1,102 @@
+source: caf2:601-700
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "full text search --search flag behavior"
+    status: resolved
+    events:
+      - line: 602
+        speaker: agent
+        type: introduced
+        quote: "Found 1 matches for 'interesting':"
+      - line: 606
+        speaker: agent
+        type: refined
+        quote: "Found 2 matches for 'test.py':"
+      - line: 610
+        speaker: agent
+        type: refined
+        quote: "Found 1 matches for 'INTERESTING':"
+
+  - id: T002
+    topic: "--conversation flag deprecation and CLI cleanup"
+    status: open
+    events:
+      - line: 665
+        speaker: user
+        type: introduced
+        quote: "Isn't it just something old to be removed and not worth fixing?"
+      - line: 687
+        speaker: agent
+        type: refined
+        quote: "Note: --conversation is deprecated. Use -t -m (or --timeline --include Message)"
+      - line: 691
+        speaker: agent
+        type: refined
+        quote: "[1] > Hello"
+      - line: 694
+        speaker: agent
+        type: refined
+        quote: "Note: --files is deprecated. Use --timeline --include \"Edit,Write,MultiEdit\" instead."
+      - line: 700
+        speaker: agent
+        type: refined
+        quote: "**--git**: NOT deprecated - it's been properly updated to use the new filtering system"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 602
+    speaker: agent
+    type: agent_proposal
+    quote: "Found 1 matches for 'interesting':\n[5] ⎿  File content here...\n[6] ⏺ I found something interesting\n[7] > Third user message"
+    context: "Search output format with -C 2 context lines: event-indexed lines with symbols (⎿, ⏺, >) showing surrounding events"
+
+  - id: F002
+    thread: T001
+    line: 606
+    speaker: agent
+    type: agent_proposal
+    quote: "Found 2 matches for 'test.py':\n[11] ⏺ Read: ← test.py\n[12] ⏺ Edit: → test.py"
+    context: "--search searches tool parameters (file names in Read/Edit calls), not just message text"
+
+  - id: F003
+    thread: T001
+    line: 610
+    speaker: agent
+    type: agent_proposal
+    quote: "Found 1 matches for 'INTERESTING':\n[6] ⏺ I found something interesting"
+    context: "--search is case-insensitive by default"
+
+  - id: F004
+    thread: T002
+    line: 665
+    speaker: user
+    type: user_correction
+    quote: "Isn't it just something old to be removed and not worth fixing? Are there similarilly other discrepancies in features listed in --help and out latest impl status?"
+    context: "User identifies --conversation as legacy dead code that should be removed rather than maintained"
+
+  - id: F005
+    thread: T002
+    line: 687
+    speaker: agent
+    type: agent_proposal
+    quote: "Note: --conversation is deprecated. Use -t -m (or --timeline --include Message)"
+    context: "The deprecation message reveals that -m (short for --include Message) is the current way to filter to messages only"
+
+  - id: F006
+    thread: T002
+    line: 694
+    speaker: agent
+    type: agent_proposal
+    quote: "DEPRECATED: Use --timeline --include \"Edit,Write,MultiEdit\" instead."
+    context: "--files flag is deprecated; file change filtering is done via --include with tool names Edit, Write, MultiEdit"
+
+notes:
+  - "Context lines L581-L600: agent implementing --search flag, replacing limited bash-only search with full-text search across all timeline content"
+  - "F001-F003 are from reconstructed tool output (search test results shown in TOOL_RESULT), not direct agent speech — they show the actual output format of --search"
+  - "T002 thread about --conversation removal is open — user raised the question but no decision to remove was made in this chunk"
+  - "The search output uses event indices [N] with symbols (⏺, ⎿, >) consistent with truncated timeline display format"
+  - "--git was updated to use the unified filtering system (show_timeline_with_filters), not deprecated"

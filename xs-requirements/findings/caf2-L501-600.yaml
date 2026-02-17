@@ -1,0 +1,73 @@
+source: caf2:501-600
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "grep-style context lines (-A/-B/-C) for timeline filtering"
+    status: resolved
+    events:
+      - line: 562
+        speaker: agent
+        type: introduced
+        quote: "Perfect! The context lines feature is working correctly."
+      - line: 568
+        speaker: agent
+        type: resolved
+        quote: "feat: add context lines support (-A/-B/-C)"
+
+  - id: T002
+    topic: "full text search (--search) across all timeline content"
+    status: resolved
+    events:
+      - line: 571
+        speaker: agent
+        type: introduced
+        quote: "Now let's implement full text search with --search"
+      - line: 574
+        speaker: agent
+        type: refined
+        quote: "I see the --search argument already exists but seems to be limited to bash commands."
+      - line: 593
+        speaker: agent
+        type: resolved
+        quote: "The -s flag conflicts with --summary. Let me remove the short form"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 568
+    speaker: agent
+    type: agent_proposal
+    quote: "feat: add context lines support (-A/-B/-C)\n\nImplemented grep-style context lines for timeline filtering:\n- -A NUM: Show NUM lines after each match\n- -B NUM: Show NUM lines before each match\n- -C NUM: Show NUM lines before and after each match"
+    context: "Context lines feature for timeline filtering; allows viewing surrounding entries when filtering by tool/entity. Committed at L570."
+
+  - id: F002
+    thread: T002
+    line: 574
+    speaker: agent
+    type: agent_error
+    quote: "the --search argument already exists but seems to be limited to bash commands"
+    context: "Original --search only searched Bash tool commands. Agent upgraded it to full text search across all timeline content."
+
+  - id: F003
+    thread: T002
+    line: 598
+    speaker: agent
+    type: agent_proposal
+    quote: "Found 1 matches for 'interesting':"
+    context: "Full text search (--search) working across all timeline content, showing matching timeline entries with their display format."
+
+  - id: F004
+    thread: T002
+    line: 593
+    speaker: agent
+    type: agent_error
+    quote: "The -s flag conflicts with --summary. Let me remove the short form"
+    context: "Short flag -s cannot be used for --search because --summary already claims it. --search has no short form."
+
+notes:
+  - "T001 (context lines) was initiated in context zone (L484-L500); primary zone contains implementation completion and commit"
+  - "T002 (full text search) is entirely in primary zone: agent discovers old --search was bash-only, upgrades to full text, resolves -s flag conflict"
+  - "No user turns in this chunk — all agent implementation work; requirements inferred from commit messages and agent narration"
+  - "Context lines combined with --search (F003 test at L600) suggests --search supports -A/-B/-C context flags too"

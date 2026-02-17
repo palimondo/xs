@@ -1,0 +1,123 @@
+source: a40c:301-400
+extracted_by: sonnet
+timestamp: 2026-02-17T15:00:00Z
+
+threads:
+  - id: T001
+    topic: "tool call display regression"
+    status: open
+    events:
+      - line: 327
+        speaker: user
+        type: introduced
+        quote: "Why/when/how did our tool call display get broken -- this was one of the first things that we finetuned in the output"
+      - line: 399
+        speaker: agent
+        type: refined
+        quote: "git log -p da87318 --format=medium -- explore_session.py | grep -A20 -B5 '@@.*TodoWrite'"
+
+  - id: T002
+    topic: "JSON export producing empty messages"
+    status: open
+    events:
+      - line: 327
+        speaker: user
+        type: introduced
+        quote: "json still spits garbage empty messages"
+      - line: 383
+        speaker: agent
+        type: refined
+        quote: "When assistant messages have only tools, we're creating messages with: `text: None`, `thinking: None`, `tools: [...]`. But in JSON export, we're including all fields even when they're null."
+
+  - id: T003
+    topic: "event skipping / TodoWrite result filtered from timeline"
+    status: open
+    events:
+      - line: 327
+        speaker: user
+        type: introduced
+        quote: "Why is [10] still missing in 943dff12?"
+      - line: 351
+        speaker: agent
+        type: refined
+        quote: "Event 10 is being skipped because it's a tool result message containing 'Todos have been modified successfully', and there's special logic to skip these."
+      - line: 398
+        speaker: agent
+        type: refined
+        quote: "line 674 has `return` which exits the entire display function! This is the bug causing event 10 to disappear."
+
+  - id: T004
+    topic: "script invocation convention"
+    status: resolved
+    events:
+      - line: 342
+        speaker: user
+        type: introduced
+        quote: "We have started the virtual environment before claude and the script has #!/usr/bin/env python3 in premble, so you should invoke it directly, not via python -- you have preapproved permissions for that already"
+
+  - id: T005
+    topic: "use jq not python -c for data analysis"
+    status: resolved
+    events:
+      - line: 372
+        speaker: user
+        type: introduced
+        quote: "What the actual FUCK are you trying to achieve with `| python -c ` ?!?!?!?!?!?!?"
+
+  - id: T006
+    topic: "plan-before-action workflow"
+    status: resolved
+    events:
+      - line: 327
+        speaker: user
+        type: introduced
+        quote: "think hardest and then talk to me, you're in plan mode, I don't want you to be running around with scissors, before we get a full lay of the land and draft a plan of attack"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 327
+    speaker: user
+    type: user_correction
+    quote: "Why/when/how did our tool call display get broken -- this was one of the first things that we finetuned in the output"
+    context: "User identifies tool call display as a critical, early-finetuned feature that has regressed; implies it has known-good reference behavior"
+
+  - id: F002
+    thread: T002
+    line: 327
+    speaker: user
+    type: user_correction
+    quote: "json still spits garbage empty messages"
+    context: "JSON export must not include assistant messages that have null text, null thinking, and no meaningful content"
+
+  - id: F003
+    thread: T003
+    line: 327
+    speaker: user
+    type: user_correction
+    quote: "Why is [10] still missing in 943dff12?"
+    context: "All timeline events must be visible; skipping tool result messages (like TodoWrite results) breaks the event numbering and hides valid events"
+
+  - id: F004
+    thread: T003
+    line: 351
+    speaker: agent
+    type: agent_error
+    quote: "Event 10 is being skipped because it's a tool result message containing 'Todos have been modified successfully', and there's special logic to skip these."
+    context: "Bug: special-casing TodoWrite result messages caused them to be silently dropped from timeline display"
+
+  - id: F005
+    thread: T004
+    line: 342
+    speaker: user
+    type: user_correction
+    quote: "We have started the virtual environment before claude and the script has #!/usr/bin/env python3 in premble, so you should invoke it directly, not via python -- you have preapproved permissions for that already"
+    context: "explore_session.py should be invocable directly as ./explore_session.py when virtualenv is active; not via `python explore_session.py`"
+
+notes:
+  - "T001 (tool call display regression) not resolved in this chunk — agent investigating via git history at end of chunk"
+  - "T002 (JSON empty messages) not resolved — agent identified the cause (tool-only assistant messages) but fix not yet applied"
+  - "T003 (missing event 10) cause identified (return statement in display function) but fix not yet applied"
+  - "T005 user frustration with `| python -c` pipe — use jq directly for data analysis tasks; not an xs requirement but workflow correction"
+  - "T006 (plan-before-action) is a workflow preference, not an xs requirement — omitted from findings"
+  - "Lines 302-325 are agent debugging/fixing implementation mechanics (truncated formatter, JSON export, file ops) — not requirements"

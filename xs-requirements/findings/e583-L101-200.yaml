@@ -1,0 +1,93 @@
+source: e583:101-200
+extracted_by: sonnet
+timestamp: 2026-02-17T16:30:00Z
+
+threads:
+  - id: T001
+    topic: "xs symlink at project root for convenience"
+    status: resolved
+    events:
+      - line: 106
+        speaker: user
+        type: introduced
+        quote: "yep, thanks for teaching me!"
+        context: "User accepted explanation of git symlinks, task resolved"
+
+  - id: T002
+    topic: "calling xs without ./ prefix (PATH)"
+    status: resolved
+    events:
+      - line: 135
+        speaker: user
+        type: introduced
+        quote: "what's preventing us from calling just `xs`? Is it now really necessary to do `./xs`?"
+      - line: 145
+        speaker: user
+        type: resolved
+        quote: "2.; thanks for explaining"
+        context: "User accepted ./xs as the invocation method when in project root"
+
+  - id: T003
+    topic: "incremental/scientific approach to prompt engineering for Task delegation"
+    status: resolved
+    events:
+      - line: 149
+        speaker: user
+        type: introduced
+        quote: "That looks like a lot of unverified assumptions are in there... we don't really know if these \"Common Search Pattern\" you are proposing even work."
+      - line: 155
+        speaker: user
+        type: refined
+        quote: "I don't think we should be putting my local paths into it. I think you should try any command invocation that you put into the instruction first yourself so that you have a better idea of the context you're building for the Task."
+      - line: 171
+        speaker: user
+        type: refined
+        quote: "you are again putting full paths from my machine into it! please don't!"
+
+  - id: T004
+    topic: "claude-dev-log-diary is off limits without explicit user permission"
+    status: resolved
+    events:
+      - line: 190
+        speaker: user
+        type: introduced
+        quote: "this should be done using the `xs` tool, not by rummaging around in claude-dev-log-diary which is off limits without explicit permission from user."
+
+findings:
+  - id: F001
+    thread: T002
+    line: 135
+    speaker: user
+    type: user_request
+    quote: "what's preventing us from calling just `xs`? Is it now really necessary to do `./xs`?"
+    context: "User wants xs to be invocable without ./ prefix; agent explained PATH issue, user accepted ./xs for now"
+
+  - id: F002
+    thread: T003
+    line: 149
+    speaker: user
+    type: user_correction
+    quote: "That looks like a lot of unverified assumptions are in there... we don't really know if these \"Common Search Pattern\" you are proposing even work. I'm worried that we'll bake in a lot of false ideas that would be hard to correct in such a large prompt. Could you please try to me very incremental ans systematic in evolving this prompting strategy?"
+    context: "User requires agent to test xs commands before including them in delegation prompts; incremental/scientific approach required"
+
+  - id: F003
+    thread: T003
+    line: 155
+    speaker: user
+    type: user_correction
+    quote: "I don't think we should be putting my local paths into it. I think you should try any command invocation that you put into the instruction first yourself so that you have a better idea of the context you're building for the Task."
+    context: "xs prompts/docs must not contain hardcoded local machine paths; agent must test commands before documenting them"
+
+  - id: F004
+    thread: T004
+    line: 190
+    speaker: user
+    type: user_correction
+    quote: "this should be done using the `xs` tool, not by rummaging around in claude-dev-log-diary which is off limits without explicit permission from user."
+    context: "Session lookup and exploration must use the xs tool; direct file access to claude-dev-log-diary is not permitted"
+
+notes:
+  - "Context zone (L81-L100): Agent creating xs symlink at project root per user request (L88 context)"
+  - "L179-L200: Agent testing Task sub-agent delegation using xs tool - shows xs being used for session lookup within a Task agent context"
+  - "L190 is a critical workflow constraint: xs is the authorized interface for session data; direct diary file access is prohibited"
+  - "T003/F002/F003 are about xs tool UX development methodology, not xs requirements per se, but indicate the tool is being used and evolved iteratively"

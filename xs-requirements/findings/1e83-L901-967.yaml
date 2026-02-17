@@ -1,0 +1,90 @@
+source: 1e83:901-967
+extracted_by: sonnet
+timestamp: 2026-02-17T16:00:00Z
+
+threads:
+  - id: T001
+    topic: "-x Tool filter scope vs assistant tool-only messages"
+    status: open
+    events:
+      - line: 919
+        speaker: agent
+        type: introduced
+        quote: "The `-x Tool` only excludes actual tool events, not assistant messages that only contain tools (which show as `[Tools: ...]`)."
+      - line: 921
+        speaker: user
+        type: refined
+        quote: "that only contain tools\"?"
+      - line: 926
+        speaker: agent
+        type: refined
+        quote: "**Event 8**: Assistant message that ONLY contains tools (shows as `[Tools: TodoWrite]`)"
+
+  - id: T002
+    topic: "Summary output format and event breakdown counts"
+    status: open
+    events:
+      - line: 928
+        speaker: user
+        type: introduced
+        quote: "I'm still confused, if you look at summary output, where we characterize the session and provide an event breakdown by counts am I missing something?"
+      - line: 932
+        speaker: user
+        type: refined
+        quote: "Text: 188                 # -a -x Tool"
+      - line: 933
+        speaker: agent
+        type: refined
+        quote: "Now I see what you mean! Looking at the summary"
+      - line: 949
+        speaker: agent
+        type: refined
+        quote: "`Text: 188` - messages with text ONLY (no tools)"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 919
+    speaker: agent
+    type: agent_proposal
+    quote: "The `-x Tool` only excludes actual tool events, not assistant messages that only contain tools (which show as `[Tools: ...]`)."
+    context: "Agent documenting known limitation: -x Tool filter doesn't filter assistant messages that only contain tool invocations (no text); these display as [Tools: ToolName] in output"
+
+  - id: F002
+    thread: T001
+    line: 926
+    speaker: agent
+    type: agent_proposal
+    quote: "**Event 8**: Assistant message that ONLY contains tools (shows as `[Tools: TodoWrite]`)"
+    context: "Tool-only assistant messages display as [Tools: ToolName] in output; these are distinct from actual tool execution events which are type=tool"
+
+  - id: F003
+    thread: T002
+    line: 928
+    speaker: user
+    type: user_request
+    quote: "I'm still confused, if you look at summary output, where we characterize the session and provide an event breakdown by counts am I missing something?"
+    context: "User questioning the summary output event breakdown counts — implies summary mode should clearly characterize all event types without ambiguity"
+
+  - id: F004
+    thread: T002
+    line: 932
+    speaker: user
+    type: user_request
+    quote: "Text: 188                 # -a -x Tool"
+    context: "Summary output format (from tool result): shows assistant event breakdown with inline comments documenting which flags control each count; key format example of -s output"
+
+  - id: F005
+    thread: T002
+    line: 949
+    speaker: agent
+    type: agent_error
+    quote: "`Text: 188` - messages with text ONLY (no tools)"
+    context: "Agent notes that summary Tool: count is actually len(tool_calls) not count of assistant-with-tools messages; summary labels may be misleading"
+
+notes:
+  - "T001 and T002 are open — session ended with user tired, deferring to morning"
+  - "The [Tools: ToolName] display format for tool-only assistant messages is a formatting requirement"
+  - "-x Tool filter scope limitation: only excludes actual tool events, not assistant messages that only contain tools"
+  - "L932 tool result contains the full summary format with inline filter comments (e.g. Text: 188 # -a -x Tool); this is a high-value golden output example"
+  - "Session ends at L967 with context compaction"

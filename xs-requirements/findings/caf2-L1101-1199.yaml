@@ -1,0 +1,49 @@
+source: caf2:1101-1199
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "visual gap separators between non-contiguous search results"
+    status: resolved
+    events:
+      - line: 1105
+        speaker: agent
+        type: introduced
+        quote: "Wait, this shows a visual issue - there's no indication of gaps between non-contiguous matches. Let me add visual separators"
+      - line: 1120
+        speaker: agent
+        type: resolved
+        quote: "Perfect! Now the output clearly shows the gaps between non-contiguous matches."
+
+  - id: T002
+    topic: "context lines flags -A/-B/-C and full text search -S confirmed as implemented features"
+    status: resolved
+    events:
+      - line: 1138
+        speaker: agent
+        type: introduced
+        quote: "Context lines support (-A/-B/-C), full text search implementation"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1105
+    speaker: agent
+    type: agent_proposal
+    quote: "Wait, this shows a visual issue - there's no indication of gaps between non-contiguous matches. Let me add visual separators"
+    context: "When displaying filtered results with context expansion (-A/-B/-C), non-contiguous sections must be visually separated with blank lines to make gaps clear"
+
+  - id: F002
+    thread: T002
+    line: 1138
+    speaker: agent
+    type: agent_proposal
+    quote: "Context lines support (-A/-B/-C), full text search implementation"
+    context: "Summary of features pushed: context lines (-A/-B/-C for after/before/context), full text search (-S), MCP tool parsing fix, search and argument consistency improvements"
+
+notes:
+  - "Primary range is mostly implementation/cleanup work: agent adding visual separators between non-contiguous matches, committing, then user doing cleanup of temp/debug files"
+  - "T001 resolved: agent self-identified visual gap issue and fixed it — no user correction required"
+  - "T002: agent's push summary confirms -A/-B/-C context flags and -S full text search were implemented"
+  - "Lines 1140-1199: user asking agent to clean up debug/temp files — not xs requirements"

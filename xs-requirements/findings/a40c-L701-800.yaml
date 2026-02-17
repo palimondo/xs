@@ -1,0 +1,31 @@
+source: a40c:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T15:30:00Z
+
+threads:
+  - id: T001
+    topic: "compact mode must display each event on a single line"
+    status: resolved
+    events:
+      - line: 750
+        speaker: user
+        type: introduced
+        quote: "and [104] are multiline but in compact mode each event from session log should be presented on single line only"
+      - line: 793
+        speaker: agent
+        type: resolved
+        quote: "Both events [93/94] and [104] are now properly displayed as single lines in compact mode. The multiline content has been collapsed to a single line with truncation for long parameters."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 750
+    speaker: user
+    type: user_correction
+    quote: "and [104] are multiline but in compact mode each event from session log should be presented on single line only"
+    context: "User correcting agent output where tool calls with multiline parameters (e.g. MCP tool with body containing newlines) were displaying across multiple lines in compact mode. Compact mode must enforce single-line display for every event."
+
+notes:
+  - "Lines 701-749: Agent debugging test infrastructure and JSON export — implementation mechanics, not requirements"
+  - "Lines 794-800: Session compaction, /cost command, commit request — not xs requirements"
+  - "The fix involved replacing newlines with spaces and truncating long parameters to fit single line"

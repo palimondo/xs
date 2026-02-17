@@ -1,0 +1,93 @@
+source: caf2:401-500
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "Tool(pattern) syntax for filtering by tool name with glob patterns"
+    status: resolved
+    events:
+      - line: 401
+        speaker: agent
+        type: introduced
+        quote: "I see the issue. Let me check where this is called"
+      - line: 463
+        speaker: agent
+        type: resolved
+        quote: "[11] ⏺ mcp__memory__read(project_context)\n[12] ⏺ mcp__memory__write(test)\n[13] ⏺ mcp__github__create_issue(Test)"
+
+  - id: T002
+    topic: "MCP tools must be included in timeline parsing"
+    status: resolved
+    events:
+      - line: 448
+        speaker: agent
+        type: introduced
+        quote: "Found it! Line 98 is explicitly skipping MCP tools: `if not tool_name.startswith('mcp__'):`. This needs to be fixed"
+      - line: 463
+        speaker: agent
+        type: resolved
+        quote: "[11] ⏺ mcp__memory__read(project_context)\n[12] ⏺ mcp__memory__write(test)\n[13] ⏺ mcp__github__create_issue(Test)"
+
+  - id: T003
+    topic: "Context lines support (-A/-B/-C flags) for timeline filtering"
+    status: open
+    events:
+      - line: 474
+        speaker: agent
+        type: introduced
+        quote: "Now let me implement context lines support (-A/-B/-C) as requested by the user"
+      - line: 495
+        speaker: agent
+        type: refined
+        quote: "parser.add_argument('--show-numbers', action='store_true'"
+
+  - id: T004
+    topic: "YOLO mode - user leaves agent to implement features autonomously"
+    status: open
+    events:
+      - line: 476
+        speaker: user
+        type: introduced
+        quote: "Don't forget to commit often. Will leave you now in YOLO mode. Try to implement everything with your existing permissions, I will be AFK for an hour"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 463
+    speaker: agent
+    type: agent_proposal
+    quote: "[11] ⏺ mcp__memory__read(project_context)\n[12] ⏺ mcp__memory__write(test)\n[13] ⏺ mcp__github__create_issue(Test)"
+    context: "Tool(pattern) syntax works for filtering timeline items by tool name with glob patterns like Tool(mcp__*), Tool(mcp__memory*), Tool(Read*)"
+
+  - id: F002
+    thread: T002
+    line: 448
+    speaker: agent
+    type: agent_error
+    quote: "Found it! Line 98 is explicitly skipping MCP tools: `if not tool_name.startswith('mcp__'):`. This needs to be fixed"
+    context: "Bug: MCP tools were excluded from timeline parsing. After fix, all tools including MCP should appear in timeline and be filterable"
+
+  - id: F003
+    thread: T003
+    line: 474
+    speaker: agent
+    type: agent_proposal
+    quote: "Now let me implement context lines support (-A/-B/-C) as requested by the user"
+    context: "Context lines support like grep's -A (after), -B (before), -C (context) flags for timeline filtering - shows neighboring timeline items around matches"
+
+  - id: F004
+    thread: T004
+    line: 476
+    speaker: user
+    type: user_request
+    quote: "Don't forget to commit often. Will leave you now in YOLO mode. Try to implement everything with your existing permissions, I will be AFK for an hour"
+    context: "User expects agent to commit incremental changes frequently during autonomous implementation work"
+
+notes:
+  - "Context zone (L381-L400): agent was implementing Tool(pattern) syntax for MCP filtering - this is implementation mechanics, not requirements"
+  - "T001/F001: Tool(pattern) filtering with glob patterns is an xs requirement - -i 'Tool(Read*)' includes only Read tool events, -i 'Tool(mcp__*)' includes all MCP tools"
+  - "T002/F002: MCP tools (mcp__*) must be included in timeline by default - previously they were excluded which was a bug"
+  - "T003/F003: Context lines support (-A/-B/-C flags) was explicitly mentioned as 'requested by the user' in prior conversation"
+  - "T004 is workflow/process, not an xs feature requirement"
+  - "Lines 401-474 are mostly implementation debugging (not xs requirements), key requirement evidence is at L448, L463, L474, L476"

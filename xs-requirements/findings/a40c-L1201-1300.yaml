@@ -1,0 +1,133 @@
+source: a40c:1201-1300
+extracted_by: sonnet
+timestamp: 2026-02-17T15:30:00Z
+
+threads:
+  - id: T001
+    topic: "user message display format with > prefix"
+    status: resolved
+    events:
+      - line: 1262
+        speaker: agent
+        type: introduced
+        quote: "I see - user messages show `>` prefix. Let me fix the test:"
+      - line: 1264
+        speaker: agent
+        type: resolved
+        quote: "# Should show user text messages with > prefix\n            assert '> Hello Claude' in stdout"
+
+  - id: T002
+    topic: "shortcut flags for filtering message types"
+    status: resolved
+    events:
+      - line: 1245
+        speaker: agent
+        type: introduced
+        quote: "Now let me continue with the medium priority tests. I'll create tests for the shortcut flags:"
+      - line: 1280
+        speaker: agent
+        type: resolved
+        quote: "57 passed, 1 skipped in 2.51s"
+
+  - id: T003
+    topic: "export-json requires RANGE and OUTPUT parameters"
+    status: resolved
+    events:
+      - line: 1265
+        speaker: agent
+        type: introduced
+        quote: "Now let me check the export-json requirement:"
+      - line: 1268
+        speaker: agent
+        type: resolved
+        quote: "usage: explore_session.py [-h] [-s] [-t] [-g] [-f] [-c] [-S SEARCH]"
+
+  - id: T004
+    topic: "file operations display: --created and --files flags"
+    status: resolved
+    events:
+      - line: 1202
+        speaker: agent
+        type: introduced
+        quote: "Now let me fix the failing tests to match the actual behavior:"
+      - line: 1201
+        speaker: agent
+        type: resolved
+        quote: "another.txt: 1 changes"
+
+  - id: T005
+    topic: "context options -B/-A/-C with tool filter"
+    status: resolved
+    events:
+      - line: 1214
+        speaker: agent
+        type: introduced
+        quote: "I see - the Read tool shows up as two events (announcement and execution). Let me fix the context tests:"
+      - line: 1213
+        speaker: agent
+        type: resolved
+        quote: "[7] ⏺ Read: ← /target.py"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1261
+    speaker: agent
+    type: agent_proposal
+    quote: "[1] > Hello Claude"
+    context: "User messages displayed with '>' prefix in truncated mode; confirmed by actual tool output in characterization test"
+
+  - id: F002
+    thread: T002
+    line: 1268
+    speaker: agent
+    type: agent_proposal
+    quote: "usage: explore_session.py [-h] [-s] [-t] [-g] [-f] [-c] [-S SEARCH]\n                          [--export-json RANGE OUTPUT] [--json] [--jsonl]\n                          [-i FILTERS] [-x FILTERS] [--truncated] [--full]\n                          [--no-tool-results] [--show-numbers] [-A NUM]\n                          [-B NUM] [-C NUM] [-M] [-U] [-a] [-T]"
+    context: "Complete CLI interface from --help output, captured during test debugging; -M/-U/-a/-T are shortcut filter flags"
+
+  - id: F003
+    thread: T002
+    line: 1246
+    speaker: agent
+    type: agent_proposal
+    quote: "shortcut_flags_spec.py"
+    context: "Shortcut flags: -M shows all messages (shortcut for -i Message), -U shows only user messages, -a shows only assistant messages, -T shows only tools including tool results"
+
+  - id: F004
+    thread: T003
+    line: 1268
+    speaker: agent
+    type: agent_proposal
+    quote: "[--export-json RANGE OUTPUT] [--json] [--jsonl]"
+    context: "--export-json takes two required arguments: RANGE (e.g. '5-10') and OUTPUT (file path); running without them shows usage error"
+
+  - id: F005
+    thread: T004
+    line: 1201
+    speaker: agent
+    type: agent_proposal
+    quote: "another.txt: 1 changes"
+    context: "--files output format: groups by filename, shows operation count ('N changes') and operation type (Write/Edit) with event index; uses ⏺ prefix"
+
+  - id: F006
+    thread: T004
+    line: 1204
+    speaker: agent
+    type: agent_proposal
+    quote: "# Should show files created with Write (without full path)\n            assert 'new_file.py' in stdout\n            assert 'another_new.txt' in stdout\n            # Should show content preview\n            assert \"print('hello')\" in stdout\n            # Should NOT show edited files\n            assert 'existing.py' not in stdout"
+    context: "--created flag shows only files created via Write operations (not edited), shows filenames without full path, shows content preview"
+
+  - id: F007
+    thread: T005
+    line: 1213
+    speaker: agent
+    type: agent_proposal
+    quote: "[7] ⏺ Read: ← /target.py"
+    context: "Read tool shows as two events: first a tool announcement '[Tools: Read]' then the execution 'Read: ← /filepath'. The ← arrow indicates reading from a file."
+
+notes:
+  - "No user messages in primary range L1201-1300; all entries are agent tool calls and tool results"
+  - "Agent is writing/fixing characterization tests for explore_session.py (secondary source, low trust per CLAUDE.md)"
+  - "Key behavioral facts are extracted from actual tool output observed during test runs, not from test code assertions"
+  - "CLI usage string from L1268 confirms full flag interface including -i/-x filter flags, --no-tool-results, --show-numbers"
+  - "Context zone L1181-1200 showed agent writing range_formats_spec.py and running tests with failures"

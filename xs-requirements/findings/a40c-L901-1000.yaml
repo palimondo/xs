@@ -1,0 +1,66 @@
+source: a40c:901-1000
+extracted_by: sonnet
+timestamp: 2026-02-17T15:30:00Z
+
+threads:
+  - id: T001
+    topic: "summary output format showing session metadata"
+    status: open
+    events:
+      - line: 905
+        speaker: agent
+        type: introduced
+        quote: "Session: 20250726-1349-pr-14_run-16540466941_session-99def08d-ffb0-4df3-bf17-8159d017252f.jsonl"
+
+  - id: T002
+    topic: "search (-S) crash bug"
+    status: open
+    events:
+      - line: 927
+        speaker: agent
+        type: introduced
+        quote: "matches = explorer.search_timeline(args.search)"
+
+  - id: T003
+    topic: "BDD test naming convention for xs specs"
+    status: resolved
+    events:
+      - line: 986
+        speaker: agent
+        type: introduced
+        quote: "testpaths = specs"
+      - line: 987
+        speaker: agent
+        type: resolved
+        quote: "The pytest.ini is configured for BDD-style tests"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 905
+    speaker: agent
+    type: agent_proposal
+    quote: "Session: 20250726-1349-pr-14_run-16540466941_session-99def08d-ffb0-4df3-bf17-8159d017252f.jsonl"
+    context: "Default summary output shows session filename, then Timeline section with event counts and inline comments explaining which flag to use for each event type (e.g., Events: 105 # -t, User inputs: 0 # -U)"
+
+  - id: F002
+    thread: T002
+    line: 927
+    speaker: agent
+    type: agent_error
+    quote: "content = content if case_sensitive else content.lower()"
+    context: "Bug: -S SEARCH crashes with AttributeError in search_timeline when content is not a string. This reveals the search feature must handle non-string content types gracefully."
+
+  - id: F003
+    thread: T003
+    line: 986
+    speaker: agent
+    type: agent_proposal
+    quote: "testpaths = specs"
+    context: "pytest.ini configures BDD naming: testpaths=specs, python_files=*_spec.py, python_functions=it_*, python_classes=describe_*. xs specs must follow this convention."
+
+notes:
+  - "Context zone (881-900): user asked agent to check --help, agent revised test plan identifying missed features: --search/-S, --created/-c, -A/-B/-C context options, shortcut flags -M/-U/-a/-T"
+  - "Primary zone is mostly mechanical golden file capture and pytest configuration debugging"
+  - "T002 search bug is xs-relevant as it surfaces a behavioral requirement: search must handle non-string content"
+  - "T003 reveals test infrastructure convention that xs specs must follow"

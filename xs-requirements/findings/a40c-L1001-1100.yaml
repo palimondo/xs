@@ -1,0 +1,39 @@
+source: a40c:1001-1100
+extracted_by: sonnet
+timestamp: 2026-02-17T15:30:00Z
+
+threads:
+  - id: T001
+    topic: "specs directory location for explore_session tests"
+    status: resolved
+    events:
+      - line: 1030
+        speaker: user
+        type: introduced
+        quote: "can you keep the specs for explore_session in `claude-dev-log-diary/tools/` ?"
+      - line: 1046
+        speaker: user
+        type: refined
+        quote: "I mean, the `specs` name was good for BDD style naming, right?"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 1030
+    speaker: user
+    type: user_correction
+    quote: "can you keep the specs for explore_session in `claude-dev-log-diary/tools/` ?"
+    context: "User corrected agent that moved specs to BookMinder's top-level specs/ directory; specs for explore_session belong co-located with the tool itself"
+
+  - id: F002
+    thread: T001
+    line: 1046
+    speaker: user
+    type: user_request
+    quote: "I mean, the `specs` name was good for BDD style naming, right?"
+    context: "User confirms 'specs' directory naming for BDD-style tests (as opposed to 'tests'); BDD naming convention uses describe_*/it_* style"
+
+notes:
+  - "Chunk is primarily about test infrastructure mechanics (moving/renaming files, fixing import paths) - not xs requirements"
+  - "Two user statements about project organization: specs co-located with tool, BDD-style naming with 'specs' directory"
+  - "Context zone (L981-L1000) shows agent reorganizing test files before the primary range"

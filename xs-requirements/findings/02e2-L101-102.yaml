@@ -1,0 +1,9 @@
+source: 02e2:101-102
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads: []
+findings: []
+notes:
+  - "No xs-relevant requirements found in this chunk"
+  - "Context (L81-L100) and primary range (L101-102) contain a discussion about BookMinder project naming (Destiny/sci-fi themed names, copyright concerns, keeping BookMinder name) — unrelated to xs/explore_session/reconstruct.jq"

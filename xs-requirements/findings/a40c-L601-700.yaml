@@ -1,0 +1,54 @@
+source: a40c:601-700
+extracted_by: sonnet
+timestamp: 2026-02-17T15:30:00Z
+
+threads:
+  - id: T001
+    topic: "--json flag should output raw JSONL objects"
+    status: resolved
+    events:
+      - line: 601
+        speaker: agent
+        type: continuation
+        quote: "Let me start by modifying the parsing to store original JSONL objects"
+        context: "Continuing from context zone where user confirmed requirement at L589"
+      - line: 638
+        speaker: agent
+        type: resolved
+        quote: "Perfect! The JSON export is now correctly outputting the raw JSONL objects."
+
+  - id: T002
+    topic: "--export-json outputs raw JSONL events for replay"
+    status: resolved
+    events:
+      - line: 650
+        speaker: agent
+        type: introduced
+        quote: "Let me test the export-json feature to make sure it's also working with raw objects"
+      - line: 674
+        speaker: agent
+        type: resolved
+        quote: "Exported 5 events to /tmp/export_test.json"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 638
+    speaker: agent
+    type: agent_proposal
+    quote: "Perfect! The JSON export is now correctly outputting the raw JSONL objects."
+    context: "Confirmed: --json flag must output the raw JSONL entry from the session file, not transformed timeline structure. User approved this at L597 in context zone."
+
+  - id: F002
+    thread: T002
+    line: 674
+    speaker: agent
+    type: agent_proposal
+    quote: "Exported 5 events to /tmp/export_test.json"
+    context: "--export-json exports raw JSONL objects (preserving type: assistant/user) for the replay workflow. Contrast with prior behavior that exported tool_calls list."
+
+notes:
+  - "Core requirement established in context zone L589: --json outputs raw JSON from JSONL file for each timeline event"
+  - "Core requirement established in context zone L592/L597: --export-json extracts raw tool calls from session for replay by Claude Task tool"
+  - "L601-L700 is almost entirely implementation mechanics (agent editing explore_session.py). Requirements were established in context zone."
+  - "Two flags distinguished: --json (show raw JSONL for selected events) vs --export-json (extract range of events to file for replay)"

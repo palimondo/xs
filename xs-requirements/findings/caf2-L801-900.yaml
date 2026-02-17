@@ -1,0 +1,114 @@
+source: caf2:801-900
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "search flag short form and rg delegation"
+    status: resolved
+    events:
+      - line: 801
+        speaker: agent
+        type: introduced
+        quote: "The search is a simple substring search, not using `rg`."
+      - line: 816
+        speaker: agent
+        type: resolved
+        quote: "parser.add_argument('-S', '--search', help='Full text search across all content (simple substring match)')"
+
+  - id: T002
+    topic: "CLI shortcut naming convention: capitals for virtual entity filters"
+    status: resolved
+    events:
+      - line: 824
+        speaker: agent
+        type: resolved
+        quote: "parser.add_argument('-M', dest='include_message'"
+
+  - id: T003
+    topic: "search does not respect range filters — duplicate output bug"
+    status: resolved
+    events:
+      - line: 885
+        speaker: agent
+        type: introduced
+        quote: "Found 1 matches for 'interrupted':"
+      - line: 892
+        speaker: agent
+        type: refined
+        quote: "The issue is that when we provide indices (like `3-7`), it triggers implicit timeline mode, which shows the timeline first, THEN the search runs and shows its own results. This is a major bug!"
+      - line: 899
+        speaker: agent
+        type: resolved
+        quote: "The file /Users/palimondo/Developer/BookMinder/claude-dev-log-diary/tools/explore_session.py has been updated."
+
+  - id: T004
+    topic: "implicit timeline mode triggered by range indices"
+    status: resolved
+    events:
+      - line: 892
+        speaker: agent
+        type: introduced
+        quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode"
+      - line: 898
+        speaker: agent
+        type: resolved
+        quote: "implicit_timeline = has_filters or has_indices"
+
+  - id: T005
+    topic: "dead code: show_timeline method never called"
+    status: open
+    events:
+      - line: 872
+        speaker: agent
+        type: introduced
+        quote: "So `show_timeline` appears to be dead code!"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 801
+    speaker: agent
+    type: agent_proposal
+    quote: "The search is a simple substring search, not using `rg`."
+    context: "Search implementation uses simple substring matching, not ripgrep delegation. User had asked about rg delegation in prior chunk."
+
+  - id: F002
+    thread: T002
+    line: 824
+    speaker: agent
+    type: agent_proposal
+    quote: "parser.add_argument('-M', dest='include_message'"
+    context: "Virtual entity filter shortcuts changed to uppercase: -M (message), -U (user), -T (tool), keeping -a lowercase to match grep convention. User requested this in prior chunk."
+
+  - id: F003
+    thread: T003
+    line: 892
+    speaker: agent
+    type: agent_error
+    quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode, which shows the timeline first, THEN the search runs and shows its own results. This is a major bug!"
+    context: "Bug: using --search with a range argument caused duplicate output — timeline shown once from implicit mode, then search results shown again."
+
+  - id: F004
+    thread: T004
+    line: 892
+    speaker: agent
+    type: agent_proposal
+    quote: "when we provide indices (like `3-7`), it triggers implicit timeline mode"
+    context: "Design decision: range indices should trigger implicit timeline display mode, but this conflicts with explicit search mode."
+
+  - id: F005
+    thread: T005
+    line: 872
+    speaker: agent
+    type: agent_error
+    quote: "So `show_timeline` appears to be dead code!"
+    context: "show_timeline method existed in explore_session.py but was never called — dead code identified during investigation."
+
+notes:
+  - "Context zone (L781-L800): cleanup commit removing deprecated features, checking help consistency."
+  - "T001 was initiated by user question in prior chunk about -S short form and rg delegation."
+  - "T002 was initiated by user question in prior chunk about uppercase shortcuts."
+  - "F003 is a significant bug: --search combined with range argument produced output twice."
+  - "T005 remains open — show_timeline dead code not yet removed in this chunk."
+  - "All fixes are to explore_session.py, the xs precursor tool."

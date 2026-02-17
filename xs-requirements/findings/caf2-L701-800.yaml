@@ -1,0 +1,116 @@
+source: caf2:701-800
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "removing deprecated CLI options and updating deprecation messages"
+    status: resolved
+    events:
+      - line: 709
+        speaker: user
+        type: introduced
+        quote: "Yes to all: 1. remove; 2. remove deprication, keep the unique functionality.; 3. If the --help explains it as `-t -i...` we should update the message now that -t is implied in presence of other filter options. 4. Update to use new filtering login if possible?"
+
+  - id: T002
+    topic: "CLI short flag naming conventions and consistency"
+    status: open
+    events:
+      - line: 794
+        speaker: user
+        type: introduced
+        quote: "I see we now have -m for Message so this one is in conflict with `rg -m` in case we wanted to pass that through... Maybe we shoudl use capitals in all cases except `-a` for the shortcuts?"
+
+  - id: T003
+    topic: "CLI help format order consistency"
+    status: open
+    events:
+      - line: 794
+        speaker: user
+        type: introduced
+        quote: "Also why we sometimes document with -short --long-param and otherwise the other way around? We shoudl unify and follow the concentional order."
+
+  - id: T004
+    topic: "--search missing short form and range integration"
+    status: open
+    events:
+      - line: 794
+        speaker: user
+        type: introduced
+        quote: "I don't see short form of `--search` the `-E PATTERN` in --help, do we have it implemented?"
+      - line: 794
+        speaker: user
+        type: refined
+        quote: "`./explore_session.py 943dff12 --search \"interrupted\" -B 2 120-150` is not giving me the expected results the range filter is not applied"
+
+  - id: T005
+    topic: "--search delegates to rg (pattern support)"
+    status: open
+    events:
+      - line: 794
+        speaker: user
+        type: introduced
+        quote: "How is it implemented, does it delegate to `rg` and we therefore mention that the search pattern supports all that `rg` does?"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 709
+    speaker: user
+    type: user_request
+    quote: "remove deprication, keep the unique functionality."
+    context: "User says --files should lose the deprecation warning but keep its unique grouped-by-file display. Implies --files is a valid distinct command, not just a shortcut."
+
+  - id: F002
+    thread: T001
+    line: 709
+    speaker: user
+    type: user_request
+    quote: "If the --help explains it as `-t -i...` we should update the message now that -t is implied in presence of other filter options."
+    context: "When -t (timeline) is implied by other filter options, help text and deprecation messages referencing '-t -i...' need to be updated."
+
+  - id: F003
+    thread: T002
+    line: 794
+    speaker: user
+    type: user_request
+    quote: "Maybe we shoudl use capitals in all cases except `-a` for the shortcuts?"
+    context: "Proposal to use uppercase short flags (e.g. -M instead of -m) to avoid conflict with rg flags that could be passed through. Exception: -a for 'all'."
+
+  - id: F004
+    thread: T003
+    line: 794
+    speaker: user
+    type: user_request
+    quote: "We shoudl unify and follow the concentional order."
+    context: "CLI help text mixes '-short --long' and '--long -short' ordering. User wants consistent conventional order (short before long or vice versa, pick one)."
+
+  - id: F005
+    thread: T004
+    line: 794
+    speaker: user
+    type: user_request
+    quote: "I don't see short form of `--search` the `-E PATTERN` in --help, do we have it implemented?"
+    context: "--search should have a short form, proposed as -E (matching rg convention for regex pattern)."
+
+  - id: F006
+    thread: T004
+    line: 794
+    speaker: user
+    type: user_correction
+    quote: "`./explore_session.py 943dff12 --search \"interrupted\" -B 2 120-150` is not giving me the expected results the range filter is not applied"
+    context: "Bug: when combining --search with a range argument, the range filter is not being applied. Range and search must work together."
+
+  - id: F007
+    thread: T005
+    line: 794
+    speaker: user
+    type: user_request
+    quote: "does it delegate to `rg` and we therefore mention that the search pattern supports all that `rg` does?"
+    context: "User questions whether --search uses ripgrep under the hood and if so should document that search patterns support full rg regex syntax."
+
+notes:
+  - "T001 resolved: user approved removal of --conversation, keeping --files with unique grouped display, updating deprecation messages."
+  - "T002-T005 are open at end of chunk — agent starts investigating but results are in later chunk."
+  - "The -m vs rg -m conflict (T002) raises the broader question of whether xs should pass-through rg flags."
+  - "F006 is a bug report: range filter not applied when combined with --search."

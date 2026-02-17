@@ -1,0 +1,102 @@
+source: 1e83:801-900
+extracted_by: sonnet
+timestamp: 2026-02-17T16:00:00Z
+
+threads:
+  - id: T001
+    topic: "+N range selection applies to full timeline before filtering"
+    status: resolved
+    events:
+      - line: 825
+        speaker: agent
+        type: introduced
+        quote: "Aha! There IS a bug! When we use `+14` without filters, we get 14 items. But with `-U -a -x Tool`, we only get 10 items. This means the `+14` is being applied BEFORE the filtering, not after."
+      - line: 836
+        speaker: user
+        type: resolved
+        quote: "This works as designed (capture that in design decisions if its not there yet): \"When indices are provided (like +14), they are applied to the FULL timeline first, then filtering happens. So +14 gets the first 14 items from timeline, THEN filters them for User and Assistant (excluding Tools).\""
+
+  - id: T002
+    topic: "CLI argument ordering — options must precede session positional argument"
+    status: resolved
+    events:
+      - line: 836
+        speaker: user
+        type: introduced
+        quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works, so I guess I wa"
+      - line: 849
+        speaker: agent
+        type: refined
+        quote: "The correct pattern is actually: **Working**: `./explore_session.py -U -a -x Tool 943dff12 +14` (options first, then session, then range)"
+      - line: 849
+        speaker: agent
+        type: resolved
+        quote: "The correct pattern is actually: **Working**: `./explore_session.py -U -a -x Tool 943dff12 +14`"
+
+  - id: T003
+    topic: "conversation mode — show only user messages and assistant text (no tool calls)"
+    status: open
+    events:
+      - line: 870
+        speaker: user
+        type: introduced
+        quote: "I was trying to recreate the old use case of option --conversation, which should have displayed only user messages and text responses from the assistant. The -x Tools should have removed the tools calls... IIRC."
+      - line: 893
+        speaker: agent
+        type: refined
+        quote: "To get a true conversation mode, we need to: 1. Include User and Assistant messages 2. Exclude Tool events 3. Also exclude Assistant messages that only contain tools"
+
+  - id: T004
+    topic: "-x Tool filter does not exclude assistant messages containing only tool calls"
+    status: open
+    events:
+      - line: 870
+        speaker: user
+        type: introduced
+        quote: "The -x Tools should have removed the tools calls... IIRC. But it doesn't?"
+      - line: 887
+        speaker: agent
+        type: refined
+        quote: "I see the issue! The `[Tools: ...]` messages are still showing."
+      - line: 893
+        speaker: agent
+        type: refined
+        quote: "The issue is that `-x Tool` only excludes actual tool events (type='tool'), but assistant messages that only contain tools (showing as `[Tools: ...]`) are still type='message' with type='assistant'."
+
+findings:
+  - id: F001
+    thread: T001
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "This works as designed (capture that in design decisions if its not there yet): \"When indices are provided (like +14), they are applied to the FULL timeline first, then filtering happens. So +14 gets the first 14 items from timeline, THEN filters them for User and Assistant (excluding Tools).\""
+    context: "User explicitly confirms that +N range selection applies to the full unfiltered timeline first, then filters are applied to those N items. This is intentional behavior, not a bug."
+
+  - id: F002
+    thread: T002
+    line: 836
+    speaker: user
+    type: user_request
+    quote: "Oh, I just tried running `./explore_session.py -U -a -x Tool 943dff12 +14` which works, so I guess I wa"
+    context: "CLI options must be specified BEFORE the positional session argument. The session file comes after all flags, before optional range arguments."
+
+  - id: F003
+    thread: T003
+    line: 870
+    speaker: user
+    type: user_request
+    quote: "I was trying to recreate the old use case of option --conversation, which should have displayed only user messages and text responses from the assistant. The -x Tools should have removed the tools calls... IIRC."
+    context: "User recalls a --conversation mode that showed only user messages and assistant text responses, excluding all tool calls. This implies a convenience filter combining -U -a -x Tool should work cleanly."
+
+  - id: F004
+    thread: T004
+    line: 893
+    speaker: agent
+    type: agent_error
+    quote: "The issue is that `-x Tool` only excludes actual tool events (type='tool'), but assistant messages that only contain tools (showing as `[Tools: ...]`) are still type='message' with type='assistant'."
+    context: "Bug: -x Tool filter only excludes tool_use timeline events, but not assistant messages whose content consists entirely of tool calls (displayed as [Tools: ToolName]). True conversation mode requires excluding both."
+
+notes:
+  - "T001 and T002 are resolved design decisions — +N applies to full timeline before filtering, and options must precede session positional arg"
+  - "T003/T004 are open — user wants a working --conversation mode (or equivalent -U -a -x Tool) but the -x Tool filter is incomplete"
+  - "No --conversation flag exists in the current implementation; user recalls it as an 'old use case'"

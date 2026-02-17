@@ -1,0 +1,191 @@
+source: caf2:301-400
+extracted_by: sonnet
+timestamp: 2026-02-17T14:45:00Z
+
+threads:
+  - id: T001
+    topic: "summary output as inline parameter tutorial with YAML comments"
+    status: resolved
+    events:
+      - line: 301
+        speaker: agent
+        type: refined
+        quote: "You're absolutely right! Let me think through this"
+      - line: 303
+        speaker: user
+        type: refined
+        quote: "We shoudl make the timeline implied. But the timeline comment needs refinement"
+      - line: 316
+        speaker: user
+        type: refined
+        quote: "Use my Timeline comment. I wan the event filter type comment to be between Duration and Timeline, NOT  after Timeline!"
+      - line: 326
+        speaker: agent
+        type: resolved
+        quote: "Timeline:                   # to show specific event types:"
+
+  - id: T002
+    topic: "implicit timeline mode — -t not required when filters or ranges present"
+    status: resolved
+    events:
+      - line: 301
+        speaker: agent
+        type: introduced
+        quote: "You're suggesting that `-t` should be implied when: Using include/exclude filters"
+      - line: 303
+        speaker: user
+        type: refined
+        quote: "We shoudl make the timeline implied"
+      - line: 347
+        speaker: agent
+        type: resolved
+        quote: "Good! The summary format is working. Now let me make -t implicit for filters and ranges:"
+      - line: 371
+        speaker: agent
+        type: resolved
+        quote: "Perfect! The implicit timeline is working."
+
+  - id: T003
+    topic: "filter pipeline ordering: search → range → include → exclude → context expansion"
+    status: resolved
+    events:
+      - line: 316
+        speaker: user
+        type: introduced
+        quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events"
+      - line: 318
+        speaker: agent
+        type: resolved
+        quote: "0. Search: Find all events matching pattern (if --search specified)\n1. Range: Apply index range filter (100-200, +50, -30)\n2. Include: Keep only events matching -i filters\n3. Exclude: Remove events matching -x filters\n4. Context: Expand filtered results with -A/-B/-C lines (merge overlaps)"
+
+  - id: T004
+    topic: "context expansion flags -A/-B/-C (after/before/context lines around matches)"
+    status: resolved
+    events:
+      - line: 305
+        speaker: user
+        type: introduced
+        quote: "a, b, c -- I believe these stand for after, before and context, right?"
+      - line: 316
+        speaker: user
+        type: refined
+        quote: "the `grep`/`rg` parameters are capital A, B, C, so we are free to use `-a` as shortcut for `-i Assistant`"
+      - line: 318
+        speaker: agent
+        type: resolved
+        quote: "4. Context: Expand filtered results with -A/-B/-C lines (merge overlaps)"
+
+  - id: T005
+    topic: "text search with -e/--search PATTERN across session events"
+    status: open
+    events:
+      - line: 305
+        speaker: user
+        type: introduced
+        quote: "I think we should add support for that too: a, b, c"
+      - line: 316
+        speaker: user
+        type: refined
+        quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events"
+      - line: 318
+        speaker: agent
+        type: refined
+        quote: "0. Search: Find all events matching pattern (if --search specified)"
+
+  - id: T006
+    topic: "summary counts sorted descending, zero-count items omitted"
+    status: resolved
+    events:
+      - line: 332
+        speaker: user
+        type: introduced
+        quote: "Note that the `Assistant messages` children are ordere by count, descending. (Default) Tools with 0 counts should be left out from the listing."
+
+  - id: T007
+    topic: "MCP tool filtering with Tool(mcp__*) glob pattern"
+    status: resolved
+    events:
+      - line: 332
+        speaker: user
+        type: introduced
+        quote: "we need the support for parametrized filters `Tool(mcp__toolname*)` and `Tool(mcp__toolname_operation*)`"
+      - line: 333
+        speaker: agent
+        type: refined
+        quote: "This enables powerful filtering patterns: `Tool(mcp__*)` - All MCP tools"
+      - line: 371
+        speaker: agent
+        type: resolved
+        quote: "Perfect! The implicit timeline is working. Let me verify that Tool(pattern) works correctly:"
+
+findings:
+  - id: F001
+    thread: T001
+    line: 326
+    speaker: user
+    type: user_request
+    quote: "Here's my handcrafted final mock:"
+    context: "User provided a handcrafted YAML summary mock showing hierarchical structure with inline parameter comments. Key design: no-params = summary, filter/range params = implicit timeline"
+
+  - id: F002
+    thread: T002
+    line: 301
+    speaker: agent
+    type: agent_proposal
+    quote: "You're suggesting that `-t` should be implied when: Using include/exclude filters (`-i`, `-x`, `-m`, `-u`, `-a`, `-T`)"
+    context: "Timeline display is implicit when any filter or range is specified; -t alone shows full timeline"
+
+  - id: F003
+    thread: T002
+    line: 305
+    speaker: user
+    type: user_request
+    quote: "We shoudl make the timeline implied."
+    context: "Explicit UX rule: no args = summary; any filter/range arg = timeline implied. User repeated this at L305 after interrupting prior message at L303."
+
+  - id: F004
+    thread: T003
+    line: 316
+    speaker: user
+    type: user_request
+    quote: "(0.) Find matches by `-e PATTERN --search PATTERN` (implemented by delegating to `rg`?), or take all events\n1. Filter events by range\n2. Filter by `-i --include`\n3. Filter by `-x --exclude`\n4. Expand the matches that remained after filtering by adding context as specified by `-A -B -C` (but not duplicating any lines, since this expansion can produce overlaps)"
+    context: "User defined explicit pipeline ordering for filtering: search→range→include→exclude→context. No duplicates when expansions overlap."
+
+  - id: F005
+    thread: T004
+    line: 316
+    speaker: user
+    type: user_correction
+    quote: "the `grep`/`rg` parameters are capital A, B, C, so we are free to use `-a` as shortcut for `-i Assistant`"
+    context: "Lowercase -a/-b/-c are NOT context flags (grep uses capitals). -a = shortcut for -i Assistant. Uppercase -A/-B/-C = context lines around matches."
+
+  - id: F006
+    thread: T006
+    line: 332
+    speaker: user
+    type: user_request
+    quote: "Note that the `Assistant messages` children are ordere by count, descending. (Default) Tools with 0 counts should be left out from the listing."
+    context: "Summary output: tool counts sorted by descending count; zero-count tools omitted entirely"
+
+  - id: F007
+    thread: T007
+    line: 332
+    speaker: user
+    type: user_request
+    quote: "we need the support for parametrized filters `Tool(mcp__toolname*)` and `Tool(mcp__toolname_operation*)`"
+    context: "MCP tools follow naming pattern mcp__<server>__<tool>. Tool(pattern) filter should match against tool name with glob, enabling Tool(mcp__*), Tool(mcp__memory*) etc."
+
+  - id: F008
+    thread: T001
+    line: 346
+    speaker: agent
+    type: agent_proposal
+    quote: "Timeline:                   # to show specific event types:\n  Events: 6                  # -t\n  User inputs: 0              # -u\n  Tool results: 1             # (shown after -T events, use --no-tool-results to exclude)\n  Assistant: 3                # -a\n  Assistant messages:\n    Text: 2                  # -a -x Tool\n    Tool: 1                  # -T\n    Tool calls:\n      Read: 1                  # -i Read"
+    context: "Implemented summary format showing hierarchical counts with inline CLI parameter hints. Tool calls grouped under Assistant messages."
+
+notes:
+  - "Context zone (L281-L300): commit of virtual entity support just completed; user corrected --no-tool-results misunderstanding"
+  - "L384 is a compaction summary injected by CC when context ran out; new agent continues implementation from L385"
+  - "T005 (search feature) was discussed but not fully implemented in this chunk — open thread"
+  - "The summary output mock at L326 is user's handcrafted design spec — high authority"
+  - "Tool(pattern) syntax uses glob matching against tool name (not parameters)"
