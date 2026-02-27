@@ -1,9 +1,9 @@
 # xs Requirements Recovery Tracker
 
 meta:
-  last_updated: 2026-02-17T23:45:00Z
-  current_pass: 5_conflicts
-  current_step: complete
+  last_updated: 2026-02-27T10:30:00Z
+  current_pass: 6_slicing
+  current_step: pending
   pre_pass2_validation: complete
 
 passes:
@@ -34,7 +34,9 @@ passes:
       summary: complete
 
   3_golden_files:
-    status: pending
+    status: complete
+    completed_at: 2026-02-27T10:30:00Z
+    note: "2.x capture via tmux-driven interactive session (CC v2.1.62). 48 files: JSONL+export golden pair, schema, fixtures, tooling scripts."
 
   4_principles:
     status: complete
@@ -123,11 +125,11 @@ synthesis_artifacts:
   synthesis_summary: 1
 
 next_action: |
-  Pass 3: Golden File Assembly.
-  1. Gather existing golden files from old implementation (specs/golden_outputs/)
-  2. Organize by format version (1x/ vs 2x/)
-  3. For stories without golden files, create from real sessions
-  4. Link golden files to acceptance criteria
-  5. Mark for user validation
+  Pass 6: Implementation Slicing.
+  1. Identify walking skeleton (minimal end-to-end path)
+  2. Group stories by dependency
+  3. Apply priority (must/should/could)
+  4. Map to spec files
+  5. Create implementation roadmap
 
 blockers: []

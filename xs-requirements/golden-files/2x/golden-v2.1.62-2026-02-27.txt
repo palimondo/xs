@@ -1,0 +1,208 @@
+
+╭─── Claude Code v2.1.62 ──────────────────────────────────────────────────────╮
+│                                     │ Tips for getting started               │
+│            Welcome back!            │ Run /init to create a CLAUDE.md file … │
+│                                     │ ────────────────────────────────────── │
+│               ▐▛███▜▌               │ Recent activity                        │
+│              ▝▜█████▛▘              │ No recent activity                     │
+│                ▘▘ ▝▝                │                                        │
+│                                     │                                        │
+│        Opus 4.6 · Claude API        │                                        │
+│   /private/tmp/xs-capture-session   │                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ Run these three shell commands: echo "hello world" > test.txt && echo -e  
+  "line 1\nline 2\nline 3\nfoo bar\nbaz qux" > data.txt && mkdir -p subdir  
+  && echo "nested content" > subdir/nested.txt                              
+
+⏺ Bash(echo "hello world" > test.txt && echo -e "line 1\nline 2\nline 3\nfoo
+      bar\nbaz qux" > data.txt && mkdir -p subdir && echo "nested content" >
+      subdir/nested.txt)
+  ⎿  (No output)
+
+⏺ Done. Created three files:
+  - test.txt — "hello world"
+  - data.txt — 5 lines of text
+  - subdir/nested.txt — "nested content"
+
+❯ What is 2 + 2? 
+
+⏺ 4
+
+❯ Read the file test.txt 
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ The file contains:
+
+  hello world
+
+❯ Create a file called output.txt containing exactly "test output line 1" 
+
+⏺ Write(output.txt)
+  ⎿  Wrote 1 lines to output.txt
+     test output line 1
+
+
+⏺ Created output.txt with the content "test output line 1".
+
+❯ Edit test.txt to change "hello" to "greetings" 
+
+⏺ Update(test.txt)
+  ⎿  Added 1 line, removed 1 line
+      1 -hello world                                                     
+      1 +greetings world                                                 
+
+⏺ Updated test.txt — "hello world" is now "greetings world".
+
+❯ Make two edits: in test.txt change "greetings" to "howdy", and in         
+  output.txt change "test" to "final"                                       
+
+⏺ Update(test.txt)
+  ⎿  Added 1 line, removed 1 line
+      1 -greetings world                                                 
+      1 +howdy world                                                     
+
+⏺ Update(output.txt)
+  ⎿  Added 1 line, removed 1 line
+      1 -test output line 1                                              
+      1 +final output line 1                                             
+
+⏺ Done. Updated both files:
+  - test.txt — "greetings world" → "howdy world"
+  - output.txt — "test output line 1" → "final output line 1"
+
+❯ Run: echo "bash test" && cat test.txt && ls -la subdir/ 
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ Output shows:
+  - echo printed "bash test"
+  - test.txt contains "howdy world" (confirming our edit)
+  - subdir/ contains one file: nested.txt (15 bytes)
+
+❯ Search for the word "howdy" in all files in the current directory 
+
+⏺ Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Found one match — "howdy" appears in test.txt on line 1.
+
+❯ Find all .txt files recursively in this directory 
+
+⏺ Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Found 4 .txt files:
+  - data.txt
+  - subdir/nested.txt
+  - test.txt
+  - output.txt
+
+❯ List the contents of the current directory using the LS tool 
+
+⏺ There isn't a dedicated LS tool available. I can use Bash with ls instead.
+
+⏺ Read 1 file (ctrl+o to expand)
+
+⏺ Directory contains:
+  - .git/ — git repository
+  - README.md — 18 bytes
+  - data.txt — 37 bytes
+  - output.txt — 20 bytes
+  - subdir/ — directory
+  - test.txt — 12 bytes
+
+❯ Search the web for "Claude Code session transcript format" 
+
+⏺ Web Search("Claude Code session transcript format")
+  ⎿  Did 1 search in 8s
+
+⏺ Here's what I found about Claude Code session transcript format:
+
+  Storage: Claude Code stores session transcripts as JSONL files in
+  ~/.claude/projects/<project>/sessions/, with each session named by UUID.
+
+  Format: Each JSONL file contains typed message records linked by parentUuid,
+  including:
+  - User prompts and assistant responses (text, tool calls, thinking blocks)
+  - Tool results with exact inputs/outputs
+  - Subagent spawning events
+  - Token usage, model selection, working directory, and git state snapshots
+
+  Metadata: A sessions-index.json file contains summaries, message counts, git
+  branches, and timestamps.
+
+  Tools for viewing transcripts:
+  - https://github.com/simonw/claude-code-transcripts by Simon Willison —
+  converts JSONL to readable HTML
+  - https://github.com/daaain/claude-code-log — another Python CLI for HTML
+  conversion
+
+  Sources:
+  - https://github.com/simonw/claude-code-transcripts
+  - https://simonw.substack.com/p/a-new-way-to-extract-detailed-transcripts
+  - https://medium.com/@databunny/inside-claude-code-the-session-file-format-and
+  -how-to-inspect-it-b9998e66d56b
+  - https://kentgigger.com/posts/claude-code-conversation-history
+  - https://github.com/daaain/claude-code-log
+
+❯ Fetch https://httpbin.org/json and tell me what it contains 
+
+⏺ Fetch(https://httpbin.org/json)
+  ⎿  Received 429 bytes (200 OK)
+
+⏺ The endpoint returns a sample JSON object representing a slideshow with:
+
+  - Title: "Sample Slide Show"
+  - Author: "Yours Truly"
+  - 2 slides:
+    a. A title slide — "Wake up to WonderWidgets!"
+    b. An overview slide with bullet points about why WonderWidgets are great
+  and who buys them
+
+  It's a standard httpbin test payload used for testing JSON responses.
+
+❯ Create a todo list with two items: "Review schema" (pending) and "Extract 
+   fixtures" (completed)                                                    
+
+⏺ Created two tasks:
+  1. Review schema — pending
+  2. Extract fixtures — completed
+
+❯ Use the Task tool to spawn a subagent that reads data.txt and reports     
+  exactly how many lines it contains. The subagent should use the Read      
+  tool.                                                                     
+
+⏺ Task(Count lines in data.txt)
+  ⎿  Done (1 tool use · 12.0k tokens · 5s)
+  (ctrl+o to expand)
+
+⏺ The subagent reports that data.txt contains 6 lines (5 lines of text plus a
+  trailing newline).
+
+❯ I need help choosing. Please use the AskUserQuestion tool to ask me       
+  whether I prefer "Option A: Simple approach" or "Option B: Comprehensive  
+  approach" for this project.                                               
+
+⏺ User answered Claude's questions:
+  ⎿  · Which approach do you prefer for this project? → Option A: Simple 
+     approach
+
+⏺ Got it — you prefer Option A: Simple approach. I'll keep things minimal and
+  straightforward.
+
+❯ @data.txt How many lines does this file have? 
+  ⎿  Read data.txt (6 lines)
+
+⏺ The file has 5 lines of text content:
+
+  1. line 1
+  2. line 2
+  3. line 3
+  4. foo bar
+  5. baz qux
+
+  (Plus a trailing empty line at line 6.)
+
+❯ Write a very detailed 2000-word essay about the history of computer       
+  science starting from Charles Babbage                                     
+  ⎿  Interrupted · What should Claude do instead?

@@ -1,0 +1,9 @@
+{"type": "user", "message": "Test user message", "timestamp": "2025-01-01T10:00:00Z"}
+{"type": "assistant", "message": {"content": [{"type": "thinking", "text": "This is a thinking block\nwith multiple lines"}]}, "timestamp": "2025-01-01T10:00:01Z"}
+{"type": "user", "message": "//voice: voice is running…", "timestamp": "2025-01-01T10:00:02Z"}
+{"type": "assistant", "message": {"content": [{"type": "text", "text": "Allowed 1 tools for this command"}]}, "timestamp": "2025-01-01T10:00:03Z"}
+{"type": "user", "message": "<bash-input>./explore_session.py test</bash-input>", "timestamp": "2025-01-01T10:00:04Z"}
+{"type": "user", "message": "<bash-stderr>Error: file not found</bash-stderr>", "timestamp": "2025-01-01T10:00:05Z"}
+{"type": "user", "message": "@file.txt", "timestamp": "2025-01-01T10:00:06Z"}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Read", "id": "tool_read", "input": {"file_path": "file.txt"}}]}, "timestamp": "2025-01-01T10:00:07Z"}
+{"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "tool_read", "content": "File contents here"}]}, "timestamp": "2025-01-01T10:00:08Z"}

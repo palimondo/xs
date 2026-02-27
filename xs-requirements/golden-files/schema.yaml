@@ -1,0 +1,298 @@
+metadata:
+  description: Exhaustive message type schema derived from 1.x session transcripts
+  era: 1.x (pre-2.0)
+  source: bookminder-sessions/*.jsonl
+  total_files: 60
+  total_lines: 30701
+  parse_errors: 0
+event_types:
+  assistant:
+    count: 15704
+    sessions: 54
+    era: 1.x
+    top_level_fields:
+    - cwd
+    - gitBranch
+    - isApiErrorMessage
+    - isSidechain
+    - message
+    - parentUuid
+    - requestId
+    - sessionId
+    - timestamp
+    - type
+    - userType
+    - uuid
+    - version
+    message_fields:
+    - container
+    - content
+    - id
+    - model
+    - role
+    - stop_reason
+    - stop_sequence
+    - type
+    - usage
+  user:
+    count: 10718
+    sessions: 55
+    era: 1.x
+    top_level_fields:
+    - cwd
+    - gitBranch
+    - isCompactSummary
+    - isMeta
+    - isSidechain
+    - isVisibleInTranscriptOnly
+    - message
+    - parentUuid
+    - sessionId
+    - thinkingMetadata
+    - timestamp
+    - toolUseResult
+    - type
+    - userType
+    - uuid
+    - version
+    message_fields:
+    - content
+    - role
+  system:
+    count: 4072
+    sessions: 44
+    era: 1.x
+    top_level_fields:
+    - compactMetadata
+    - content
+    - cwd
+    - gitBranch
+    - isMeta
+    - isSidechain
+    - level
+    - logicalParentUuid
+    - parentUuid
+    - sessionId
+    - subtype
+    - timestamp
+    - toolUseID
+    - type
+    - userType
+    - uuid
+    - version
+    subtypes:
+      <missing>: 4066
+      local_command: 4
+      compact_boundary: 2
+      stop_hook_summary: 0  # 2.x-only: 17 per capture run, one per turn
+  summary:
+    count: 140
+    sessions: 33
+    era: 1.x
+    top_level_fields:
+    - leafUuid
+    - summary
+    - type
+  file-history-snapshot:
+    count: 67
+    sessions: 2
+    era: 1.x
+    top_level_fields:
+    - isSnapshotUpdate
+    - messageId
+    - snapshot
+    - type
+  progress:
+    count: 0
+    sessions: 0
+    era: 2.x-only
+    description: Hook progress events (hook_progress). Emitted after each turn.
+    top_level_fields:
+    - type
+    - content
+    - timestamp
+    note: Discovered in 2.x capture run (32 occurrences). Not in 1.x sessions.
+  queue-operation:
+    count: 0
+    sessions: 0
+    era: 2.x-only
+    description: Queue operation tracking (dequeue). Added in 2.x.
+    top_level_fields:
+    - type
+    - operation
+    - timestamp
+    - sessionId
+    note: Not present in any 1.x session file
+content_block_types:
+  tool_use:
+    count: 7696
+    era: 1.x
+  tool_result:
+    count: 7696
+    era: 1.x
+  text:
+    count: 7137
+    era: 1.x
+  thinking:
+    count: 1960
+    era: 1.x
+  image:
+    count: 3
+    era: 1.x
+tool_names:
+  Bash:
+    count: 3850
+    era: 1.x
+  Edit:
+    count: 1326
+    era: 1.x
+  Read:
+    count: 850
+    era: 1.x
+  TodoWrite:
+    count: 642
+    era: 1.x
+  Grep:
+    count: 442
+    era: 1.x
+  Write:
+    count: 208
+    era: 1.x
+  WebFetch:
+    count: 97
+    era: 1.x
+  MultiEdit:
+    count: 73
+    era: 1.x
+  ExitPlanMode:
+    count: 48
+    era: 1.x
+  WebSearch:
+    count: 46
+    era: 1.x
+  Task:
+    count: 46
+    era: 1.x
+  LS:
+    count: 35
+    era: 1.x
+  Glob:
+    count: 17
+    era: 1.x
+  exit_plan_mode:
+    count: 12
+    era: 1.x
+  TodoRead:
+    count: 4
+    era: 1.x
+  AskUserQuestion:
+    count: 0
+    era: 1.x (absent from 1.x sessions, confirmed in 2.x capture)
+    description: Presents interactive question with options to user
+  TaskCreate:
+    count: 0
+    era: 2.x-only
+    description: Creates a task in the todo list (replaces TodoWrite in 2.x)
+  TaskUpdate:
+    count: 0
+    era: 2.x-only
+    description: Updates task status/details (replaces TodoWrite in 2.x)
+  Skill:
+    count: 0
+    era: 2.x-only
+    description: Skill invocation tool, added in 2.x
+special_patterns:
+  version 1.x: 29916
+  'tool_result content: string': 7658
+  'isSidechain: true': 1015
+  version 2.x: 578
+  markdown code block: 444
+  '@file reference': 195
+  '[Request interrupted by user]': 143
+  'summary: has .summary text': 140
+  'summary: has .leafUuid': 140
+  'isMeta: true (caveat message)': 123
+  contains URL: 81
+  <bash-input> tag: 45
+  'tool_result content: array': 38
+  'tool_result sub-block: text': 34
+  'tool_result sub-block: image': 4
+  'image media_type: image/png': 3
+  'slash_command: /ultrathink': 1
+content_format_polymorphism:
+  array: 24478
+  string: 1944
+tool_result_entry_fields:
+  stdout: 3250
+  stderr: 3250
+  interrupted: 3250
+  isImage: 3250
+  filePath: 1186
+  structuredPatch: 1186
+  userModified: 1031
+  oldString: 989
+  newString: 989
+  originalFile: 989
+  replaceAll: 989
+  type: 979
+  file: 824
+  oldTodos: 641
+  newTodos: 641
+  content: 552
+  numFiles: 459
+  filenames: 459
+  mode: 385
+  numLines: 363
+  durationMs: 112
+  bytes: 95
+  code: 95
+  codeText: 95
+  result: 95
+  url: 95
+  returnCodeInterpretation: 80
+  query: 46
+  results: 46
+  durationSeconds: 46
+  edits: 42
+  originalFileContents: 42
+  totalDurationMs: 34
+  totalTokens: 34
+  totalToolUseCount: 34
+  usage: 34
+  plan: 21
+  isAgent: 21
+  wasInterrupted: 18
+  truncated: 17
+  status: 2
+  prompt: 2
+stop_reasons:
+  tool_use: 1667
+  end_turn: 141
+  stop_sequence: 50
+models:
+  claude-opus-4-20250514: 15232
+  claude-sonnet-4-5-20250929: 261
+  claude-sonnet-4-20250514: 118
+  <synthetic>: 50
+  claude-haiku-4-5-20251001: 43
+two_x_only_fields:
+  agent_id:
+    location: entry root
+    description: Identifies subagent type (v2.0.28+)
+    era: 2.x-only
+  agent_transcript_path:
+    location: entry root
+    description: Path to subagent transcript file (v2.0.28+)
+    era: 2.x-only
+  thinkingMetadata:
+    location: entry root (user entries)
+    description: Extended thinking control metadata
+    era: late-1.x+ (already seen in sessions)
+  todos:
+    location: entry root
+    description: Inline task tracking array
+    era: 2.x-only
+  modelUsage:
+    location: entry root
+    description: Per-model token usage breakdown
+    era: 2.x-only

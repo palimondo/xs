@@ -1,0 +1,551 @@
+# Golden Files Inventory
+# Tracks all input fixtures and expected outputs for xs spec validation
+#
+# Source: BookMinder/claude-dev-log-diary/tools/specs/
+# Trust level: LOW (post-hoc characterization, not TDD-derived)
+# Usage: Reference for understanding expected behavior, NOT authoritative specs
+
+metadata:
+  gathered_from: ~/Developer/BookMinder/claude-dev-log-diary/tools/specs/
+  gathered_at: 2026-02-26
+  trust_note: |
+    These golden files were created as part of post-hoc characterization specs
+    for the vibe-coded xs implementation. They show what the OLD implementation
+    produced, not necessarily what the NEW implementation should produce.
+    Use as reference, validate against recovered requirements before adopting.
+
+# ─── Input Fixtures ───────────────────────────────────────────────
+
+fixtures:
+
+  synthetic/minimal_session.jsonl:
+    description: Minimal 5-entry session with thinking, text, TodoWrite, MCP tool
+    entries: 5
+    entry_types: [assistant, user]
+    tools_covered: [TodoWrite, mcp__github_comment__update_claude_comment]
+    content_blocks: [thinking, text, tool_use, tool_result]
+    era: synthetic (no version field)
+    used_by:
+      - 1x/minimal_timeline_compact.txt
+
+  synthetic/file_ops_session.jsonl:
+    description: File operation examples — Write and Edit tools
+    entries: 5
+    entry_types: [assistant, user]
+    tools_covered: [Write, Edit]
+    content_blocks: [tool_use, tool_result]
+    era: synthetic (no version field)
+    used_by: []
+    note: No corresponding golden output file found
+
+  synthetic/format_test_session.jsonl:
+    description: Edge case formatting — string content, voice, bash-input/stderr, @file, Read
+    entries: 9
+    entry_types: [user, assistant]
+    tools_covered: [Read]
+    content_blocks: [thinking, text, tool_use, tool_result]
+    special_patterns:
+      - string content (message as plain string, not array)
+      - voice marker ("//voice: voice is running…")
+      - bash-input tag ("<bash-input>./explore_session.py test</bash-input>")
+      - bash-stderr tag ("<bash-stderr>Error: file not found</bash-stderr>")
+      - "@file.txt" reference
+    era: synthetic (no version field)
+    used_by: []
+    note: No corresponding golden output file found — likely used in format_spec tests
+
+# ─── 1.x Era Golden Outputs ──────────────────────────────────────
+# Source session: 99def08d (GitHub Actions PR review, July 2025)
+# CC version: ~1.0.x
+
+golden_outputs_1x:
+
+  # --- Display mode: summary ---
+
+  1x/summary_default.txt:
+    description: Session summary showing event counts, tool breakdown, usage hints
+    display_mode: summary
+    source_session: 99def08d (GH Actions PR #14 review)
+    size: 1.2K
+    lines: 30
+    stories_covered:
+      - SUM-001  # Summary view event counts
+      - SUM-002  # Tool type breakdown in summary
+      - CLI-003  # Summary mode flag (-s)
+    key_features:
+      - Event count breakdown (105 events)
+      - Tool call categorization (MCP, Bash, Read, Grep, Glob)
+      - Inline CLI usage hints as comments
+      - Files modified count
+
+  # --- Display mode: compact (with sequence numbers) ---
+
+  1x/timeline_compact.txt:
+    description: Full session in compact mode with [N] sequence numbers
+    display_mode: compact
+    source_session: 99def08d
+    size: 7.2K
+    lines: ~30
+    stories_covered:
+      - DSP-001  # Compact display mode
+      - FMT-001  # Sequence number display
+      - FMT-003  # Thinking block rendering
+      - FMT-004  # Tool use compact rendering ("[Tools: X]")
+      - FMT-005  # Tool result rendering (⎿ prefix)
+      - FMT-006  # Truncation with [...] markers
+    key_features:
+      - "[N] ⏺" numbering pattern
+      - Tool abbreviations "[Tools: Glob]"
+      - File list truncation with "[...]"
+      - Continuation lines with "⎿"
+
+  1x/minimal_timeline_compact.txt:
+    description: Minimal compact timeline from synthetic fixture
+    display_mode: compact
+    source_fixture: fixtures/synthetic/minimal_session.jsonl
+    size: 362B
+    lines: 8
+    stories_covered:
+      - DSP-001  # Compact display mode
+      - FMT-003  # Thinking block as "<thinking>"
+      - FMT-018  # TodoWrite result formatting
+      - FMT-019  # MCP tool display
+    key_features:
+      - Thinking shown as "⏺ <thinking> text"
+      - TodoWrite result as "Updated 1 todos (1 pending)"
+      - MCP tool as "mcp__github_comment__...(body)"
+      - Tool result with "⎿" continuation
+
+  # --- Display mode: truncated (no sequence numbers) ---
+
+  1x/timeline_truncated.txt:
+    description: Full session in truncated mode (no sequence numbers)
+    display_mode: truncated
+    source_session: 99def08d
+    size: 19K
+    lines: ~200
+    stories_covered:
+      - DSP-002  # Truncated display mode
+      - FMT-003  # Thinking with "… +N lines" truncation
+      - FMT-004  # Tool use rendering
+      - FMT-007  # Multi-line truncation pattern
+      - FMT-009  # "Waiting…" placeholder for async tools
+    key_features:
+      - No sequence numbers (bare "⏺")
+      - Thinking truncation "… +18 lines"
+      - "Waiting…" for tool execution
+      - File path display and truncation
+      - Analysis blocks "<analysis>...</analysis>"
+
+  # --- Filtering ---
+
+  1x/git_operations.txt:
+    description: Filtered view showing only git bash commands
+    display_mode: compact (filtered)
+    source_session: 99def08d
+    size: 177B
+    lines: 6
+    stories_covered:
+      - FLT-009  # --git flag shortcut
+      - FLT-001  # Include filter (-i Bash)
+    key_features:
+      - "Bash: $ command" format (1.x style)
+      - Non-consecutive sequence numbers [85], [86], [91], [99]
+      - Only git-related commands shown
+    format_note: |
+      Uses 1.x tool format "Bash: $ command" not 2.x "Bash(command)".
+      Relevant to CONF-001 (1.x vs 2.x format).
+
+  # --- Range selection ---
+
+  1x/timeline_range_10_20.txt:
+    description: Range-selected output (events 10-20)
+    display_mode: compact
+    source_session: 99def08d
+    size: 706B
+    lines: 12
+    stories_covered:
+      - RNG-001  # Range selection syntax
+      - DSP-001  # Compact display in range
+    key_features:
+      - Range [10]-[20] only
+      - Tool invocations and results within range
+      - File path truncation
+
+  1x/timeline_after_context.txt:
+    description: Output after context expansion showing continuation
+    display_mode: compact
+    source_session: 99def08d
+    size: 164B
+    lines: 4
+    stories_covered:
+      - CTX-001  # Context lines display
+    key_features:
+      - Shows [10]-[12] after context expansion
+      - Continuation "⎿" with file list
+
+  # --- Export ---
+
+  1x/export_json_1_5.json:
+    description: JSON export of events 1-5 (API message format)
+    display_mode: json export
+    source_session: 99def08d
+    size: 8.7K
+    lines: ~80
+    stories_covered:
+      - EXP-001  # JSON export mode
+      - EXP-002  # Export preserves API structure
+    key_features:
+      - Full Claude API message structure
+      - Thinking blocks with signature field
+      - Usage statistics (input/output/cache tokens)
+      - parent_tool_use_id and session_id fields
+      - stop_reason and stop_sequence
+
+  # --- Full session replays ---
+
+  1x/session_e583_full.txt:
+    description: Full console replay of session e583 (xs tool evaluation)
+    display_mode: full
+    source_session: e583 (August 2025, 1.x era)
+    size: 9.9K
+    lines: ~200
+    stories_covered:
+      - DSP-003  # Full display mode
+      - FMT-010  # Task tool delegation display
+    key_features:
+      - Task delegation prompt display
+      - Citation format "[session:seq]"
+      - xs command examples in output
+      - Tool assessment structure
+
+  1x/session_e583_context_recovery_unconstrained_scout.txt:
+    description: Subagent output from context recovery scout task
+    display_mode: full (subagent)
+    source_session: e583 (subagent output)
+    size: 12K
+    lines: ~200
+    stories_covered:
+      - SDC-001  # Sidechain display
+      - FMT-010  # Task delegation display
+    key_features:
+      - Subagent tool usage (Bash with xs commands)
+      - Bug discovery report structure
+      - Tool assessment findings
+      - Citation format in findings
+
+  1x/session_1e83.txt:
+    description: Full console replay of session 1e83 (xs testing & conversation mode)
+    display_mode: full
+    source_session: 1e83 (August 2025, 1.x era)
+    size: 155K
+    lines: 3170
+    stories_covered:
+      - DSP-003  # Full display mode
+      - FMT-001  # All formatting patterns at scale
+    key_features:
+      - Large realistic session
+      - Git operations, file reads, searches
+      - Task delegation patterns
+      - Error handling in output
+    note: Largest 1.x golden file — good for comprehensive rendering validation
+
+# ─── 2.x Era Golden Outputs ──────────────────────────────────────
+# Source session: 760a (compaction recovery testing, October 2025)
+# CC version: 2.0.19
+
+golden_outputs_2x:
+
+  2x/session_760a_full.txt:
+    description: Full console replay of session 760a (compaction recovery hooks)
+    display_mode: full
+    source_session: 760a (October 2025, CC v2.0.19)
+    size: 470K
+    lines: 8048
+    stories_covered:
+      - DSP-003  # Full display mode
+      - FMT-001  # 2.x formatting patterns
+      - FMT-020  # Compaction banner display
+      - FMT-022  # API error display
+    key_features:
+      - CC v2.0.19 banner and formatting
+      - /model command (local_command subtype)
+      - Ctrl+E historical messages marker
+      - Compaction workflow
+      - Hook execution results
+      - API error (400) display
+      - "ultrathink" analysis section
+    format_note: |
+      Shows 2.x console appearance — compare with 1.x files for CONF-001 analysis.
+      Key differences: banner format, tool display, compaction markers.
+
+  2x/session_760a_post-compact.txt:
+    description: Session 760a after compaction — context recovery workflow
+    display_mode: full (post-compact)
+    source_session: 760a (October 2025, CC v2.0.19)
+    size: 24K
+    lines: 497
+    stories_covered:
+      - DSP-003  # Full display mode
+      - FMT-020  # Compaction banner ("═══ Conversation compacted ═══")
+      - FMT-022  # PreCompact hook output
+      - CTX-005  # Context recovery hooks
+    key_features:
+      - Compaction separator with "ctrl+o for history"
+      - /compact command and result
+      - PreCompact hook execution display
+      - Flag file creation (/tmp/.claude_compaction_*.json)
+      - Hook-generated context recovery prompt
+      - Tool use blocking (permissionDecision: deny)
+      - xs command usage in recovery workflow
+
+# ─── Real JSONL Fixtures ──────────────────────────────────────────
+# Extracted from real session transcripts by extract_fixtures.py
+# Each is a small (1-4 entry) self-contained fragment covering a specific pattern
+
+real_fixtures:
+
+  # Basic message patterns
+  fixtures/real/basic-conversation.jsonl:
+    description: User string message → assistant thinking + text response
+    source_session: 0a5034b4
+    entries: 3
+    covers: [user string content, assistant thinking, assistant text, content polymorphism]
+
+  fixtures/real/thinking-block.jsonl:
+    description: Assistant with thinking + text content blocks (no tool_use)
+    source_session: 1e83
+    entries: 1
+    covers: [thinking block, text block, stop_reason end_turn]
+
+  # Tool use pairs (assistant tool_use → user tool_result)
+  fixtures/real/tool-bash.jsonl:
+    description: Bash tool_use + tool_result with stdout/stderr
+    source_session: 1e83
+    entries: 2
+    covers: [Bash tool, toolUseResult.stdout, toolUseResult.stderr, toolUseResult.interrupted]
+
+  fixtures/real/tool-read.jsonl:
+    description: Read tool_use + tool_result
+    source_session: 1e83
+    entries: 2
+    covers: [Read tool, toolUseResult.file, toolUseResult.numLines]
+
+  fixtures/real/tool-edit.jsonl:
+    description: Edit tool_use + tool_result with structuredPatch
+    source_session: 1e83
+    entries: 2
+    covers: [Edit tool, toolUseResult.structuredPatch, toolUseResult.filePath]
+
+  fixtures/real/tool-write.jsonl:
+    description: Write tool_use + tool_result
+    source_session: b475
+    entries: 2
+    covers: [Write tool, toolUseResult.filePath]
+
+  fixtures/real/tool-grep.jsonl:
+    description: Grep tool_use + tool_result
+    source_session: 1e83
+    entries: 2
+    covers: [Grep tool, toolUseResult.content]
+
+  fixtures/real/tool-glob.jsonl:
+    description: Glob tool_use + tool_result
+    source_session: 31c4
+    entries: 2
+    covers: [Glob tool, toolUseResult.numFiles, toolUseResult.filenames]
+
+  fixtures/real/tool-todowrite.jsonl:
+    description: TodoWrite tool_use + tool_result with oldTodos/newTodos
+    source_session: 1e83
+    entries: 2
+    covers: [TodoWrite tool, toolUseResult.oldTodos, toolUseResult.newTodos]
+
+  fixtures/real/tool-webfetch.jsonl:
+    description: WebFetch tool_use + tool_result
+    source_session: b475
+    entries: 2
+    covers: [WebFetch tool, toolUseResult.url, toolUseResult.bytes]
+
+  fixtures/real/tool-task.jsonl:
+    description: Task tool_use + tool_result with subagent fields
+    source_session: e583
+    entries: 2
+    covers: [Task tool, toolUseResult.totalTokens, toolUseResult.totalDurationMs]
+
+  # Special event types
+  fixtures/real/sidechain.jsonl:
+    description: Entries with isSidechain true (subagent work)
+    source_session: e583
+    entries: 4
+    covers: [isSidechain flag, subagent entries]
+
+  fixtures/real/interruption.jsonl:
+    description: User interruption with [Request interrupted by user]
+    source_session: 1e83
+    entries: 2
+    covers: [user interruption text, truncated assistant response]
+
+  fixtures/real/meta-caveat.jsonl:
+    description: isMeta true caveat messages
+    source_session: e583
+    entries: 1
+    covers: [isMeta flag, caveat message pattern]
+
+  fixtures/real/summary.jsonl:
+    description: Summary entries with summary text + leafUuid
+    source_session: 0a5034b4
+    entries: 2
+    covers: [summary event type, summary text, leafUuid]
+
+  fixtures/real/compact-summary.jsonl:
+    description: isCompactSummary true (post-compaction context)
+    source_session: 760a
+    entries: 1
+    covers: [isCompactSummary flag, post-compaction user entry]
+    era: 2.x (v2.0.19)
+
+  # System entries
+  fixtures/real/system-compact-boundary.jsonl:
+    description: System compact_boundary with compactMetadata
+    source_session: 760a
+    entries: 1
+    covers: [system type, compact_boundary subtype, compactMetadata, logicalParentUuid]
+    era: 2.x (v2.0.19)
+
+  fixtures/real/system-local-command.jsonl:
+    description: System local_command entries (/model, /usage)
+    source_session: 760a
+    entries: 2
+    covers: [system type, local_command subtype, XML content format]
+    era: 2.x (v2.0.19)
+
+  fixtures/real/system-hook.jsonl:
+    description: System PreToolUse hook entries (no subtype)
+    source_session: 1e83
+    entries: 2
+    covers: [system type, toolUseID, level field, hook content]
+
+  fixtures/real/api-error.jsonl:
+    description: isApiErrorMessage true (API error response)
+    source_session: 760a
+    entries: 1
+    covers: [isApiErrorMessage flag, error response structure]
+    era: 2.x (v2.0.19)
+
+  fixtures/real/file-history-snapshot.jsonl:
+    description: file-history-snapshot entry
+    source_session: 760a
+    entries: 1
+    covers: [file-history-snapshot type, snapshot data, isSnapshotUpdate]
+    era: 2.x (v2.0.19)
+
+# ─── Remaining Gaps ──────────────────────────────────────────────
+
+coverage_gaps:
+
+  missing_fixtures:
+    - name: MCP tool_use
+      description: No sessions contain actual MCP tool_use (only text references)
+      needed_for: FMT-019 (MCP tool display)
+      action: Run capture-scenario.md with MCP server configured, or hand-create
+
+    - name: Parallel tool calls (multi tool_use per message)
+      description: All 1.x sessions have exactly 1 tool_use per assistant message
+      needed_for: FMT-010 (parallel tool display)
+      action: Capture in 2.x session (CC now supports parallel tool calls)
+      note: This is a 2.x behavior — 1.x CC never sent parallel tool calls
+
+    - name: Image content block
+      description: 3 image blocks exist in corpus but are large base64 (skipped)
+      needed_for: FMT-017 (image display)
+      action: Extract with size limit or hand-create small test image
+
+    - name: WebSearch tool
+      description: Not extracted as standalone fixture
+      needed_for: FMT-016 (WebSearch display)
+      action: Extract from sessions with WebSearch (46 uses in corpus)
+
+  missing_golden_outputs:
+    - name: JSONL export mode
+      description: No golden file for --jsonl export (raw passthrough)
+      needed_for: EXP-003
+      action: Create from any session
+
+    - name: Search results display
+      description: No golden file showing -S search highlighting
+      needed_for: SRC-001, SRC-002
+      action: Generate with old implementation
+
+    - name: Context lines display
+      description: Only minimal context example (timeline_after_context.txt)
+      needed_for: CTX-001 through CTX-004
+      action: Generate more comprehensive examples
+
+    - name: 2.x compact/truncated modes
+      description: Only full replay golden files for 2.x, no compact/truncated
+      needed_for: Comparing 1.x vs 2.x rendering
+      action: Run capture-scenario.md, generate with old implementation
+
+  # ─── 2.x Capture Session (Run 1, 2026-02-27) ────────────────────
+
+  capture_run_2:
+    date: 2026-02-27
+    cc_version: 2.1.62
+    model: claude-opus-4-6
+    session_id: 91992383-ebfc-43f8-a60f-eb055ef47016
+    scenario: minimal-capture-scenario.md
+    method: tmux-driven interactive session
+    note: Run 2 fixes the compaction issue — /export happens BEFORE /compact
+
+    files:
+      golden-v2.1.62-2026-02-27.jsonl:
+        description: Full session JSONL (all 17 prompts + compact)
+        lines: 148
+        size: 128K
+        event_types: [user, assistant, progress, file-history-snapshot, system]
+        event_counts: { user: 42, assistant: 38, progress: 29, file-history-snapshot: 22, system: 17 }
+        tools_used: [Bash, Edit, Read, TaskCreate, Write, WebSearch, WebFetch, TaskUpdate, Task, Grep, Glob, AskUserQuestion]
+        special_patterns: [isMeta, isCompactSummary, interruption, compact_boundary, thinking, stop_hook_summary]
+
+      golden-v2.1.62-2026-02-27.txt:
+        description: "/export" output BEFORE /compact — truncated view of full session
+        lines: 207
+        size: 7.8K
+        content: THIS IS THE GOLDEN OUTPUT — what xs must reproduce from the JSONL
+
+      golden-v2.1.62-2026-02-27-full.txt:
+        description: Full transcript via Ctrl+O → Ctrl+E expanded view + tmux scrollback
+        lines: 423
+        size: 21K
+        content: Complete pre-compact session + compact summary + post-compact commands
+
+      golden-v2.1.62-2026-02-27-full-ansi.txt:
+        description: Same as -full.txt but with ANSI color codes preserved
+        lines: 423
+        size: 30K
+
+    tools_NOT_triggered:
+      MultiEdit: "CC used 2 separate Edit calls instead"
+      LS: "CC used Bash(ls -la) instead"
+      TodoWrite: "Replaced by TaskCreate + TaskUpdate in 2.x"
+
+    discoveries:
+      - "progress event type (hook_progress) — 29 occurrences, after each turn"
+      - "stop_hook_summary system subtype — 17 occurrences, one per turn"
+      - "TaskCreate/TaskUpdate replace TodoWrite in CC 2.x"
+      - "MultiEdit may not exist in CC 2.x (or CC prefers Edit)"
+      - "LS tool may not exist in CC 2.x (or CC prefers Bash)"
+      - "/export with absolute path fails — CC prepends CWD, creating double path"
+      - "Ctrl+O then Ctrl+E needed to access full expanded transcript via tmux"
+      - "/compact wipes visible history — /export must happen BEFORE /compact"
+
+  discovered_schema_facts:
+    - "CC 1.x never sends parallel tool calls (always 1 tool_use per assistant message)"
+    - "No real MCP tool_use in any of 60 sessions (mcp__ only in text references)"
+    - "'Bash: $ command' format was an xs bug, not CC console format"
+    - "'//voice:' format was an xs bug, not CC console format"
+    - "Synthetic fixtures encode buggy formats — unreliable as golden references"
+    - "All 3 synthetic fixtures lack uuid, sessionId, version fields"
+    - "CC 2.x progress event type not in 1.x schema — newly discovered"
+    - "CC 2.x uses TaskCreate/TaskUpdate instead of TodoWrite for todo management"
