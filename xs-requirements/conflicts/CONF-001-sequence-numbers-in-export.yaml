@@ -1,0 +1,56 @@
+id: CONF-001
+title: "Sequence numbers in JSON/JSONL export vs raw passthrough"
+
+description: |
+  PRIN-004 (raw passthrough) requires --json/--jsonl to emit unmodified
+  JSONL objects. But the user expects sequence numbers to be available
+  in export modes (EXP-004) for cross-referencing with display output.
+  Adding a sequence field violates passthrough. Not adding it breaks
+  addressability in export pipelines.
+
+evidence:
+  - source: "Group 1 tension T5"
+    observation: "PRS-012 notes user expected sequence numbers in export but raw passthrough forbids injection"
+  - source: "Group 2 tension T1"
+    observation: "EXP-001/EXP-002 require verbatim objects; EXP-004 wants sequence numbers added"
+  - source: "EXP-004 validation_notes"
+    observation: "Explicitly noted as unresolved"
+
+options:
+  - id: A
+    name: "Strict passthrough — no sequence numbers in export"
+    pros: ["Preserves raw contract", "Simplest implementation", "jq pipelines get clean data"]
+    cons: ["No way to correlate export objects with display sequence numbers"]
+
+  - id: B
+    name: "Envelope wrapping — {seq: N, event: <raw_object>}"
+    pros: ["Raw object untouched inside envelope", "Sequence numbers available"]
+    cons: ["Changes output structure", "Breaks naive jq pipelines expecting bare objects"]
+
+  - id: C
+    name: "Inject seq field into objects"
+    pros: ["Simple to consume", "Sequence number directly available"]
+    cons: ["Violates PRIN-004", "Modifies source data"]
+
+  - id: D
+    name: "Separate flag: --seq adds sequence, default is raw"
+    pros: ["User controls tradeoff", "Default preserves raw contract"]
+    cons: ["Additional flag complexity"]
+
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Option D selected. Default --json/--jsonl preserves raw passthrough
+  (PRIN-004). An optional --with-seq flag injects a sequence number
+  field into each exported object. This preserves the raw contract by
+  default while providing opt-in correlation.
+  (Resolution carried from draft CONF-002.)
+
+affects:
+  - EXP-001
+  - EXP-002
+  - EXP-004
+  - PRS-012
+  - PRIN-004
+
+status: fresh

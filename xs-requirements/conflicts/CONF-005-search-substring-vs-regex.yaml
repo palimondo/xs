@@ -1,0 +1,54 @@
+id: CONF-005
+title: "Search: simple substring vs regex/alternation"
+
+description: |
+  SRC-001 explicitly states search is "simple substring match, not regex."
+  However, CRH-005-AC4 shows the user expecting regex alternation patterns
+  like 'xs 760a -S "commit|tdd-guard|decision block"'. If search is truly
+  simple substring, the | character would be searched literally. The user's
+  grep/rg familiarity (PRIN-008) suggests regex may be desired despite
+  the earlier "simple substring" statement.
+
+evidence:
+  - source: "Group 3 tension T2"
+    observation: "SRC-001 says simple substring; CRH-005-AC4 shows alternation pattern"
+  - source: "Group 3 constraint C1"
+    observation: "Search confirmed as simple case-insensitive substring in SRC-001"
+  - source: "CRH-005-AC4"
+    observation: "User example: xs 760a9954 -S 'commit|tdd-guard|decision block'"
+
+options:
+  - id: A
+    name: "Simple substring only"
+    pros: ["Explicitly stated by user", "Simplest implementation", "No regex escaping issues"]
+    cons: ["Cannot do alternation patterns the user later used"]
+
+  - id: B
+    name: "Full regex support"
+    pros: ["Matches user's later usage", "Consistent with grep/rg familiarity"]
+    cons: ["Contradicts explicit 'simple substring' statement", "Regex escaping complexity"]
+
+  - id: C
+    name: "Substring by default, --regex flag for regex mode"
+    pros: ["Honors both statements", "Progressive complexity"]
+    cons: ["Another flag", "User may forget which mode they need"]
+
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  The spec should say: -S supports full regex patterns (case-insensitive).
+  The WHY is performance — delegating search to native tools (rg, jq) that
+  can process huge JSONL files faster than naive Python. Regex support is a
+  free bonus of that delegation, not a complication. The spec should NOT
+  prescribe implementation details (rg vs jq vs other), but the acceptance
+  criteria should reflect regex capability since it comes at zero cost.
+
+  If a future need arises for literal matching, add -F/--fixed-strings
+  (matching rg's own convention).
+
+affects:
+  - SRC-001
+  - CRH-005
+  - PRIN-008
+
+status: fresh

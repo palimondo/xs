@@ -1,0 +1,37 @@
+id: PRIN-010
+title: "Summary mode as self-documenting tutorial"
+
+statement: |
+  Summary output serves double duty: session overview AND inline CLI
+  tutorial. Each count line includes a YAML comment showing the flag
+  combination to view that subset (e.g., "# -U", "# -i Bash").
+  Summary output must be valid, machine-parseable YAML. Hierarchical
+  counts must be arithmetically consistent (children sum to parent).
+
+rationale: |
+  The user explicitly designed summary as the entry point that teaches
+  the tool's filter vocabulary. A new user runs `xs <session>`, sees
+  the summary, and learns which flags to use for deeper exploration.
+  The user called out arithmetic inconsistency as something to prevent.
+
+implications:
+  - "Every count line has an inline YAML comment showing the relevant CLI flags"
+  - "Output is valid YAML (machine-parseable)"
+  - "Child counts must sum to their parent count"
+  - "Zero-count entries are omitted"
+  - "Tool calls sorted descending by count"
+  - "Changes to filter flags must be reflected in summary comments"
+
+applies_to:
+  - SUM-001   # Summary view
+  - SUM-002   # MCP tool grouping
+  - SUM-003   # Git detection
+  - CLI-001   # Summary mode
+
+evidence:
+  - "Group 3 pattern P3: Summary as self-documenting tutorial (SUM-001, SUM-002, SUM-003)"
+  - "Group 4 pattern P4: Summary coupled to filter flag inventory (CLI-001)"
+  - "Group 3 pattern P4: Hierarchical arithmetic consistency (b475:301-400 F008)"
+  - "Group 3 constraint C3: Summary output must be valid YAML"
+
+status: fresh

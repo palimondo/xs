@@ -1,0 +1,279 @@
+phase: "Pass 4 Reduce"
+generated_at: 2026-02-27
+method: "Synthesized from 4 group analysis summaries (pass4-group-{1..4}.yaml)"
+reference_data: ["golden-files/schema.yaml", "golden-files/inventory.yaml"]
+
+principles:
+  - id: PRIN-001
+    file: principles/PRIN-001-unified-timeline.yaml
+    title: "Unified chronological timeline as the central data structure"
+    cross_group_evidence: [G1:P1, G2:P7, G3:P2, G4:P2, G4:P3]
+    scope: "Foundational — all epics depend on this"
+
+  - id: PRIN-002
+    file: principles/PRIN-002-filter-pipeline-ordering.yaml
+    title: "Canonical five-step filter pipeline"
+    cross_group_evidence: [G1:P2, G1:C9, G3:P2, G1:C8]
+    scope: "search, filtering, range, export"
+
+  - id: PRIN-003
+    file: principles/PRIN-003-filter-display-separation.yaml
+    title: "Filtering and display are orthogonal concerns"
+    cross_group_evidence: [G1:P9, G2:P12, G4:P3]
+    scope: "Architecture — filtering vs display/export"
+
+  - id: PRIN-004
+    file: principles/PRIN-004-raw-jsonl-passthrough.yaml
+    title: "Raw JSONL passthrough for JSON/JSONL export"
+    cross_group_evidence: [G1:P10, G2:P6, G3:P5]
+    scope: "parsing, export, sidechain"
+
+  - id: PRIN-005
+    file: principles/PRIN-005-stable-sequence-numbers.yaml
+    title: "Gapless, stable sequence numbers"
+    cross_group_evidence: [G1:C2, G2:P7]
+    scope: "parsing, display, range"
+
+  - id: PRIN-006
+    file: principles/PRIN-006-console-fidelity.yaml
+    title: "Console output fidelity for LLM consumption"
+    cross_group_evidence: [G2:P1, G2:C1, G2:C2, G2:C3, G4:P5]
+    scope: "All formatting and display stories"
+
+  - id: PRIN-007
+    file: principles/PRIN-007-no-implicit-filtering.yaml
+    title: "No implicit filtering without explicit flags"
+    cross_group_evidence: [G1:C3]
+    scope: "filtering, parsing"
+    note: "Single-group origin but zero-tolerance severity elevates it to principle"
+
+  - id: PRIN-008
+    file: principles/PRIN-008-grep-conventions.yaml
+    title: "CLI mirrors grep/rg conventions"
+    cross_group_evidence: [G3:P1, G1:P12, G4:P6]
+    scope: "search, filtering, CLI design"
+
+  - id: PRIN-009
+    file: principles/PRIN-009-implicit-mode-activation.yaml
+    title: "Implicit mode activation from flag context"
+    cross_group_evidence: [G1:P8, G3:P9, G4:P2]
+    scope: "CLI, display modes, search"
+
+  - id: PRIN-010
+    file: principles/PRIN-010-summary-as-tutorial.yaml
+    title: "Summary mode as self-documenting tutorial"
+    cross_group_evidence: [G3:P3, G4:P4, G3:P4, G3:C3]
+    scope: "summary, CLI"
+
+  - id: PRIN-011
+    file: principles/PRIN-011-content-polymorphism.yaml
+    title: "Content format polymorphism is a first-class concern"
+    cross_group_evidence: [G1:P6, G3:P8]
+    scope: "parsing, search, formatting"
+    note: "Derived from established facts 9 and 10, elevated to principle due to crash risk"
+
+  - id: PRIN-012
+    file: principles/PRIN-012-display-mode-hierarchy.yaml
+    title: "Display mode derivation chain"
+    cross_group_evidence: [G2:P2, G2:C8, G2:P3]
+    scope: "display modes, formatting"
+    note: "Primarily Group 2 but affects implementation strategy across formatting and display"
+
+conflicts:
+  - id: CONF-001
+    file: conflicts/CONF-001-sequence-numbers-in-export.yaml
+    title: "Sequence numbers in JSON/JSONL export vs raw passthrough"
+    cross_group_evidence: [G1:T5, G2:T1]
+    resolution: pending
+
+  - id: CONF-002
+    file: conflicts/CONF-002-post-filter-tail.yaml
+    title: "Pipeline ordering prevents 'last N search/filter results'"
+    cross_group_evidence: [G1:T1, G3:T1, G3:T6]
+    resolution: pending
+
+  - id: CONF-003
+    file: conflicts/CONF-003-git-shortcut-glob-depth.yaml
+    title: "--git shortcut fails with cd-prefixed commands"
+    cross_group_evidence: [G1:T4, G4:T3, G3:C7]
+    resolution: pending
+
+  - id: CONF-004
+    file: conflicts/CONF-004-slash-command-prefix.yaml
+    title: "Slash command display prefix"
+    cross_group_evidence: [G2:T2]
+    resolution: pending
+
+  - id: CONF-005
+    file: conflicts/CONF-005-search-substring-vs-regex.yaml
+    title: "Search: simple substring vs regex/alternation"
+    cross_group_evidence: [G3:T2, G3:C1]
+    resolution: pending
+
+patterns_not_elevated_to_principles:
+  - pattern: "G1:P3 Include/exclude duality with symmetric syntax"
+    reason: "Within-group (filtering epic only). Important but not cross-cutting."
+
+  - pattern: "G1:P4 Virtual entities as unifying filter abstraction"
+    reason: "Within-group (filtering epic only). Design detail, not principle."
+
+  - pattern: "G1:P7 Glob pattern matching from CC allowed-tools"
+    reason: "Folded into PRIN-008 (grep conventions) as an implication."
+
+  - pattern: "G1:P11 Multi-line JSON accumulation parser"
+    reason: "Technical implementation detail within parsing epic."
+
+  - pattern: "G1:P14 Range syntax disambiguation"
+    reason: "Within-group (range epic only). Syntax design detail."
+
+  - pattern: "G2:P4/P5 Truncation patterns (first/last, 3-line limit)"
+    reason: "Within-group (formatting epic). Display detail, not principle."
+
+  - pattern: "G2:P8/P9 Blank line spacing and gap separators"
+    reason: "Within-group. Formatting details folded into PRIN-006."
+
+  - pattern: "G3:P6 Two-hook architecture for compaction recovery"
+    reason: "Within-group (context/compaction). Implementation pattern."
+
+  - pattern: "G3:P7 Sidechain events are inline, not special"
+    reason: "Within-group (sidechain epic). Could become a principle if more epics are affected."
+
+  - pattern: "G4:P7/P8/P9 Flat directory, filename as metadata, XML tags"
+    reason: "Within-group (fetch epic only). Not cross-cutting."
+
+  - pattern: "G4:P10/P11 Performance-conscious extraction, dual-script parity"
+    reason: "Within-group (fetch epic only). Implementation concerns."
+
+tensions_not_elevated_to_conflicts:
+  - tension: "G1:T3 Thinking blocks in JSONL"
+    reason: "Resolved by established facts and schema. Thinking blocks ARE in JSONL (1,960 occurrences)."
+
+  - tension: "G1:T6 +N vs N+ syntactic similarity"
+    reason: "User accepted both forms. No decision needed — document clearly."
+
+  - tension: "G1:T7 MCP tool needs parametric filter"
+    reason: "By design. Virtual entities = coarse, parametric = fine. No conflict."
+
+  - tension: "G2:T3 Sequence number visibility rules circular dependency"
+    reason: "Implementation ordering concern, not a design tension. Treat seq visibility as cross-cutting config."
+
+  - tension: "G2:T4/T5 Duplicate stories (FMT-018/DSP-005, FMT-017/DSP-004)"
+    reason: "Story hygiene issue, not a design conflict. Merge during implementation slicing."
+
+  - tension: "G2:T6 Export filters: same pipeline or separate"
+    reason: "Resolved by PRIN-003 (filter-display separation). Pipeline is shared."
+
+  - tension: "G2:T7 TodoWrite vs TaskCreate/TaskUpdate display"
+    reason: "Handled by version-aware formatting. Not a conflict, just work to be done."
+
+  - tension: "G3:T3 Sidechain filtering without flag design"
+    reason: "Under-specified, not conflicting. Needs a story, not a conflict resolution."
+
+  - tension: "G3:T4 Context expansion applies to filters too"
+    reason: "Under-specified interaction, but can follow grep convention (every surviving event is a 'match')."
+
+  - tension: "G3:T5 -C combined with -A/-B behavior"
+    reason: "Follow grep convention: -C sets both, -A/-B override one side. No genuine conflict."
+
+  - tension: "G4:T1 Convenience alias with unique display"
+    reason: "Rule is clear: unique display format = own mode; content selection only = filter alias."
+
+  - tension: "G4:T2 Implicit timeline vs explicit mode priority"
+    reason: "Resolved by PRIN-009 mode hierarchy. Explicit always wins."
+
+  - tension: "G4:T4 Fetch pipeline: Python vs shell"
+    reason: "Implementation choice for fetch epic, not a cross-cutting design conflict."
+
+  - tension: "G4:T5 Filename timestamp source ambiguity"
+    reason: "Three-timestamp model is clear. Fetch epic detail, not a design conflict."
+
+# ─── Completeness Check (Step B3) ───────────────────────────────────
+
+completeness_check:
+  performed_at: 2026-02-27
+  method: "Compared 9 draft principles + 4 draft conflicts against fresh derivation"
+
+  draft_to_fresh_mapping:
+    principles:
+      - draft: "PRIN-001 Console Fidelity"
+        fresh: "PRIN-006"
+        status: confirmed
+        note: "Also absorbed draft PRIN-004 (No Chrome) — no separate principle needed"
+
+      - draft: "PRIN-002 Filter Pipeline"
+        fresh: "PRIN-002"
+        status: confirmed
+
+      - draft: "PRIN-003 Raw Passthrough"
+        fresh: "PRIN-004"
+        status: confirmed
+
+      - draft: "PRIN-004 No Chrome"
+        fresh: "—"
+        status: "absorbed into PRIN-006"
+        note: "No emojis and no section headers are now implications within console fidelity"
+
+      - draft: "PRIN-005 Graceful Degradation"
+        fresh: "PRIN-013"
+        status: "gap filled"
+        note: "Fresh derivation missed broader crash-resistance. Added PRIN-013."
+
+      - draft: "PRIN-006 Period-Appropriate Formatting"
+        fresh: "—"
+        status: "demoted to resolved conflict CONF-006"
+        note: "1.x vs 2.x is now established facts + resolved design decision, not a principle"
+
+      - draft: "PRIN-007 Summary as Tutorial"
+        fresh: "PRIN-010"
+        status: confirmed
+
+      - draft: "PRIN-008 Filter-Display Separation"
+        fresh: "PRIN-003"
+        status: confirmed
+
+      - draft: "PRIN-009 Stable Sequence Numbers"
+        fresh: "PRIN-005"
+        status: confirmed
+
+    conflicts:
+      - draft: "CONF-001 1.x vs 2.x Format"
+        fresh: "CONF-006"
+        status: "resolution carried"
+        note: "Fresh derivation treated as established fact. Added CONF-006 with resolution."
+
+      - draft: "CONF-002 Seq Numbers in Export"
+        fresh: "CONF-001"
+        status: "resolution carried"
+        note: "User chose option D (--with-seq flag). Transferred."
+
+      - draft: "CONF-003 git cd-prefix"
+        fresh: "CONF-003"
+        status: "resolution carried"
+        note: "User chose Bash(*git *). Transferred."
+
+      - draft: "CONF-004 Slash Command Prefix"
+        fresh: "CONF-004"
+        status: "resolution carried"
+        note: "User chose era-dependent prefix. Transferred."
+
+  new_in_fresh:
+    principles:
+      - "PRIN-001 Unified Timeline — real gap in drafts"
+      - "PRIN-007 No Implicit Filtering — real gap (zero-tolerance user requirement)"
+      - "PRIN-008 grep/rg Conventions — real gap (cross-cutting CLI pattern)"
+      - "PRIN-009 Implicit Mode Activation — real gap (core UX behavior)"
+      - "PRIN-011 Content Polymorphism — real gap (from Pass 3 crash evidence)"
+      - "PRIN-012 Display Mode Hierarchy — real gap (structural derivation chain)"
+
+    conflicts:
+      - "CONF-002 Post-filter tail — new tension not in drafts"
+      - "CONF-005 Substring vs regex — new tension not in drafts"
+
+  summary: |
+    Draft had 9 principles, fresh has 13. All 9 draft principles are accounted for:
+    6 confirmed (renumbered), 1 absorbed, 1 gap-filled, 1 demoted. 6 genuinely
+    new principles were discovered that the synthesis-era drafts missed.
+
+    Draft had 4 conflicts (all resolved), fresh has 6. All 4 draft resolutions
+    carried forward. 2 genuinely new conflicts surfaced. 4 of 6 are resolved;
+    2 remain pending (CONF-002, CONF-005).

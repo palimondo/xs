@@ -1,0 +1,44 @@
+id: PRIN-006
+title: "Console output fidelity for LLM consumption"
+
+statement: |
+  xs output must faithfully reproduce Claude Code console appearance
+  using a fixed Unicode symbol vocabulary: > for user messages,
+  * (U+23FA) for assistant text and tool calls, ⎿ for tool results,
+  ✻ for thinking blocks, ! for local bash commands, @ for file references.
+  No emojis. No section headers. No interactive elements.
+
+rationale: |
+  The primary consumer of xs output is another LLM (Gemini) that needs
+  to parse and summarize session content. Console fidelity ensures the
+  output is recognizable and parseable. The user corrected the agent
+  multiple times for using emojis, adding section headers like
+  "=== TIMELINE ===", or including interactive elements like
+  "(ctrl+r to expand)".
+
+implications:
+  - "Use identical symbols to CC console (defined symbol vocabulary)"
+  - "No emojis in any output mode"
+  - "No section headers (=== TIMELINE ===, etc.) in any output mode"
+  - "No interactive-only elements (ctrl+r, ctrl+o prompts)"
+  - "Tool calls use ToolName(primary_param) format, not Bash: $ format"
+
+applies_to:
+  - FMT-001   # User message format
+  - FMT-002   # Assistant message format
+  - FMT-003   # Bash tool format
+  - FMT-006   # Thinking block format
+  - FMT-025   # No emojis constraint
+  - FMT-024   # No section headers
+  - DSP-001   # Compact mode
+  - DSP-002   # Truncated mode
+
+evidence:
+  - "Group 2 pattern P1: Unified symbol vocabulary, user corrections (b475:966, b475:981, b475:1017)"
+  - "Group 2 constraint C1: No emojis — user corrected multiple times"
+  - "Group 2 constraint C2: No interactive elements"
+  - "Group 2 constraint C3: No section headers — user repeatedly corrected"
+  - "Group 4 pattern P5: No section headers (CLI-008-AC5)"
+  - "Established fact 1: 'Bash: $ command' was an xs bug, correct format is Bash(command)"
+
+status: fresh

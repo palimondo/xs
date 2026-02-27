@@ -1,0 +1,39 @@
+id: PRIN-001
+title: Console Output Fidelity for LLM Consumption
+
+statement: |
+  xs output must faithfully reproduce Claude Code console appearance
+  because the primary consumer is another LLM (Gemini) that needs to
+  understand the session content. reconstruct.jq is the authoritative
+  formatting reference, not the existing explore_session.py implementation.
+
+rationale: |
+  The cross-LLM workflow (Claude Code -> xs -> Gemini summarization) depends
+  on output that another AI can parse reliably. Deviations from CC console
+  appearance confuse the downstream consumer. The user corrected formatting
+  issues repeatedly across sessions b475, 0841, a40c, and day-021.
+
+implications:
+  - Use identical symbols to CC (> for user, ⏺ for assistant/tool_use, ⎿ for tool_result, ✻ for thinking)
+  - Match indentation and spacing exactly
+  - Remove interactive-only elements ("ctrl+r to expand" explicitly removed by user)
+  - Preserve message chronological ordering
+  - Truncation patterns must match CC (3 lines + "... +N lines" where N is TOTAL count)
+  - reconstruct.jq is the reference implementation, not explore_session.py
+
+applies_to:
+  - FMT-*   # All formatting stories
+  - DSP-*   # All display mode stories
+  - SUM-*   # Summary output format
+
+evidence:
+  - "console-formatting report: design hierarchy CC -> reconstruct.jq -> truncated -> compact (b475:1011)"
+  - "display-modes report: ctrl+r reversal — 'instruction for user which is relevant only in interactive mode and is noise in static log output'"
+  - "console-formatting report: truncation count uses TOTAL line count, not remaining (day-021:11201-11400)"
+  - "b475:1224, 0841:1285 — reconstruct.jq as authoritative reference"
+  - "Multiple corrections across sessions b475, a40c, e583, 06a0"
+
+pass3_corrections:
+  - "No factual errors found. Verified against golden file schema and inventory."
+
+status: draft

@@ -1,0 +1,43 @@
+id: PRIN-001
+title: "Unified chronological timeline as the central data structure"
+
+statement: |
+  All xs operations — filtering, range selection, display, export, search,
+  and summary — operate on a single unified chronological timeline. Each
+  content block within a JSONL message becomes a separate timeline entry
+  with a contiguous sequence number starting from 1. This timeline is
+  built once by the parser and consumed by all downstream stages.
+
+rationale: |
+  The user designed the timeline as the foundational abstraction after
+  discovering that operating directly on JSONL messages was too coarse.
+  Content blocks (text, tool_use, tool_result, thinking) need individual
+  addressability for filtering and range selection to work correctly.
+  The timeline unifies the data model so that filtering logic is
+  implemented once, not per-output-mode.
+
+implications:
+  - "Parser must expand each JSONL message into 1+ timeline entries (one per content block)"
+  - "Sequence numbers are contiguous from 1, no gaps, even for empty messages"
+  - "All filtering, range, search, and display operate on the timeline array, never raw JSONL"
+  - "Any change to timeline structure affects every downstream consumer"
+
+applies_to:
+  - PRS-005   # Timeline building
+  - PRS-013   # Content block extraction
+  - FLT-001   # Include filter
+  - FLT-002   # Exclude filter
+  - RNG-001   # Single item range
+  - DSP-001   # Compact mode
+  - DSP-002   # Truncated mode
+  - EXP-001   # JSON export
+  - SRC-001   # Search
+  - SUM-001   # Summary
+
+evidence:
+  - "Group 1 pattern P1: Timeline is the central data structure (PRS-005, FLT-*, RNG-*)"
+  - "Group 2 pattern P7: Sequence number stability across all display modes (FMT-017, DSP-004, EXP-004)"
+  - "Group 3 pattern P2: Five-step filter pipeline all operate on timeline (SRC-*, FLT-*, RNG-*)"
+  - "Group 4 patterns P2/P3: All CLI modes depend on PRS-005 timeline"
+
+status: fresh

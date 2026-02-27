@@ -1,0 +1,54 @@
+id: CONF-006
+title: "Claude Code 1.x vs 2.x format handling"
+
+description: |
+  CC JSONL format evolved between 1.x and 2.x: content block structure,
+  tool names (TodoWrite→TaskCreate/TaskUpdate), new event types (progress,
+  stop_hook_summary), new fields (agent_id, todos, modelUsage). xs must
+  handle both eras. Previously documented as draft CONF-001.
+
+  NOTE: "Bash: $ command" was NOT a real 1.x format — it was an xs bug.
+  Corrected in Pass 3.
+
+evidence:
+  - source: "Pass 3 golden file schema"
+    observation: "Exhaustive field inventory confirms structural differences between eras"
+  - source: "Pass 3 2.x capture run"
+    observation: "TaskCreate/TaskUpdate replace TodoWrite; progress/stop_hook_summary are new event types"
+  - source: "Draft CONF-001"
+    observation: "Original conflict documented 1.x vs 2.x with 3 options"
+
+options:
+  - id: A
+    name: "Always 2.x style"
+    pros: [simpler, forward-compatible]
+    cons: [historical sessions look wrong]
+
+  - id: B
+    name: "Auto-detect + optional --format-style=2x override"
+    pros: [period-appropriate by default, user can force 2.x on old sessions]
+    cons: [two rendering paths]
+
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Option B selected. Auto-detect format version from JSONL fields
+  (PRS-006). Render period-appropriately by default. Optional
+  --format-style=2x flag forces 2.x rendering on old sessions.
+  No reverse direction needed. Formatter architecture should be
+  modular/pluggable for eventual multi-agent support.
+
+affects:
+  - PRS-006  # Format version detection
+  - FMT-*    # All formatting stories
+  - DSP-*    # Display modes
+  - PRIN-006 # Console fidelity
+  - PRIN-012 # Display mode hierarchy
+
+completeness_check: |
+  From draft CONF-001, previously resolved. Fresh derivation did not
+  re-surface this because the reduce agent treated format differences
+  as established facts rather than an open conflict. Preserving the
+  resolution here for completeness.
+
+status: fresh

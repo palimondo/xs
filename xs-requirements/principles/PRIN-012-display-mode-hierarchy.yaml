@@ -1,0 +1,35 @@
+id: PRIN-012
+title: "Display mode derivation chain"
+
+statement: |
+  The three display modes form a derivation chain: truncated mode is the
+  canonical rendering that replicates Claude Code console output. Compact
+  mode compresses each event to one line with [seq] prefix. Full mode
+  is truncated mode with the 3-line tool result limit removed. All modes
+  share the same symbol vocabulary and ToolName(param) format.
+
+rationale: |
+  Defining modes as derivations from a single canonical rendering ensures
+  consistency. Truncated mode is the reference implementation matching
+  CC console. Compact and full are mechanical transformations of it
+  (compress to one line, or remove truncation limit). This avoids
+  independent mode implementations that could diverge.
+
+implications:
+  - "Truncated mode is the canonical rendering — implement this first"
+  - "Compact = truncated compressed to one line per event, [seq] prepended"
+  - "Full = truncated with truncation limit removed (tool results shown in full)"
+  - "All modes share ToolName(param) format, same symbols, same indentation rules"
+  - "Assistant text is never truncated in any mode"
+
+applies_to:
+  - DSP-001   # Compact mode
+  - DSP-002   # Truncated mode
+  - DSP-003   # Full mode
+
+evidence:
+  - "Group 2 pattern P2: Display mode hierarchy CC console -> truncated -> compact"
+  - "Group 2 constraint C8: Assistant text NOT truncated in truncated mode"
+  - "Group 2 pattern P3: ToolName(param) generic format shared across all modes"
+
+status: fresh

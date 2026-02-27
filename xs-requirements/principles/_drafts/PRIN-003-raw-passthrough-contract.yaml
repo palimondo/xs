@@ -1,0 +1,41 @@
+id: PRIN-003
+title: Raw JSONL Passthrough Contract
+
+statement: |
+  --json and --jsonl output modes must emit verbatim, unmodified JSONL objects
+  from the session transcript. No transformation, no field injection, no
+  metadata stripping.
+
+rationale: |
+  The user explicitly corrected the implementation when --json output was
+  emitting transformed timeline objects instead of raw JSONL (a40c:545).
+  This was reconfirmed as a fundamental contract in e583:1103. Raw passthrough
+  enables downstream jq processing and ensures no information loss.
+
+implications:
+  - --json outputs a JSON array of raw JSONL objects
+  - --jsonl outputs one raw JSONL object per line
+  - No sequence number injection into raw objects (conflicts with this principle)
+  - No metadata stripping (isSidechain, isMeta, etc. must be preserved)
+  - Filters still apply (only matching events are output), but events themselves are unmodified
+  - The parser must retain original JSONL objects alongside parsed timeline (PRS-012)
+
+applies_to:
+  - EXP-001 # --json output
+  - EXP-002 # --jsonl output
+  - PRS-012 # Raw object preservation in parser
+  - SID-003 # Sidechain metadata preservation
+
+evidence:
+  - "export report: user correction at a40c:545 — --json must output raw JSONL, not transformed"
+  - "export report: user reconfirmation at e583:1103"
+  - "sidechain report: xs --jsonl strips isSidechain metadata (e583:901-1000) — violates this principle"
+  - "jsonl-parsing report: PRS-012 created specifically for this requirement"
+
+conflicts:
+  - CONF-002  # Sequence numbers in export tension
+
+pass3_corrections:
+  - "No factual errors found. Verified against golden file schema and inventory."
+
+status: draft

@@ -1,0 +1,39 @@
+id: PRIN-004
+title: No Chrome in Output (No Headers, No Emojis)
+
+statement: |
+  xs output must not include decorative elements such as section headers
+  (=== TIMELINE ===), emojis, or any chrome not present in the original
+  Claude Code console output. Unicode symbols used by CC itself (⏺, ⎿, ✻)
+  are required; arbitrary emojis are not.
+
+rationale: |
+  The user repeatedly corrected the agent to remove added headers and emojis.
+  Claude Code uses specific Unicode symbols as part of its console UI, and
+  these must be reproduced. But section headers, dividers, and emojis
+  added by xs itself pollute the output and break the console fidelity
+  principle.
+
+implications:
+  - No === TIMELINE ===, === CONVERSATION === section headers
+  - No emoji characters in output (only CC Unicode symbols)
+  - No decorative dividers or separators (except -- for grep-style gaps)
+  - Summary mode uses plain YAML format without decorative elements
+  - This is a cross-cutting constraint that applies to ALL output modes
+
+applies_to:
+  - FMT-024 # No section headers story
+  - FMT-025 # No emojis story
+  - DSP-*   # All display modes
+  - SUM-001 # Summary format
+
+evidence:
+  - "console-formatting report: FMT-024 — user repeatedly corrected agent to remove headers (b475:1224, caf2:12, caf2:66, b475:2395)"
+  - "console-formatting report: FMT-025 — user corrected agent multiple times about emoji usage (b475:966, b475:981, b475:1017)"
+  - "display-modes report: 'No emojis, no section headers' listed as design constraint"
+  - "summary report: parameter hints use inline comments, not decorative formatting"
+
+pass3_corrections:
+  - "No factual errors found. Verified against golden file schema and inventory."
+
+status: draft

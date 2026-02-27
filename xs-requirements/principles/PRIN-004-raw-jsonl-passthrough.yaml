@@ -1,0 +1,35 @@
+id: PRIN-004
+title: "Raw JSONL passthrough for JSON/JSONL export"
+
+statement: |
+  The --json and --jsonl export modes must output verbatim JSONL objects
+  from the session transcript without any transformation. Filters and
+  ranges select WHICH objects to include, but the objects themselves
+  are never modified. No fields are stripped, added, or renamed.
+
+rationale: |
+  The user explicitly corrected the agent multiple times when
+  transformed data with null fields was output. The passthrough
+  contract enables downstream tools (jq pipelines, other LLMs)
+  to receive the exact same data that Claude Code wrote. The parser
+  must retain original raw JSONL objects alongside the structured
+  timeline to support this.
+
+implications:
+  - "Parser must store raw JSONL objects alongside parsed timeline entries"
+  - "Export modes apply filter selection then emit raw objects verbatim"
+  - "No field injection (including sequence numbers) into exported objects"
+  - "isSidechain, parentUuid, userType and all other fields preserved"
+
+applies_to:
+  - PRS-012   # Raw JSONL preservation
+  - EXP-001   # JSON export
+  - EXP-002   # JSONL export
+  - SID-003   # Sidechain field preservation
+
+evidence:
+  - "Group 1 pattern P10: Raw JSONL preservation alongside structured timeline (PRS-012)"
+  - "Group 2 pattern P6: User corrected agent multiple times on raw passthrough (a40c:545, e583:1103)"
+  - "Group 3 pattern P5: Sidechain metadata stripping discovered as bug (SID-003)"
+
+status: fresh

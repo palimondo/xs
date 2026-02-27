@@ -1,0 +1,37 @@
+id: PRIN-011
+title: "Content format polymorphism is a first-class concern"
+
+statement: |
+  message.content can be an array of typed blocks (24,478 occurrences)
+  or a plain string (1,944 occurrences). tool_result content can be
+  a string (7,658) or an array (38). Both forms must be handled as
+  first-class cases throughout the parser, search, and formatting layers.
+  Failure to handle either form causes crashes (AttributeError).
+
+rationale: |
+  This polymorphism is documented in the schema and causes real crashes
+  in search (SRC-001-BUG1) and sidechain handling (SID-002-AC2). The
+  string case is not an edge case at ~7% of content fields. Both forms
+  must be handled at the parsing level so downstream consumers never
+  encounter raw polymorphic content.
+
+implications:
+  - "Parser normalizes content to a consistent internal form before downstream consumption"
+  - "Search must handle both content formats without crashing"
+  - "Formatting code receives normalized content, not raw polymorphic fields"
+  - "tool_result array case is rare (38 vs 7658) but must not crash"
+
+applies_to:
+  - PRS-013   # Content block extraction
+  - PRS-005   # Timeline building
+  - SRC-001   # Search
+  - SID-002   # Sidechain search
+  - FMT-001   # User message formatting
+  - FMT-002   # Assistant message formatting
+
+evidence:
+  - "Group 1 pattern P6: Content format polymorphism requires dual handling (PRS-013)"
+  - "Group 3 pattern P8: Search must handle content polymorphism (SRC-001-BUG1)"
+  - "Schema: array=24478, string=1944 for message.content; string=7658, array=38 for tool_result"
+
+status: fresh

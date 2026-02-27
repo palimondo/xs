@@ -1,0 +1,33 @@
+id: PRIN-005
+title: "Gapless, stable sequence numbers"
+
+statement: |
+  Timeline sequence numbers are contiguous integers starting from 1,
+  assigned from the full unfiltered timeline. They never change regardless
+  of active filters, display mode, or range selection. The same event
+  always has the same sequence number. Empty messages receive a number.
+
+rationale: |
+  Sequence number stability enables reliable cross-mode referencing:
+  a user can see event [42] in compact mode and address it in a range
+  command. The user reported a bug when item [13] was missing from
+  range 12-14 and called gapless numbering a hard invariant.
+
+implications:
+  - "Sequence numbers assigned once during timeline building, never recalculated"
+  - "Filtered output shows non-contiguous numbers (gaps visible to user)"
+  - "Range syntax addresses absolute sequence numbers from full timeline"
+  - "Even empty messages get a sequence number (no skipping)"
+
+applies_to:
+  - PRS-005   # Timeline building
+  - FMT-017   # Sequence number display
+  - DSP-004   # Sequence number visibility control
+  - RNG-001   # Single item by sequence number
+  - RNG-004   # Range by sequence numbers
+
+evidence:
+  - "Group 1 constraint C2: Gapless contiguous numbers, user bug report for missing [13]"
+  - "Group 2 pattern P7: Sequence number stability across modes (FMT-017, DSP-004, EXP-004)"
+
+status: fresh

@@ -1,0 +1,426 @@
+group: 4
+name: Interface/Infrastructure
+epics: [cli, fetch]
+story_count: 19
+analyzed_at: 2026-02-27
+
+patterns:
+  - id: P1
+    name: "Convenience aliases delegate to unified systems"
+    description: |
+      Multiple CLI stories establish that convenience shortcuts (--git, --files, --created)
+      must NOT have separate implementations. They must delegate to the centralized
+      filtering/timeline system. CLI-003 explicitly states --git must expand to
+      --include with a glob pattern via the unified filter pipeline. CLI-004 is the
+      exception: --files was reinstated BECAUSE it has a unique grouped-by-file display
+      format that cannot be replicated by simple timeline filtering.
+    evidence: ["CLI-003", "CLI-004", "CLI-006", "CLI-009"]
+    scope: "cross-group"
+
+  - id: P2
+    name: "Implicit mode activation from context"
+    description: |
+      When no explicit mode flag is given, the tool infers the display mode from context:
+      no args = summary mode (CLI-001); any filter or range = implicit timeline (CLI-006);
+      --search = search mode overrides implicit timeline (CLI-006-AC4). This means the
+      tool has a mode-resolution hierarchy: explicit mode > search > implicit timeline > summary.
+    evidence: ["CLI-001", "CLI-002", "CLI-006"]
+    scope: "cross-group"
+
+  - id: P3
+    name: "Orthogonality of filtering and display"
+    description: |
+      Filters (what to show) and display modes (how to show) are orthogonal concerns.
+      CLI-002 explicitly states "filters are orthogonal to display mode" (AC3).
+      CLI-006 sources cite "separate filtering (what to show) from display (how to show)".
+      This is a foundational architectural principle that pervades the entire CLI design.
+    evidence: ["CLI-002", "CLI-006", "CLI-003"]
+    scope: "cross-group"
+
+  - id: P4
+    name: "Summary as self-documenting tutorial"
+    description: |
+      The summary mode (CLI-001) serves double duty: session overview AND inline CLI
+      flag tutorial. Each count line includes a comment showing which flag produces that
+      subset (e.g., "# -U", "# -a", "# -t"). This means summary is tightly coupled to
+      the full CLI flag inventory -- any flag changes must be reflected in summary output.
+    evidence: ["CLI-001"]
+    scope: "cross-group"
+
+  - id: P5
+    name: "No section headers in output"
+    description: |
+      Output must never contain section headers like "=== TIMELINE ===" or
+      "=== CONVERSATION ===". The user explicitly rejected these (CLI-008-AC5).
+      The rationale is that the user knows what flags they sent.
+    evidence: ["CLI-008"]
+    scope: "cross-group"
+
+  - id: P6
+    name: "Unix tool conventions for CLI design"
+    description: |
+      The CLI is explicitly modeled after Unix tools (grep, rg, ls). Short flags for
+      common operations, consistent argument ordering, session ID via short prefix
+      (git-style), positional arguments after flags. CLI-008 sources cite the user
+      saying "should build on your knowledge of conceptually related tools like grep, rg."
+    evidence: ["CLI-008", "CLI-007"]
+    scope: "within-group"
+
+  - id: P7
+    name: "Flat directory structure for fetched files"
+    description: |
+      All fetched session files must be in a single flat github/ directory. No
+      subdirectories by type (issue vs PR), no per-run folders, no "unlinked" fallback
+      folder. The user was extremely emphatic about this across multiple sessions
+      (GFH-007 sources include profanity about unauthorized subfolder creation).
+    evidence: ["GFH-007"]
+    scope: "within-group"
+
+  - id: P8
+    name: "Filename as metadata carrier"
+    description: |
+      Fetched filenames encode all metadata: date, time, issue/PR type, number, run ID,
+      session UUID. This enables deduplication (GFH-005 extracts run IDs from filenames),
+      natural filesystem sorting (date-time prefix), and human identification without
+      opening the file. The filename IS the index.
+    evidence: ["GFH-007", "GFH-005", "GFH-004"]
+    scope: "within-group"
+
+  - id: P9
+    name: "XML tags as authoritative metadata source"
+    description: |
+      Issue/PR classification uses XML tags in GHA logs (<is_pr>, <issue_number>,
+      <pr_number>) exclusively. Title-based parsing was explicitly rejected as unreliable.
+      The user stated XML tags are "ALWAYS present and always authoritative."
+    evidence: ["GFH-004"]
+    scope: "within-group"
+
+  - id: P10
+    name: "Performance-conscious extraction"
+    description: |
+      The fetch pipeline favors Unix tools (sed, awk) over Python for JSONL extraction.
+      The user requested empirical benchmarking and the AWK-based approach won (~2-3ms).
+      Fixed-position substring extraction (49-char prefix) is preferred over regex.
+    evidence: ["GFH-003"]
+    scope: "within-group"
+
+  - id: P11
+    name: "Dual-script parity"
+    description: |
+      fetch_logs.py and fetch_logs.sh must produce identical results for all operations.
+      This includes identical output files, identical timestamps, and cross-script
+      deduplication (files created by one are recognized by the other).
+    evidence: ["GFH-010", "GFH-005", "GFH-006"]
+    scope: "within-group"
+
+constraints:
+  - id: C1
+    name: "Argument ordering: flags before session before ranges"
+    description: |
+      CLI flags must precede the positional session argument, and index/range arguments
+      follow the session. Argparse breaks when flags appear after the session positional
+      argument combined with +N range syntax. The correct order is:
+      `xs -U -a -x Tool <session> +14`
+    evidence: ["CLI-008", "CLI-007"]
+
+  - id: C2
+    name: "Short flag naming: uppercase for virtual entity shortcuts"
+    description: |
+      Virtual entity filter shortcuts use uppercase (-M, -U, -T) to avoid conflicts
+      with grep/rg flag conventions. The lone exception is -a (lowercase). -S is
+      --search, -s is --summary. These are hard constraints from flag collision avoidance.
+    evidence: ["CLI-008"]
+
+  - id: C3
+    name: "Session identification via short prefix"
+    description: |
+      Sessions are identified by a 4-6 character GUID prefix (git-revision style).
+      This is the primary positional argument to xs.
+    evidence: ["CLI-008"]
+
+  - id: C4
+    name: "Range syntax vocabulary is fixed"
+    description: |
+      N = specific index, +N = first N (head), -N = last N (tail), N-M = range,
+      N+ = from N onwards (open-ended). These are positional arguments after the
+      session identifier. Multiple ranges are supported and merged without duplicates.
+    evidence: ["CLI-007"]
+
+  - id: C5
+    name: "GFH extraction uses boundary markers, not content parsing"
+    description: |
+      JSONL extraction from GHA logs uses fixed boundary markers:
+      Start = "Running Claude with prompt from file:"
+      End = "Log saved to" + "claude-execution-output.json"
+      The log prefix is exactly 49 characters and is stripped by fixed-position
+      substring, not regex.
+    evidence: ["GFH-003"]
+
+  - id: C6
+    name: "Session ID from first 10 lines, not just line 1"
+    description: |
+      When extracting session_id from JSONL content, scan the first 10 lines
+      (not just line 1) because the session_id field may not appear on the
+      first line. This was a specific bug fix.
+    evidence: ["GFH-003"]
+
+  - id: C7
+    name: "Timestamp semantics: ctime = start, mtime = end"
+    description: |
+      File creation time = session start timestamp, modification time = session end
+      timestamp. On macOS, creation time requires SetFile command (os.utime cannot
+      set it). Access time must NOT be used (user was emphatic about this).
+    evidence: ["GFH-006"]
+
+  - id: C8
+    name: "Filename timestamp from workflow createdAt, not session start"
+    description: |
+      The date-time prefix in filenames comes from the workflow's createdAt field,
+      not the session start timestamp. These are subtly different (workflow creation
+      vs actual session start).
+    evidence: ["GFH-007"]
+
+  - id: C9
+    name: "No 'unlinked' fallback category"
+    description: |
+      If XML metadata tags are missing from a log, the file gets no issue/PR
+      classification. There is no 'unlinked' folder or category. The user
+      explicitly rejected this fallback.
+    evidence: ["GFH-004", "GFH-007"]
+
+  - id: C10
+    name: "--conversation flag must not exist"
+    description: |
+      The --conversation flag was intentionally removed. The xs recreation must
+      NOT include it. Equivalent behavior is achieved by combining -U -a -x Tool
+      or using -M (message filter).
+    evidence: ["CLI-009"]
+
+tensions:
+  - id: T1
+    name: "Convenience alias with unique display vs delegation pattern"
+    description: |
+      CLI-003 (--git) and CLI-009 (--conversation removal) establish that convenience
+      aliases should delegate to the unified filter system. But CLI-004 (--files) was
+      explicitly reinstated BECAUSE it has a unique grouped-by-file display format.
+      This creates a tension: when does a shortcut deserve its own display mode vs
+      being a pure filter alias? The distinguishing factor seems to be whether the
+      shortcut produces a fundamentally different OUTPUT FORMAT (--files groups by file)
+      vs just different CONTENT SELECTION (--git selects git commands).
+    stories: ["CLI-003", "CLI-004", "CLI-009"]
+    possible_resolution: |
+      Formalize the rule: shortcuts that only change content selection delegate to
+      filter pipeline; shortcuts that produce a unique display format get their own
+      mode. --files and --created are display modes; --git is a filter alias.
+
+  - id: T2
+    name: "Implicit timeline vs explicit search mode priority"
+    description: |
+      CLI-006 establishes that filters/ranges trigger implicit timeline mode. But
+      CLI-006-AC4 carves out an exception: --search overrides implicit timeline.
+      This means there's a hidden mode-resolution precedence that must be carefully
+      implemented. What happens with other explicit modes (--files, --created, --summary)
+      combined with filters? Do they also override implicit timeline?
+    stories: ["CLI-006", "CLI-001", "CLI-002"]
+    possible_resolution: |
+      Establish explicit precedence: explicit mode flags (--summary, --files, --created,
+      --search) always win over implicit timeline. Implicit timeline only activates
+      when NO explicit mode flag is present and filters/ranges are given.
+
+  - id: T3
+    name: "--git glob pattern matching depth"
+    description: |
+      CLI-003-AC3 requires --git to match git operations anywhere in the command string
+      (e.g., "cd myproject && git commit"). But the glob pattern "Bash(git *)" only
+      matches prefix. This is actually a tension with the filtering epic's glob matching
+      implementation (FLT-005): how sophisticated does glob matching need to be?
+      Should it support substring matching, or must the user write "Bash(*git *)"?
+    stories: ["CLI-003"]
+    possible_resolution: |
+      The --git shortcut needs a more permissive pattern like "Bash(*git*)" or the
+      glob matcher needs to support contains-style matching. This affects FLT-005
+      glob pattern semantics.
+
+  - id: T4
+    name: "Fetch pipeline: Python vs shell as primary"
+    description: |
+      GFH-010 requires parity between fetch_logs.py and fetch_logs.sh. But GFH-003
+      favors Unix tools (AWK) for performance, and f9c7:1301 states "rewriting
+      fetch_logs.py to bash script." Is the intent to eventually deprecate Python
+      in favor of shell? Or maintain both indefinitely? Maintaining parity is
+      expensive and error-prone.
+    stories: ["GFH-010", "GFH-003"]
+    possible_resolution: |
+      For the xs recreation, decide: single implementation (Python with subprocess
+      calls to awk/sed for hot paths) or dual scripts. User's parity requirement
+      suggests both are valued, but the maintenance burden may argue for consolidation.
+
+  - id: T5
+    name: "Filename timestamp source ambiguity"
+    description: |
+      GFH-007-AC2 says filename timestamp comes from workflow createdAt. But
+      GFH-007 source f9c7:1401 also says "extract from raw log as additional
+      metadata so that it is truly matching the time." These could differ slightly.
+      GFH-006 uses session start/end timestamps for file creation/modification time.
+      So we have THREE timestamp concepts: workflow createdAt (filename), session
+      start (file ctime), session end (file mtime). The distinction is subtle and
+      the sources show the user deliberating about which to use where.
+    stories: ["GFH-007", "GFH-006"]
+    possible_resolution: |
+      Clarify the three-timestamp model: workflow createdAt for filename prefix
+      (human-readable, approximate); session start for file ctime (precise start);
+      session end for file mtime (precise end). All three are independent.
+
+dependencies:
+  - from: "CLI-001"
+    to: "PRS-005"
+    nature: "Summary mode requires unified timeline data structure to count events"
+  - from: "CLI-002"
+    to: "PRS-005"
+    nature: "Timeline display requires unified timeline data structure"
+  - from: "CLI-003"
+    to: "PRS-005"
+    nature: "Git mode filters from unified timeline"
+  - from: "CLI-003"
+    to: "FLT-005"
+    nature: "Git mode depends on Tool(glob) pattern matching for Bash(git*) expansion"
+  - from: "CLI-004"
+    to: "PRS-005"
+    nature: "Files mode groups from unified timeline events"
+  - from: "CLI-005"
+    to: "PRS-005"
+    nature: "Created mode filters Write tool calls from unified timeline"
+  - from: "CLI-006"
+    to: "CLI-002"
+    nature: "Implicit timeline depends on timeline mode existing"
+  - from: "CLI-007"
+    to: "RNG-001"
+    nature: "Multi-index depends on range parsing logic"
+  - from: "GFH-002"
+    to: "GFH-001"
+    nature: "Log fetching requires run listing to identify targets"
+  - from: "GFH-003"
+    to: "GFH-002"
+    nature: "JSONL extraction requires raw log content from fetcher"
+  - from: "GFH-004"
+    to: "GFH-002"
+    nature: "Metadata extraction requires raw log content"
+  - from: "GFH-005"
+    to: "GFH-001"
+    nature: "Deduplication filters the run listing"
+  - from: "GFH-005"
+    to: "GFH-007"
+    nature: "Deduplication depends on filename convention to extract run IDs"
+  - from: "GFH-006"
+    to: "GFH-003"
+    nature: "Timestamp setting requires start/end timestamps from extraction"
+  - from: "GFH-007"
+    to: "GFH-003"
+    nature: "File naming requires session_id from extraction"
+  - from: "GFH-007"
+    to: "GFH-004"
+    nature: "File naming requires issue/PR metadata"
+  - from: "GFH-009"
+    to: "GFH-001"
+    nature: "Fetch-by-issue depends on run listing infrastructure"
+  - from: "GFH-009"
+    to: "GFH-002"
+    nature: "Fetch-by-issue depends on log fetching for identified runs"
+
+cross_epic_concerns:
+  - description: |
+      CLI-001 (summary) must display inline hints referencing filter flags from the
+      filtering epic (-U, -a, -T, -x, -i, -M). Any changes to filter flag names
+      or semantics must be reflected in summary output.
+    affects: ["filtering", "summary"]
+
+  - description: |
+      CLI-002 (timeline) and CLI-006 (implicit timeline) directly depend on display
+      modes from the display-modes epic (DSP-001 compact, DSP-002 truncated,
+      DSP-003 full). Timeline's default display is compact mode.
+    affects: ["display-modes"]
+
+  - description: |
+      CLI-003 (--git) depends on FLT-005 glob pattern matching and the behavior of
+      --include filter from the filtering epic. The glob pattern semantics (prefix
+      vs substring vs wildcard) directly determine whether --git works for "cd dir &&
+      git commit" style commands.
+    affects: ["filtering"]
+
+  - description: |
+      CLI-006 (implicit timeline) must coexist with SRC-001 (search mode) without
+      producing duplicate output. The search epic must participate in mode-resolution
+      priority.
+    affects: ["search"]
+
+  - description: |
+      CLI-007 (multi-index) depends on RNG-001 through RNG-004 from the range-selection
+      epic for parsing +N, -N, N-M, N+ syntax and composing multiple ranges.
+    affects: ["range-selection"]
+
+  - description: |
+      All CLI stories depend on PRS-005 (unified timeline data structure) from the
+      jsonl-parsing epic. The unified timeline is the foundational data structure
+      that all modes operate on.
+    affects: ["jsonl-parsing"]
+
+  - description: |
+      The fetch epic (GFH-001 through GFH-010) is largely self-contained and operates
+      independently of the local exploration epics. However, GFH-003 produces JSONL
+      files that must be parseable by PRS-001 (load session). The output format of
+      fetch is the input format of local exploration.
+    affects: ["jsonl-parsing"]
+
+  - description: |
+      GFH-003 mentions session_id extraction which overlaps with PRS-001/PRS-002
+      session identification. The fetch pipeline's session_id parsing must be
+      consistent with the local exploration pipeline's expectations.
+    affects: ["jsonl-parsing"]
+
+established_fact_impacts:
+  - fact: "Fact 6: MultiEdit and LS tools present in 1.x but absent from 2.x"
+    affected_stories: ["CLI-004"]
+    impact: |
+      CLI-004-AC2 lists "Edit, Write, and MultiEdit operations" as file-modifying
+      operations. In 2.x sessions, MultiEdit will not appear. The --files mode
+      must handle both eras: 1.x includes MultiEdit, 2.x does not. The tool list
+      for file-change detection should be version-aware or at minimum not fail
+      when MultiEdit is absent.
+
+  - fact: "Fact 3: Synthetic fixtures are unreliable"
+    affected_stories: ["CLI-001", "CLI-005"]
+    impact: |
+      Both stories reference agent-proposed output formats (a40c:875 for summary,
+      a40c:1197 for created). These are agent proposals, not verified golden files.
+      Golden file assembly (Pass 3) must validate these formats against real session
+      data, not synthetic fixtures. The acceptance criteria describe output format
+      but lack verified golden file references.
+
+  - fact: "Fact 9: Content format polymorphism (array vs string)"
+    affected_stories: ["GFH-003"]
+    impact: |
+      GFH-003-AC5 scans first 10 lines for session_id. If content can be string
+      or array, the session_id extraction logic in the fetch pipeline must handle
+      both formats when parsing early JSONL lines. This is primarily a jsonl-parsing
+      concern but affects fetch's session_id extraction step.
+
+  - fact: "Fact 5: CC 2.x uses TaskCreate/TaskUpdate instead of TodoWrite"
+    affected_stories: ["CLI-001"]
+    impact: |
+      Summary mode counts event types hierarchically. The tool breakdown must
+      handle both TodoWrite (1.x) and TaskCreate/TaskUpdate (2.x) as distinct
+      tool names. This affects the summary's tool count breakdown accuracy.
+
+  - fact: "Fact 7: New 2.x event types (progress, stop_hook_summary, queue-operation)"
+    affected_stories: ["CLI-001", "CLI-002"]
+    impact: |
+      Summary mode must count these new event types correctly. Timeline mode must
+      display them in chronological order. Both modes need to handle event types
+      that did not exist in 1.x without erroring.
+
+  - fact: "Fact 8: New 2.x fields (agent_id, agent_transcript_path, todos, modelUsage)"
+    affected_stories: ["CLI-001"]
+    impact: |
+      Summary mode may want to display agent-related information (e.g., multi-agent
+      session indicator). New fields don't break anything but represent display
+      opportunities for the summary view.

@@ -1,0 +1,44 @@
+id: PRIN-013
+title: "Graceful degradation on malformed input"
+
+statement: |
+  xs must continue processing session data even when individual events
+  are malformed, missing fields, or in unexpected formats. Show what
+  can be shown; never crash on a single anomaly.
+
+rationale: |
+  Real-world JSONL files contain edge cases: empty assistant messages,
+  missing timestamps, malformed content blocks, format version mismatches,
+  content-type polymorphism (string vs array). The user expects xs to
+  degrade gracefully — log or skip problem entries, not halt the entire
+  session. Multiple bugs were documented where xs crashed on unexpected
+  content types (SRC-001 BUG1: AttributeError on list content, SRC-003
+  crash with --full flag).
+
+implications:
+  - "Multi-line JSON parsing must handle partial/malformed objects"
+  - "Missing timestamps produce 'unknown' rather than crash"
+  - "Content polymorphism (PRIN-011) is the parsing-level manifestation"
+  - "Search over list-type content must not crash"
+  - "Summary statistics should note 'incomplete' when data is missing"
+  - "Format version differences auto-detected and adapted"
+
+applies_to:
+  - PRS-003  # Multi-line JSON parsing
+  - PRS-004  # Parse error handling
+  - SRC-001  # Search robustness
+  - SUM-001  # Summary with missing metadata
+  - GFH-003  # JSONL extraction from potentially corrupt logs
+
+evidence:
+  - "Group 1 pattern P6: content polymorphism requiring safe extraction"
+  - "Group 3 pattern P8: content polymorphism handling in search"
+  - "Group 3 constraint C8: graceful timestamp absence in summary"
+  - "Draft PRIN-005: documented SRC-001 BUG1, SRC-003 BUG3 crashes"
+
+completeness_check: |
+  From draft PRIN-005 (Graceful Degradation). Fresh derivation covered the
+  content-polymorphism aspect (PRIN-011) but missed the broader principle
+  of crash-resistant processing for ALL types of malformed input.
+
+status: fresh

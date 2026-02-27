@@ -1,0 +1,468 @@
+group: 3
+name: Features
+epics: [search, context, sidechain, summary]
+story_count: 20
+analyzed_at: 2026-02-27
+
+patterns:
+  - id: P1
+    name: "grep/rg CLI convention mirroring"
+    description: |
+      The search epic consistently mirrors grep/rg conventions: -S for search,
+      uppercase -A/-B/-C for context lines, -- as gap separator between
+      non-contiguous results. The CLI is explicitly designed to feel familiar
+      to grep/rg users (SRC-001 source e583:1-100 F002). This extends to
+      behavior: context windows must merge overlapping regions and never
+      produce duplicate output, exactly as grep does.
+    evidence: ["SRC-001", "SRC-002", "SRC-003", "SRC-004", "SRC-006"]
+    scope: cross-group  # affects CLI-002 design
+
+  - id: P2
+    name: "five-step filter pipeline ordering"
+    description: |
+      A canonical 5-step pipeline governs all filtering: (0) search, (1) range,
+      (2) include, (3) exclude, (4) context expansion. This was stated by the
+      user twice (caf2:301-400 and caf2:901-1000) and confirmed as the
+      authoritative design. Context expansion (-A/-B/-C) happens LAST,
+      after all filtering, and must merge overlapping windows without
+      duplication. This pipeline is the single most cross-cutting pattern
+      in the search and filtering epics.
+    evidence: ["SRC-001", "SRC-002", "SRC-003", "SRC-004", "SRC-007"]
+    scope: cross-group  # affects FLT-*, RNG-*, DSP-*
+
+  - id: P3
+    name: "summary as self-documenting tutorial"
+    description: |
+      Summary mode is explicitly designed as a tutorial for the tool. Each
+      count line has an inline YAML comment showing the CLI flag combination
+      to view just that event type (e.g. "# -i Bash", "# -U"). The summary
+      output must be valid, machine-parseable YAML. This serves both human
+      discoverability and machine consumption.
+    evidence: ["SUM-001", "SUM-002", "SUM-003"]
+    scope: cross-group  # affects CLI-001, DSP-001
+
+  - id: P4
+    name: "hierarchical arithmetic consistency in summary"
+    description: |
+      Summary counts form a tree where children must sum to their parent.
+      Zero-count entries are omitted. Tool calls are sorted descending by
+      count. Git operations nest under Bash; MCP tools nest by server prefix.
+      The user explicitly called out arithmetic inconsistency as something
+      to prevent (b475:301-400 F008).
+    evidence: ["SUM-001", "SUM-002", "SUM-003"]
+    scope: within-group
+
+  - id: P5
+    name: "raw JSONL passthrough for --json/--jsonl"
+    description: |
+      When --json or --jsonl output mode is used, raw JSONL objects must pass
+      through unmodified. No fields should be stripped or transformed. This
+      is critical for sidechain handling (isSidechain field preservation)
+      and was explicitly stated as a user requirement (e583:1101-1200 F001).
+      This pattern touches export, sidechain, and filtering concerns.
+    evidence: ["SID-003", "SID-001"]
+    scope: cross-group  # affects DSP-003, EXP-*, PRS-005
+
+  - id: P6
+    name: "two-hook architecture for compaction recovery"
+    description: |
+      Compaction recovery uses a two-hook pattern: PreCompact creates a flag
+      file, PreToolUse detects it and blocks tool use with recovery prompt.
+      This is necessary because PostCompact does not exist in the Claude Code
+      hooks API. The flag file is session-scoped (/tmp/.claude_compaction_{id[:8]}.json)
+      for multi-instance safety.
+    evidence: ["CRH-001", "CRH-002", "CRH-003", "CRH-004"]
+    scope: within-group
+
+  - id: P7
+    name: "sidechain events are inline, not special"
+    description: |
+      Sidechain events from Task sub-agents appear inline in the timeline
+      as regular events without special marking. Summary counts include
+      sidechain events. This was confirmed by characterization testing
+      (e583:1001-1100) after an initial incorrect conclusion that they
+      were invisible.
+    evidence: ["SID-001", "SID-002", "SID-003"]
+    scope: within-group
+
+  - id: P8
+    name: "search must handle content polymorphism"
+    description: |
+      Search (and by extension all text operations) must handle the fact
+      that message.content can be an array or a string, and tool_result
+      content can be a string or an array. Failure to handle this causes
+      AttributeError crashes. This is documented as SRC-001-BUG1 and
+      SID-002-AC2, and connects to established fact #9 and #10.
+    evidence: ["SRC-001", "SID-002"]
+    scope: cross-group  # affects PRS-* content parsing
+
+  - id: P9
+    name: "implicit mode activation by flag presence"
+    description: |
+      The CLI has an implicit mode selection rule: no flags = summary mode;
+      any filter/range/search flag = timeline mode. When search is active,
+      it IS the output mode -- implicit timeline must not activate separately
+      and produce duplicate output. This was a critical bug (SRC-005,
+      caf2:801-900, caf2:901-1000).
+    evidence: ["SRC-005", "SUM-001"]
+    scope: cross-group  # affects CLI-001, DSP-001
+
+  - id: P10
+    name: "xs as session analysis tool, not current-state tool"
+    description: |
+      xs is for exploring past/other sessions. Current session state should
+      use native Claude Code tools. The user explicitly corrected the agent
+      when it used xs to check current session TODOs (760a:401-500). In
+      compaction recovery, xs is the primary tool for session analysis,
+      replacing direct filesystem exploration.
+    evidence: ["CRH-006", "CRH-005"]
+    scope: cross-group  # affects overall tool design philosophy
+
+constraints:
+  - id: C1
+    name: "search is simple substring, not regex"
+    description: |
+      Search uses simple case-insensitive substring matching, not ripgrep
+      or regex. User asked about rg delegation; implementation confirmed
+      as simple substring. However, CRH-005-AC4 mentions regex alternation
+      patterns like "commit|tdd-guard|decision block" -- this creates a
+      tension (see T2).
+    evidence: ["SRC-001"]
+
+  - id: C2
+    name: "no duplicate or out-of-order output"
+    description: |
+      User explicitly stated that outputting the same message multiple times
+      or out of order is a "serious bug that must be fixed immediately"
+      (caf2:1001-1100 F004). Context expansion merge must be deduplicated.
+      Search + implicit timeline must not produce double output.
+    evidence: ["SRC-004", "SRC-005", "SRC-001"]
+
+  - id: C3
+    name: "summary output must be valid YAML"
+    description: |
+      Summary output uses YAML aesthetic AND must be valid, machine-parseable
+      YAML (b475:301-400 F005). Keys are capitalized. Inline comments use
+      YAML comment syntax (#). This constrains formatting choices.
+    evidence: ["SUM-001"]
+
+  - id: C4
+    name: "hook API: permissionDecision/permissionDecisionReason only"
+    description: |
+      PreToolUse hooks must use permissionDecision: deny with
+      permissionDecisionReason for the recovery prompt. additionalContext
+      only works for SessionStart/UserPromptSubmit. The deprecated
+      decision/block format causes 400 errors.
+    evidence: ["CRH-003"]
+
+  - id: C5
+    name: "hooks require manual /hooks reload"
+    description: |
+      Hook scripts do not auto-reload when modified. User must trigger
+      /hooks to reload. This is a practical constraint for hook
+      development workflow.
+    evidence: ["CRH-007"]
+
+  - id: C6
+    name: "token counts not available in JSONL"
+    description: |
+      Token count data is NOT available in JSONL session format.
+      Summary must not attempt to show token usage.
+    evidence: ["SUM-001"]
+
+  - id: C7
+    name: "git detection must handle cd-prefixed commands"
+    description: |
+      Git operation detection cannot assume git is the first word in a
+      Bash command. Commands like "cd dir && git commit" must be detected.
+      This is a known issue from CONF-003.
+    evidence: ["SUM-003"]
+
+  - id: C8
+    name: "GitHub CI sessions lack timestamps"
+    description: |
+      Sessions from GitHub Actions may not have timestamp fields. Summary
+      metadata section (Started/Ended/Duration) must gracefully degrade
+      when timestamps are absent.
+    evidence: ["SUM-001"]
+
+tensions:
+  - id: T1
+    name: "tail-of-search-results not expressible"
+    description: |
+      The canonical pipeline applies range (step 1) before search (step 0
+      selects, but step 1 range filters the timeline positions, not search
+      result positions). This means -N (tail N events) applies to the
+      timeline before search narrows it, so "last N search results" cannot
+      be expressed. The user proposed a --tail flag for post-filter slicing
+      (e583:1601-1700) but it may not exist yet. This is a known gap that
+      affects both search (SRC-007) and compaction recovery (CRH-005, CRH-007).
+    stories: ["SRC-007", "CRH-005", "CRH-007"]
+    possible_resolution: |
+      Add a --tail flag that applies AFTER the full pipeline (step 5),
+      distinct from range (step 1). The user explicitly proposed this.
+
+  - id: T2
+    name: "simple substring vs regex/alternation patterns"
+    description: |
+      SRC-001 explicitly states search is "simple substring match, not regex."
+      However, CRH-005-AC4 shows the user expecting regex alternation:
+      `xs 760a9954 -S "commit|tdd-guard|decision block"`. If search is
+      truly simple substring, the | character would be searched literally,
+      not as alternation. Either the user's expectation changed, or "simple
+      substring" means something different in context.
+    stories: ["SRC-001", "CRH-005"]
+    possible_resolution: |
+      Clarify with user whether -S should support regex or remain pure
+      substring. The user's grep/rg familiarity (P1) suggests regex may
+      be desired despite the "simple substring" statement.
+
+  - id: T3
+    name: "sidechain filtering without explicit flag design"
+    description: |
+      SID-003 describes filtering sidechain events in/out, but notes "No
+      flag syntax was discussed or decided." AC1 and AC2 are speculative.
+      The story itself notes it may need splitting: AC3 (metadata
+      preservation in --jsonl) is confirmed, but AC1/AC2 are unconfirmed.
+      Meanwhile, sidechain events lack visual distinction (SID-001).
+    stories: ["SID-001", "SID-003"]
+    possible_resolution: |
+      Implement AC3 (raw passthrough preserving isSidechain) as part of
+      the JSON/JSONL passthrough principle (P5). Defer AC1/AC2 sidechain
+      filter flag to a future story or merge into FLT-* epic.
+
+  - id: T4
+    name: "context expansion applies to filters too, not just search"
+    description: |
+      SRC-002-AC2 states "-A used with include/exclude filters (not just
+      search)" shows context around filter results. But the pipeline has
+      context expansion as step 4, after include/exclude (step 2-3). If
+      -A is used with -i but no -S, what constitutes a "match" for context
+      expansion? Is every event that passes the filter pipeline a "match"?
+      This interaction is under-specified.
+    stories: ["SRC-002", "SRC-004", "SRC-007"]
+    possible_resolution: |
+      Define "match" as any event that survives all prior pipeline steps.
+      Context expansion adds neighbors around these survivors. This is
+      consistent with grep behavior where -A applies to pattern matches,
+      and here filters serve as the "pattern."
+
+  - id: T5
+    name: "-C combined with -A or -B behavior undefined"
+    description: |
+      SRC-004-AC4 notes: "Interaction between -C and -A/-B not explicitly
+      documented in findings; needs design decision." If user specifies
+      both -C 3 and -A 5, does -A override the after-portion of -C?
+      Or is it an error?
+    stories: ["SRC-004"]
+    possible_resolution: |
+      Follow grep convention: -C sets both, -A/-B can override one side.
+      Alternatively, make them mutually exclusive with a clear error.
+
+  - id: T6
+    name: "--jq and --tail flags: requested but possibly unimplemented"
+    description: |
+      CRH-005 references --jq and --tail as features the user explicitly
+      requested (e583:1601-1700). These would enable arbitrary jq filtering
+      on JSONL events and post-pipeline tail slicing. They appear in
+      acceptance criteria (CRH-005-AC1) but may not have stories of their
+      own. --tail also resolves T1.
+    stories: ["CRH-005", "CRH-007", "SRC-007"]
+    possible_resolution: |
+      Check if --jq and --tail have dedicated stories in other epics
+      (likely CLI or filtering). If not, they need stories created.
+      --tail is critical for resolving the pipeline ordering gap (T1).
+
+dependencies:
+  - from: "SRC-001"
+    to: "PRS-005"
+    nature: "Search requires unified timeline data structure from JSONL parsing"
+
+  - from: "SRC-002"
+    to: "SRC-001"
+    nature: "After-context requires basic search to identify matches"
+
+  - from: "SRC-003"
+    to: "SRC-001"
+    nature: "Before-context requires basic search to identify matches"
+
+  - from: "SRC-004"
+    to: "SRC-001"
+    nature: "Combined context requires basic search to identify matches"
+
+  - from: "SRC-005"
+    to: "SRC-001"
+    nature: "Display mode interaction depends on basic search working"
+
+  - from: "SRC-006"
+    to: "SRC-001"
+    nature: "Gap separators require non-contiguous search results to exist"
+
+  - from: "SRC-007"
+    to: "SRC-001"
+    nature: "Pipeline definition depends on search as step 0"
+
+  - from: "SRC-007"
+    to: "FLT-001"
+    nature: "Pipeline step 2 (include) from filtering epic"
+
+  - from: "SRC-007"
+    to: "FLT-002"
+    nature: "Pipeline step 3 (exclude) from filtering epic"
+
+  - from: "SRC-007"
+    to: "RNG-001"
+    nature: "Pipeline step 1 (range) from range-selection epic"
+
+  - from: "CRH-002"
+    to: "CRH-001"
+    nature: "Flag detection requires flag creation to have occurred"
+
+  - from: "CRH-003"
+    to: "CRH-002"
+    nature: "Tool blocking triggers after flag detection"
+
+  - from: "CRH-005"
+    to: "CRH-003"
+    nature: "Recovery prompt content depends on tool blocking mechanism"
+
+  - from: "CRH-006"
+    to: "CRH-005"
+    nature: "Methodology uses xs operations defined in CRH-005"
+
+  - from: "CRH-007"
+    to: "CRH-006"
+    nature: "Test findings refine the recovery methodology"
+
+  - from: "SID-001"
+    to: "PRS-005"
+    nature: "Sidechain display requires parsing isSidechain field"
+
+  - from: "SID-002"
+    to: "SID-001"
+    nature: "Search over sidechain requires sidechain display"
+
+  - from: "SID-002"
+    to: "SRC-001"
+    nature: "Search over sidechain uses core search functionality"
+
+  - from: "SID-003"
+    to: "SID-001"
+    nature: "Filtering sidechain requires sidechain display"
+
+  - from: "SID-003"
+    to: "PRS-005"
+    nature: "Filtering by isSidechain requires parsing that field"
+
+  - from: "SUM-001"
+    to: "PRS-005"
+    nature: "Summary statistics require parsed timeline data"
+
+  - from: "SUM-002"
+    to: "SUM-001"
+    nature: "MCP grouping extends the base summary display"
+
+  - from: "SUM-003"
+    to: "SUM-001"
+    nature: "Git detection extends the base summary display"
+
+cross_epic_concerns:
+  - description: |
+      The 5-step filter pipeline (P2) is the primary cross-group contract.
+      Search (step 0), range (step 1), include (step 2), exclude (step 3),
+      and context expansion (step 4) span search, filtering, and
+      range-selection epics. Any change to pipeline ordering affects all three.
+    affects: ["filtering (FLT-001, FLT-002)", "range-selection (RNG-001)", "cli-interface (CLI-002)"]
+
+  - description: |
+      Raw JSONL passthrough (P5) affects export and display-modes epics.
+      SID-003 discovered that xs --jsonl was stripping metadata fields
+      (isSidechain, parentUuid, userType). The user explicitly requires
+      --json/--jsonl to emit unmodified JSONL objects.
+    affects: ["export (EXP-*)", "display-modes (DSP-003)", "jsonl-parsing (PRS-005)"]
+
+  - description: |
+      Content polymorphism (P8) -- message.content as array or string,
+      tool_result content as string or array -- causes crashes in search.
+      This is fundamentally a parsing concern (PRS-*) that manifests in
+      search and sidechain stories.
+    affects: ["jsonl-parsing (PRS-005, PRS-012, PRS-013)"]
+
+  - description: |
+      Summary mode (SUM-001) defines implicit CLI mode selection: no flags
+      means summary, any filter/range/search flag means timeline. This is
+      a cli-interface and display-modes concern.
+    affects: ["cli-interface (CLI-001)", "display-modes (DSP-001)"]
+
+  - description: |
+      The compaction recovery epic (CRH-*) is a consumer of xs features
+      from search, filtering, range, and display-modes epics. It defines
+      real-world usage patterns that validate those features work correctly
+      in combination: search + range + context, filter by tool, --full mode,
+      --jq, --tail.
+    affects: ["search", "filtering", "range-selection", "display-modes"]
+
+  - description: |
+      MCP tool grouping (SUM-002) and git detection (SUM-003) require
+      parametrized filter patterns like Tool(mcp__memory*) and --git (-g)
+      shortcut. These features live in the filtering epic but are surfaced
+      by summary.
+    affects: ["filtering (FLT-001, FLT-003)", "cli-interface (CLI-003)"]
+
+established_fact_impacts:
+  - fact: "Fact #9: Content format polymorphism: message.content can be array (24478) or string (1944)"
+    affected_stories: ["SRC-001", "SID-002"]
+    impact: |
+      SRC-001-BUG1 (AttributeError when content is a list) and SID-002-AC2
+      directly reflect this fact. Search implementation must handle both
+      content formats. These stories correctly identify the polymorphism
+      issue. No correction needed, but implementation must use the
+      established fact's frequency data (array is 12.5x more common
+      than string) to prioritize the array case.
+
+  - fact: "Fact #10: tool_result content can be string (7658) or array (38)"
+    affected_stories: ["SRC-001", "SID-002"]
+    impact: |
+      Same as fact #9 -- the AttributeError crash in search occurs when
+      encountering list-type tool_result content. The array case is rare
+      (38 vs 7658) but must not crash. Stories correctly document this.
+
+  - fact: "Fact #3: Synthetic fixtures are unreliable -- they encode buggy formats and lack uuid/sessionId/version fields"
+    affected_stories: ["SUM-001", "SUM-002", "SUM-003", "SID-001"]
+    impact: |
+      Summary and sidechain stories reference characterization tests and
+      existing behavior. Golden files for summary output format should be
+      derived from real sessions, not synthetic fixtures. Any test fixtures
+      for summary validation need uuid/sessionId/version fields to be
+      realistic.
+
+  - fact: "Fact #5: CC 2.x uses TaskCreate/TaskUpdate instead of TodoWrite"
+    affected_stories: ["CRH-005", "SUM-001"]
+    impact: |
+      CRH-005-AC3 references "xs {session} -i TodoWrite" for checking
+      todo state. In 2.x sessions, this should be TaskCreate/TaskUpdate
+      instead. Summary tool counts (SUM-001) must handle both naming
+      conventions depending on format version.
+
+  - fact: "Fact #6: MultiEdit and LS tools present in 1.x but absent from 2.x"
+    affected_stories: ["SUM-001", "SUM-002"]
+    impact: |
+      Summary tool breakdown must handle format-version-specific tool
+      names. A 1.x session may show LS/MultiEdit in tool counts while
+      a 2.x session will not. This interacts with the 1.x vs 2.x
+      format conflict (CONF-001).
+
+  - fact: "Fact #7: New 2.x event types: progress (hook_progress), stop_hook_summary, queue-operation"
+    affected_stories: ["SUM-001"]
+    impact: |
+      Summary event counts must account for 2.x-specific event types.
+      The hierarchical tree design should handle these gracefully --
+      they may need new categories or be counted under a catch-all.
+
+  - fact: "Fact #8: New 2.x fields: agent_id, agent_transcript_path, todos, modelUsage"
+    affected_stories: ["SID-001", "SID-003", "CRH-005"]
+    impact: |
+      agent_id and agent_transcript_path may be relevant for identifying
+      sidechain events in 2.x format (alongside isSidechain). CRH-005
+      recovery operations may benefit from modelUsage data if available
+      in 2.x. These are enhancement opportunities, not corrections.

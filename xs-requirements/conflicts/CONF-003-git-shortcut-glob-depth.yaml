@@ -1,0 +1,55 @@
+id: CONF-003
+title: "--git shortcut fails with cd-prefixed commands"
+
+description: |
+  The --git shortcut expands to --include Bash(git *) which only matches
+  commands where "git" is the first word. Real sessions frequently have
+  commands like "cd myproject && git commit" which fail to match. The
+  glob pattern needs to be more permissive, but broader matching risks
+  false positives.
+
+evidence:
+  - source: "Group 1 tension T4"
+    observation: "FLT-014 Bash(git *) only matches prefix, not cd-prefixed commands"
+  - source: "Group 4 tension T3"
+    observation: "CLI-003-AC3 requires matching git anywhere; Bash(git *) is insufficient"
+  - source: "Group 3 constraint C7"
+    observation: "SUM-003 confirms git detection must handle cd-prefixed commands"
+
+options:
+  - id: A
+    name: "Use Bash(*git*) pattern"
+    pros: ["Catches cd-prefixed and &&-chained commands"]
+    cons: ["False positives (e.g., 'digital', 'digit')"]
+
+  - id: B
+    name: "Use Bash(*git *) with leading wildcard"
+    pros: ["Catches cd && git patterns", "Requires space after git to reduce false positives"]
+    cons: ["Misses 'git' at end of line (no trailing space)"]
+
+  - id: C
+    name: "Smart matching: word boundary detection for 'git'"
+    pros: ["Accurate matching"]
+    cons: ["More complex than glob", "May conflict with PRIN-008 glob-not-regex constraint"]
+
+  - id: D
+    name: "Multiple patterns: Bash(git *),Bash(*&& git *),Bash(*; git *)"
+    pros: ["Explicit coverage of known patterns"]
+    cons: ["Verbose", "May miss edge cases"]
+
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Option B selected. Expand glob pattern to Bash(*git *) with leading
+  wildcard to catch cd-prefixed commands. Accept minor over-matching
+  risk as pragmatic trade-off. Semantic git detection noted as future
+  enhancement if over-matching becomes a problem.
+  (Resolution carried from draft CONF-003.)
+
+affects:
+  - FLT-014
+  - CLI-003
+  - FLT-005
+  - SUM-003
+
+status: fresh

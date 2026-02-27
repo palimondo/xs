@@ -1,0 +1,606 @@
+group: 1
+name: Core Pipeline
+epics: [parsing, filtering, range]
+story_count: 35
+analyzed_at: 2026-02-27
+
+patterns:
+  - id: P1
+    name: "Timeline is the central data structure"
+    description: |
+      The unified chronological timeline (PRS-005) is the foundation that both
+      filtering and range selection operate on. Every story in filtering and range
+      depends on PRS-005. The timeline assigns contiguous sequence numbers starting
+      from 1 to ALL events (no gaps, no skips), and these numbers are stable
+      regardless of active filters or display modes.
+    evidence: ["PRS-005", "FLT-001", "FLT-002", "FLT-003", "FLT-004", "FLT-011",
+               "FLT-015", "RNG-001", "RNG-002", "RNG-003", "RNG-004", "RNG-005",
+               "RNG-006", "RNG-007"]
+    scope: "cross-group"
+
+  - id: P2
+    name: "Canonical pipeline ordering: search -> range -> include -> exclude -> context"
+    description: |
+      The user explicitly defined the filter pipeline ordering twice in separate
+      sessions (FLT-011, RNG-007). The order is:
+      0. Search by pattern (-e/--search)
+      1. Select by range (positional args)
+      2. Include whitelist (--include/-i)
+      3. Exclude blacklist (--exclude/-x)
+      4. Context expansion (-A/-B/-C) with dedup
+      This pipeline is applied once at the event array level, not reimplemented
+      per output mode. Range applies to the FULL unfiltered timeline first, then
+      include/exclude filters narrow the result.
+    evidence: ["FLT-011", "RNG-007", "RNG-002", "RNG-003", "FLT-002"]
+    scope: "cross-group"
+
+  - id: P3
+    name: "Include/exclude duality with symmetric syntax"
+    description: |
+      The user explicitly required --include and --exclude to have identical
+      comma-separated syntax. Include acts as a whitelist; exclude further removes
+      from what was included. Both accept tool names, parameterized tool names
+      with glob patterns (Tool(glob)), and virtual entity names (Message, Tool,
+      User, Assistant, Thinking).
+    evidence: ["FLT-001", "FLT-002", "FLT-005", "FLT-011"]
+    scope: "within-group"
+
+  - id: P4
+    name: "Virtual entities as a unifying filter abstraction"
+    description: |
+      Virtual entities (Message, Tool, User, Assistant, Thinking) provide coarse
+      filtering categories that replace ad-hoc special flags. They unify the
+      filter syntax: --include Message replaces deprecated --conversation,
+      --include Tool replaces old tool-specific flags. Virtual entities take no
+      parameters; parameters are for specific tool names (Bash(git *)).
+    evidence: ["FLT-003", "FLT-004", "FLT-013", "FLT-006", "FLT-007", "FLT-008",
+               "FLT-009"]
+    scope: "within-group"
+
+  - id: P5
+    name: "Content block as atomic timeline unit"
+    description: |
+      Within a JSONL message, content is an array of typed blocks (text, tool_use,
+      tool_result, thinking). Each block becomes a separate timeline entry with its
+      own sequence number. This is the level at which filtering operates. An
+      assistant message with both text and tool_use blocks expands into multiple
+      timeline entries.
+    evidence: ["PRS-013", "PRS-005"]
+    scope: "cross-group"
+
+  - id: P6
+    name: "Content format polymorphism requires dual handling"
+    description: |
+      User message content can be either an array of typed blocks (tool_result) or
+      a plain string (regular text input). The parser must handle both forms.
+      Assistant messages always have content as an array. This polymorphism is a
+      fundamental parsing concern that affects every downstream consumer.
+    evidence: ["PRS-013", "PRS-005"]
+    scope: "cross-group"
+
+  - id: P7
+    name: "Glob pattern matching from Claude Code allowed-tools"
+    description: |
+      Filter patterns use fnmatch glob syntax (*, **, ?), NOT regex. This syntax
+      is derived from Claude Code's allowed-tools permission system. Different
+      tool types match against different parameters: Edit/Write/MultiEdit match
+      against file_path, Bash matches against command. The user explicitly
+      corrected the agent when regex was proposed.
+    evidence: ["FLT-005", "FLT-001"]
+    scope: "within-group"
+
+  - id: P8
+    name: "Implicit timeline mode from filter/range presence"
+    description: |
+      When any filter flag (--include, --exclude, -M, -U, -a, -T) or range
+      argument is present, timeline display mode is implied automatically. No
+      explicit -t flag is needed. Summary mode is the default only when no
+      filters or ranges are specified.
+    evidence: ["FLT-011", "FLT-006", "FLT-007", "FLT-008", "FLT-009"]
+    scope: "cross-group"
+
+  - id: P9
+    name: "Filter-display separation"
+    description: |
+      Filtering (what to show) and display (how to show) are orthogonal concerns.
+      Filters compose into a pipeline applied at the event array level. Display
+      modes (compact, truncated, full, JSON, JSONL) render the filtered result.
+      However, FLT-012 reveals a boundary leak: -x Tool must suppress tool
+      announcements that are generated at display time, requiring exclude filters
+      to be passed to the display function.
+    evidence: ["FLT-011", "FLT-012", "FLT-015"]
+    scope: "cross-group"
+
+  - id: P10
+    name: "Raw JSONL preservation alongside structured timeline"
+    description: |
+      The parser must retain the original raw JSONL objects verbatim alongside
+      the parsed/structured timeline. This enables --json/--jsonl export modes
+      to output unmodified source data. Filters and ranges select which events
+      to include, but the JSON content is never transformed.
+    evidence: ["PRS-012"]
+    scope: "cross-group"
+
+  - id: P11
+    name: "Multi-line JSON accumulation parser"
+    description: |
+      Claude Code session files use pretty-printed (multi-line) JSON, not
+      standard one-object-per-line JSONL. The parser must accumulate lines until
+      a complete JSON object boundary is found. Naive line-by-line JSON.loads()
+      breaks. This is a hard technical constraint for the parsing layer.
+    evidence: ["PRS-003", "PRS-001"]
+    scope: "within-group"
+
+  - id: P12
+    name: "Shortcut flags follow grep/rg convention"
+    description: |
+      Single-letter shortcuts for virtual entity filters are deliberately chosen
+      to avoid conflict with grep/rg conventions. Uppercase -A/-B/-C are reserved
+      for grep-style context lines. Lowercase -a is used for Assistant (because
+      -A is taken). Uppercase -M for Message, -U for User, -T for Tool.
+    evidence: ["FLT-006", "FLT-007", "FLT-008", "FLT-009"]
+    scope: "cross-group"
+
+  - id: P13
+    name: "Tool use and tool result are paired timeline events"
+    description: |
+      A tool invocation produces two separate timeline events: tool_use (from
+      assistant message) and tool_result (from user message with tool_result
+      content). When filtering by tool name, BOTH the tool_use and its
+      corresponding tool_result must be included or excluded together. The
+      --no-tool-results flag suppresses tool_result events specifically.
+    evidence: ["FLT-001", "FLT-010", "PRS-005", "PRS-013"]
+    scope: "cross-group"
+
+  - id: P14
+    name: "Range syntax disambiguation"
+    description: |
+      Range syntax was carefully designed to avoid ambiguity:
+      - N (bare positive integer) = single item at index N
+      - +N (plus prefix) = first N items (head)
+      - -N (minus prefix) = last N items (tail)
+      - N-M (dash between) = contiguous range
+      - N+ (plus suffix) or N- (dash suffix) = from N to end
+      The user explicitly resolved the +N vs bare N ambiguity.
+    evidence: ["RNG-001", "RNG-002", "RNG-003", "RNG-004", "RNG-005"]
+    scope: "within-group"
+
+constraints:
+  - id: C1
+    name: "Full backwards/forwards format compatibility"
+    description: |
+      The parser must handle both Claude Code 1.x and 2.x format sessions.
+      The user explicitly stated "full backwards/forwards compatibility."
+      Version detection uses the version field in system events, with structural
+      inference as fallback.
+    evidence: ["PRS-006"]
+
+  - id: C2
+    name: "Gapless contiguous sequence numbers"
+    description: |
+      Timeline sequence numbers must be contiguous starting from 1, with no gaps.
+      Even empty messages (assistant with no text/tools) receive a sequence number.
+      The user reported a bug when item [13] was missing from range 12-14. This is
+      a hard invariant.
+    evidence: ["PRS-005", "RNG-004"]
+
+  - id: C3
+    name: "No implicit filtering without explicit flags"
+    description: |
+      Without --include or --exclude flags, the timeline MUST show ALL events
+      including thinking content, meta messages, and empty messages. The user
+      called implicit filtering "a serious issue." This is a zero-tolerance
+      constraint.
+    evidence: ["FLT-015", "PRS-005"]
+
+  - id: C4
+    name: "Raw passthrough for JSON/JSONL export"
+    description: |
+      --json and --jsonl export modes must output the original JSONL objects
+      verbatim, with only range/filter selection applied. The user explicitly
+      corrected the agent when transformed data with null fields was output.
+    evidence: ["PRS-012"]
+
+  - id: C5
+    name: "SIGPIPE graceful handling"
+    description: |
+      When xs output is piped to head/tail and the pipe closes early, xs must
+      exit gracefully without a Python traceback.
+    evidence: ["PRS-004"]
+
+  - id: C6
+    name: "Parsing efficiency for large files"
+    description: |
+      JSONL session files can be 500KB+ (GitHub Actions). An early naive parser
+      timed out at 2 minutes on a 500KB file. The parser must handle large files
+      without excessive memory or time.
+    evidence: ["PRS-001", "PRS-003"]
+
+  - id: C7
+    name: "Glob syntax, not regex"
+    description: |
+      Tool filter patterns use fnmatch glob semantics (*, **, ?), NOT regex.
+      The user explicitly corrected the agent: "not explicit regex syntax, what
+      the allowed-tools do." This adopts Claude Code's allowed-tools permission
+      syntax.
+    evidence: ["FLT-005"]
+
+  - id: C8
+    name: "No duplicate events in output"
+    description: |
+      Context expansion (-A/-B/-C) can produce overlapping ranges. The output
+      must never contain duplicate events or events out of order. The user called
+      duplicate output "a serious bug that must be fixed immediately."
+    evidence: ["FLT-011"]
+
+  - id: C9
+    name: "Centralized range/filter at event array level"
+    description: |
+      Range selection and filtering logic must be implemented once, centrally,
+      at the event array level. It must NOT be reimplemented per output mode
+      or sub-command. The user explicitly asked "why isn't the range-ing
+      implemented once for all output styles?"
+    evidence: ["RNG-007", "FLT-011"]
+
+  - id: C10
+    name: "Timestamp-based ranges explicitly out of scope"
+    description: |
+      Time-based range selection was discussed and explicitly deferred. Only
+      index-based range selection is in scope.
+    evidence: ["RNG-007"]
+
+tensions:
+  - id: T1
+    name: "Range-before-filter prevents 'last N search results'"
+    description: |
+      The canonical pipeline applies range BEFORE include/exclude filters.
+      This means -N (tail) selects the last N items from the full timeline,
+      not the last N filtered results. The user identified this gap and proposed
+      a separate --tail flag for post-filter tail selection, but it was never
+      resolved. This creates a tension between stable addressing (ranges use
+      absolute indices) and the common use case of "show me the last 5 matching
+      items."
+    stories: ["RNG-003", "RNG-007", "FLT-011"]
+    possible_resolution: |
+      Add a --tail N post-filter flag that operates after include/exclude,
+      distinct from -N range syntax. The user proposed this in e583:1601-1700
+      but cautioned about creating "conflicting mess of exclusive parameter sets."
+
+  - id: T2
+    name: "Filter-display boundary leak for tool announcements"
+    description: |
+      FLT-012 reveals that -x Tool must suppress [Tools: Bash] announcement
+      lines that are generated at display time, not filter time. This violates
+      the clean filter-display separation principle (P9). The exclude filters
+      must be passed to the display function to suppress these announcements.
+    stories: ["FLT-012", "FLT-011", "FLT-015"]
+    possible_resolution: |
+      The display layer must be aware of active exclude filters for tool
+      announcements. This is a controlled boundary crossing, not a full
+      violation of filter-display separation. The display function receives
+      exclude_filters as a parameter.
+
+  - id: T3
+    name: "Thinking blocks: are they in JSONL?"
+    description: |
+      FLT-013 (Thinking virtual entity) has an unresolved question: the agent
+      believed thinking/reasoning blocks might be UI-only and not present in
+      JSONL data. However, PRS-005 and PRS-013 state that thinking content
+      blocks ARE in JSONL and must be parsed and included in the timeline.
+      The established facts (item 9) confirm content blocks include thinking type.
+    stories: ["FLT-013", "PRS-005", "PRS-013"]
+    possible_resolution: |
+      Established fact 9 (content format polymorphism) and PRS-013/PRS-005
+      confirm thinking blocks exist in JSONL. FLT-013's validation_notes
+      caveat ("Needs format investigation") is likely outdated. Thinking blocks
+      are present in assistant message content arrays.
+
+  - id: T4
+    name: "--git shortcut fails with cd-prefixed commands"
+    description: |
+      FLT-014's --git shortcut uses Bash(git *) pattern which only matches
+      commands starting with "git ". Real sessions often have commands like
+      "cd myproject && git commit" which don't match. This is a known
+      limitation documented in the story (CONF-003).
+    stories: ["FLT-014", "FLT-005"]
+    possible_resolution: |
+      Use Bash(*git*) pattern (match git anywhere in command) or implement
+      a smarter matching strategy that accounts for cd prefixes and && chains.
+      Tradeoff: broader match may catch false positives.
+
+  - id: T5
+    name: "Sequence numbers in JSON/JSONL export"
+    description: |
+      PRS-012 notes that the user expected sequence/index numbers to be included
+      when exporting events as JSON/JSONL, but raw passthrough means the original
+      JSONL objects don't contain sequence numbers. This creates a tension between
+      the raw passthrough contract and the desire for event addressing in exports.
+    stories: ["PRS-012"]
+    possible_resolution: |
+      Either inject a sequence number field into exported objects (violating raw
+      passthrough) or make sequence number derivable from position in output.
+      The user raised this but it was "not fully resolved" per validation notes.
+
+  - id: T6
+    name: "+N vs N+ syntactic similarity"
+    description: |
+      +N (first N items, head) and N+ (from N onwards) are syntactically very
+      similar but semantically different. +5 means "first 5 items" while 5+
+      means "from item 5 to end." The user noted difficulty naming the N+
+      syntax and questioned discoverability.
+    stories: ["RNG-002", "RNG-005"]
+    possible_resolution: |
+      Accept both forms as the user ultimately approved them. Clear help text
+      and examples are essential. The user kept the syntax despite hesitation.
+
+  - id: T7
+    name: "MCP tool naming pattern needs parametric filter"
+    description: |
+      MCP tools use naming pattern mcp__server__tool. Filtering these requires
+      parameterized tool filters like Tool(mcp__*). This is handled by FLT-005
+      glob patterns, but the "Tool" virtual entity (FLT-004) takes no parameters.
+      To filter MCP tools specifically, you must use the parameterized form, not
+      the virtual entity.
+    stories: ["FLT-004", "FLT-005", "PRS-013"]
+    possible_resolution: |
+      This is by design. Virtual entities are coarse (Tool = all tools);
+      parameterized forms (Tool(mcp__*)) are for fine-grained filtering.
+      Documentation should clarify this distinction.
+
+dependencies:
+  # Parsing -> Filtering dependencies
+  - from: "PRS-005"
+    to: "FLT-001"
+    nature: "FLT-001 requires parsed timeline with sequence numbers from PRS-005"
+  - from: "PRS-005"
+    to: "FLT-002"
+    nature: "FLT-002 requires parsed timeline from PRS-005"
+  - from: "PRS-005"
+    to: "FLT-003"
+    nature: "FLT-003 requires event type classification from PRS-005"
+  - from: "PRS-005"
+    to: "FLT-004"
+    nature: "FLT-004 requires event type classification from PRS-005"
+  - from: "PRS-005"
+    to: "FLT-013"
+    nature: "FLT-013 requires thinking block extraction from PRS-005/PRS-013"
+  - from: "PRS-005"
+    to: "FLT-015"
+    nature: "FLT-015 (unfiltered default) requires complete timeline from PRS-005"
+
+  # Parsing -> Range dependencies
+  - from: "PRS-005"
+    to: "RNG-001"
+    nature: "RNG-001 addresses timeline events by sequence number from PRS-005"
+  - from: "PRS-005"
+    to: "RNG-002"
+    nature: "RNG-002 selects first N from timeline built by PRS-005"
+  - from: "PRS-005"
+    to: "RNG-003"
+    nature: "RNG-003 selects last N from timeline built by PRS-005"
+  - from: "PRS-005"
+    to: "RNG-004"
+    nature: "RNG-004 selects range from timeline built by PRS-005"
+  - from: "PRS-005"
+    to: "RNG-005"
+    nature: "RNG-005 selects from N onwards in timeline built by PRS-005"
+
+  # Filtering internal dependencies
+  - from: "FLT-001"
+    to: "FLT-005"
+    nature: "FLT-005 extends FLT-001 with glob patterns for tool parameters"
+  - from: "FLT-001"
+    to: "FLT-011"
+    nature: "FLT-011 composes FLT-001 include with FLT-002 exclude"
+  - from: "FLT-002"
+    to: "FLT-011"
+    nature: "FLT-011 composes FLT-001 include with FLT-002 exclude"
+  - from: "FLT-003"
+    to: "FLT-006"
+    nature: "FLT-006 (-M) is shortcut for FLT-003 (--include Message)"
+  - from: "FLT-003"
+    to: "FLT-007"
+    nature: "FLT-007 (-U) is shortcut for a subset of FLT-003 (User only)"
+  - from: "FLT-003"
+    to: "FLT-008"
+    nature: "FLT-008 (-a) is shortcut for a subset of FLT-003 (Assistant only)"
+  - from: "FLT-004"
+    to: "FLT-009"
+    nature: "FLT-009 (-T) is shortcut for FLT-004 (--include Tool)"
+  - from: "FLT-004"
+    to: "FLT-010"
+    nature: "FLT-010 (--no-tool-results) refines FLT-004 by suppressing results"
+  - from: "FLT-005"
+    to: "FLT-014"
+    nature: "FLT-014 (--git) is convenience alias using FLT-005 glob (Bash(git *))"
+  - from: "FLT-006"
+    to: "FLT-012"
+    nature: "FLT-012 tests -M combined with -x Tool interaction"
+
+  # Range internal dependencies
+  - from: "RNG-001"
+    to: "RNG-006"
+    nature: "RNG-006 combines multiple single items and ranges from RNG-001..005"
+  - from: "RNG-002"
+    to: "RNG-006"
+    nature: "RNG-006 combines multiple range types"
+  - from: "RNG-003"
+    to: "RNG-006"
+    nature: "RNG-006 combines multiple range types"
+  - from: "RNG-004"
+    to: "RNG-006"
+    nature: "RNG-006 combines multiple range types"
+  - from: "RNG-005"
+    to: "RNG-006"
+    nature: "RNG-006 combines multiple range types"
+
+  # Cross-epic: Range -> Filtering pipeline
+  - from: "RNG-007"
+    to: "FLT-011"
+    nature: "Both define the canonical pipeline: range applies before include/exclude"
+
+  # Parsing internal chain
+  - from: "PRS-001"
+    to: "PRS-003"
+    nature: "PRS-003 multi-line parsing is the core mechanism for PRS-001 file loading"
+  - from: "PRS-001"
+    to: "PRS-006"
+    nature: "PRS-006 format version detection happens during PRS-001 loading"
+  - from: "PRS-003"
+    to: "PRS-013"
+    nature: "PRS-013 content block extraction operates on objects parsed by PRS-003"
+  - from: "PRS-013"
+    to: "PRS-005"
+    nature: "PRS-005 timeline building uses content blocks extracted by PRS-013"
+  - from: "PRS-001"
+    to: "PRS-007"
+    nature: "PRS-007 slash command parsing operates on parsed user messages"
+  - from: "PRS-001"
+    to: "PRS-008"
+    nature: "PRS-008 bash content extraction operates on parsed user messages"
+  - from: "PRS-001"
+    to: "PRS-009"
+    nature: "PRS-009 interruption detection operates on parsed events"
+  - from: "PRS-001"
+    to: "PRS-010"
+    nature: "PRS-010 meta/caveat tracking operates on parsed user message flags"
+
+cross_epic_concerns:
+  - description: |
+      The timeline (PRS-005) is the shared contract between parsing, filtering,
+      range, display, export, search, and summary. Any change to how timeline
+      entries are structured affects all downstream consumers.
+    affects: ["display-modes", "export", "search", "summary", "console-formatting"]
+
+  - description: |
+      Content block extraction (PRS-013) determines what types of content are
+      available for filtering. Thinking blocks, tool_use, tool_result, and text
+      blocks all need distinct type classification for virtual entity filtering
+      to work correctly.
+    affects: ["display-modes", "console-formatting"]
+
+  - description: |
+      Format version detection (PRS-006) affects console-formatting: tool renames
+      between 1.x and 2.x (LS Tool -> LS, View -> Read) and potential display
+      format differences between versions (CONF-001).
+    affects: ["console-formatting", "CONF-001"]
+
+  - description: |
+      The raw JSONL preservation requirement (PRS-012) creates a constraint on
+      the export epic: --json/--jsonl must output unmodified source objects.
+      The tension about sequence numbers in exports (T5) affects the export epic.
+    affects: ["export", "CONF-002"]
+
+  - description: |
+      Filter shortcuts (-M, -U, -a, -T) imply timeline mode automatically (P8).
+      This affects CLI interface design: the cli-interface epic must handle the
+      implicit mode switching when filter flags are present.
+    affects: ["cli-interface"]
+
+  - description: |
+      The pipeline ordering (search -> range -> include -> exclude -> context)
+      directly constrains the search epic: search results must feed into the
+      same filter pipeline. Context expansion (-A/-B/-C) with dedup is a
+      cross-cutting concern affecting both filtering and search.
+    affects: ["search"]
+
+  - description: |
+      Agent file discovery (PRS-011) and sidechain handling are parsing-level
+      concerns that affect the sidechain-handling epic. Agent files use the same
+      JSONL format but are separate files that need discovery.
+    affects: ["sidechain-handling"]
+
+  - description: |
+      Fuzzy session discovery (PRS-002) with its interactive disambiguation menu
+      affects the CLI interface epic. The fallback to ~/.claude/projects/ directory
+      search is a CLI-level concern.
+    affects: ["cli-interface"]
+
+  - description: |
+      The --no-tool-results flag (FLT-010) suppresses tool_result events. This
+      interacts with display modes: in truncated mode, tool results are shown
+      indented under tool_use; suppressing them changes the display layout.
+    affects: ["console-formatting", "display-modes"]
+
+  - description: |
+      Interruption detection (PRS-009) and meta/caveat tracking (PRS-010) produce
+      specially classified events that need distinct formatting in the
+      console-formatting epic (e.g., "Interrupted by user" display, [META] prefix).
+    affects: ["console-formatting", "summary"]
+
+established_fact_impacts:
+  - fact: "Fact 9: Content format polymorphism - message.content can be array (24478) or string (1944)"
+    affected_stories: ["PRS-013", "PRS-005"]
+    impact: |
+      PRS-013-AC5 explicitly handles the string case. PRS-005 implicitly depends
+      on this being handled correctly. The ratio (24478 array vs 1944 string)
+      confirms this is not an edge case -- ~7% of content fields are strings.
+      Both forms must be first-class in the parser.
+
+  - fact: "Fact 10: tool_result content can be string (7658) or array (38)"
+    affected_stories: ["PRS-013", "PRS-009"]
+    impact: |
+      PRS-013-AC4 handles tool_result content extraction but does not explicitly
+      mention the string vs array polymorphism for tool_result content specifically.
+      The overwhelmingly common case is string (7658 vs 38 array), but both must
+      be handled. Interruption detection (PRS-009) may need to check both forms
+      when looking for "[Request interrupted by user" content.
+
+  - fact: "Fact 4: CC 1.x never sends parallel tool calls (always 1 tool_use per assistant message)"
+    affected_stories: ["PRS-013", "PRS-005"]
+    impact: |
+      PRS-013-AC6 states "each block becomes a separate timeline entry preserving
+      order" -- this applies differently in 1.x (always 1 tool_use) vs 2.x
+      (potentially multiple tool_use blocks in one message). Timeline building
+      (PRS-005) must handle both cases. In 1.x, assistant messages expand to at
+      most 2 timeline entries (text + tool_use). In 2.x, they can expand to many.
+
+  - fact: "Fact 5: CC 2.x uses TaskCreate/TaskUpdate instead of TodoWrite"
+    affected_stories: ["FLT-001", "FLT-005"]
+    impact: |
+      Filter patterns referencing specific tool names must account for version
+      differences. TodoWrite filters work on 1.x sessions but not 2.x (where
+      TaskCreate/TaskUpdate are used). This reinforces the need for version-aware
+      tool name knowledge, or at minimum, clear documentation that tool names
+      in filters match against what appears in the JSONL.
+
+  - fact: "Fact 6: MultiEdit and LS tools present in 1.x but absent from 2.x"
+    affected_stories: ["FLT-005"]
+    impact: |
+      FLT-005-AC7 specifically mentions MultiEdit matching against file_path.
+      This tool only exists in 1.x sessions. Filter patterns using MultiEdit
+      will simply match nothing in 2.x sessions -- this is correct behavior
+      but worth noting for documentation.
+
+  - fact: "Fact 7: New 2.x event types: progress (hook_progress), stop_hook_summary, queue-operation"
+    affected_stories: ["PRS-005", "FLT-015"]
+    impact: |
+      PRS-005 defines timeline building for known event types (system, assistant,
+      user). New 2.x event types need timeline entry classification. FLT-015's
+      requirement that "no implicit filtering occurs" means these new event types
+      must appear in the unfiltered timeline even if they have no dedicated display
+      format yet.
+
+  - fact: "Fact 8: New 2.x fields: agent_id, agent_transcript_path, todos, modelUsage"
+    affected_stories: ["PRS-011", "PRS-005"]
+    impact: |
+      PRS-011 (agent file loading) uses agent_transcript_path for discovery.
+      PRS-005 timeline building may need to incorporate agent_id for sidechain
+      event identification. These fields should be preserved in the parsed
+      representation even if not immediately used.
+
+  - fact: "Fact 1: 'Bash: $ command' format was an xs bug, NOT real CC 1.x console format"
+    affected_stories: []
+    impact: |
+      No parsing or filtering stories reference this buggy format. This is a
+      display/formatting concern only. However, FLT-005's glob patterns match
+      against the tool's command parameter, not the display format. The
+      established fact confirms that display format bugs don't affect filter
+      matching, which operates on JSONL structure.
+
+  - fact: "Fact 3: Synthetic fixtures are unreliable"
+    affected_stories: []
+    impact: |
+      No parsing, filtering, or range stories reference specific fixtures. However,
+      testing these stories will require reliable fixtures. Golden files from Pass 3
+      must use real session fragments, not synthetic ones.

@@ -1,0 +1,52 @@
+id: CONF-002
+title: "Pipeline ordering prevents 'last N search/filter results'"
+
+description: |
+  The canonical pipeline (PRIN-002) applies range BEFORE include/exclude
+  filters. This means -N (tail N events) selects from the full timeline,
+  not from filtered results. "Show me the last 5 matching items" cannot
+  be expressed. The user proposed a --tail flag for post-filter slicing
+  but cautioned about creating "conflicting mess of exclusive parameter sets."
+
+evidence:
+  - source: "Group 1 tension T1"
+    observation: "Range-before-filter prevents 'last N search results' (RNG-003, RNG-007, FLT-011)"
+  - source: "Group 3 tension T1"
+    observation: "tail-of-search-results not expressible, user proposed --tail (e583:1601-1700)"
+  - source: "Group 3 tension T6"
+    observation: "--tail and --jq referenced in CRH-005 acceptance criteria but may lack stories"
+
+options:
+  - id: A
+    name: "Add --tail N as a post-pipeline step (step 5)"
+    pros: ["Resolves the gap", "User explicitly proposed this", "Useful for compaction recovery"]
+    cons: ["Additional flag", "Risk of confusion with -N range syntax"]
+
+  - id: B
+    name: "Defer — keep current pipeline, document limitation"
+    pros: ["No complexity added", "Pipeline stays clean"]
+    cons: ["Common use case unsupported", "Compaction recovery workflows harder"]
+
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Keep range positional args as pre-filter chunking (pipeline step 2).
+  Add --head N and --tail N as post-pipeline step 6, operating on
+  already-filtered results. This matches established dual-stage patterns
+  (docker logs, journalctl, SQL WHERE vs LIMIT) and is justified because
+  --full mode produces multi-line output per event, making Unix pipe to
+  head/tail insufficient (they slice lines, not events).
+
+  Pipeline becomes: search → range → include → exclude → context → head/tail
+
+  The distinction must be made explicit in --help and summary hints.
+
+affects:
+  - RNG-003
+  - RNG-007
+  - SRC-007
+  - CRH-005
+  - CRH-007
+  - PRIN-002
+
+status: fresh

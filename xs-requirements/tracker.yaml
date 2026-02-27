@@ -1,7 +1,7 @@
 # xs Requirements Recovery Tracker
 
 meta:
-  last_updated: 2026-02-27T10:30:00Z
+  last_updated: 2026-02-27T20:00:00Z
   current_pass: 6_slicing
   current_step: pending
   pre_pass2_validation: complete
@@ -40,13 +40,22 @@ passes:
 
   4_principles:
     status: complete
-    completed_at: 2026-02-17T23:45:00Z
-    note: "9 principles extracted during synthesis step C"
+    completed_at: 2026-02-27T20:00:00Z
+    note: |
+      Re-derived fresh from stories (not synthesis side-effect). 4 parallel Opus
+      agents mapped 108 stories into group summaries, 1 Opus agent reduced to
+      13 principles. Completeness-checked against corrected drafts (9 originals).
+      6 confirmed, 1 absorbed, 1 gap-filled (PRIN-013), 1 demoted to resolved
+      conflict, 6 genuinely new principles discovered. Drafts in _drafts/.
 
   5_conflicts:
     status: complete
-    completed_at: 2026-02-17T23:45:00Z
-    note: "4 conflicts surfaced during synthesis step C"
+    completed_at: 2026-02-27T20:00:00Z
+    note: |
+      Re-derived fresh: 6 conflicts total. 4 carried from drafts (resolutions
+      preserved), 2 new (CONF-002 post-filter tail, CONF-005 search regex).
+      All 6 resolved by user. CONF-006 added for 1.x/2.x format (was draft
+      CONF-001, already resolved).
 
   6_slicing:
     status: pending
@@ -79,12 +88,14 @@ counts:
       should: ~48
       could: ~15
   principles:
-    total: 9
-    status: draft
+    total: 13
+    status: fresh  # re-derived from stories, completeness-checked against drafts
+    drafts_preserved: 9  # in principles/_drafts/
   conflicts:
-    total: 4
+    total: 6
     pending: 0
-    resolved: 4
+    resolved: 6
+    drafts_preserved: 4  # in conflicts/_drafts/
   bugs_documented:
     total: 4
     with_workaround: 4
@@ -120,8 +131,10 @@ sources_cataloged:
 synthesis_artifacts:
   epic_reports: 12
   cross_epic_resolutions: 1
-  principles: 9
-  conflicts: 4
+  pass4_group_summaries: 4  # synthesis/pass4-group-{1..4}.yaml
+  pass4_reduce_manifest: 1  # synthesis/pass4-reduce-manifest.yaml (includes completeness check)
+  principles: 13
+  conflicts: 6
   synthesis_summary: 1
 
 next_action: |

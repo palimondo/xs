@@ -1,0 +1,546 @@
+group: 2
+name: Display/Output
+epics: [formatting, display, export]
+story_count: 34
+analyzed_at: 2026-02-27
+
+patterns:
+  - id: P1
+    name: "Unified symbol vocabulary"
+    description: |
+      All display modes share a fixed set of Unicode symbols with strict semantic meaning:
+      > for user messages, ⏺ for assistant text and tool calls, ⎿ for tool results,
+      ✻ for thinking blocks, ! for local bash commands, @ for file references.
+      No emojis are ever used. This is enforced as a hard constraint (FMT-025)
+      and repeated corrections from the user (b475:966, b475:981, b475:1017).
+    evidence: ["FMT-001", "FMT-002", "FMT-003", "FMT-006", "FMT-007", "FMT-013", "FMT-014", "FMT-025", "DSP-002"]
+    scope: within-group
+
+  - id: P2
+    name: "Display mode hierarchy: CC console -> truncated -> compact"
+    description: |
+      The three display modes form a derivation chain. Truncated mode is the
+      canonical rendering that replicates Claude Code console output. Compact mode
+      is truncated mode compressed to one line per event with [seq] prefix added.
+      Full mode is truncated mode with the 3-line tool result limit removed.
+      All modes share the same symbol vocabulary and tool parameter formatting.
+    evidence: ["DSP-001", "DSP-002", "DSP-003", "FMT-003", "FMT-004", "FMT-005"]
+    scope: within-group
+
+  - id: P3
+    name: "ToolName(param) generic format"
+    description: |
+      All tool calls use the format ToolName(primary_param) with a parameter
+      extraction priority chain: .command > .file_path > .path > .pattern > fallback.
+      This applies to Bash, Edit, Write, Read, Grep, Glob, LS, Task, WebSearch, etc.
+      Only TodoWrite/TodoRead have special display handling. The user explicitly
+      rejected alternative formats (dollar sign, arrow decorations, tabs).
+    evidence: ["FMT-003", "FMT-004", "FMT-005", "FMT-010", "FMT-022", "FMT-020"]
+    scope: within-group
+
+  - id: P4
+    name: "Multiline content truncation: first [...] last"
+    description: |
+      In compact mode, all multiline content (user messages, assistant text, tool
+      parameters, tool results, thinking blocks) uses a consistent pattern:
+      first_line [...] last_line on a single line. No arbitrary character truncation
+      (e.g., no 60-char limits). This enables reliable grep/head/tail workflows.
+    evidence: ["FMT-008", "FMT-011", "DSP-001"]
+    scope: within-group
+
+  - id: P5
+    name: "Tool result truncation in truncated mode: first 3 lines + total count"
+    description: |
+      In truncated mode, tool results show first 3 lines then '... +N lines' where
+      N is the TOTAL line count (not remaining). Interactive elements like
+      '(ctrl+r to expand)' are explicitly excluded. Assistant text messages are
+      NOT truncated in truncated mode -- only tool results are.
+    evidence: ["FMT-015", "FMT-007", "DSP-002"]
+    scope: within-group
+
+  - id: P6
+    name: "Raw passthrough contract for JSON/JSONL export"
+    description: |
+      --json and --jsonl must output verbatim JSONL objects from the session
+      transcript without any transformation. Filters and ranges select WHICH
+      objects to include, but the objects themselves are not modified. The user
+      explicitly corrected the agent multiple times on this (a40c:545, e583:1103).
+    evidence: ["EXP-001", "EXP-002", "EXP-003"]
+    scope: cross-group
+
+  - id: P7
+    name: "Sequence number stability"
+    description: |
+      Sequence numbers are assigned from the full timeline position and remain
+      stable regardless of display mode, filtering, or range selection. The same
+      event always has the same sequence number. This enables reliable cross-mode
+      referencing and grep workflows.
+    evidence: ["FMT-017", "DSP-004", "EXP-004"]
+    scope: cross-group
+
+  - id: P8
+    name: "Blank line spacing in truncated/full modes"
+    description: |
+      Truncated and full modes use blank lines between message types for readability
+      matching CC console appearance. Tool call and tool result are grouped together
+      (no blank line between them). Compact mode has NO blank lines.
+    evidence: ["FMT-023", "DSP-001", "DSP-002"]
+    scope: within-group
+
+  - id: P9
+    name: "Discontinuous separator (grep-style --)"
+    description: |
+      When filtering creates gaps in the event sequence, a '--' separator line is
+      inserted between non-contiguous groups. This applies to all display modes and
+      follows the grep convention. It complements sequence numbers as a visual
+      discontinuity indicator.
+    evidence: ["FMT-018", "DSP-005"]
+    scope: within-group
+
+  - id: P10
+    name: "No section headers in any mode"
+    description: |
+      Output contains no === TIMELINE ===, === CONVERSATION ===, or any other
+      section headers. The user repeatedly corrected the agent to remove these.
+      This applies to all display modes.
+    evidence: ["FMT-024", "DSP-001", "DSP-002", "DSP-003"]
+    scope: within-group
+
+  - id: P11
+    name: "Special user message types with distinct prefixes"
+    description: |
+      User messages have three special subtypes beyond plain '>' prefix:
+      slash commands ('> /command is running...' in truncated, '> /command' in compact),
+      local bash commands ('! command'), and file references ('@ filename').
+      Each has a distinct prefix character to distinguish from regular user input.
+    evidence: ["FMT-012", "FMT-013", "FMT-014", "FMT-001"]
+    scope: within-group
+
+  - id: P12
+    name: "Filter-display separation"
+    description: |
+      Display modes control HOW events are rendered. Filters (include/exclude/range)
+      control WHICH events are shown. The export modes (--json, --jsonl, --export-json)
+      are alternative output formats that still respect the same filter pipeline.
+      This separation is stated as an architecture principle (b475:1501-1600).
+    evidence: ["DSP-001", "DSP-002", "DSP-003", "EXP-001", "EXP-002", "EXP-003"]
+    scope: cross-group
+
+constraints:
+  - id: C1
+    name: "No emojis in any output"
+    description: |
+      Output must use only Claude Code console symbols (⏺, ⎿, ✻, >, !, @, /,
+      ☒, ◐, ☐). No emoji characters. User corrected this multiple times.
+    evidence: ["FMT-025", "DSP-001", "DSP-002"]
+
+  - id: C2
+    name: "No interactive elements"
+    description: |
+      Output must not contain interactive-only elements like '(ctrl+r to expand)'
+      or 'ctrl+r to see all'. These are noise in static log output.
+    evidence: ["FMT-015", "DSP-002"]
+
+  - id: C3
+    name: "No section headers"
+    description: |
+      No === TIMELINE ===, === CONVERSATION ===, or similar section headers
+      in any output mode. User repeatedly corrected this.
+    evidence: ["FMT-024", "DSP-001", "DSP-002", "DSP-003"]
+
+  - id: C4
+    name: "Raw passthrough for JSON/JSONL"
+    description: |
+      --json and --jsonl must emit verbatim JSONL objects from the session
+      transcript without modification. User explicitly corrected agent on this
+      and reconfirmed it in a later session.
+    evidence: ["EXP-001", "EXP-002"]
+
+  - id: C5
+    name: "Compact mode: exactly one line per event"
+    description: |
+      In compact mode, every event must fit on exactly one line. Multiline content
+      is collapsed using first [...] last pattern. Newlines in tool parameters
+      are replaced. No blank lines between events.
+    evidence: ["DSP-001", "FMT-008"]
+
+  - id: C6
+    name: "Tool result indentation: 2 spaces + symbol + spaces"
+    description: |
+      Tool result lines use exactly 2 spaces before the ⎿ symbol. The agent
+      struggled repeatedly with this spacing (3 spaces instead of 2, wrong number
+      of spaces after ⎿). This must be precisely implemented.
+    evidence: ["FMT-016", "FMT-007", "DSP-002"]
+
+  - id: C7
+    name: "Truncation count is TOTAL lines, not remaining"
+    description: |
+      In truncated mode, the '... +N lines' indicator shows the TOTAL line count
+      of the tool result, not the number of remaining lines after the 3-line preview.
+    evidence: ["FMT-015", "DSP-002"]
+
+  - id: C8
+    name: "Assistant text NOT truncated in truncated mode"
+    description: |
+      Only tool results are truncated (to 3 lines) in truncated mode. Assistant
+      text messages are shown in full. The name 'truncated mode' refers to CC's
+      truncation of tool output, not assistant text.
+    evidence: ["FMT-015", "FMT-002", "DSP-002"]
+
+  - id: C9
+    name: "Display mode flags are mutually exclusive"
+    description: |
+      --truncated and --full are mutually exclusive. Default is compact mode.
+      Only one display mode flag accepted at a time.
+    evidence: ["DSP-003"]
+
+  - id: C10
+    name: "No arbitrary character truncation"
+    description: |
+      Tool commands and parameters must not be truncated to arbitrary character
+      limits (e.g., no 60-char truncation). Show full first line of commands.
+    evidence: ["FMT-003", "FMT-008", "DSP-002"]
+
+tensions:
+  - id: T1
+    name: "Raw passthrough vs sequence numbers in export"
+    description: |
+      EXP-001 and EXP-002 require raw/verbatim JSONL objects (no modification).
+      EXP-004 wants sequence numbers added to exported objects. Adding a sequence
+      field would violate the raw passthrough contract. This is explicitly noted
+      as unresolved in EXP-004 validation_notes.
+    stories: ["EXP-001", "EXP-002", "EXP-004"]
+    possible_resolution: |
+      Wrap each raw object in an envelope {sequence: N, event: <raw_object>},
+      or add sequence as a field that doesn't exist in the original (but this
+      still modifies the object). Could also provide sequence via a separate
+      output mode or flag. Needs user decision.
+
+  - id: T2
+    name: "Slash command prefix: > vs no prefix"
+    description: |
+      FMT-012 notes that at 0841:1257 the user says 'I dislike that you used >
+      prefix also for these' about slash commands, but reconstruct.jq (the
+      authoritative reference) uses > prefix for slash commands. The story
+      currently specifies > prefix matching reconstruct.jq but flags the
+      conflict for resolution.
+    stories: ["FMT-012", "FMT-001"]
+    possible_resolution: |
+      Given that slash commands ARE user messages (user typed /command),
+      the > prefix is semantically correct. The user may have been objecting
+      to visual clutter. Could use a different prefix or no prefix for
+      slash commands. This maps to CONF-004 in the conflicts directory.
+
+  - id: T3
+    name: "Sequence number visibility rules across modes"
+    description: |
+      FMT-017 and DSP-004 define complex rules: compact always shows [seq],
+      truncated hides by default but auto-shows when filtering, --show-numbers
+      overrides. But FMT-017 depends_on DSP-004 while DSP-004 depends_on
+      DSP-001 and DSP-002, creating a circular logical dependency between
+      formatting rules and display mode definitions.
+    stories: ["FMT-017", "DSP-004", "DSP-001", "DSP-002"]
+    possible_resolution: |
+      Treat sequence number rendering as a cross-cutting concern that is
+      configured per display mode, not as a dependency chain. The display
+      mode determines default visibility, and --show-numbers is an override.
+
+  - id: T4
+    name: "FMT-018 and DSP-005 are near-duplicates"
+    description: |
+      FMT-018 (Discontinuous Section Separator in formatting epic) and
+      DSP-005 (Discontinuous Section Separator in display epic) describe
+      the same feature: '--' separator between non-contiguous events.
+      FMT-018 depends_on DSP-005, suggesting the display epic owns the
+      concept, but the formatting epic also has acceptance criteria for it.
+    stories: ["FMT-018", "DSP-005"]
+    possible_resolution: |
+      Merge into a single story in the display epic (DSP-005), since the
+      separator is a display-level concern. Remove or redirect FMT-018
+      to be a reference/related story.
+
+  - id: T5
+    name: "FMT-017 and DSP-004 are near-duplicates"
+    description: |
+      FMT-017 (Sequence Number Display Logic in formatting epic) and
+      DSP-004 (Sequence Number Display Control in display epic) cover
+      the same feature with overlapping acceptance criteria. FMT-017 has
+      6 ACs, DSP-004 has 7 ACs, with significant overlap.
+    stories: ["FMT-017", "DSP-004"]
+    possible_resolution: |
+      Merge into a single story in the display epic (DSP-004), since
+      sequence number visibility is a display-level concern. FMT-017
+      should reference DSP-004 for the rules and focus only on the
+      formatting details (bracket style, position in line).
+
+  - id: T6
+    name: "Export filters: same pipeline or separate?"
+    description: |
+      EXP-003 specifies that --export-json respects --include and --exclude
+      filters with the same semantics as display filtering. But the export
+      stories (EXP-001, EXP-002) don't explicitly state whether the filter
+      pipeline is shared or separate. The filter-display separation principle
+      implies a shared pipeline, but export is neither a filter nor a display mode.
+    stories: ["EXP-001", "EXP-002", "EXP-003"]
+    possible_resolution: |
+      Clarify that the filter pipeline is shared across ALL output modes
+      (display + export). The pipeline is: search -> range -> include ->
+      exclude -> context. Then output mode (compact/truncated/full/json/jsonl/
+      export-json) determines rendering. This aligns with PRIN-008.
+
+  - id: T7
+    name: "TodoWrite special handling scope"
+    description: |
+      FMT-020 defines special display for TodoWrite/TodoRead (custom labels,
+      status symbols, priority codes). But established fact #5 says CC 2.x
+      uses TaskCreate/TaskUpdate instead of TodoWrite. This means the TodoWrite
+      formatting may only be relevant for 1.x sessions, while 2.x sessions
+      need analogous handling for TaskCreate/TaskUpdate. FMT-010 covers Task
+      tool but doesn't mention the Todo-like display with checkboxes.
+    stories: ["FMT-020", "FMT-010"]
+    possible_resolution: |
+      Determine whether TaskCreate/TaskUpdate in 2.x serves the same purpose
+      as TodoWrite in 1.x. If so, apply the same special display logic
+      (status symbols, priority codes) to both. This connects to CONF-001
+      (1.x vs 2.x format differences).
+
+dependencies:
+  - from: "FMT-001"
+    to: "PRS-005"
+    nature: "Formatting user messages requires parsing user message JSONL entries"
+
+  - from: "FMT-002"
+    to: "PRS-005"
+    nature: "Formatting assistant messages requires parsing assistant message JSONL entries"
+
+  - from: "FMT-003"
+    to: "PRS-005"
+    nature: "Formatting Bash tool calls requires parsing tool_use entries"
+
+  - from: "FMT-006"
+    to: "PRS-005"
+    nature: "Formatting thinking blocks requires parsing thinking content from JSONL"
+
+  - from: "FMT-007"
+    to: "PRS-005"
+    nature: "Formatting tool results requires parsing tool result entries"
+
+  - from: "FMT-009"
+    to: "FMT-007"
+    nature: "Empty content display is a special case of tool result formatting"
+
+  - from: "FMT-011"
+    to: "FMT-006"
+    nature: "Thinking truncation depends on thinking block symbol definition"
+
+  - from: "FMT-011"
+    to: "FMT-008"
+    nature: "Thinking truncation uses the same first [...] last pattern"
+
+  - from: "FMT-012"
+    to: "PRS-007"
+    nature: "Slash command display requires parsing <command-message> XML tags"
+
+  - from: "FMT-013"
+    to: "PRS-008"
+    nature: "Local bash display requires parsing <bash-input> XML tags"
+
+  - from: "FMT-015"
+    to: "FMT-007"
+    nature: "Truncation rules build on tool result formatting"
+
+  - from: "FMT-017"
+    to: "DSP-004"
+    nature: "Sequence number display logic depends on display mode selection"
+
+  - from: "FMT-018"
+    to: "DSP-005"
+    nature: "FMT-018 is a formatting-level view of the same feature as DSP-005"
+
+  - from: "FMT-019"
+    to: "PRS-010"
+    nature: "Meta/caveat display requires parsing isMeta field from JSONL"
+
+  - from: "FMT-020"
+    to: "FMT-007"
+    nature: "Todo formatting is a special case of tool result formatting"
+
+  - from: "FMT-021"
+    to: "PRS-009"
+    nature: "Interruption display requires detecting interruption markers in JSONL"
+
+  - from: "FMT-021"
+    to: "FMT-007"
+    nature: "Interrupted result display is a special case of tool result formatting"
+
+  - from: "FMT-022"
+    to: "PRS-005"
+    nature: "Generic tool format requires parsing tool_use entries with parameter extraction"
+
+  - from: "DSP-001"
+    to: "FMT-001"
+    nature: "Compact mode renders user messages using FMT-001 format"
+
+  - from: "DSP-001"
+    to: "FMT-002"
+    nature: "Compact mode renders assistant messages using FMT-002 format"
+
+  - from: "DSP-002"
+    to: "FMT-001"
+    nature: "Truncated mode renders user messages using FMT-001 format"
+
+  - from: "DSP-002"
+    to: "FMT-002"
+    nature: "Truncated mode renders assistant messages using FMT-002 format"
+
+  - from: "DSP-003"
+    to: "DSP-002"
+    nature: "Full mode is truncated mode without the 3-line truncation limit"
+
+  - from: "DSP-004"
+    to: "DSP-001"
+    nature: "Compact mode always shows sequence numbers"
+
+  - from: "DSP-004"
+    to: "DSP-002"
+    nature: "Truncated mode hides sequence numbers by default"
+
+  - from: "DSP-005"
+    to: "DSP-004"
+    nature: "Discontinuous separator complements sequence number gaps"
+
+  - from: "EXP-001"
+    to: "PRS-005"
+    nature: "JSON export requires timeline construction from parsed JSONL"
+
+  - from: "EXP-002"
+    to: "PRS-005"
+    nature: "JSONL export requires timeline construction from parsed JSONL"
+
+  - from: "EXP-003"
+    to: "RNG-004"
+    nature: "Export range requires range parsing"
+
+  - from: "EXP-004"
+    to: "EXP-001"
+    nature: "Sequence numbers in export depends on JSON export feature"
+
+  - from: "EXP-004"
+    to: "EXP-002"
+    nature: "Sequence numbers in export depends on JSONL export feature"
+
+cross_epic_concerns:
+  - description: |
+      All formatting stories (FMT-*) depend on parsing stories (PRS-005 through PRS-010)
+      to extract structured data from raw JSONL. The formatting epic cannot function
+      without the parsing epic's output.
+    affects: ["jsonl-parsing"]
+
+  - description: |
+      Display mode selection (DSP-001/002/003) interacts with the CLI interface epic
+      for flag parsing (--truncated, --full, --show-numbers are CLI flags). The display
+      modes also interact with filtering (FLT-*) since filtering determines WHICH events
+      are rendered, and display determines HOW.
+    affects: ["cli-interface", "filtering"]
+
+  - description: |
+      Export stories (EXP-001/002/003) interact with the filtering epic (FLT-001, FLT-002)
+      and range selection epic (RNG-001, RNG-004) because exports respect the same
+      filter/range pipeline as display modes.
+    affects: ["filtering", "range-selection"]
+
+  - description: |
+      Sequence number stability (P7) affects the range-selection epic. Range selection
+      uses sequence numbers to specify event ranges (e.g., '5-10', '50-'). If sequence
+      numbers are unstable, range selection breaks.
+    affects: ["range-selection"]
+
+  - description: |
+      The filter-display separation principle (P12) requires coordination between
+      this group and the filtering group. The filtering pipeline must produce a
+      list of selected events with stable sequence numbers, and the display/export
+      layer must render them without re-filtering.
+    affects: ["filtering"]
+
+  - description: |
+      FMT-022 (generic tool format) has implications for MCP tools (mcp__provider__tool)
+      which are part of the parsing/sidechain epics. The parameter extraction chain
+      needs to handle MCP tool input structures.
+    affects: ["jsonl-parsing", "sidechain-handling"]
+
+  - description: |
+      EXP-003 (export to file) mentions Tool(glob) filter syntax like
+      Edit(*/specs/**) and Bash(git commit *). This filter syntax is defined
+      in the filtering epic but its application to export is a cross-concern.
+    affects: ["filtering"]
+
+  - description: |
+      The context flags (-A, -B, -C for lines before/after matches) mentioned in
+      DSP-005-AC3 and FMT-018-AC3 are defined in the context epic but produce
+      discontinuous output that this group must render correctly.
+    affects: ["context"]
+
+established_fact_impacts:
+  - fact: "Fact 1: 'Bash: $ command' format was an xs bug, NOT real CC 1.x console format"
+    affected_stories: ["FMT-003"]
+    impact: |
+      FMT-003 validation_notes reference user rejecting 'Bash: $ command' format (1e83:348).
+      This is consistent with established fact 1. No story change needed -- FMT-003 already
+      specifies the correct Bash(command) format. The bug was in the old implementation,
+      not in the requirements.
+
+  - fact: "Fact 2: '//voice:' format was an xs bug, NOT CC console format"
+    affected_stories: []
+    impact: |
+      No stories in this group reference the //voice: format. No impact.
+
+  - fact: "Fact 3: Synthetic fixtures are unreliable"
+    affected_stories: ["FMT-007", "FMT-016"]
+    impact: |
+      FMT-007 and FMT-016 reference indentation patterns from day-021 sessions where
+      the agent was working with fixtures. Golden files for these stories should be
+      derived from real sessions, not synthetic fixtures. This affects Pass 3 golden
+      file assembly for tool result indentation verification.
+
+  - fact: "Fact 4: CC 1.x never sends parallel tool calls (always 1 tool_use per assistant message)"
+    affected_stories: ["FMT-002"]
+    impact: |
+      FMT-002-AC4 specifies compact format for tool-only assistant messages as
+      '[N] ⏺ [Tools: ToolName1, ToolName2]' with a plural list format. Since
+      CC 1.x only has 1 tool per message, this plural format only applies to 2.x
+      sessions. The story should note that 1.x will always have a single tool name.
+      This connects to CONF-001 (1.x vs 2.x format differences).
+
+  - fact: "Fact 5: CC 2.x uses TaskCreate/TaskUpdate instead of TodoWrite"
+    affected_stories: ["FMT-020", "FMT-010"]
+    impact: |
+      FMT-020 defines special display for TodoWrite/TodoRead with status symbols
+      and priority codes. In 2.x sessions, the equivalent is TaskCreate/TaskUpdate.
+      FMT-010 covers Task tool generically but doesn't include the Todo-like special
+      display. The stories need to be reconciled: either FMT-020 should cover both
+      1.x (TodoWrite) and 2.x (TaskCreate/TaskUpdate) variants, or a new story
+      should handle the 2.x equivalent.
+
+  - fact: "Fact 6: MultiEdit and LS tools present in 1.x but absent from 2.x"
+    affected_stories: ["FMT-004", "FMT-022"]
+    impact: |
+      FMT-004-AC3 specifies MultiEdit formatting. FMT-022-AC3 specifies LS formatting.
+      These tools are 1.x only. Stories should note the version scope. For 2.x sessions,
+      these tool names will not appear in the JSONL.
+
+  - fact: "Fact 9: Content format polymorphism: message.content can be array or string"
+    affected_stories: ["FMT-001", "FMT-002", "FMT-006", "FMT-022"]
+    impact: |
+      Multiple FMT stories reference .message.content[0].text for content extraction.
+      When content is a string (1,944 occurrences vs 24,478 arrays), the [0].text
+      path fails. All formatting stories that extract text content must handle both
+      content formats. This is primarily a parsing concern (PRS-*) but affects the
+      formatting stories' assumptions about input structure.
+
+  - fact: "Fact 10: tool_result content can be string or array"
+    affected_stories: ["FMT-007", "FMT-009", "FMT-015", "FMT-021"]
+    impact: |
+      Tool result formatting stories assume a specific content structure. When
+      tool_result content is an array (38 occurrences) vs string (7,658), the
+      display logic must handle both. FMT-007 references reconstruct.jq checking
+      'if toolUseResult | type == "string"' which is the correct polymorphic handling.

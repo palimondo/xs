@@ -1,0 +1,72 @@
+id: CONF-001
+title: Claude Code 1.x vs 2.x Output Format Differences
+
+description: |
+  Claude Code's JSONL format and console output evolved between 1.x and 2.x.
+  The user has sessions from both eras. Key differences include content block
+  structure, tool output format, and available metadata fields. User wants
+  "period appropriate" output but this creates two code paths.
+
+evidence:
+  1x:
+    - observation: "Different content block structure in JSONL"
+    - observation: "NOTE: 'Bash: $ command' was an xs bug, NOT real CC 1.x console format"
+    - observation: "TodoWrite, MultiEdit, LS tools present in 1.x"
+    - observation: "CC 1.x never sends parallel tool calls (always 1 tool_use per message)"
+    - note: "Golden files exist for 1.x era — but synthetic fixtures are unreliable (encode buggy formats)"
+
+  2x:
+    - observation: "New content block structure with typed arrays"
+    - observation: "TaskCreate/TaskUpdate replace TodoWrite"
+    - observation: "MultiEdit and LS absent (CC uses Edit and Bash(ls) instead)"
+    - observation: "New event types: progress (hook_progress), stop_hook_summary"
+    - observation: "Parallel tool calls supported (multiple tool_use per assistant message)"
+    - observation: "New fields: agent_id, agent_transcript_path, todos, modelUsage"
+    - note: "Current CC sessions use this format"
+
+options:
+  - id: A
+    name: "Always 2.x style"
+    pros: [simpler implementation, forward-compatible, less maintenance]
+    cons: [historical sessions look different from original CC output]
+
+  - id: B
+    name: "Period-appropriate (auto-detect from version field)"
+    pros: [historical accuracy, sessions look correct for their era]
+    cons: [two code paths for formatting, harder to test, complexity]
+
+  - id: C
+    name: "User flag --format-style=1x|2x|auto"
+    pros: [user control, flexibility]
+    cons: [complexity, decision burden on user, three code paths]
+
+resolution: resolved
+decided_by: user
+decision_rationale: |
+  Auto-detect format version (period-appropriate rendering) by default.
+  Optional --format-style=2x flag forces 2.x rendering on old sessions.
+  No reverse direction (1x on 2x) needed. Two rendering paths (1.x and 2.x),
+  auto-detect via JSONL version field, with one override direction.
+
+  Architectural note: the formatter should be modular/pluggable, not hardcoded
+  to Claude Code. This enables eventual support for other coding agent formats
+  (Codex CLI, Gemini CLI) in addition to CC 1.x and 2.x.
+
+affects:
+  - PRS-006  # Format version detection
+  - FMT-*    # All formatting stories
+  - DSP-*    # Display mode rendering
+  - PRIN-006 # Period-appropriate formatting principle
+
+pass3_corrections:
+  - "Removed false claim 'Bash: $ command' is CC 1.x format — it was an xs bug"
+  - "Added tool evolution details (TodoWrite→TaskCreate/TaskUpdate, MultiEdit/LS absent)"
+  - "Added 2.x-only event types and fields"
+  - "Noted parallel tool calls are 2.x-only"
+  - "Noted synthetic fixtures are unreliable golden references"
+
+sources:
+  - "jsonl-parsing report: PRS-006 — format version detection"
+  - "console-formatting report: compact-vs-truncated tool format conflict (b475:2301 vs b475:1142)"
+  - "Pass 3 golden file schema and inventory — confirmed facts"
+  - "CLAUDE.md template for this conflict"

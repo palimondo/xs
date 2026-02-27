@@ -1,0 +1,37 @@
+id: PRIN-009
+title: "Implicit mode activation from flag context"
+
+statement: |
+  When no explicit mode flag is given: no arguments = summary mode;
+  any filter, range, or search flag = implicit timeline mode.
+  Explicit mode flags (--summary, --files, --created, --search)
+  override implicit timeline. Search mode overrides implicit timeline
+  to prevent duplicate output. The mode resolution hierarchy is:
+  explicit mode > search > implicit timeline > summary.
+
+rationale: |
+  The user wants zero-friction interaction: just `xs <session>` gives
+  a summary, adding a filter flag automatically switches to timeline
+  without requiring -t. A critical bug occurred when search + implicit
+  timeline produced duplicate output — search must be treated as its
+  own mode that suppresses implicit timeline.
+
+implications:
+  - "xs <session> with no flags = summary mode"
+  - "xs <session> -U = implicit timeline (filter flag triggers timeline)"
+  - "xs <session> -S pattern = search mode (not timeline + search)"
+  - "xs <session> --files = explicit files mode (overrides implicit timeline)"
+  - "Summary mode is tightly coupled to filter flag inventory (inline hints)"
+
+applies_to:
+  - CLI-001   # Summary mode
+  - CLI-006   # Implicit timeline
+  - SRC-005   # Search overrides implicit timeline
+  - SUM-001   # Summary as default
+
+evidence:
+  - "Group 1 pattern P8: Implicit timeline from filter/range presence (FLT-011)"
+  - "Group 3 pattern P9: Search IS the output mode — no duplicate (SRC-005, caf2:801-900)"
+  - "Group 4 pattern P2: Implicit mode activation hierarchy (CLI-001, CLI-002, CLI-006)"
+
+status: fresh

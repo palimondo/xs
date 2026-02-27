@@ -1,0 +1,40 @@
+id: PRIN-003
+title: "Filtering and display are orthogonal concerns"
+
+statement: |
+  Filters (include, exclude, range, search) determine WHICH events are
+  shown. Display modes (compact, truncated, full) and export modes
+  (json, jsonl) determine HOW events are rendered. These are orthogonal:
+  any filter combination works with any output mode. The filter pipeline
+  produces a list of selected events; the output layer renders them
+  without re-filtering.
+
+rationale: |
+  The user explicitly stated "separate filtering (what to show) from
+  display (how to show)" and "filters are orthogonal to display mode."
+  This is a foundational architectural principle that prevents coupling
+  between selection logic and rendering logic.
+
+implications:
+  - "Filter pipeline runs once, output mode receives filtered event list"
+  - "Export modes (--json, --jsonl) use the same filter pipeline as display modes"
+  - "Adding a new display mode requires zero changes to filtering code"
+  - "Known boundary leak: -x Tool must suppress tool announcements at display time (FLT-012)"
+
+applies_to:
+  - FLT-011   # Pipeline composition
+  - FLT-012   # Tool announcement suppression (boundary leak)
+  - DSP-001   # Compact mode
+  - DSP-002   # Truncated mode
+  - DSP-003   # Full mode
+  - EXP-001   # JSON export
+  - EXP-002   # JSONL export
+  - CLI-002   # Timeline display
+  - CLI-006   # Implicit timeline
+
+evidence:
+  - "Group 1 pattern P9: Filter-display separation with FLT-012 boundary leak"
+  - "Group 2 pattern P12: Display modes + export share same filter pipeline"
+  - "Group 4 pattern P3: 'filters are orthogonal to display mode' (CLI-002-AC3)"
+
+status: fresh

@@ -1,0 +1,31 @@
+id: PRIN-007
+title: "No implicit filtering without explicit flags"
+
+statement: |
+  Without --include or --exclude flags, the timeline must show ALL events
+  including thinking content, meta messages, empty messages, and new/unknown
+  event types. The tool must never silently hide events. The user called
+  implicit filtering "a serious issue" — this is a zero-tolerance constraint.
+
+rationale: |
+  xs is a session analysis tool. Hiding events without the user's knowledge
+  defeats the purpose. New 2.x event types (progress, stop_hook_summary,
+  queue-operation) must appear in unfiltered output even if they have no
+  dedicated display format yet.
+
+implications:
+  - "Default unfiltered timeline includes ALL parsed events"
+  - "New/unknown event types must not be silently dropped"
+  - "Thinking blocks appear in unfiltered output"
+  - "Meta/caveat messages appear in unfiltered output"
+  - "Empty assistant messages (no text, no tools) appear in unfiltered output"
+
+applies_to:
+  - FLT-015   # Unfiltered default
+  - PRS-005   # Timeline includes all events
+
+evidence:
+  - "Group 1 constraint C3: User called implicit filtering 'a serious issue' (FLT-015, PRS-005)"
+  - "Established fact 7: New 2.x event types must appear in unfiltered timeline"
+
+status: fresh

@@ -1,39 +1,38 @@
 id: PRIN-002
-title: Canonical Filter Pipeline Ordering
+title: "Canonical five-step filter pipeline"
 
 statement: |
-  The filter pipeline follows a strict 5-step ordering:
-    search -> range -> include -> exclude -> context expansion
-  This ordering was stated by the user TWICE in separate sessions and
-  bugs were found when it was violated.
+  All event selection uses a single pipeline applied in strict order:
+  (0) search by pattern, (1) select by range, (2) include whitelist,
+  (3) exclude blacklist, (4) context expansion with dedup.
+  This pipeline is implemented once at the event array level and
+  shared by all output modes (display, export, search).
 
 rationale: |
-  The pipeline ordering determines how different selection mechanisms compose.
-  Search narrows first, range selects a window from search results (or full
-  timeline), include/exclude further refine, and context expansion (-A/-B/-C)
-  adds surrounding events for the final output. Violating this order produces
-  duplicates, missing results, or incorrect context windows.
+  The user explicitly defined this ordering twice in separate sessions
+  and asked "why isn't the range-ing implemented once for all output
+  styles?" The pipeline must be centralized to avoid per-mode reimplementation
+  bugs. Range applies to the FULL unfiltered timeline first, then
+  include/exclude narrow the result. Context expansion happens last
+  and must merge overlapping windows without duplicates.
 
 implications:
-  - Search (-S) runs first and produces a set of matching events
-  - Range (positional args) applies to the full timeline BEFORE filtering (confirmed as intentional)
-  - Include (-i) is an OR-whitelist of entity types
-  - Exclude (-x) is an AND-blacklist applied after include
-  - Context expansion (-A/-B/-C) runs last, adding events around surviving matches
-  - No post-filter tail selection currently possible (known gap; --tail proposed but deferred)
+  - "Pipeline is implemented once, not per output mode or sub-command"
+  - "Range addresses absolute timeline positions, not filtered positions"
+  - "Context expansion must deduplicate overlapping windows"
+  - "No duplicate or out-of-order events in output (user called this a 'serious bug')"
 
 applies_to:
-  - FLT-*   # All filtering stories
-  - RNG-*   # All range selection stories
-  - SRC-*   # All search stories
-  - CLI-006 # Implicit timeline triggers
+  - FLT-011   # Composed filter pipeline
+  - RNG-007   # Range-filter interaction
+  - SRC-007   # Search-filter pipeline
+  - SRC-004   # Context deduplication
+  - EXP-003   # Export respects same pipeline
 
 evidence:
-  - "caf2:301-400 F004 — user stated pipeline ordering"
-  - "caf2:901-1000 F001 — user restated pipeline ordering (second time)"
-  - "1e83:801-900 F001 — range before filtering confirmed as intentional design"
-  - "caf2:1001-1100 F004 — bug: search ignored -i/-x filters (ordering violation)"
-  - "range-selection report: canonical pipeline defined in RNG-007"
-  - "search report: SRC-007 documents search position as step 0"
+  - "Group 1 pattern P2: Canonical pipeline ordering stated twice by user (FLT-011, RNG-007)"
+  - "Group 1 constraint C9: Centralized at event array level, not per output mode"
+  - "Group 3 pattern P2: Five-step pipeline confirmed across search/filter/range epics"
+  - "Group 1 constraint C8: No duplicate events (user: 'serious bug that must be fixed immediately')"
 
-status: draft
+status: fresh

@@ -1,53 +1,48 @@
 id: CONF-004
-title: Slash Command Display Prefix
+title: "Slash command display prefix"
 
 description: |
-  User dislikes the ">" prefix on slash commands (0841:1257), but
-  reconstruct.jq uses ">" prefix for all user messages including slash
-  commands. The question is whether slash commands should have a distinct
-  visual prefix (like "/" which matches their nature) or use the standard
-  user message ">" prefix.
+  The user stated "I dislike that you used > prefix also for these" about
+  slash commands (0841:1257). But reconstruct.jq, the authoritative
+  reference implementation, uses > prefix for slash commands because
+  they ARE user messages. The story currently specifies > prefix matching
+  reconstruct.jq but flags the conflict.
 
 evidence:
-  preference:
-    - source: "0841:1257"
-      observation: "User dislikes > prefix on slash commands"
-
-  existing:
-    - source: "console-formatting report: slash-command-prefix conflict"
-      observation: "reconstruct.jq uses > prefix consistently for all user messages"
-
-  symbols:
-    - source: "console-formatting report: key_symbols"
-      observation: "slash_command symbol listed as '/' in formatting report"
+  - source: "Group 2 tension T2"
+    observation: "FMT-012: user dislikes > for slash commands, but reconstruct.jq uses it"
+  - source: "FMT-012"
+    observation: "Story specifies '> /command is running...' for truncated, '> /command' for compact"
 
 options:
   - id: A
-    name: "Use '/' prefix for slash commands"
-    pros: [matches user preference, visually distinguishes from regular user messages]
-    cons: [differs from reconstruct.jq reference, breaks PRIN-001 if CC uses '>']
+    name: "Keep > prefix (match reconstruct.jq)"
+    pros: ["Consistent with authoritative reference", "Slash commands ARE user input", "Simpler"]
+    cons: ["User expressed dislike"]
 
   - id: B
-    name: "Use '>' prefix (same as all user messages)"
-    pros: [consistent with reconstruct.jq, simpler, follows PRIN-001]
-    cons: [user explicitly dislikes this]
+    name: "Use / prefix (no > prefix for slash commands)"
+    pros: ["Visually distinct from regular user messages", "Honors user preference"]
+    cons: ["Diverges from reconstruct.jq", "Slash commands are semantically user messages"]
 
   - id: C
-    name: "No prefix — show '/compact' without any leading symbol"
-    pros: [slash commands are self-identifying via '/' start]
-    cons: [breaks visual consistency with other user messages]
+    name: "Use > /command (keep > but the / is visual distinction enough)"
+    pros: ["Consistent framing", "The slash itself distinguishes from regular messages"]
+    cons: ["This is what reconstruct.jq does and the user still disliked it"]
 
 resolution: resolved
 decided_by: user
 decision_rationale: |
-  Era-dependent prefix, tied to CONF-001 auto-detect decision. CC 2.x uses
-  ❯ (U+276F) for user message prompts (including slash commands). For 1.x
-  rendering, > is used (matching reconstruct.jq). For 2.x rendering, ❯ is
-  used (matching CC 2.x /export output). "Staying true to what gets
-  /export-ed is the right call." Exact character and applicability to all
-  user messages needs golden file verification during Pass 3. FMT-001 may
-  need updating but deferred until golden files confirm the exact format.
+  Era-dependent prefix, tied to CONF-006 (1.x vs 2.x) auto-detect.
+  CC 2.x uses ❯ (U+276F) for user message prompts including slash
+  commands. For 1.x rendering, > is used. For 2.x rendering, ❯ is used.
+  "Staying true to what gets /export-ed is the right call."
+  (Resolution carried from draft CONF-004.)
 
 affects:
-  - FMT-012 # Slash command display format
-  - PRIN-001 # Console fidelity (if CC uses > for slash commands)
+  - FMT-012
+  - FMT-001
+  - DSP-001
+  - DSP-002
+
+status: fresh

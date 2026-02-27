@@ -1,0 +1,44 @@
+id: PRIN-008
+title: "CLI mirrors grep/rg conventions"
+
+statement: |
+  The xs CLI is explicitly modeled after grep and ripgrep. Uppercase
+  -A/-B/-C are reserved for context lines (after/before/combined).
+  The -- separator marks gaps between non-contiguous results. Short
+  flags use established conventions where possible. The user stated
+  xs should "build on your knowledge of conceptually related tools
+  like grep, rg."
+
+rationale: |
+  xs users are developers familiar with grep/rg. Reusing established
+  conventions reduces learning curve and enables familiar workflows
+  (piping through head/tail/grep). Flag naming was deliberately chosen
+  to avoid conflicts with grep/rg conventions.
+
+implications:
+  - "-A/-B/-C reserved for context lines (grep convention), cannot be used for entities"
+  - "-a (lowercase) for Assistant because -A is taken"
+  - "-- separator between non-contiguous event groups (grep convention)"
+  - "SIGPIPE handled gracefully for pipe-to-head workflows"
+  - "Glob syntax for filters (from CC allowed-tools), not regex"
+
+applies_to:
+  - SRC-002   # After context (-A)
+  - SRC-003   # Before context (-B)
+  - SRC-004   # Combined context (-C)
+  - SRC-006   # Gap separators (--)
+  - FLT-006   # -M for Message
+  - FLT-007   # -U for User
+  - FLT-008   # -a for Assistant
+  - FLT-009   # -T for Tool
+  - FLT-005   # Glob patterns
+  - PRS-004   # SIGPIPE handling
+  - CLI-008   # CLI design
+
+evidence:
+  - "Group 3 pattern P1: grep/rg CLI convention mirroring (SRC-001 source e583:1-100)"
+  - "Group 1 pattern P12: Shortcut flags follow grep/rg convention (FLT-006..009)"
+  - "Group 4 pattern P6: Unix tool conventions for CLI design (CLI-008)"
+  - "Group 1 constraint C7: Glob syntax, not regex — user explicitly corrected agent"
+
+status: fresh
