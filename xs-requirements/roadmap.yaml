@@ -1,0 +1,1303 @@
+# xs Implementation Roadmap
+# Pass 6: Implementation Slicing for Outside-In ATDD (GOOS)
+#
+# Each slice is a user-observable behavior tested from the outside.
+# The sequence shapes the emerging internal design — this IS a design document.
+#
+# Principles:
+# - Feature slices, not technical layers
+# - Walking skeleton first (thinnest end-to-end)
+# - Double loop: outer acceptance test → inner unit tests
+# - Each slice grows the internals (parser grows as features demand)
+# - Listen to the tests (hard-to-write tests signal design problems)
+# - Golden files are reference material, not test oracles
+#
+# Generated: 2026-02-28
+# Source: 108 stories, 13 principles, 6 resolved conflicts
+
+meta:
+  total_slices: 14
+  total_stories: 108
+  analysis_file: synthesis/pass6-story-analysis.yaml
+  principles_applied:
+    - PRIN-001  # Unified timeline
+    - PRIN-002  # Filter pipeline ordering
+    - PRIN-003  # Filter-display separation
+    - PRIN-006  # Console fidelity
+    - PRIN-009  # Implicit mode activation
+    - PRIN-012  # Display mode derivation chain
+
+# ═══════════════════════════════════════════════════════════════════════
+# WALKING SKELETON
+# ═══════════════════════════════════════════════════════════════════════
+
+slices:
+
+  - id: S0
+    name: "Walking Skeleton"
+    description: |
+      Thinnest possible end-to-end: CLI entry point → load JSONL file →
+      parse multi-line JSON → extract content blocks → build timeline →
+      render summary → stdout. Makes `xs <file>` produce output.
+
+    acceptance_test: |
+      Given a real JSONL fixture file (basic-conversation.jsonl)
+      When `xs fixture.jsonl` is run with no flags
+      Then stdout contains valid YAML with event counts matching the fixture
+
+    stories:
+      # --- Parsing chain (in dependency order) ---
+      - id: PRS-001
+        title: "Load session file by path"
+        readiness: ready
+        notes: "Entry point. 5 testable ACs."
+
+      - id: PRS-003
+        title: "Parse multi-line JSON objects"
+        readiness: ready
+        notes: "CC uses pretty-printed JSON, not one-per-line. 4 ACs."
+
+      - id: PRS-013
+        title: "Extract content blocks from messages"
+        readiness: ready
+        notes: "Content polymorphism (PRIN-011): array vs string. 6 ACs."
+
+      - id: PRS-005
+        title: "Build unified chronological timeline"
+        readiness: needs-splitting
+        refinement: |
+          Split into S0-minimal and S2-complete:
+          S0: Basic timeline — one entry per JSONL message, contiguous seq numbers.
+          S2: Full timeline — expand content blocks into separate entries.
+          The split lets S0 work with a simpler model while S2 grows it.
+
+      - id: PRS-006
+        title: "Format version detection (1.x vs 2.x)"
+        readiness: ready
+        notes: "Auto-detect from JSONL fields. 5 ACs. CONF-006 resolved."
+
+      - id: PRS-004
+        title: "Graceful error recovery and SIGPIPE"
+        readiness: ready
+        notes: "PRIN-013. Continue on malformed entries. 4 ACs."
+
+      # --- Summary rendering ---
+      - id: SUM-001
+        title: "Summary view with event counts and CLI hints"
+        readiness: needs-splitting
+        refinement: |
+          Split into S0-basic and S1-enhanced:
+          S0: Event type counts (user/assistant/system) as valid YAML.
+          S1: Tool breakdown, inline CLI hints, arithmetic consistency.
+
+      - id: CLI-001
+        title: "Summary as default mode (no flags)"
+        readiness: ready
+        notes: "PRIN-009: no args = summary. 4 ACs."
+
+      - id: FLT-015
+        title: "No implicit filtering"
+        readiness: needs-reframing
+        refinement: |
+          Reframe from constraint to observable behavior:
+          "Given unfiltered timeline, when no flags, then ALL events appear
+          in summary counts including thinking, meta, empty messages."
+          PRIN-007: zero-tolerance constraint.
+
+    internal_growth: |
+      Parser (file loading, JSON accumulation, content block extraction)
+      TimelineBuilder (message → timeline entry mapping, sequence numbering)
+      SummaryRenderer (event counting, YAML output with hints)
+      CLI entry point (argparse skeleton, mode resolution)
+
+    test_difficulty: |
+      Content polymorphism (PRIN-011) is the first design challenge.
+      message.content as string vs array must be handled in PRS-013.
+      Test with fixtures/real/basic-conversation.jsonl (string content)
+      and fixtures/real/thinking-block.jsonl (array content).
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # SUMMARY ENHANCEMENTS
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S1
+    name: "Summary Mode Enhancements"
+    depends_on: [S0]
+    description: |
+      Complete summary mode: hierarchical tool breakdown, MCP grouping,
+      git detection, inline CLI flag hints. Makes summary a self-documenting
+      tutorial (PRIN-010).
+
+    acceptance_test: |
+      Given a session with Bash, Edit, Read tools and git commands
+      When `xs fixture.jsonl` is run
+      Then summary shows tool breakdown sorted by count with inline hints
+      And Bash git operations nest under Bash count
+      And children sum to parent (arithmetic consistency)
+      And output is valid machine-parseable YAML
+
+    stories:
+      - id: SUM-001
+        title: "Summary view — enhanced portion"
+        readiness: needs-splitting
+        notes: "S1 portion: tool breakdown, hints, arithmetic consistency."
+
+      - id: SUM-002
+        title: "MCP tool grouping in summary"
+        readiness: ready
+        notes: "4 ACs. Hierarchical grouping by server prefix."
+
+      - id: SUM-003
+        title: "Git detection in summary"
+        readiness: ready
+        notes: "4 ACs. cd-prefix handling per CONF-003."
+
+    internal_growth: |
+      SummaryRenderer grows: tool categorization, hierarchical counting,
+      hint generation coupled to filter flag inventory.
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # COMPACT TIMELINE
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S2
+    name: "Compact Timeline Display"
+    depends_on: [S0]
+    description: |
+      Second display mode: `xs <file> -t` shows compact one-line-per-event
+      timeline with [seq] prefix. Drives the core formatting abstractions.
+      This is where ToolName(param) format and symbol vocabulary emerge.
+
+    acceptance_test: |
+      Given a session fixture with user messages, assistant text, and tool calls
+      When `xs fixture.jsonl -t` is run
+      Then each event is exactly one line
+      And user messages start with "[N] > "
+      And assistant text starts with "[N] ⏺ "
+      And tool calls show "[N] ⏺ ToolName(primary_param)"
+      And multiline content uses first [...] last pattern
+      And no blank lines between events
+      And no section headers or emojis
+
+    stories:
+      - id: CLI-002
+        title: "Timeline display mode (-t flag)"
+        readiness: ready
+        notes: "3 ACs. Activates timeline instead of summary."
+
+      - id: DSP-001
+        title: "Compact display mode"
+        readiness: needs-splitting
+        refinement: |
+          Split into: (1) basic compact — user/assistant text rendering,
+          (2) tool call compact — ToolName(param) format,
+          (3) tool result compact — ⎿ prefix one-liner.
+          Each can be a separate inner-loop TDD cycle.
+
+      - id: DSP-004
+        title: "Sequence number display control"
+        readiness: ready
+        notes: |
+          7 ACs. Compact always shows [seq]. Truncated hides by default,
+          auto-shows when filtering. --show-numbers override.
+          Absorbs FMT-017 (merge candidate — same feature).
+
+      - id: FMT-001
+        title: "User message > prefix"
+        readiness: ready
+        notes: "Already needed in S0 for summary, now gets compact format."
+
+      - id: FMT-002
+        title: "Assistant text ⏺ prefix"
+        readiness: ready
+        notes: "5 ACs including tool-only assistant compact rendering."
+
+      - id: FMT-008
+        title: "Compact truncation: first [...] last"
+        readiness: ready
+        notes: "4 ACs. Core compact mode pattern for all multiline content."
+
+      - id: FMT-022
+        title: "Generic ToolName(param) format"
+        readiness: needs-splitting
+        refinement: |
+          This is the canonical tool formatting story. Absorbs FMT-004 (Edit),
+          FMT-005 (Read), FMT-010 (Task). Split into:
+          (1) Parameter extraction priority chain (.command > .file_path > .path > .pattern)
+          (2) Per-tool parameter mapping table
+          The acceptance criteria from FMT-003 (Bash) provide the template.
+
+      # Merge candidates absorbed into this slice:
+      - id: FMT-017
+        title: "Sequence number display logic"
+        readiness: merge-candidate
+        notes: "Merge into DSP-004. Same feature, different epic perspective."
+
+      - id: FMT-024
+        title: "No section headers"
+        readiness: merge-candidate
+        notes: "PRIN-006 constraint. Verified as negative test in compact AT."
+
+      - id: FMT-025
+        title: "No emojis"
+        readiness: merge-candidate
+        notes: "PRIN-006 constraint. Verified as negative test in compact AT."
+
+      - id: FMT-011
+        title: "Thinking block content preview"
+        readiness: needs-beefing-up
+        notes: "3 ACs. Missing: full mode rendering, empty thinking blocks, clarity on content layout."
+
+    internal_growth: |
+      CompactRenderer (one line per event, symbol vocabulary)
+      EventFormatter (ToolName(param) extraction, content truncation)
+      DisplayModeResolver (summary vs compact selection)
+      PRS-005 grows: full content block expansion into separate timeline entries
+
+    test_difficulty: |
+      ToolName(param) extraction chain requires testing many tool types.
+      Use real fixtures (tool-bash.jsonl, tool-read.jsonl, tool-edit.jsonl, etc.)
+      to validate parameter extraction for each tool.
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # BASIC FILTERING
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S3
+    name: "Basic Filtering"
+    depends_on: [S2]
+    description: |
+      Include/exclude filters with virtual entities and glob patterns.
+      This slice drives the filter pipeline design (PRIN-002).
+      Implicit timeline activation (PRIN-009): adding a filter flag
+      automatically switches from summary to timeline.
+
+    acceptance_test: |
+      Given a session with user messages, assistant text, and Bash tool calls
+      When `xs fixture.jsonl -U` is run (no -t flag)
+      Then only user messages appear (implicit timeline activation)
+      And sequence numbers show gaps (stable from full timeline, PRIN-005)
+      And a "--" separator appears between non-contiguous events (DSP-005)
+
+    stories:
+      # --- Core filter pipeline ---
+      - id: FLT-001
+        title: "Include filter (--include / -i)"
+        readiness: ready
+        notes: "5 ACs. Whitelist by entity name or tool name."
+
+      - id: FLT-002
+        title: "Exclude filter (--exclude / -x)"
+        readiness: ready
+        notes: "4 ACs. Blacklist. Applied after include."
+
+      - id: FLT-003
+        title: "Virtual entity: Message"
+        readiness: ready
+        notes: "4 ACs. Message = User + Assistant text (no tools)."
+
+      - id: FLT-004
+        title: "Virtual entity: Tool"
+        readiness: ready
+        notes: "3 ACs. Tool = tool_use + tool_result pairs."
+
+      - id: FLT-005
+        title: "Glob pattern matching for tool params"
+        readiness: ready
+        notes: |
+          7 ACs. fnmatch semantics (PRIN-008 constraint C7).
+          Edit/Write match file_path, Bash matches command.
+
+      - id: FLT-011
+        title: "Filter composition pipeline"
+        readiness: ready
+        notes: |
+          Pipeline: search → range → include → exclude → context → head/tail
+          (PRIN-002). This slice implements steps 2+3 (include → exclude).
+
+      - id: FLT-010
+        title: "--no-tool-results flag"
+        readiness: ready
+        notes: "4 ACs. Suppresses tool_result events."
+
+      - id: FLT-012
+        title: "Tool announcement suppression (-x Tool boundary leak)"
+        readiness: ready
+        notes: "5 ACs. For greenfield build, this is correct filtering behavior: -M -x Tool suppresses tool-only assistant messages."
+
+      - id: FLT-014
+        title: "--git shortcut"
+        readiness: ready
+        notes: "Alias for --include 'Bash(*git*)'. CONF-003 resolved."
+
+      # --- Implicit mode activation ---
+      - id: CLI-006
+        title: "Implicit timeline from filter flags"
+        readiness: ready
+        notes: "5 ACs. Search mode overrides implicit timeline — this is a specification of correct behavior, not a bug."
+
+      - id: CLI-003
+        title: "--git convenience alias"
+        readiness: ready
+        notes: "Delegates to filter pipeline. Not a separate mode."
+
+      - id: CLI-009
+        title: "No --conversation flag"
+        readiness: needs-reframing
+        refinement: "Reframe as: --conversation is absent; use -M or -U -a -x Tool."
+
+      # --- Shortcut flags (merge into single implementation) ---
+      - id: FLT-006
+        title: "-M shortcut (Message)"
+        readiness: merge-candidate
+        notes: "Implement all 4 shortcuts together as argparse aliases."
+
+      - id: FLT-007
+        title: "-U shortcut (User)"
+        readiness: merge-candidate
+
+      - id: FLT-008
+        title: "-a shortcut (Assistant)"
+        readiness: merge-candidate
+
+      - id: FLT-009
+        title: "-T shortcut (Tool)"
+        readiness: merge-candidate
+
+      # --- Discontinuous separator ---
+      - id: DSP-005
+        title: "Discontinuous separator (-- between gaps)"
+        readiness: ready
+        notes: |
+          grep convention (PRIN-008). Absorbs FMT-018 (merge candidate).
+          5 ACs.
+
+      - id: FMT-018
+        title: "Discontinuous separator formatting"
+        readiness: merge-candidate
+        notes: "Merge into DSP-005."
+
+    internal_growth: |
+      FilterPipeline (include → exclude composition, centralized per PRIN-002)
+      VirtualEntityClassifier (Message/Tool/User/Assistant/Thinking → event types)
+      GlobMatcher (fnmatch over tool parameters)
+      DisplayModeResolver grows: implicit timeline activation from flag presence
+      CompactRenderer grows: gap separator insertion
+
+    test_difficulty: |
+      Filter composition with virtual entities + glob patterns has
+      combinatorial surface. Focus on the pipeline contract (PRIN-002):
+      include narrows, exclude further removes, order matters.
+      The boundary leak (FLT-012) is a known design compromise — test explicitly.
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # RANGE SELECTION
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S4
+    name: "Range Selection"
+    depends_on: [S3]
+    description: |
+      Positional range arguments address timeline events by absolute
+      sequence number. Range is a pre-filter step (pipeline step 1):
+      it chunks the timeline BEFORE include/exclude.
+
+    acceptance_test: |
+      Given a session fixture
+      When `xs fixture.jsonl 5-10` is run
+      Then only events with sequence numbers 5 through 10 appear
+      And `xs fixture.jsonl -U 1-20` shows only user messages within range 1-20
+
+    stories:
+      - id: RNG-001
+        title: "Single item by index (N)"
+        readiness: ready
+        notes: "4 ACs."
+
+      - id: RNG-002
+        title: "Head selection (+N)"
+        readiness: ready
+        notes: "4 ACs. First N events."
+
+      - id: RNG-003
+        title: "Tail selection (-N)"
+        readiness: ready
+        notes: "3 ACs. Last N events."
+
+      - id: RNG-004
+        title: "Contiguous range (N-M)"
+        readiness: ready
+        notes: "5 ACs."
+
+      - id: RNG-005
+        title: "Open-ended range (N+)"
+        readiness: ready
+        notes: "3 ACs. From N to end."
+
+      - id: RNG-006
+        title: "Multiple ranges"
+        readiness: ready
+        notes: "4 ACs. Merge overlapping, deduplicate."
+
+      - id: RNG-007
+        title: "Range-filter interaction"
+        readiness: needs-reframing
+        refinement: |
+          Reframe from implementation concern to observable behavior:
+          "Given range 5-10 and -U filter, the 5-10 range selects from
+          the FULL timeline, then -U further filters within that chunk."
+          This is pipeline step 1 (range) before step 2 (include).
+
+      - id: CLI-007
+        title: "Multi-index CLI parsing"
+        readiness: needs-reframing
+        refinement: |
+          Reframe as: "positional arguments after session ID are range
+          specifiers parsed by RangeParser". Observable: correct ranges
+          from various syntax forms.
+
+    internal_growth: |
+      RangeParser (syntax: N, +N, -N, N-M, N+)
+      FilterPipeline grows: range as step 1 before include/exclude
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # TRUNCATED & FULL DISPLAY MODES
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S5
+    name: "Truncated and Full Display Modes"
+    depends_on: [S2]
+    description: |
+      Truncated mode is the canonical rendering that replicates Claude Code
+      console output (PRIN-012). Full mode removes the 3-line truncation limit.
+      Both modes are derivations of compact mode, not independent implementations.
+
+    acceptance_test: |
+      Given a session with tool calls that have multi-line results
+      When `xs fixture.jsonl -t --truncated` is run
+      Then tool results show first 3 lines + "... +N lines" (N = total)
+      And assistant text is NOT truncated (PRIN-012 constraint C8)
+      And blank lines separate message groups (FMT-023)
+      And tool call + result are grouped without blank lines
+
+      When `xs fixture.jsonl -t --full` is run
+      Then tool results show ALL lines (no truncation)
+
+    stories:
+      # --- Display modes ---
+      - id: DSP-002
+        title: "Truncated display mode"
+        readiness: needs-splitting
+        refinement: |
+          Split from DSP-001: truncated is multi-line per event,
+          blank lines between groups, tool result truncation.
+
+      - id: DSP-003
+        title: "Full display mode"
+        readiness: ready
+        notes: "Truncated without the 3-line limit. 4 ACs."
+
+      # --- Tool formatting ---
+      - id: FMT-003
+        title: "Bash tool format"
+        readiness: ready
+        notes: |
+          4 ACs. ⏺ Bash(command) format.
+          User rejected Bash: $ format (established fact 1).
+
+      - id: FMT-006
+        title: "Thinking block ✻ format"
+        readiness: ready
+        notes: "3 ACs. Truncated, compact, full. Special symbol."
+
+      - id: FMT-007
+        title: "Tool result ⎿ format"
+        readiness: ready
+        notes: "6 ACs. Indentation, truncation, interrupted results."
+
+      - id: FMT-015
+        title: "Tool result truncation rules"
+        readiness: ready
+        notes: |
+          5 ACs. First 3 lines, total count (not remaining),
+          no interactive elements. C7: total not remaining.
+
+      - id: FMT-016
+        title: "2-space indentation consistency"
+        readiness: ready
+        notes: "4 ACs. Specific, observable: tool result base indent, continuation lines, line number, todo items."
+
+      - id: FMT-023
+        title: "Blank line spacing between message groups"
+        readiness: ready
+        notes: "Tool call + result grouped. Blank lines between groups."
+
+      # --- Merge candidates absorbed ---
+      - id: FMT-004
+        title: "Edit tool format"
+        readiness: merge-candidate
+        notes: "Absorbed by FMT-022 generic tool format."
+
+      - id: FMT-005
+        title: "Read tool format"
+        readiness: merge-candidate
+        notes: "Absorbed by FMT-022 generic tool format."
+
+      - id: FMT-009
+        title: "(No content) for empty results"
+        readiness: needs-beefing-up
+        notes: "Only 2 ACs. Missing: full mode behavior, definition of 'empty' (null vs empty string vs whitespace)."
+
+    internal_growth: |
+      TruncatedRenderer (derives from CompactRenderer base, adds multi-line)
+      FullRenderer (derives from TruncatedRenderer, removes truncation limit)
+      ToolResultFormatter (⎿ prefix, 3-line truncation, total count)
+      ThinkingFormatter (✻ symbol, truncation in compact vs full display)
+      PRIN-012 derivation chain: truncated is canonical, compact/full derive from it
+
+    test_difficulty: |
+      Tool result indentation (FMT-016) was a persistent bug in the old
+      implementation. Pay attention to exact spacing: "  ⎿ " (2 spaces
+      before symbol). Golden files are essential reference here.
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # SEARCH
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S6
+    name: "Search"
+    depends_on: [S3, S4]
+    description: |
+      Search by regex pattern (-S). Pipeline step 0: search runs BEFORE
+      range and filtering. Context lines (-A/-B/-C) follow grep conventions.
+      Search IS its own output mode (PRIN-009): no duplicate output.
+
+    acceptance_test: |
+      Given a session with various content
+      When `xs fixture.jsonl -S "pattern"` is run
+      Then matching events are displayed with matches highlighted
+      And no duplicate events appear (PRIN-002 constraint C8)
+
+      When `xs fixture.jsonl -S "pattern" -C 2` is run
+      Then 2 context lines before and after each match appear
+      And overlapping context windows are merged (dedup)
+
+    stories:
+      - id: SRC-001
+        title: "Basic search (-S)"
+        readiness: ready
+        notes: "6 ACs. Regex search (CONF-005 resolved). Historical bug notes are provenance, not defects for greenfield build."
+
+      - id: SRC-002
+        title: "After context (-A)"
+        readiness: needs-beefing-up
+        notes: "Only 3 ACs. Missing: overlap dedup when two matches are close, -A 0 case, -A with no active search."
+
+      - id: SRC-003
+        title: "Before context (-B)"
+        readiness: needs-beefing-up
+        notes: "Only 3 ACs. Missing: overlap dedup AC, -B 0 case, interaction with -A when both specified."
+
+      - id: SRC-004
+        title: "Combined context with dedup (-C)"
+        readiness: ready
+        notes: "4 ACs. Merge overlapping windows. No duplicates."
+
+      - id: SRC-005
+        title: "Search overrides implicit timeline"
+        readiness: ready
+        notes: "6 ACs. Search is its own mode (PRIN-009). No duplicate output. Historical bug is provenance."
+
+      - id: SRC-006
+        title: "Gap separators in search results"
+        readiness: ready
+        notes: "4 ACs. Cohesive story. Still recommended to merge with DSP-005 for implementation."
+
+      - id: SRC-007
+        title: "Search-filter pipeline interaction"
+        readiness: ready
+        notes: "4 ACs. Covers full pipeline: search+range+include+exclude. Integration story."
+
+    internal_growth: |
+      SearchEngine (regex matching across content, pipeline step 0)
+      ContextWindowManager (before/after/combined, merge overlapping, dedup)
+      FilterPipeline grows: search as step 0
+      DisplayModeResolver grows: search overrides implicit timeline
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # EXPORT
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S7
+    name: "Export Modes"
+    depends_on: [S3, S4]
+    description: |
+      Raw JSONL passthrough for JSON and JSONL export (PRIN-004).
+      Filters and ranges select WHICH objects; objects are NEVER modified.
+
+    acceptance_test: |
+      Given a session fixture
+      When `xs fixture.jsonl --json 1-5` is run
+      Then exactly the raw JSONL objects for events 1-5 are output as JSON array
+      And no fields are added, stripped, or renamed
+      And objects are byte-identical to source JSONL
+
+      When `xs fixture.jsonl --jsonl -U` is run
+      Then only user message JSONL objects appear (one per line)
+
+    stories:
+      - id: PRS-012
+        title: "Raw JSONL preservation"
+        readiness: ready
+        notes: "Parser stores raw objects alongside timeline. 4 ACs."
+
+      - id: EXP-001
+        title: "JSON export (--json)"
+        readiness: ready
+        notes: "3 ACs. JSON array output."
+
+      - id: EXP-002
+        title: "JSONL export (--jsonl)"
+        readiness: ready
+        notes: "3 ACs. One object per line."
+
+      - id: EXP-003
+        title: "Export with filters and range"
+        readiness: needs-splitting
+        refinement: |
+          Split: (1) export respects range selection,
+          (2) export respects include/exclude filters,
+          (3) export to file (--export-json path).
+
+      - id: EXP-004
+        title: "Include sequence numbers in JSON/JSONL export"
+        readiness: needs-reframing
+        notes: |
+          Only 1 AC, marked UNRESOLVED. Conflicts with raw-passthrough contract (PRIN-004).
+          Adding sequence field modifies raw objects. Needs design decision: envelope format,
+          separate --annotated-json flag, or defer entirely.
+
+    internal_growth: |
+      ExportRenderer (raw passthrough, JSON array vs JSONL line formatting)
+      Parser grows: stores raw JSONL objects alongside parsed timeline
+      FilterPipeline → ExportRenderer integration (same pipeline, different output)
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # POST-FILTER HEAD/TAIL
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S8
+    name: "Post-Filter Head/Tail"
+    depends_on: [S3]
+    description: |
+      Pipeline step 6 (CONF-002 resolution): --head N and --tail N
+      operate on already-filtered results. Justified because --full mode
+      produces multi-line output per event (Unix head/tail slice lines,
+      not events).
+
+    acceptance_test: |
+      Given a session with many Bash tool calls
+      When `xs fixture.jsonl -i Bash --tail 5` is run
+      Then only the last 5 Bash events appear (post-filter)
+      And this differs from `xs fixture.jsonl -i Bash -5`
+      which selects last 5 from full timeline THEN filters
+
+    stories:
+      - id: new
+        title: "--head N and --tail N post-filter limit"
+        readiness: needs-beefing-up
+        refinement: |
+          NEW story derived from CONF-002 resolution. Write ACs:
+          AC1: --tail N shows last N events after all filtering
+          AC2: --head N shows first N events after all filtering
+          AC3: --head and --tail are mutually exclusive
+          AC4: Interacts correctly with all pipeline stages
+          AC5: --help documents distinction from range syntax
+
+    internal_growth: |
+      FilterPipeline grows: step 6 (head/tail) after context expansion
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # ADVANCED DISPLAY FEATURES
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S9
+    name: "Advanced Display Features"
+    depends_on: [S5]
+    description: |
+      Special message types (slash commands, local bash, file references),
+      meta/caveat display, interruption display, TodoWrite/TaskCreate,
+      and other formatting refinements.
+
+    acceptance_test: |
+      Given a session with slash commands, interruptions, and meta messages
+      When `xs fixture.jsonl -t --truncated` is run
+      Then slash commands show "> /command is running..." (1.x) or "❯ /command" (2.x)
+      And interruptions show "[interrupted by user]" marker
+      And meta messages show with appropriate prefix
+
+    stories:
+      # --- Parsing prerequisites ---
+      - id: PRS-007
+        title: "Slash command parsing"
+        readiness: ready
+        notes: "5 ACs. Extract from <command-name> XML tags."
+
+      - id: PRS-008
+        title: "Bash content extraction"
+        readiness: needs-beefing-up
+        refinement: "Add ACs for <bash-input> and @file XML tag formats."
+
+      - id: PRS-009
+        title: "Interruption detection"
+        readiness: ready
+        notes: "5 ACs."
+
+      - id: PRS-010
+        title: "Meta/caveat tracking"
+        readiness: ready
+        notes: "5 ACs."
+
+      # --- Formatting ---
+      - id: FMT-012
+        title: "Slash command display"
+        readiness: ready
+        notes: "CONF-004 resolved: > for 1.x, ❯ for 2.x. Era-dependent."
+
+      - id: FMT-013
+        title: "Local bash display (! prefix)"
+        readiness: ready
+        notes: "3 ACs covering compact, truncated, and XML tag parsing. Adequate for testing."
+
+      - id: FMT-014
+        title: "File reference display (@ prefix)"
+        readiness: needs-beefing-up
+        refinement: "Add ACs for @ prefix format in compact/truncated/full."
+
+      - id: FMT-019
+        title: "Meta/caveat display"
+        readiness: ready
+        notes: "4 ACs."
+
+      - id: FMT-020
+        title: "TodoWrite/TaskCreate display"
+        readiness: needs-splitting
+        refinement: |
+          Split: (1) TodoWrite with status symbols (1.x),
+          (2) TaskCreate/TaskUpdate display (2.x).
+          Connected to CONF-006 (format versioning).
+
+      - id: FMT-021
+        title: "Interruption display"
+        readiness: ready
+        notes: "3 ACs."
+
+      - id: FMT-010
+        title: "Task tool delegation display"
+        readiness: merge-candidate
+        notes: "Absorbed by FMT-022 (generic tool format) for Task tool."
+
+    internal_growth: |
+      SpecialMessageParser (XML tag extraction for slash/bash/file)
+      EventFormatter grows: special prefixes (!, @, >, ❯)
+      ToolResultFormatter grows: TodoWrite status symbols, TaskCreate rendering
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # SESSION DISCOVERY & ADVANCED CLI
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S10
+    name: "Session Discovery and Advanced CLI"
+    depends_on: [S4]
+    description: |
+      Session discovery by UUID prefix (git-style), interactive disambiguation
+      menu, --files and --created convenience modes, and Thinking filter.
+
+    acceptance_test: |
+      Given sessions in ~/.claude/projects/ with various UUIDs
+      When `xs b475` is run (short prefix)
+      Then the matching session is loaded and summary displayed
+      When multiple sessions match, an interactive menu appears
+
+    stories:
+      - id: PRS-002
+        title: "Session discovery by substring"
+        readiness: needs-splitting
+        refinement: |
+          Split: (1) unique match → auto-load,
+          (2) multiple match → interactive menu,
+          (3) fallback to ~/.claude/projects/ directory.
+
+      - id: PRS-011
+        title: "Agent transcript file discovery"
+        readiness: needs-beefing-up
+        refinement: "Clarify auto-discovery mechanism and agentId marking."
+
+      - id: CLI-004
+        title: "--files mode"
+        readiness: needs-beefing-up
+        refinement: "Unique grouped-by-file display (not a filter alias)."
+
+      - id: CLI-005
+        title: "--created mode"
+        readiness: needs-beefing-up
+        refinement: "Filter Write tool calls, group by file created."
+
+      - id: CLI-008
+        title: "CLI design (help, flags, arguments)"
+        readiness: needs-splitting
+        refinement: |
+          Split: (1) --help text with examples,
+          (2) flag validation and error messages,
+          (3) argument ordering rules (flags before session before range).
+
+      - id: FLT-013
+        title: "Thinking virtual entity"
+        readiness: needs-beefing-up
+        refinement: "Clarify: thinking blocks ARE in JSONL (confirmed)."
+
+    internal_growth: |
+      SessionDiscovery (UUID prefix matching, directory scanning, menu)
+      CLI grows: --files, --created modes with unique display formats
+      FilterPipeline grows: Thinking as virtual entity
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # SIDECHAIN HANDLING
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S11
+    name: "Sidechain Handling"
+    depends_on: [S6, S7]
+    description: |
+      Sidechain events from Task sub-agents appear inline (no special marking).
+      Search and export must preserve sidechain metadata (isSidechain field).
+
+    acceptance_test: |
+      Given a session with Task sub-agent events (isSidechain=true)
+      When `xs fixture.jsonl -t` is run
+      Then sidechain events appear inline without special marking
+      When `xs fixture.jsonl --jsonl` is run
+      Then isSidechain field is preserved verbatim (PRIN-004)
+
+    stories:
+      - id: SID-001
+        title: "Sidechain events inline in timeline"
+        readiness: ready
+        notes: "4 ACs."
+
+      - id: SID-002
+        title: "Sidechain search"
+        readiness: merge-candidate
+        notes: "Only 2 ACs. Natural consequence of SID-001 + SRC-001 composing correctly. Merge into SID-001."
+
+      - id: SID-003
+        title: "Sidechain filtering and metadata"
+        readiness: needs-splitting
+        refinement: |
+          Split: (1) isSidechain preservation in export (confirmed),
+          (2) sidechain include/exclude filter (flag design unconfirmed).
+
+    internal_growth: |
+      Timeline grows: sidechain events marked but not special-cased
+      Export preserves all fields including isSidechain
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # FETCH PIPELINE
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S12
+    name: "Fetch Pipeline (GitHub Actions)"
+    depends_on: [S0]
+    description: |
+      Largely independent subsystem: fetch Claude Code session transcripts
+      from GitHub Actions CI runs. Separate script(s) with their own CLI.
+
+    acceptance_test: |
+      Given a GitHub repository with Claude Code Action workflow runs
+      When `xs fetch --repo owner/repo` is run
+      Then workflow runs are listed
+      And sessions are extracted, named, timestamped, and deduplicated
+
+    stories:
+      - id: GFH-001
+        title: "Workflow listing"
+        readiness: ready
+        notes: "4 ACs. Server-side success filtering, dual workflow combination, sort order, skipped run exclusion."
+
+      - id: GFH-002
+        title: "Log fetching"
+        readiness: needs-beefing-up
+        notes: "Download logs for specific run. 3 ACs."
+
+      - id: GFH-003
+        title: "JSONL extraction"
+        readiness: ready
+        notes: "6 ACs. Start/end boundary detection, prefix stripping, multi-value return, session_id scan, JSONL-only output."
+
+      - id: GFH-004
+        title: "Metadata extraction"
+        readiness: ready
+        notes: "5 ACs. PR/issue detection from XML tags, no-match handling, negative constraints (no title parsing, single grep)."
+
+      - id: GFH-005
+        title: "Deduplication"
+        readiness: needs-beefing-up
+        notes: "Skip already-downloaded. 3 ACs."
+
+      - id: GFH-006
+        title: "Timestamp setting"
+        readiness: ready
+        notes: "4 ACs. ctime=start/mtime=end, macOS SetFile for birth time, non-macOS fallback, duration logging."
+
+      - id: GFH-007
+        title: "File naming convention"
+        readiness: ready
+        notes: "5 ACs. Full filename format, date/time from createdAt, flat directory, github/ location, raw log fallback."
+
+      - id: GFH-008
+        title: "Fetch CLI interface"
+        readiness: ready
+        notes: "6 ACs. --limit, --run-id, --save-raw-logs, default behavior, skip messaging, success summary."
+
+      - id: GFH-009
+        title: "Fetch by issue/PR"
+        readiness: needs-beefing-up
+        notes: "Filter by issue/PR number. 4 ACs."
+
+      - id: GFH-010
+        title: "Script parity"
+        readiness: needs-reframing
+        notes: "3 ACs but describes process policy, not testable behavior. Reframe as architectural constraint."
+
+    internal_growth: |
+      FetchPipeline (workflow listing → log download → JSONL extraction)
+      MetadataExtractor (XML tags → issue/PR classification)
+      FileNamer (structured convention, flat directory)
+      Deduplicator (run ID from filenames)
+      Independent subsystem — minimal coupling to xs core
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # COMPACTION RECOVERY
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - id: S13
+    name: "Compaction Recovery Hooks"
+    depends_on: [S6, S10]
+    description: |
+      Integration with Claude Code hooks for compaction recovery.
+      Two-hook architecture: PreCompact flag file → PreToolUse blocks
+      tool use with recovery prompt.
+
+    acceptance_test: |
+      Given a session where /compact was triggered
+      When PreCompact hook fires
+      Then flag file is created at /tmp/.claude_compaction_{id[:8]}.json
+      When PreToolUse hook fires and flag file exists
+      Then tool use is blocked with recovery prompt containing xs commands
+
+    stories:
+      - id: CRH-001
+        title: "PreCompact flag file creation"
+        readiness: ready
+        notes: "3 ACs."
+
+      - id: CRH-002
+        title: "Flag file content and session scoping"
+        readiness: ready
+        notes: "4 ACs. Multi-instance safety."
+
+      - id: CRH-003
+        title: "PreToolUse hook response format"
+        readiness: ready
+        notes: "4 ACs. permissionDecision: deny format."
+
+      - id: CRH-004
+        title: "Recovery prompt generation"
+        readiness: ready
+        notes: "5 ACs."
+
+      - id: CRH-005
+        title: "Compaction recovery workflow"
+        readiness: needs-reframing
+        refinement: |
+          Describes integration scenario, not single testable behavior.
+          Reframe as end-to-end acceptance test for the hook pair.
+
+      - id: CRH-006
+        title: "xs as session analysis tool"
+        readiness: needs-reframing
+        notes: "Design principle, not implementable story. Absorb into docs."
+
+      - id: CRH-007
+        title: "Hook reload requirement"
+        readiness: needs-reframing
+        notes: "CC constraint, not xs behavior. Document, don't implement."
+
+    internal_growth: |
+      PreCompactHook (flag file creation, session-scoped)
+      PreToolUseHook (flag detection, recovery prompt with xs commands)
+      Integration tested against CC hook API contract
+
+# ═══════════════════════════════════════════════════════════════════════
+# STORY REFINEMENT CHECKLIST
+# ═══════════════════════════════════════════════════════════════════════
+
+refinement_checklist:
+
+  needs_splitting:
+    - id: PRS-002
+      action: "Split into (1) unique match, (2) interactive menu, (3) fallback search"
+      slice: S10
+
+    - id: PRS-005
+      action: "Split into (1) basic timeline (one entry per message) for S0, (2) content block expansion for S2"
+      slice: S0/S2
+
+    - id: SUM-001
+      action: "Split into (1) basic counts (S0), (2) tool breakdown with hints (S1)"
+      slice: S0/S1
+
+    - id: DSP-001
+      action: "Split into (1) basic compact, (2) tool call compact, (3) tool result compact"
+      slice: S2
+
+    - id: DSP-002
+      action: "Split from DSP-001: multi-line rendering with truncation"
+      slice: S5
+
+    - id: FMT-020
+      action: "Split into (1) TodoWrite 1.x display, (2) TaskCreate/TaskUpdate 2.x display"
+      slice: S9
+
+    - id: FMT-022
+      action: "Split into (1) parameter extraction chain, (2) per-tool mapping table"
+      slice: S2
+
+    - id: EXP-003
+      action: "Split into (1) export+range, (2) export+filters, (3) export to file"
+      slice: S7
+
+    - id: SID-003
+      action: "Split into (1) metadata preservation (confirmed), (2) filter flag (unconfirmed)"
+      slice: S11
+
+    - id: CLI-008
+      action: "Split into (1) help text, (2) flag validation, (3) argument ordering"
+      slice: S10
+
+  merge_candidates:
+    - ids: [FMT-004, FMT-005, FMT-010]
+      into: FMT-022
+      action: "Absorb into generic ToolName(param) format story"
+
+    - ids: [FMT-017]
+      into: DSP-004
+      action: "Merge sequence number display logic into display control story"
+
+    - ids: [FMT-018]
+      into: DSP-005
+      action: "Merge discontinuous separator formatting into display story"
+
+    - ids: [FMT-024, FMT-025]
+      into: "negative tests in S2 acceptance spec"
+      action: "No-headers and no-emojis are constraints verified by absence"
+
+    - ids: [FLT-006, FLT-007, FLT-008, FLT-009]
+      into: "single implementation (argparse aliases)"
+      action: "Implement all 4 shortcut flags together; test individually"
+
+    - ids: [SRC-006]
+      into: DSP-005
+      action: "Gap separators in search same as in filtering"
+
+    - ids: [SID-002]
+      into: SID-001
+      action: "Sidechain search is natural consequence of SID-001 + SRC-001 composing correctly"
+
+  needs_reframing:
+    - id: FLT-015
+      from: "constraint statement"
+      to: "observable: unfiltered timeline shows ALL events"
+
+    - id: RNG-007
+      from: "implementation concern"
+      to: "observable: range selects from full timeline before filters"
+
+    - id: CLI-007
+      from: "parsing implementation"
+      to: "observable: range syntax from positional args"
+
+    - id: CLI-009
+      from: "removal notice"
+      to: "observable: --conversation flag absent; -M is replacement"
+
+    - id: CRH-005
+      from: "integration scenario"
+      to: "end-to-end AT for hook pair"
+
+    - id: CRH-006
+      from: "design principle"
+      to: "absorb into documentation"
+
+    - id: CRH-007
+      from: "CC constraint"
+      to: "document, don't implement"
+
+    - id: EXP-004
+      from: "needs-beefing-up status"
+      to: "design decision needed: sequence numbers conflict with raw-passthrough"
+
+    - id: GFH-010
+      from: "process policy"
+      to: "architectural constraint or remove"
+
+  needs_beefing_up:
+    - id: PRS-008
+      action: "Add ACs for <bash-input> and @file XML tag formats"
+
+    - id: PRS-011
+      action: "Clarify auto-discovery mechanism and agentId output marking"
+
+    - id: FMT-014
+      action: "Add ACs for @ prefix in compact/truncated/full modes"
+
+    - id: FLT-013
+      action: "Confirm thinking blocks in JSONL; add specific GWT ACs"
+
+    - id: CLI-004
+      action: "Define grouped-by-file display format"
+
+    - id: CLI-005
+      action: "Define created-files display format"
+
+    - id: SRC-002
+      action: "Add AC for overlapping context window dedup, -A 0, -A without search"
+
+    - id: SRC-003
+      action: "Add AC for overlap dedup, -B 0, interaction with -A"
+
+    - id: FMT-009
+      action: "Add ACs for full mode, definition of 'empty' (null vs string vs whitespace)"
+
+    - id: FMT-011
+      action: "Add ACs for full mode thinking rendering, empty thinking blocks"
+
+    - id: GFH-002
+      action: "Fetch stories have ACs but need beefing up for TDD clarity"
+    - id: GFH-005
+      action: "Same"
+    - id: GFH-009
+      action: "Same"
+
+# ═══════════════════════════════════════════════════════════════════════
+# SPEC FILE ORGANIZATION
+# ═══════════════════════════════════════════════════════════════════════
+
+spec_organization:
+  description: |
+    Outside-in ATDD: acceptance specs test xs as a black box (run CLI, assert
+    output). Unit specs test internal collaborators discovered during implementation.
+    Acceptance specs organized by slice (implementation order). Unit specs organized
+    by module (emerging from implementation).
+
+  acceptance_specs:
+    description: |
+      One spec file per slice. Each tests `xs` end-to-end using real fixtures.
+      BDD naming: describe_*/it_* per project convention.
+    files:
+      - specs/acceptance/describe_walking_skeleton_spec.py
+      - specs/acceptance/describe_summary_mode_spec.py
+      - specs/acceptance/describe_compact_timeline_spec.py
+      - specs/acceptance/describe_filtering_spec.py
+      - specs/acceptance/describe_range_selection_spec.py
+      - specs/acceptance/describe_truncated_full_modes_spec.py
+      - specs/acceptance/describe_search_spec.py
+      - specs/acceptance/describe_export_spec.py
+      - specs/acceptance/describe_post_filter_limit_spec.py
+      - specs/acceptance/describe_advanced_display_spec.py
+      - specs/acceptance/describe_session_discovery_spec.py
+      - specs/acceptance/describe_sidechain_spec.py
+      - specs/acceptance/describe_fetch_pipeline_spec.py
+      - specs/acceptance/describe_compaction_hooks_spec.py
+
+  unit_specs:
+    description: |
+      Emerge during implementation. Expected structure based on internal
+      growth predictions from each slice.
+    expected_modules:
+      - specs/unit/describe_parser_spec.py           # PRS-* (S0)
+      - specs/unit/describe_timeline_builder_spec.py  # PRS-005 (S0/S2)
+      - specs/unit/describe_summary_renderer_spec.py  # SUM-* (S0/S1)
+      - specs/unit/describe_compact_renderer_spec.py  # DSP-001, FMT-* (S2)
+      - specs/unit/describe_event_formatter_spec.py   # FMT-022, tool param extraction (S2)
+      - specs/unit/describe_filter_pipeline_spec.py   # FLT-* (S3)
+      - specs/unit/describe_range_parser_spec.py      # RNG-* (S4)
+      - specs/unit/describe_truncated_renderer_spec.py # DSP-002 (S5)
+      - specs/unit/describe_search_engine_spec.py     # SRC-* (S6)
+      - specs/unit/describe_export_renderer_spec.py   # EXP-* (S7)
+      - specs/unit/describe_session_discovery_spec.py  # PRS-002 (S10)
+      - specs/unit/describe_fetch_pipeline_spec.py    # GFH-* (S12)
+    note: |
+      These are predictions. Actual modules emerge from test-driven design.
+      If tests are hard to write, the design needs to change (GOOS principle).
+
+# ═══════════════════════════════════════════════════════════════════════
+# ARCHITECTURAL EMERGENCE NOTES
+# ═══════════════════════════════════════════════════════════════════════
+
+architectural_notes:
+  description: |
+    Where we expect ports/adapters and key abstractions to emerge.
+    These are NOT prescribed designs — they're predictions of what
+    the tests will drive us toward.
+
+  expected_ports:
+    - name: "SessionLoader"
+      emerges_in: S0
+      role: "Loads JSONL from file path or stdin"
+      note: "Later grows to accept session UUID prefix (S10)"
+
+    - name: "TimelineBuilder"
+      emerges_in: S0
+      role: "Converts parsed JSONL messages into timeline entries"
+      note: "Grows from one-entry-per-message (S0) to content-block expansion (S2)"
+
+    - name: "FilterPipeline"
+      emerges_in: S3
+      role: "Composes search → range → include → exclude → context → head/tail"
+      note: "Steps added incrementally: S3 (include/exclude), S4 (range), S6 (search), S8 (head/tail)"
+
+    - name: "Renderer"
+      emerges_in: S0
+      role: "Renders filtered timeline entries to stdout"
+      note: |
+        Starts as SummaryRenderer (S0). CompactRenderer (S2) and
+        TruncatedRenderer (S5) derive from it. ExportRenderer (S7) is
+        a separate branch. PRIN-012: truncated is canonical, others derive.
+
+    - name: "EventFormatter"
+      emerges_in: S2
+      role: "Formats individual timeline entries (ToolName(param), symbols)"
+      note: "Grows as new tool types and special message types are added"
+
+  design_risks:
+    - description: |
+        Content polymorphism (PRIN-011) is pervasive. Parser MUST normalize
+        before any downstream consumer sees content. If we skip this in S0,
+        it will bite us in every subsequent slice.
+      mitigation: "Handle both forms in PRS-013 (S0). Test with both fixtures."
+
+    - description: |
+        Filter-display boundary leak (FLT-012): -x Tool must suppress
+        display-time announcements. This breaks clean separation.
+      mitigation: "Accept as controlled boundary crossing. Pass exclude_filters to renderer."
+
+    - description: |
+        Format version detection (1.x vs 2.x) affects many downstream stories.
+        If detection is wrong, rendering will be wrong.
+      mitigation: "PRS-006 is in S0. Test with both 1.x and 2.x fixtures."
+
+    - description: |
+        Implicit mode activation (PRIN-009) has a mode-resolution hierarchy
+        that can produce subtle bugs (duplicate output with search + timeline).
+      mitigation: "Test explicitly for search overriding implicit timeline (CLI-006 AC4)."

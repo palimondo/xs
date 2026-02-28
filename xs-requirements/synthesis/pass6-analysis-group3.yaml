@@ -1,0 +1,570 @@
+# Group 3: Search + Export + Sidechain + Summary + Context + Fetch stories
+# Analyzed: 2026-02-28
+# Story count: 34
+
+stories:
+  # === SEARCH EPIC ===
+  - id: SRC-001
+    title: "Basic substring search"
+    epic: search
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: search
+    ac_count: 6
+    notes: >
+      6 well-specified ACs covering: basic search, no-match output, case-insensitive
+      matching, non-string content handling, argparse edge case (-- patterns), and
+      pipeline ordering. ACs are observable and in Given/When/Then format. The bugs_found
+      section is provenance metadata for a greenfield build -- the ACs already encode the
+      correct behavior (e.g., AC4 handles list content gracefully, AC5 handles -- patterns).
+      Strong story with excellent source evidence.
+
+  - id: SRC-002
+    title: "Show lines after match (-A)"
+    epic: search
+    theme: local-exploration
+    priority: should
+    depends_on: [SRC-001]
+    readiness: needs-beefing-up
+    slice: search
+    ac_count: 3
+    notes: >
+      3 ACs covering basic -A usage, filter+context interaction, and boundary handling.
+      Missing: AC for overlapping context windows (deduplication when two matches are close),
+      AC for -A 0 (zero context), AC for -A with no search/filter active (should it be
+      an error or no-op?). The overlap dedup requirement is documented in sources but not
+      captured in an AC here (it is in SRC-004). Should add at least one overlap AC.
+
+  - id: SRC-003
+    title: "Show lines before match (-B)"
+    epic: search
+    theme: local-exploration
+    priority: should
+    depends_on: [SRC-001]
+    readiness: needs-beefing-up
+    slice: search
+    ac_count: 3
+    notes: >
+      3 ACs covering basic -B usage, search+range interaction, and boundary handling.
+      Very similar structure to SRC-002. Missing: overlap dedup AC, -B 0 case, interaction
+      with -A (what happens if both -A and -B specified without -C). Could be a
+      merge-candidate with SRC-002 since the logic is symmetric, but they map to distinct
+      CLI flags so keeping separate is reasonable. Needs 1-2 more ACs for edge cases.
+
+  - id: SRC-004
+    title: "Show lines before and after match (-C)"
+    epic: search
+    theme: local-exploration
+    priority: should
+    depends_on: [SRC-001]
+    readiness: ready
+    slice: search
+    ac_count: 4
+    notes: >
+      4 ACs covering: basic -C usage, overlap deduplication, filter+context interaction,
+      and -C/-A/-B interaction. Well-structured. AC2 (overlap merge) is the critical
+      correctness AC. AC4 wisely flags the -C + -A/-B interaction as needing a design
+      decision. Ready for TDD as-is.
+
+  - id: SRC-005
+    title: "Search results displayed in timeline mode"
+    epic: search
+    theme: local-exploration
+    priority: should
+    depends_on: [SRC-001]
+    readiness: ready
+    slice: search
+    ac_count: 6
+    notes: >
+      6 ACs covering search interaction with -t flag, range, context, --full mode,
+      implicit timeline suppression, and include/exclude pipeline. The core requirement
+      is AC5 (search suppresses implicit timeline to prevent duplicate output). Well-suited
+      for integration-level acceptance tests. The current_behavior section is provenance
+      metadata describing bugs from the old implementation.
+
+  - id: SRC-006
+    title: "Visual separators between non-contiguous search/filter results"
+    epic: search
+    theme: local-exploration
+    priority: should
+    depends_on: [SRC-001, SRC-002]
+    readiness: ready
+    slice: search
+    ac_count: 4
+    notes: >
+      4 ACs covering: basic gap separator, context expansion gaps, merged overlap (no
+      separator), and filter results (not just search). Uses -- as separator per grep/rg
+      convention. Cohesive single behavior. Well-specified and testable.
+
+  - id: SRC-007
+    title: "Search as step 0 of the filter pipeline"
+    epic: search
+    theme: local-exploration
+    priority: must
+    depends_on: [SRC-001, FLT-001, FLT-002, RNG-001]
+    readiness: ready
+    slice: search
+    ac_count: 4
+    notes: >
+      4 ACs covering the full pipeline: search+range+include+exclude, search+range,
+      search+include, and search+context ordering. The design_notes section documents
+      the canonical 5-step pipeline and the known gap (tail-of-search-results). This is
+      an integration/orchestration story that ties the pipeline together. Ready for TDD.
+
+  # === EXPORT EPIC ===
+  - id: EXP-001
+    title: "JSON array output to stdout"
+    epic: export
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: export
+    ac_count: 5
+    notes: >
+      5 ACs covering: JSON array output, filter interaction, range interaction, raw
+      passthrough contract, and jq compatibility. The raw passthrough contract (AC4) is
+      the critical design decision -- raw JSONL objects unchanged, not transformed. Strong
+      source evidence with user corrections. Ready for TDD.
+
+  - id: EXP-002
+    title: "JSONL output to stdout"
+    epic: export
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: export
+    ac_count: 5
+    notes: >
+      5 ACs covering: newline-delimited output, filter interaction, range interaction,
+      raw passthrough contract, and jq line-by-line parsing. Structurally parallel to
+      EXP-001 but for streaming format. Each line independently parseable. Ready for TDD.
+
+  - id: EXP-003
+    title: "Export range to JSON file"
+    epic: export
+    theme: console-replay
+    priority: should
+    depends_on: [PRS-005, RNG-004]
+    readiness: needs-splitting
+    slice: export
+    ac_count: 7
+    notes: >
+      7 ACs but covers multiple distinct behaviors: file output (AC1), stdout with '-'
+      (AC2), include filter (AC3), exclude filter (AC4), combined filters (AC5), range
+      syntax (AC6), and replay format (AC7). The filter semantics (AC3-AC5) duplicate
+      the general filter pipeline from FLT-001/FLT-002. Suggest splitting into:
+      (1) --export-json RANGE OUTPUT basic file/stdout output (AC1, AC2, AC6)
+      (2) --export-json filter interaction (AC3-AC5) -- may be covered by general filter
+          pipeline if --export-json is just another output format
+      (3) Export replay format (AC7) -- separate concern about output schema
+
+  - id: EXP-004
+    title: "Include sequence numbers in JSON/JSONL export"
+    epic: export
+    theme: local-exploration
+    priority: could
+    depends_on: [EXP-001, EXP-002]
+    readiness: needs-reframing
+    slice: export
+    ac_count: 1
+    notes: >
+      Only 1 AC, and it is marked UNRESOLVED in the notes. The story itself acknowledges
+      tension with the raw-passthrough contract (EXP-001-AC4, EXP-002-AC4). Adding a
+      sequence field would modify the raw objects, violating the passthrough contract.
+      Needs reframing: either (a) define an envelope format that wraps raw objects with
+      metadata, or (b) define a separate --annotated-json flag, or (c) defer entirely
+      until the user resolves the tension. As written, this story cannot be implemented
+      without a design decision that contradicts existing accepted requirements.
+
+  # === SIDECHAIN EPIC ===
+  - id: SID-001
+    title: "Display sidechain events in timeline"
+    epic: sidechain-handling
+    theme: local-exploration
+    priority: should
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: sidechain
+    ac_count: 4
+    notes: >
+      4 ACs covering: inline display without marking, summary inclusion, compact mode
+      parameter display, and --full mode content visibility. Cohesive story about making
+      sidechain events visible across all display modes. AC3 (compact display) and AC4
+      (full mode verification) add valuable coverage beyond the basic case.
+
+  - id: SID-002
+    title: "Search includes sidechain content"
+    epic: sidechain-handling
+    theme: local-exploration
+    priority: should
+    depends_on: [SID-001, SRC-001]
+    readiness: merge-candidate
+    slice: sidechain
+    ac_count: 2
+    notes: >
+      Only 2 ACs. AC1 (search finds sidechain content) is a natural consequence of
+      sidechain events being in the timeline (SID-001) and search operating on the
+      timeline (SRC-001). AC2 (list content handling) is already covered by SRC-001-AC4.
+      This story does not introduce any new behavior beyond what SID-001 + SRC-001
+      already provide. Merge into SID-001 as a verification AC, or simply treat as an
+      integration test that validates SID-001 and SRC-001 compose correctly.
+
+  - id: SID-003
+    title: "Filter sidechain events with dedicated flag"
+    epic: sidechain-handling
+    theme: local-exploration
+    priority: could
+    depends_on: [SID-001, PRS-005]
+    readiness: needs-splitting
+    slice: sidechain
+    ac_count: 3
+    notes: >
+      The story's own validation_notes acknowledge it should be split. AC3 (raw JSONL
+      passthrough preserving isSidechain) belongs in the export/parsing stories, not here.
+      AC1 (exclude sidechain) and AC2 (sidechain-only) are speculative future features
+      with no direct user request. Suggest splitting:
+      (1) AC3 -> merge into EXP-001/EXP-002 as verification of raw passthrough
+      (2) AC1+AC2 -> keep as a speculative "could" story for dedicated sidechain filter flag
+
+  # === SUMMARY EPIC ===
+  - id: SUM-001
+    title: "Summary mode shows session statistics"
+    epic: summary
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: needs-splitting
+    slice: walking-skeleton
+    ac_count: 7
+    notes: >
+      7 ACs covering: full summary display, hierarchical tree, sort/omit rules, inline
+      parameter hints, graceful timestamp omission, special event counting, and implicit
+      mode activation. This is a large story spanning multiple distinct behaviors:
+      (1) Basic summary with filename + metadata (AC1, AC5) -> walking-skeleton
+      (2) Hierarchical tool breakdown with sort/omit (AC2, AC3) -> summary-mode
+      (3) Inline parameter hints as self-documenting tutorial (AC4) -> summary-mode
+      (4) Special event counting (interruptions, slash commands) (AC6) -> summary-mode
+      (5) Mode activation logic (AC7) -> walking-skeleton (CLI routing)
+      Recommend splitting into basic summary (walking-skeleton) and enhanced summary
+      features (summary-mode slice).
+
+  - id: SUM-002
+    title: "Group MCP tools in summary display"
+    epic: summary
+    theme: local-exploration
+    priority: should
+    depends_on: [SUM-001]
+    readiness: ready
+    slice: summary-mode
+    ac_count: 4
+    notes: >
+      4 ACs covering: MCP tool inclusion, server-based grouping hierarchy, inline filter
+      comments, and zero-count omission. Well-scoped single behavior (MCP-specific grouping
+      logic). ACs are testable and observable. Depends on SUM-001's tool breakdown being
+      in place first.
+
+  - id: SUM-003
+    title: "Detect and show git commits in summary"
+    epic: summary
+    theme: local-exploration
+    priority: should
+    depends_on: [SUM-001]
+    readiness: ready
+    slice: summary-mode
+    ac_count: 4
+    notes: >
+      4 ACs covering: nested Git operations under Bash, detection patterns (including
+      cd && git), Commits sub-level, and zero-count omission. Well-scoped. AC2 is
+      particularly valuable -- it specifies the detection patterns including the tricky
+      "cd dir && git commit" case that was a known bug.
+
+  # === CONTEXT (CRH) EPIC ===
+  - id: CRH-001
+    title: "Create flag file when compaction occurs"
+    epic: context
+    theme: compaction-recovery
+    priority: must
+    depends_on: []
+    readiness: ready
+    slice: compaction-recovery
+    ac_count: 4
+    notes: >
+      4 ACs covering: flag creation path, flag contents, clean exit, and wildcard matcher.
+      Cohesive single behavior (PreCompact hook). ACs are specific and testable. The
+      wildcard matcher (AC4) was a user correction from separate auto/manual entries.
+
+  - id: CRH-002
+    title: "Detect compaction flag on tool use"
+    epic: context
+    theme: compaction-recovery
+    priority: must
+    depends_on: [CRH-001]
+    readiness: ready
+    slice: compaction-recovery
+    ac_count: 4
+    notes: >
+      4 ACs covering: glob search for flag files, session_id extraction, flag deletion
+      after processing, and hook placement directory. Cohesive single behavior (PreToolUse
+      hook flag detection). AC3 (delete after processing) prevents repeated triggers.
+
+  - id: CRH-003
+    title: "Block tool use and inject recovery prompt"
+    epic: context
+    theme: compaction-recovery
+    priority: must
+    depends_on: [CRH-002]
+    readiness: ready
+    slice: compaction-recovery
+    ac_count: 4
+    notes: >
+      4 ACs covering: permissionDecision/deny response format, recovery prompt content,
+      session ID inclusion, and negative AC (do NOT use additionalContext). Well-specified.
+      AC4 is a valuable negative constraint derived from user correction. The correct
+      API (permissionDecision/permissionDecisionReason) was arrived at after investigating
+      multiple alternatives.
+
+  - id: CRH-004
+    title: "Handle multiple Claude instances safely"
+    epic: context
+    theme: compaction-recovery
+    priority: should
+    depends_on: []
+    readiness: ready
+    slice: compaction-recovery
+    ac_count: 4
+    notes: >
+      4 ACs covering: session_id[:8] in filename, per-session flag isolation, single
+      flag processing per invocation, and full session_id inside JSON. Cohesive
+      concurrency safety story. AC4 clarifies the distinction between filename (8-char
+      prefix for disambiguation) and JSON contents (full UUID for xs commands).
+
+  - id: CRH-005
+    title: "xs operations used by recovery prompt"
+    epic: context
+    theme: compaction-recovery
+    priority: should
+    depends_on: [CRH-003]
+    readiness: needs-reframing
+    slice: compaction-recovery
+    ac_count: 6
+    notes: >
+      6 ACs but they describe xs CLI usage patterns, not observable behaviors of a
+      component under test. The ACs read like a usage manual for xs commands in recovery
+      context, not testable acceptance criteria. AC1 prescribes specific command strings
+      (including --jq and --tail which may not exist). AC6 is about manual fallback
+      (documentation concern, not code behavior). Reframe as: "Recovery prompt includes
+      correct xs command templates" with ACs testing that the generated prompt contains
+      valid, executable xs commands. Or merge into CRH-003 as additional ACs about the
+      prompt content.
+
+  - id: CRH-006
+    title: "Deep context recovery methodology"
+    epic: context
+    theme: compaction-recovery
+    priority: should
+    depends_on: [CRH-005]
+    readiness: needs-reframing
+    slice: compaction-recovery
+    ac_count: 6
+    notes: >
+      6 ACs but they describe a methodology/workflow, not observable software behavior.
+      AC1 (scan timeline first), AC2 (focus on WHY), AC4 (use Task delegation), AC5
+      (don't jump to implementation) are human-workflow guidelines, not testable software
+      requirements. AC3 and AC6 are usage guidelines (use xs, not filesystem exploration).
+      This is documentation/runbook content, not a user story with testable ACs. Reframe
+      as a documentation artifact or remove from implementation backlog entirely.
+
+  - id: CRH-007
+    title: "Apply lessons from real-world recovery test"
+    epic: context
+    theme: compaction-recovery
+    priority: could
+    depends_on: [CRH-006]
+    readiness: needs-reframing
+    slice: compaction-recovery
+    ac_count: 6
+    notes: >
+      6 ACs but they describe lessons learned and constraints, not testable behavior.
+      AC1 (recognize unanswered questions), AC2 (targeted recovery preferred), AC3 (plan
+      files prevent full recovery) are human-process observations. AC4 (range+search
+      ordering gap) duplicates the known pipeline gap from SRC-007. AC5 (hooks don't
+      auto-reload) is a Claude Code platform constraint, not xs behavior. AC6 (agent
+      regression after compaction) is an LLM behavior observation. None of these are
+      testable software requirements. Reframe as documentation/lessons-learned artifact.
+
+  # === FETCH (GFH) EPIC ===
+  - id: GFH-001
+    title: "List workflow runs from GitHub Actions"
+    epic: fetch
+    theme: github-fetch
+    priority: must
+    depends_on: []
+    readiness: ready
+    slice: fetch-pipeline
+    ac_count: 4
+    notes: >
+      4 ACs covering: server-side success filtering with --limit, dual workflow
+      combination, sort order, and skipped run exclusion. Cohesive and testable. AC1
+      (server-side filtering) is a critical performance/correctness requirement -- the
+      user was explicit that --limit N means N successful runs.
+
+  - id: GFH-002
+    title: "Fetch logs for specific workflow run"
+    epic: fetch
+    theme: github-fetch
+    priority: must
+    depends_on: [GFH-001]
+    readiness: needs-beefing-up
+    slice: fetch-pipeline
+    ac_count: 3
+    notes: >
+      3 ACs covering: gh run view --log command, error handling for invalid/expired runs,
+      and handoff to extraction. Thin on edge cases. Missing: AC for network failure
+      handling, AC for very large log content (memory), AC for rate limiting from GitHub
+      API. The core behavior is simple (shell out to gh) but error paths need more ACs.
+
+  - id: GFH-003
+    title: "Extract JSONL content from Claude execution logs"
+    epic: fetch
+    theme: github-fetch
+    priority: must
+    depends_on: [GFH-002]
+    readiness: ready
+    slice: fetch-pipeline
+    ac_count: 6
+    notes: >
+      6 ACs covering: start boundary detection, end boundary detection, constant-length
+      prefix stripping, multi-value return (content + metadata), session_id scanning
+      (first 10 lines), and JSONL-only output (no JSON metadata files). Well-specified
+      extraction pipeline. AC3 (fixed-position substring, not regex) captures a
+      performance optimization decision. AC5 (scan first 10 lines) captures a bug fix.
+
+  - id: GFH-004
+    title: "Extract issue or PR number from log XML tags"
+    epic: fetch
+    theme: github-fetch
+    priority: should
+    depends_on: [GFH-002]
+    readiness: ready
+    slice: fetch-pipeline
+    ac_count: 5
+    notes: >
+      5 ACs covering: PR detection (is_pr=true + pr_number), issue detection (is_pr=false
+      + issue_number), no-match handling (no unlinked fallback), negative AC (no title
+      parsing), and single grep invocation. Well-specified. AC3 (no unlinked fallback)
+      and AC4 (no title parsing) are valuable negative constraints from user corrections.
+
+  - id: GFH-005
+    title: "Skip already-downloaded workflow runs"
+    epic: fetch
+    theme: github-fetch
+    priority: should
+    depends_on: [GFH-001]
+    readiness: needs-beefing-up
+    slice: fetch-pipeline
+    ac_count: 3
+    notes: >
+      3 ACs covering: extract run IDs from filenames, parse filename pattern, and skip
+      matching runs. Missing: AC for empty github/ directory (first run), AC for
+      corrupted/partial filenames, AC for cross-script deduplication (files from .py
+      recognized by .sh and vice versa -- this is covered in GFH-010 but should be
+      referenced here). Needs 1-2 more ACs.
+
+  - id: GFH-006
+    title: "Set file timestamps to session times"
+    epic: fetch
+    theme: github-fetch
+    priority: should
+    depends_on: [GFH-003]
+    readiness: ready
+    slice: fetch-pipeline
+    ac_count: 4
+    notes: >
+      4 ACs covering: ctime=start/mtime=end mapping, macOS SetFile for birth time,
+      non-macOS fallback, and duration logging. AC2 captures the platform-specific
+      requirement (macOS needs SetFile because os.utime can't set creation time). AC3
+      handles cross-platform gracefully. Testable and well-scoped.
+
+  - id: GFH-007
+    title: "Name output files with structured convention"
+    epic: fetch
+    theme: github-fetch
+    priority: should
+    depends_on: [GFH-003, GFH-004]
+    readiness: ready
+    slice: fetch-pipeline
+    ac_count: 5
+    notes: >
+      5 ACs covering: full filename format, date/time from createdAt, flat directory
+      structure, github/ directory location, and raw log fallback location. Strong negative
+      constraints (no subdirectories, no per-type folders). AC1 specifies the exact
+      filename pattern. Well-suited for acceptance testing.
+
+  - id: GFH-008
+    title: "Command-line interface for fetch"
+    epic: fetch
+    theme: github-fetch
+    priority: must
+    depends_on: []
+    readiness: ready
+    slice: fetch-pipeline
+    ac_count: 6
+    notes: >
+      6 ACs covering: --limit N, --run-id ID, --save-raw-logs, default behavior (no
+      args), skipped run messaging, and success summary output. Comprehensive CLI spec.
+      AC4 (default behavior) ties together multiple stories (GFH-001 listing, GFH-005
+      dedup). Ready for TDD.
+
+  - id: GFH-009
+    title: "Fetch workflow runs by issue or PR number"
+    epic: fetch
+    theme: github-fetch
+    priority: could
+    depends_on: [GFH-001, GFH-002]
+    readiness: needs-beefing-up
+    slice: fetch-pipeline
+    ac_count: 4
+    notes: >
+      4 ACs but they describe a feature that was planned but never implemented. ACs are
+      somewhat vague -- AC2 ("finds Claude bot's comment containing workflow run link(s)")
+      does not specify the comment format or parsing strategy in detail. Missing: AC for
+      no comments found, AC for multiple Claude comments on same issue, AC for private
+      repos. The sticky comment format needs to be specified more concretely before this
+      can be implemented. However, as a "could" priority, this is acceptable as a
+      placeholder.
+
+  - id: GFH-010
+    title: "Maintain feature parity between fetch_logs.py and fetch_logs.sh"
+    epic: fetch
+    theme: github-fetch
+    priority: should
+    depends_on: []
+    readiness: needs-reframing
+    slice: fetch-pipeline
+    ac_count: 3
+    notes: >
+      3 ACs but they describe a process/policy constraint, not a single testable behavior.
+      AC1 ("any feature change to .py must be mirrored in .sh") is a development process
+      rule, not a software requirement. AC2 (identical output) and AC3 (cross-script
+      dedup) are testable but belong as integration test ACs on GFH-005/GFH-007/GFH-008
+      rather than a standalone story. For a greenfield build, the decision of whether to
+      have both .py and .sh implementations is an architectural choice, not a user story.
+      Reframe as an architectural constraint/principle, or merge AC2/AC3 into relevant
+      stories.
+
+summary:
+  total: 34
+  by_priority:
+    must: 14
+    should: 16
+    could: 4
+  by_readiness:
+    ready: 21
+    needs-beefing-up: 4
+    needs-splitting: 3
+    merge-candidate: 1
+    needs-reframing: 5

@@ -1,9 +1,9 @@
 # xs Requirements Recovery Tracker
 
 meta:
-  last_updated: 2026-02-27T20:00:00Z
-  current_pass: 6_slicing
-  current_step: pending
+  last_updated: 2026-02-28T17:00:00Z
+  current_pass: implementation
+  current_step: ready
   pre_pass2_validation: complete
 
 passes:
@@ -58,7 +58,20 @@ passes:
       CONF-001, already resolved).
 
   6_slicing:
-    status: pending
+    status: complete
+    completed_at: 2026-02-28T17:00:00Z
+    redone_at: 2026-02-28T22:00:00Z
+    note: |
+      14 feature slices defined with GOOS outside-in ordering (S0-S13).
+      Walking skeleton (S0) → Summary (S1) → Compact (S2) → Filtering (S3) →
+      Range (S4) → Truncated/Full (S5) → Search (S6) → Export (S7) →
+      Head/Tail (S8) → Advanced Display (S9) → Session Discovery (S10) →
+      Sidechain (S11) → Fetch (S12) → Compaction (S13).
+      Story analysis (redone with 3 parallel Opus agents, verified against source):
+      64 ready, 13 needs-beefing-up, 10 needs-splitting,
+      12 merge-candidates, 9 needs-reframing.
+      Artifacts: roadmap.yaml, synthesis/pass6-story-analysis.yaml,
+      synthesis/pass6-analysis-group{1,2,3}.yaml.
 
 counts:
   themes: 4
@@ -84,9 +97,9 @@ counts:
       reviewed: 0
       validated: 0
     by_priority:
-      must: ~45
-      should: ~48
-      could: ~15
+      must: 51
+      should: 48
+      could: 9
   principles:
     total: 13
     status: fresh  # re-derived from stories, completeness-checked against drafts
@@ -136,13 +149,15 @@ synthesis_artifacts:
   principles: 13
   conflicts: 6
   synthesis_summary: 1
+  pass6_story_analysis: 1   # synthesis/pass6-story-analysis.yaml
+  roadmap: 1                 # roadmap.yaml
 
 next_action: |
-  Pass 6: Implementation Slicing.
-  1. Identify walking skeleton (minimal end-to-end path)
-  2. Group stories by dependency
-  3. Apply priority (must/should/could)
-  4. Map to spec files
-  5. Create implementation roadmap
+  All 6 passes complete. Ready to implement.
+  Start with Slice S0 (Walking Skeleton):
+  1. Set up Python project (pytest, BDD naming)
+  2. Write failing acceptance test: `xs fixture.jsonl` → valid YAML summary
+  3. Implement PRS-001 → PRS-003 → PRS-013 → PRS-005 → SUM-001 → CLI-001
+  4. Refine stories as needed (split PRS-005, split SUM-001)
 
 blockers: []

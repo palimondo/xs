@@ -1,0 +1,637 @@
+# Group 2: Filtering + Range + Display + CLI stories
+# Analyzed: 2026-02-28
+# Story count: 36
+
+stories:
+  # === FILTERING EPIC (15 stories) ===
+
+  - id: FLT-001
+    title: "Filter to include specific tools by name"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 4
+    notes: >
+      4 ACs cover single tool include, comma-separated list, tool_use+tool_result pairing,
+      and non-tool event exclusion. All specific, observable, Given/When/Then format.
+      Strong evidence from 9 sources across multiple sessions (a40c, b475, fa1a, day-025).
+      Comma-separated format deliberately matches Claude Code's allowedTools syntax.
+
+  - id: FLT-002
+    title: "Filter to exclude specific tools by name"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 4
+    notes: >
+      4 ACs for single exclude, comma-separated, include+exclude composition, and symmetric
+      syntax. Semantics explicitly defined by user: include is whitelist first, then exclude
+      removes from included set (day-025:5241). User rejected renaming --include to --filter
+      because it breaks the duality (cc2d:665). Well-specified.
+
+  - id: FLT-003
+    title: "Filter by Message virtual entity"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 3
+    notes: >
+      3 ACs for Message matching user+assistant, excluding tool-only assistant messages,
+      and bidirectional use in --include/--exclude. Replaces deprecated --conversation.
+      Although only 3 ACs, each is specific and the behavior is well-bounded. The edge
+      case of assistant messages with only tool_use content (AC2) is particularly important.
+
+  - id: FLT-004
+    title: "Filter by Tool virtual entity"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 4
+    notes: >
+      4 ACs for include Tool, matches all tool types, exclude Tool, and no-parameter
+      constraint. Complementary to FLT-003. Each AC is specific. The "no parameters"
+      constraint (AC4) is important: Tool is a coarse filter; fine-grained filtering
+      uses specific tool names with optional globs.
+
+  - id: FLT-005
+    title: "Support glob patterns in tool filters"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [FLT-001]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 7
+    notes: >
+      7 ACs covering Bash(git *), Edit(**/specs/**), Tool(mcp__*), fnmatch semantics,
+      bare tool name fallback, comma-separated mix, and per-tool parameter matching
+      (Edit/Write match file_path, Bash matches command). Very strong evidence from
+      12 sources. User explicitly corrected agent: uses glob/fnmatch, NOT regex (b475:838).
+      Comprehensive and well-specified.
+
+  - id: FLT-006
+    title: "-M shortcut for all messages"
+    epic: filtering
+    theme: local-exploration
+    priority: should
+    depends_on: [FLT-003]
+    readiness: merge-candidate
+    slice: basic-filtering
+    ac_count: 3
+    notes: >
+      3 ACs. Trivial alias for --include Message. AC3 (implies timeline mode) is really
+      part of CLI-006 (implicit timeline). The shortcut itself is a single argparse alias.
+      Merge candidate with FLT-007, FLT-008, FLT-009 into a single "virtual entity filter
+      shortcuts" story since all four shortcuts follow the same pattern: single-letter flag
+      that expands to --include <VirtualEntity> and implies timeline mode.
+
+  - id: FLT-007
+    title: "-U shortcut for user messages"
+    epic: filtering
+    theme: local-exploration
+    priority: should
+    depends_on: [FLT-003]
+    readiness: merge-candidate
+    slice: basic-filtering
+    ac_count: 2
+    notes: >
+      Only 2 ACs. Trivial alias for --include User. Same pattern as FLT-006/008/009.
+      Merge into a single "filter shortcuts" story covering all four virtual entity
+      shortcuts (-M, -U, -a, -T) with shared ACs for the common behavior (alias
+      expansion, implied timeline mode) and per-shortcut ACs for the specific entity.
+
+  - id: FLT-008
+    title: "-a shortcut for assistant messages"
+    epic: filtering
+    theme: local-exploration
+    priority: should
+    depends_on: [FLT-003]
+    readiness: merge-candidate
+    slice: basic-filtering
+    ac_count: 3
+    notes: >
+      3 ACs including -U + -a combination equivalence to -M. Trivial alias for
+      --include Assistant. Lowercase -a deliberately chosen because uppercase -A is
+      reserved for grep-style context lines (caf2:316). Merge with FLT-006/007/009
+      into single shortcuts story. AC3 (-U + -a = -M equivalence) is a good combined
+      behavior test.
+
+  - id: FLT-009
+    title: "-T shortcut for all tools"
+    epic: filtering
+    theme: local-exploration
+    priority: should
+    depends_on: [FLT-004]
+    readiness: merge-candidate
+    slice: basic-filtering
+    ac_count: 3
+    notes: >
+      3 ACs. Trivial alias for --include Tool. Commonly combined with --no-tool-results
+      (AC2). Merge with FLT-006/007/008 into single shortcuts story. The --no-tool-results
+      interaction (AC2) can be an AC in the merged story or remain as a cross-reference
+      to FLT-010.
+
+  - id: FLT-010
+    title: "--no-tool-results flag"
+    epic: filtering
+    theme: local-exploration
+    priority: should
+    depends_on: [FLT-004]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 4
+    notes: >
+      4 ACs for result suppression, default inclusion, -T combination, and separate-event
+      semantics. User corrected agent's misunderstanding: this suppresses separate
+      tool_result events, not truncating content within a result (caf2:288). Clear
+      semantics for a distinct behavioral concern. Each AC is specific and testable.
+
+  - id: FLT-011
+    title: "Compose multiple filters with AND semantics"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [FLT-001, FLT-002]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 7
+    notes: >
+      7 ACs covering pipeline ordering (search -> range -> include -> exclude -> context),
+      range+filter interaction, OR within include, include-then-exclude composition,
+      implicit timeline activation, context dedup, and search+filter integration.
+      Core architectural story defining the canonical filter pipeline. User defined
+      the ordering explicitly twice in separate sessions (caf2:316, caf2:936).
+      Context dedup (no duplicate events) flagged as critical bug fix (caf2:1079).
+      Comprehensive and well-specified.
+
+  - id: FLT-012
+    title: "Handle -M -x Tool interaction correctly"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [FLT-006, FLT-002, FLT-004]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 5
+    notes: >
+      5 ACs covering clean conversation view, tool-only assistant suppression, mixed
+      text+tool assistant handling, equivalence with old --conversation, and display-level
+      suppression of tool announcements. The historical notes about a bug in the previous
+      implementation describe the correct behavior we need to implement: when -x Tool is
+      specified, assistant messages containing only tool_use blocks must be completely
+      suppressed (not shown as [Tools: ...] announcements). For a greenfield build, this
+      is simply a specification of correct filtering behavior, not a bug to fix. All 5 ACs
+      are specific and observable.
+
+  - id: FLT-013
+    title: "Filter by Thinking virtual entity"
+    epic: filtering
+    theme: local-exploration
+    priority: could
+    depends_on: [PRS-005]
+    readiness: needs-beefing-up
+    slice: advanced-display
+    ac_count: 2
+    notes: >
+      Only 2 ACs. Fundamentally unresolved whether thinking/extended reasoning blocks
+      appear in the JSONL format at all (agent questioned this in b475:1502). Needs
+      format investigation before any implementation. No golden file. ACs are vague
+      ("thinking/reasoning blocks" without specifying what these look like in JSON).
+      Beef up: (1) verify thinking block JSON format, (2) add AC for sessions without
+      thinking content, (3) add AC for interaction with -a (assistant) shortcut.
+
+  - id: FLT-014
+    title: "--git as convenience alias for --include Bash(git *)"
+    epic: filtering
+    theme: local-exploration
+    priority: should
+    depends_on: [FLT-005, FLT-001]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 3
+    notes: >
+      3 ACs for equivalence with --include pattern, delegation to centralized filtering,
+      and cd-prefix handling. The known limitation with "cd dir && git commit" patterns
+      is documented in AC3 (b475:2351). Although only 3 ACs, each addresses a distinct
+      concern and together they cover the key behaviors. The cd-prefix issue is a design
+      decision to surface, not a missing AC.
+
+  - id: FLT-015
+    title: "Timeline shows all events when no filters specified"
+    epic: filtering
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: needs-reframing
+    slice: walking-skeleton
+    ac_count: 2
+    notes: >
+      Only 2 ACs describing a negative constraint (no implicit filtering without explicit
+      filter flags). This is better expressed as a design invariant or principle rather
+      than a standalone user story. Already captured by PRIN-007 (no implicit filtering).
+      Reframe: fold into acceptance criteria of the timeline display story (CLI-002 or
+      DSP-001) as a negative test case, or keep purely as a cross-cutting principle
+      validation rather than a feature story.
+
+  # === RANGE EPIC (7 stories) ===
+
+  - id: RNG-001
+    title: "Select single item by index"
+    epic: range-selection
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: range-selection
+    ac_count: 3
+    notes: >
+      3 ACs for valid index, invalid index (0/negative disambiguation), and out-of-bounds.
+      Bare positive integer = specific index (not head), resolved explicitly by user
+      (b475:245-246). Out-of-bounds produces empty output without error. Although only 3
+      ACs, the semantics are clear and complete for this narrow behavior. The 0-vs-1 indexing
+      question could use an additional AC, but the existing ACs cover the key observable behaviors.
+
+  - id: RNG-002
+    title: "Select first N items with +N syntax"
+    epic: range-selection
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: range-selection
+    ac_count: 4
+    notes: >
+      4 ACs for +N selection, exceeds-length graceful handling, combined with filters
+      (pipeline ordering), and argparse robustness with filter flags. Pipeline ordering
+      confirmed by user as intentional design (1e83:836). AC4 addresses a real bug
+      discovered during usage. Well-specified.
+
+  - id: RNG-003
+    title: "Select last N items with -N syntax"
+    epic: range-selection
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: range-selection
+    ac_count: 3
+    notes: >
+      3 ACs for -N selection, exceeds-length graceful handling, and combined with filter.
+      Known gap documented: -N applies before search, so "last N search results" is not
+      possible with this syntax (user identified e583:1601-1700; separate --tail flag
+      proposed). The 3 ACs cover the range-selection behavior well. The gap is a separate
+      concern addressed by CONF-002 (--head/--tail post-filter).
+
+  - id: RNG-004
+    title: "Select range with N-M syntax"
+    epic: range-selection
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: range-selection
+    ac_count: 5
+    notes: >
+      5 ACs for valid inclusive range, exact items with no gaps, fully out-of-bounds,
+      partially out-of-bounds, and invalid format error message. Gapless indices
+      requirement emerged from a user-reported bug (0841:F004). Error message format
+      confirmed (caf2:F001). Comprehensive coverage.
+
+  - id: RNG-005
+    title: "Select from N onwards with N+ syntax"
+    epic: range-selection
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: range-selection
+    ac_count: 4
+    notes: >
+      4 ACs for N+ selection, beyond-length empty output, N- alias equivalence, and
+      1+ = all items. Both N+ and N- syntaxes supported as equivalents. User hesitated
+      about naming/discoverability but kept it (caf2:974). Note the syntactic similarity
+      but semantic difference: +N = head (first N), N+ = from N onwards. All 4 ACs are
+      specific and testable.
+
+  - id: RNG-006
+    title: "Combine multiple indices and ranges as free positional arguments"
+    epic: range-selection
+    theme: local-exploration
+    priority: should
+    depends_on: [PRS-005, RNG-001, RNG-002, RNG-003, RNG-004, RNG-005]
+    readiness: ready
+    slice: range-selection
+    ac_count: 5
+    notes: >
+      5 ACs for multiple args, mixed types with union semantics, interspersed with flags,
+      independent of display mode, and consistent syntax across features. Depends on all
+      other range stories. User explicitly requested multiple free positional args
+      (b475:239). AC5 (consistent parse_range) ensures a single parsing function for all
+      range-consuming features.
+
+  - id: RNG-007
+    title: "Range selection applies to full timeline before filtering"
+    epic: range-selection
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005, RNG-001, FLT-001]
+    readiness: needs-reframing
+    slice: range-selection
+    ac_count: 4
+    notes: >
+      4 ACs describing pipeline ordering (range before filters) and centralized
+      implementation. This is a design invariant, not a standalone feature. Overlaps
+      significantly with FLT-011 (filter composition) which already specifies the
+      canonical pipeline ordering (search -> range -> include -> exclude -> context).
+      AC3 (centralized at event array level) and AC4 (stable indices) are architectural
+      constraints. Reframe: merge pipeline ordering into FLT-011, keep centralized
+      implementation as an architectural principle (PRIN-002), and fold stable-indices
+      into DSP-004.
+
+  # === DISPLAY EPIC (5 stories) ===
+
+  - id: DSP-001
+    title: "Compact display mode (one line per event)"
+    epic: display-modes
+    theme: local-exploration
+    priority: must
+    depends_on: [FMT-001, FMT-002]
+    readiness: needs-splitting
+    slice: compact-timeline
+    ac_count: 8
+    notes: >
+      8 ACs cover single-line enforcement, tool format, multiline collapse (first [...] last),
+      thinking preview, no emojis, no section headers, MCP param newlines, and grep/head/tail
+      workflow support. Very broad scope spanning: (1) basic compact rendering with [seq]
+      prefix, (2) multiline content collapsing rules, (3) negative constraints (no emojis,
+      no headers). Split suggestion: (a) basic compact mode (AC1, AC2, AC8) -- single-line
+      per event with [seq] prefix using same Tool(param) format as truncated mode; (b) compact
+      multiline collapsing (AC3, AC4, AC7) -- first_line [...] last_line pattern for messages,
+      thinking, and MCP params; (c) merge AC5/AC6 into cross-cutting constraints (already
+      covered by FMT-024/FMT-025 and PRIN-006). Strong evidence from 7 sessions.
+
+  - id: DSP-002
+    title: "Truncated display mode (console-like)"
+    epic: display-modes
+    theme: console-replay
+    priority: must
+    depends_on: [FMT-001, FMT-002]
+    readiness: needs-splitting
+    slice: truncated-full-modes
+    ac_count: 10
+    notes: >
+      10 ACs. The most heavily evidenced story (20 sources). Covers symbols
+      (>, bullet, hook, asterisk), 3-line truncation with TOTAL count, no interactive
+      elements (ctrl+r removed), no seq numbers by default, full assistant text, full
+      bash first line, blank line spacing, 2-space indent before hook, no headers, no
+      emojis. Split suggestion: (a) basic truncated rendering (AC1, AC3, AC4, AC9, AC10)
+      -- symbols, no interactive elements, no seq numbers, no headers, no emojis;
+      (b) truncation rules (AC2, AC5, AC6) -- 3-line limit with TOTAL count, assistant
+      text not truncated, bash command full first line; (c) spacing and indentation
+      (AC7, AC8) -- blank lines between items, 2-space indent before hook symbol.
+      reconstruct.jq is the authoritative format reference.
+
+  - id: DSP-003
+    title: "Full display mode (no truncation)"
+    epic: display-modes
+    theme: local-exploration
+    priority: must
+    depends_on: [FMT-001, FMT-002, DSP-002]
+    readiness: ready
+    slice: truncated-full-modes
+    ac_count: 7
+    notes: >
+      7 ACs for complete tool result display, no truncation indicator, same formatting
+      as truncated mode, no seq numbers by default, no headers, mutual exclusivity with
+      --truncated, and rich-text markdown formatting. Full mode is cleanly defined as
+      "truncated mode minus the truncation." All ACs are specific and observable.
+      Depends on DSP-002 since it reuses the same rendering with truncation disabled.
+
+  - id: DSP-004
+    title: "Sequence number display control"
+    epic: display-modes
+    theme: local-exploration
+    priority: should
+    depends_on: [DSP-001, DSP-002]
+    readiness: ready
+    slice: compact-timeline
+    ac_count: 7
+    notes: >
+      7 ACs covering compact always shows [seq], truncated hides by default, truncated
+      --show-numbers forces display, full hides by default, full --show-numbers forces
+      display, stable numbering across filters, and visible gaps in filtered output.
+      FMT-017 duplicates this story and should be merged into it. The stable-numbering
+      requirement (AC6) is architecturally important: same event always has same number
+      regardless of display mode or active filters.
+
+  - id: DSP-005
+    title: "Show separator between non-contiguous sections"
+    epic: display-modes
+    theme: local-exploration
+    priority: should
+    depends_on: [DSP-001, DSP-004]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 4
+    notes: >
+      4 ACs for compact mode separator, truncated/full mode separator, context window
+      gaps, and no separator for contiguous output. Follows grep convention (-- separator).
+      FMT-018 and SRC-006 duplicate this story and should be absorbed here. Evidence
+      from 1e83 sessions with confirmed working output showing -- between non-contiguous
+      events. Well-specified.
+
+  # === CLI EPIC (9 stories) ===
+
+  - id: CLI-001
+    title: "Summary mode (default)"
+    epic: cli-interface
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: walking-skeleton
+    ac_count: 5
+    notes: >
+      5 ACs for default behavior (no mode flags = summary), filename header, hierarchical
+      event counts with inline CLI flag comments, sorted tool counts (descending, omit zero),
+      and aligned column positions. Summary serves as self-documenting tutorial for xs CLI
+      flags (e583:70). Well-specified with specific formatting requirements. Core entry
+      point for user experience.
+
+  - id: CLI-002
+    title: "Timeline mode (-t/--timeline)"
+    epic: cli-interface
+    theme: local-exploration
+    priority: must
+    depends_on: [PRS-005]
+    readiness: ready
+    slice: compact-timeline
+    ac_count: 5
+    notes: >
+      5 ACs for -t chronological display, default compact mode, filter composition,
+      boolean flag (no arguments), and gapless contiguous indices. Key design decision:
+      -t is a simple boolean flag, not a filter parameter -- resolved after user
+      identified the CLI UX problem (b475:618). Clean separation of mode selection
+      from filtering.
+
+  - id: CLI-003
+    title: "Git operations mode (-g/--git)"
+    epic: cli-interface
+    theme: local-exploration
+    priority: should
+    depends_on: [PRS-005, FLT-005]
+    readiness: ready
+    slice: basic-filtering
+    ac_count: 4
+    notes: >
+      4 ACs for git-only display, delegation to centralized filtering (not separate code
+      path), cd-prefix matching (git anywhere in command, not just prefix), and filter
+      composition. User explicitly identified --git as a separate implementation when it
+      should be a convenience alias (b475:738). Known cd-prefix limitation documented
+      and should be addressed in the glob pattern design.
+
+  - id: CLI-004
+    title: "File changes mode (-f/--files)"
+    epic: cli-interface
+    theme: local-exploration
+    priority: should
+    depends_on: [PRS-005]
+    readiness: needs-beefing-up
+    slice: session-discovery
+    ac_count: 4
+    notes: >
+      4 ACs are high-level. The unique value of --files is its grouped-by-file display
+      format, which cannot be replicated by simple timeline filtering. User reinstated
+      it after deprecation (caf2:709: "remove deprecation, keep unique functionality").
+      Beef up: (1) specify the grouped-by-file output format with golden file, (2) add
+      AC for file path deduplication across multiple edits to same file, (3) add AC for
+      distinguishing edit vs write vs create operations in the grouping, (4) clarify
+      interaction with range selection.
+
+  - id: CLI-005
+    title: "Created files mode (-c/--created)"
+    epic: cli-interface
+    theme: local-exploration
+    priority: could
+    depends_on: [PRS-005]
+    readiness: needs-beefing-up
+    slice: session-discovery
+    ac_count: 3
+    notes: >
+      3 ACs are vague. Limited evidence from only 3 sources. Format shows [event_index]
+      filename with indented content preview and ellipsis truncation (a40c:1197). Beef up:
+      (1) define how "created" is distinguished from "edited" (first Write to a new path?),
+      (2) specify content preview length/truncation rules, (3) add AC for sessions with no
+      created files, (4) add golden file for the output format.
+
+  - id: CLI-006
+    title: "Implicit timeline mode activation"
+    epic: cli-interface
+    theme: local-exploration
+    priority: should
+    depends_on: [CLI-002]
+    readiness: ready
+    slice: compact-timeline
+    ac_count: 5
+    notes: >
+      5 ACs covering filter-triggered implicit timeline, range-triggered implicit timeline,
+      no-args = summary default, search overrides implicit timeline, and --git triggers
+      implicit timeline. The search-mode override (AC4) was a known bug in the previous
+      implementation where implicit timeline and search produced duplicate output. For a
+      greenfield build, AC4 simply specifies that search is a primary output mode that
+      takes precedence over implicit timeline activation. All 5 ACs describe observable
+      behavior clearly.
+
+  - id: CLI-007
+    title: "Support multiple index selection"
+    epic: cli-interface
+    theme: local-exploration
+    priority: could
+    depends_on: [RNG-001]
+    readiness: needs-reframing
+    slice: range-selection
+    ac_count: 5
+    notes: >
+      5 ACs overlap significantly with RNG-006 (multiple ranges). CLI-007 focuses on CLI
+      argument parsing (positional args, argparse behavior with flags) while RNG-006
+      focuses on the behavioral outcome (union of selections). Reframe: merge CLI-specific
+      parsing concerns (AC2 flag combination, AC5 argument ordering) into RNG-006 and
+      CLI-008 respectively, then eliminate CLI-007 as a standalone story. The parsing
+      concern is a cross-cutting implementation detail, not a separate user-facing feature.
+
+  - id: CLI-008
+    title: "Argument ordering rules and help text conventions"
+    epic: cli-interface
+    theme: local-exploration
+    priority: should
+    depends_on: []
+    readiness: needs-splitting
+    slice: compact-timeline
+    ac_count: 6
+    notes: >
+      6 ACs bundle three distinct concerns: (1) argument parsing robustness -- flags
+      before session before ranges (AC1, AC3); (2) help text formatting -- consistent
+      short/long flag ordering (AC2); (3) CLI naming conventions -- uppercase shortcuts
+      -M/-U/-T, lowercase -a exception, xs tool name, no section headers (AC4, AC5, AC6).
+      Split suggestion: (a) argument parsing robustness (AC1, AC3) -- fold into CLI-002
+      or walking skeleton; (b) help text formatting (AC2) -- defer to implementation
+      polish; (c) naming conventions (AC4, AC5, AC6) -- AC4 is already part of FLT-006/007/008/009
+      shortcut stories, AC5 is already covered by DSP-001/002/003 (no headers), AC6 is
+      infrastructure setup.
+
+  - id: CLI-009
+    title: "Remove deprecated --conversation flag"
+    epic: cli-interface
+    theme: local-exploration
+    priority: should
+    depends_on: []
+    readiness: needs-reframing
+    slice: basic-filtering
+    ac_count: 2
+    notes: >
+      2 ACs. This is a non-feature: the flag should not exist. In a greenfield TDD
+      implementation, this is automatically satisfied by never implementing --conversation.
+      AC2 (equivalent behavior via -U -a -x Tool or -M) is already covered by FLT-003,
+      FLT-006, and FLT-012. Reframe: convert to a validation note on FLT-003/FLT-012
+      documenting the design decision to not include --conversation, rather than
+      maintaining as a standalone story.
+
+summary:
+  total: 36
+  by_priority:
+    must: 19
+    should: 14
+    could: 3
+  by_readiness:
+    ready: 22
+    needs-beefing-up: 3
+    needs-splitting: 3
+    merge-candidate: 4
+    needs-reframing: 4
+  by_slice:
+    walking-skeleton: 2
+    compact-timeline: 5
+    basic-filtering: 16
+    range-selection: 8
+    truncated-full-modes: 2
+    advanced-display: 1
+    session-discovery: 2
+    search: 0
+    export: 0
+    post-filter-head-tail: 0
+    summary-mode: 0
+    sidechain: 0
+    fetch-pipeline: 0
+    compaction-recovery: 0

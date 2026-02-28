@@ -1,0 +1,1910 @@
+meta:
+  title: 'Pass 6: Story Analysis for Implementation Slicing'
+  generated: '2026-02-28'
+  method: '3 parallel Opus agents (group1: parsing+formatting, group2: filtering+range+display+cli, group3:
+    search+export+sidechain+summary+context+fetch)'
+  total_stories: 108
+  group_files:
+  - synthesis/pass6-analysis-group1.yaml
+  - synthesis/pass6-analysis-group2.yaml
+  - synthesis/pass6-analysis-group3.yaml
+  verification:
+    priorities_match_source: true
+    ac_counts_match_source: true
+    no_duplicates: true
+summary:
+  by_priority:
+    must: 51
+    should: 48
+    could: 9
+  by_readiness:
+    ready: 64
+    needs-beefing-up: 13
+    merge-candidate: 12
+    needs-splitting: 10
+    needs-reframing: 9
+  by_slice:
+    compact-timeline: 19
+    basic-filtering: 17
+    advanced-display: 11
+    fetch-pipeline: 10
+    walking-skeleton: 9
+    range-selection: 8
+    search: 7
+    compaction-recovery: 7
+    truncated-full-modes: 6
+    export: 5
+    session-discovery: 4
+    sidechain: 3
+    summary-mode: 2
+stories:
+- id: PRS-001
+  title: Load session file by path
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: must
+  depends_on: []
+  readiness: ready
+  slice: walking-skeleton
+  ac_count: 5
+  notes: '5 specific, observable ACs covering: valid path loading, local session parsing, GitHub Actions
+    session parsing, missing file error, and large file performance. Single cohesive behavior: accept
+    a file path and parse it. All ACs are Given/When/Then and describe external behavior.
+
+    '
+- id: PRS-002
+  title: Discover session by substring match
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-001
+  readiness: needs-splitting
+  slice: session-discovery
+  ac_count: 9
+  notes: '9 ACs but covers three distinct, independently testable behaviors: (1) unique substring match
+    -> auto-load (AC1,AC4-AC8), (2) multiple match -> interactive menu (AC2), (3) fallback to ~/.claude/projects/
+    (AC9). Split suggestion: PRS-002a (substring matching with various identifier types), PRS-002b (interactive
+    disambiguation menu), PRS-002c (fallback directory search). AC3 (no match error) belongs with PRS-002a.
+
+    '
+- id: PRS-003
+  title: Parse multi-line JSON objects in JSONL
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-001
+  readiness: ready
+  slice: walking-skeleton
+  ac_count: 4
+  notes: '4 specific ACs covering: multi-line JSON parsing, single-line backward compatibility, line accumulation
+    logic, and performance on large files. Single cohesive behavior: parse JSONL regardless of formatting
+    style. All ACs describe observable external behavior.
+
+    '
+- id: PRS-004
+  title: Continue processing despite parse errors
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-001
+  readiness: ready
+  slice: walking-skeleton
+  ac_count: 4
+  notes: '4 specific ACs: malformed object skipping, warning emission, truncated file handling, and SIGPIPE
+    graceful exit. All are observable behaviors. Single cohesive concern: resilient parsing. AC4 (SIGPIPE)
+    is slightly tangential but reasonable to keep here as it is about graceful error handling during output.
+
+    '
+- id: PRS-005
+  title: Build unified chronological timeline
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-001
+  - PRS-003
+  readiness: needs-splitting
+  slice: walking-skeleton
+  ac_count: 7
+  notes: '7 ACs but covers two distinct concerns: (1) timeline construction with sequence numbering (AC1-AC6),
+    and (2) timestamp/duration computation (AC7). AC3 (content block expansion into separate timeline
+    entries) is a significant sub-behavior that could be its own story. Split suggestion: PRS-005a (basic
+    timeline: events get contiguous sequence numbers, all types included), PRS-005b (content block expansion:
+    multi-block messages become separate entries), PRS-005c (session time metadata from timestamps). PRS-005a
+    belongs in walking-skeleton; PRS-005b in compact-timeline; PRS-005c in summary-mode.
+
+    '
+- id: PRS-006
+  title: Handle Claude Code format versions (1.x vs 2.x)
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-001
+  readiness: ready
+  slice: walking-skeleton
+  ac_count: 5
+  notes: '5 specific ACs: 1.x parsing, 2.x parsing, version detection, tool name preservation, and graceful
+    fallback for missing version field. Single cohesive behavior: handle format versions transparently.
+    All ACs describe observable behavior. Well-formed for testing.
+
+    '
+- id: PRS-007
+  title: Parse slash commands from XML tags
+  epic: jsonl-parsing
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-001
+  readiness: ready
+  slice: advanced-display
+  ac_count: 5
+  notes: '5 specific ACs covering: command name extraction, status message extraction, combined tag parsing,
+    slash command classification, and regular message non-classification. Single cohesive behavior: parse
+    XML-tagged slash commands. All ACs are observable and testable.
+
+    '
+- id: PRS-008
+  title: Extract bash content from XML tags
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-001
+  readiness: needs-beefing-up
+  slice: advanced-display
+  ac_count: 3
+  notes: 'Only 3 ACs. Missing edge cases: multiline bash commands, bash commands with both stdout and
+    stderr, empty output, error exit codes. AC2 (@filename context drop) is actually a separate behavior
+    that should either be its own story or removed from this one. The XML tag structure (<bash-input>,
+    <bash-stdout>, <bash-stderr>) needs more specific ACs about what is extracted from each tag. Suggest
+    adding ACs for: bash command with no output, bash with only stderr, multiline bash command content.
+
+    '
+- id: PRS-009
+  title: Detect user interruptions in session
+  epic: jsonl-parsing
+  theme: console-replay
+  priority: could
+  depends_on:
+  - PRS-001
+  readiness: ready
+  slice: advanced-display
+  ac_count: 5
+  notes: '5 specific ACs covering both interruption patterns (tool_result with interrupt content, user
+    text with interrupt marker), normal completion distinction, and summary label. Single cohesive behavior:
+    detect and classify interruptions. AC5 (summary label) crosses into summary-mode territory but is
+    acceptable as it defines the classification output.
+
+    '
+- id: PRS-010
+  title: Track isMeta and caveat message flags
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-001
+  readiness: ready
+  slice: advanced-display
+  ac_count: 5
+  notes: '5 specific ACs covering: isMeta flag tracking, caveat message identification, isCompactSummary
+    flag tracking, regular message baseline, and userType field ignored. Single cohesive behavior: track
+    boolean flags on user messages. All ACs are observable and testable. AC3 (isCompactSummary) connects
+    to compaction-recovery but is a parsing concern.
+
+    '
+- id: PRS-011
+  title: Load and parse agent transcript files
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-001
+  readiness: needs-beefing-up
+  slice: session-discovery
+  ac_count: 4
+  notes: '4 ACs but they are somewhat vague. AC1 says "automatically discovered and loaded" without specifying
+    the discovery mechanism. AC3 jumps to search behavior (-S flag) which belongs in the search epic.
+    AC4 says "marked with agentId" without specifying exactly how. Missing: what happens when agent files
+    have different format versions, how agent events interleave with main timeline, error handling for
+    missing/corrupt agent files. The story also includes non-AC metadata (current_behavior, file_patterns,
+    agent_file_fields, discovery_method) that should inform ACs but currently does not.
+
+    '
+- id: PRS-012
+  title: Preserve raw JSONL objects for JSON/JSONL export
+  epic: jsonl-parsing
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-001
+  - PRS-005
+  readiness: ready
+  slice: export
+  ac_count: 4
+  notes: '4 specific ACs: --json array output, --jsonl line-per-object output, filter passthrough, and
+    sequence number availability. Single cohesive behavior: raw object preservation for export modes.
+    AC4 (sequence number) notes ambiguity ("either injected or derivable") which is acceptable as it captures
+    the unresolved design detail without being vague about the requirement.
+
+    '
+- id: PRS-013
+  title: Extract content blocks from message objects
+  epic: jsonl-parsing
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-001
+  - PRS-003
+  readiness: ready
+  slice: walking-skeleton
+  ac_count: 6
+  notes: '6 specific ACs covering all content block types: text, tool_use, thinking, tool_result, plain
+    string content, and multi-block expansion. Single cohesive behavior: extract typed content blocks
+    from message objects. All ACs are observable and testable. AC6 (multi-block ordering) connects to
+    PRS-005 timeline building but is correctly scoped as an extraction concern.
+
+    '
+- id: FMT-001
+  title: Format user messages with > prefix
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 4
+  notes: '4 specific ACs covering truncated, compact, full modes, and multiline compact handling. Single
+    cohesive behavior: user message formatting across display modes. All ACs describe observable output
+    format with exact symbols. Well-formed for testing with golden file comparison.
+
+    '
+- id: FMT-002
+  title: Format assistant text messages with play button symbol
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 5
+  notes: '5 specific ACs covering: truncated mode, compact mode, full mode, tool-only assistant messages,
+    and multiline non-truncation in truncated mode. Single cohesive behavior: assistant message formatting.
+    All ACs are observable with exact symbol specifications. AC5 (assistant text NOT truncated in truncated
+    mode) is an important negative requirement.
+
+    '
+- id: FMT-003
+  title: Format Bash tool calls with command
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 4
+  notes: '4 specific ACs: truncated mode format, full first line (no truncation), compact mode format,
+    multiline command collapse. Single cohesive behavior: Bash tool call formatting. Well-formed with
+    exact format strings. Could be merged into FMT-022 (generic tool format) since Bash is just a specific
+    case of ToolName(param), but the command field extraction and user''s strong opinions about format
+    justify keeping it separate.
+
+    '
+- id: FMT-004
+  title: Format Edit tool calls with file path
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: merge-candidate
+  slice: compact-timeline
+  ac_count: 4
+  notes: '4 ACs but this is a specific instance of the generic ToolName(file_path) pattern that FMT-022
+    already covers. Edit, Write, and MultiEdit all use the same .input.file_path extraction. Should merge
+    into FMT-022 as test cases rather than a separate story. The only distinguishing behavior is the file_path
+    field name, which FMT-022''s parameter extraction chain already handles.
+
+    '
+- id: FMT-005
+  title: Format Read tool calls with file path
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: merge-candidate
+  slice: compact-timeline
+  ac_count: 2
+  notes: 'Only 2 ACs and both describe the same generic ToolName(file_path) pattern as FMT-004 and FMT-022.
+    Should merge into FMT-022 as a test case. Read uses .input.file_path which is already in FMT-022''s
+    parameter extraction chain. No unique behavior justifies a separate story.
+
+    '
+- id: FMT-006
+  title: Format thinking blocks with teardrop-spoked asterisk
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: truncated-full-modes
+  ac_count: 3
+  notes: '3 ACs covering truncated, compact, and full mode. Slightly under the 4 AC threshold but each
+    AC is specific and observable with exact symbol (asterisk) specification. The behavior is genuinely
+    simple (symbol + label), so 3 ACs cover it adequately. Full mode AC3 mentions "followed by full thinking
+    content" which connects to FMT-011 but is correctly scoped here as the header format.
+
+    '
+- id: FMT-007
+  title: Format tool results with indentation prefix and indentation
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 6
+  notes: '6 specific ACs covering: truncated prefix format, multiline truncation, compact mode, full mode,
+    interrupted content, and filter pairing. Single cohesive behavior: tool result formatting. All ACs
+    are observable with exact format strings. AC5 (interrupted) and AC6 (filter pairing) add edge cases
+    that round out the story well.
+
+    '
+- id: FMT-008
+  title: Truncate multiline content with first [...] last pattern
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 4
+  notes: '4 specific ACs: multiline truncation, single-line no-truncation, tool result truncation, and
+    unhandled tool parameter truncation. Single cohesive behavior: compact mode multiline collapsing.
+    All ACs describe the same pattern applied to different content types. Well-formed for testing.
+
+    '
+- id: FMT-009
+  title: Show (No content) for empty tool results
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - FMT-007
+  readiness: needs-beefing-up
+  slice: compact-timeline
+  ac_count: 2
+  notes: 'Only 2 ACs (truncated and compact mode). Missing: full mode behavior for empty results, what
+    counts as "empty" (null content? empty string? whitespace only?), behavior for empty tool_use input
+    (not just empty results). The behavior is simple but edge case definition is needed. Suggest adding
+    ACs for: full mode display, null vs empty string vs whitespace-only content.
+
+    '
+- id: FMT-010
+  title: Format Task tool calls (subagents)
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-005
+  readiness: merge-candidate
+  slice: compact-timeline
+  ac_count: 2
+  notes: 'Only 2 ACs and both describe the generic ToolName(param) pattern. Task tool uses a "quoted prompt
+    excerpt" which is just a specific parameter extraction. Should merge into FMT-022 as a test case for
+    the "quoted arg" parameter display variant. No unique behavior beyond the generic tool format.
+
+    '
+- id: FMT-011
+  title: Display thinking blocks with content preview
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - FMT-006
+  - FMT-008
+  readiness: needs-beefing-up
+  slice: truncated-full-modes
+  ac_count: 3
+  notes: '3 ACs covering compact multiline, compact single-line, and truncated mode. Missing: full mode
+    thinking content display (how is full thinking text rendered? indentation? line-by-line?), very long
+    thinking blocks in compact mode, empty thinking blocks. AC1 combines the thinking header (asterisk
+    Thinking...) with the first/last pattern in one line -- needs clarity on whether "Thinking..." is
+    followed by content on same line or next line. Suggest adding: full mode rendering, empty thinking
+    block handling.
+
+    '
+- id: FMT-012
+  title: Format slash commands as user messages with running indicator
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-007
+  readiness: ready
+  slice: advanced-display
+  ac_count: 3
+  notes: '3 ACs covering truncated mode, compact mode, and XML parsing. Slightly under 4 AC threshold
+    but the behavior is well-defined and the format difference between truncated (with "is running...")
+    and compact (command only) is clearly captured. The validation notes mention a conflict about the
+    > prefix (0841:1257) that was resolved in favor of > prefix. Adequate for testing.
+
+    '
+- id: FMT-013
+  title: Display local bash commands with ! prefix
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-008
+  readiness: ready
+  slice: advanced-display
+  ac_count: 3
+  notes: '3 ACs covering compact mode, truncated mode, and XML tag parsing. Slightly under 4 AC threshold
+    but the behavior is specific and observable. The ! prefix is distinct from Claude''s Bash() tool calls.
+    AC3 about parsing <bash-input>, <bash-stdout>, <bash-stderr> tags could be more specific about how
+    stderr is displayed differently from stdout. Adequate for testing.
+
+    '
+- id: FMT-014
+  title: Display file references with @ prefix
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on: []
+  readiness: needs-beefing-up
+  slice: advanced-display
+  ac_count: 2
+  notes: 'Only 2 ACs (compact and truncated mode). Missing: full mode behavior, what the JSONL structure
+    looks like for @ messages (no XML tag details specified), multiple file references in one message,
+    file references with paths vs just filenames. The depends_on is empty but should depend on PRS-008
+    or a parsing story for @ message extraction. Limited source evidence (user deferred to future work).
+    Suggest adding: full mode AC, JSONL structure parsing AC, multiple @ references.
+
+    '
+- id: FMT-015
+  title: Apply consistent multi-line truncation rules in truncated mode
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - FMT-007
+  readiness: ready
+  slice: truncated-full-modes
+  ac_count: 5
+  notes: '5 specific ACs: >3 lines truncation, <=3 lines no truncation, total line count (not remaining),
+    no interactive elements, and assistant text non- truncation. Single cohesive behavior: truncated mode
+    truncation rules. All ACs are observable and several are important negative requirements (no ctrl+r,
+    no assistant truncation). Well-formed for testing.
+
+    '
+- id: FMT-016
+  title: Use 2-space indentation consistently
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on: []
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 4
+  notes: '4 specific ACs: tool result base indentation, continuation line consistency, line number accommodation,
+    and todo item continuation indent. Single cohesive behavior: indentation rules. All ACs are observable
+    and measurable (exact space counts). AC4 about todo items is slightly cross-cutting but acceptable
+    as an indentation rule.
+
+    '
+- id: FMT-017
+  title: Display sequence numbers with clear rules per display mode
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - DSP-004
+  readiness: merge-candidate
+  slice: compact-timeline
+  ac_count: 6
+  notes: '6 ACs but this story describes display mode behavior that is inherent to DSP-004 (display mode
+    selection). The sequence number rules (hidden in truncated, shown in compact/full, auto-shown when
+    filtering) are properties of the display modes themselves, not a separate formatting concern. Should
+    merge into DSP-004 where display mode behavior is defined. The --show-numbers flag (AC5) is a CLI
+    concern that could live in CLI stories.
+
+    '
+- id: FMT-018
+  title: Show -- separator for discontinuous sections
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - DSP-005
+  readiness: merge-candidate
+  slice: basic-filtering
+  ac_count: 3
+  notes: '3 ACs covering: gap separator, no separator for contiguous, and context lines with separator.
+    This behavior is tightly coupled to the filtering pipeline (DSP-005) -- the separator only appears
+    when filtering creates gaps. Should merge into DSP-005 (filtered display) or the search story (SRC-006
+    context lines) as it describes a formatting detail of filtered output, not a standalone behavior.
+
+    '
+- id: FMT-019
+  title: Handle isMeta and caveat messages
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-010
+  readiness: ready
+  slice: advanced-display
+  ac_count: 4
+  notes: '4 specific ACs: [META] prefix in compact mode, caveat display in truncated mode, no > prefix
+    on caveats, and filter interaction. Single cohesive behavior: meta/caveat message display formatting.
+    All ACs are observable. AC4 (filter interaction) is slightly vague ("may be excluded") but captures
+    the design intent adequately.
+
+    '
+- id: FMT-020
+  title: Format TodoWrite and TodoRead with special display
+  epic: console-formatting
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-005
+  - FMT-007
+  readiness: needs-splitting
+  slice: advanced-display
+  ac_count: 6
+  notes: '6 ACs but covers three distinct behaviors: (1) tool call header formatting ("Update Todos" /
+    "Read Todos") in AC1-AC3, (2) tool result formatting with checkbox symbols in AC4-AC5, and (3) indentation
+    rules in AC6. The todo result formatting with status symbols and priority codes is complex enough
+    to be its own story. Split suggestion: FMT-020a (TodoWrite/TodoRead call headers across modes), FMT-020b
+    (todo item result rendering with checkbox symbols and priorities).
+
+    '
+- id: FMT-021
+  title: Display user interruption indicator in timeline
+  epic: console-formatting
+  theme: console-replay
+  priority: could
+  depends_on:
+  - PRS-009
+  - FMT-007
+  readiness: ready
+  slice: advanced-display
+  ac_count: 3
+  notes: '3 ACs covering: interrupted tool result display, interrupt user message skipping, and compact
+    mode format. Slightly under 4 AC threshold but the behavior is well-defined. AC2 (silently skip user
+    interrupt text message) is an important negative requirement. The behavior is simple and the ACs are
+    specific and observable. Adequate for testing.
+
+    '
+- id: FMT-022
+  title: Display generic tool calls with appropriate parameter extraction
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: needs-splitting
+  slice: compact-timeline
+  ac_count: 7
+  notes: '7 ACs but covers two distinct concerns: (1) the parameter extraction chain (command > file_path
+    > path > pattern > fallback) which is a parsing/mapping concern (AC1, AC7), and (2) tool-specific
+    parameter display formats for Grep, LS, Glob, WebSearch, MCP tools (AC2-AC6). Split suggestion: FMT-022a
+    (parameter extraction chain: given any tool, extract the most meaningful parameter using priority
+    chain), FMT-022b (tool-specific display variants: Grep shows "pattern" in path, WebSearch shows quoted
+    query, etc.). This story should also absorb FMT-004, FMT-005, and FMT-010 as they are specific instances
+    of the generic pattern.
+
+    '
+- id: FMT-023
+  title: Insert blank lines between messages in truncated mode
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on:
+  - FMT-001
+  - FMT-002
+  - FMT-007
+  readiness: ready
+  slice: truncated-full-modes
+  ac_count: 5
+  notes: '5 specific ACs covering: user message spacing, assistant message spacing, tool call-to-result
+    grouping (no blank line), tool result trailing spacing, and compact mode no-spacing. Single cohesive
+    behavior: inter-message spacing rules. All ACs are observable. AC3 (no blank line between tool call
+    and result) is an important grouping rule. Well-formed for testing.
+
+    '
+- id: FMT-024
+  title: No section headers (=== TIMELINE ===) in output
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on: []
+  readiness: merge-candidate
+  slice: compact-timeline
+  ac_count: 2
+  notes: 'Only 2 ACs and both are negative requirements (do not output headers). This is a constraint/principle
+    rather than a standalone story. Should merge into the display mode stories (DSP-001/002/003) as a
+    negative test case, or be captured as part of PRIN-006 (console fidelity) / FMT-025 (no emojis) as
+    a cross-cutting output purity constraint. Too fine-grained for its own acceptance test cycle.
+
+    '
+- id: FMT-025
+  title: Prohibit emoji usage in all display modes
+  epic: console-formatting
+  theme: console-replay
+  priority: must
+  depends_on: []
+  readiness: merge-candidate
+  slice: compact-timeline
+  ac_count: 2
+  notes: 'Only 2 ACs and both are cross-cutting constraints (no emojis anywhere, only use specific symbols).
+    This is a principle/constraint rather than a standalone story. Should be captured as a test case within
+    the first display mode story or as a cross-cutting test assertion (e.g., verify no emoji codepoints
+    in any golden file output). Merging with FMT-024 into a single "output purity" negative test story
+    would also work.
+
+    '
+- id: FLT-001
+  title: Filter to include specific tools by name
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 4
+  notes: '4 ACs cover single tool include, comma-separated list, tool_use+tool_result pairing, and non-tool
+    event exclusion. All specific, observable, Given/When/Then format. Strong evidence from 9 sources
+    across multiple sessions (a40c, b475, fa1a, day-025). Comma-separated format deliberately matches
+    Claude Code''s allowedTools syntax.
+
+    '
+- id: FLT-002
+  title: Filter to exclude specific tools by name
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 4
+  notes: '4 ACs for single exclude, comma-separated, include+exclude composition, and symmetric syntax.
+    Semantics explicitly defined by user: include is whitelist first, then exclude removes from included
+    set (day-025:5241). User rejected renaming --include to --filter because it breaks the duality (cc2d:665).
+    Well-specified.
+
+    '
+- id: FLT-003
+  title: Filter by Message virtual entity
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 3
+  notes: '3 ACs for Message matching user+assistant, excluding tool-only assistant messages, and bidirectional
+    use in --include/--exclude. Replaces deprecated --conversation. Although only 3 ACs, each is specific
+    and the behavior is well-bounded. The edge case of assistant messages with only tool_use content (AC2)
+    is particularly important.
+
+    '
+- id: FLT-004
+  title: Filter by Tool virtual entity
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 4
+  notes: '4 ACs for include Tool, matches all tool types, exclude Tool, and no-parameter constraint. Complementary
+    to FLT-003. Each AC is specific. The "no parameters" constraint (AC4) is important: Tool is a coarse
+    filter; fine-grained filtering uses specific tool names with optional globs.
+
+    '
+- id: FLT-005
+  title: Support glob patterns in tool filters
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - FLT-001
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 7
+  notes: '7 ACs covering Bash(git *), Edit(**/specs/**), Tool(mcp__*), fnmatch semantics, bare tool name
+    fallback, comma-separated mix, and per-tool parameter matching (Edit/Write match file_path, Bash matches
+    command). Very strong evidence from 12 sources. User explicitly corrected agent: uses glob/fnmatch,
+    NOT regex (b475:838). Comprehensive and well-specified.
+
+    '
+- id: FLT-006
+  title: -M shortcut for all messages
+  epic: filtering
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - FLT-003
+  readiness: merge-candidate
+  slice: basic-filtering
+  ac_count: 3
+  notes: '3 ACs. Trivial alias for --include Message. AC3 (implies timeline mode) is really part of CLI-006
+    (implicit timeline). The shortcut itself is a single argparse alias. Merge candidate with FLT-007,
+    FLT-008, FLT-009 into a single "virtual entity filter shortcuts" story since all four shortcuts follow
+    the same pattern: single-letter flag that expands to --include <VirtualEntity> and implies timeline
+    mode.
+
+    '
+- id: FLT-007
+  title: -U shortcut for user messages
+  epic: filtering
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - FLT-003
+  readiness: merge-candidate
+  slice: basic-filtering
+  ac_count: 2
+  notes: 'Only 2 ACs. Trivial alias for --include User. Same pattern as FLT-006/008/009. Merge into a
+    single "filter shortcuts" story covering all four virtual entity shortcuts (-M, -U, -a, -T) with shared
+    ACs for the common behavior (alias expansion, implied timeline mode) and per-shortcut ACs for the
+    specific entity.
+
+    '
+- id: FLT-008
+  title: -a shortcut for assistant messages
+  epic: filtering
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - FLT-003
+  readiness: merge-candidate
+  slice: basic-filtering
+  ac_count: 3
+  notes: '3 ACs including -U + -a combination equivalence to -M. Trivial alias for --include Assistant.
+    Lowercase -a deliberately chosen because uppercase -A is reserved for grep-style context lines (caf2:316).
+    Merge with FLT-006/007/009 into single shortcuts story. AC3 (-U + -a = -M equivalence) is a good combined
+    behavior test.
+
+    '
+- id: FLT-009
+  title: -T shortcut for all tools
+  epic: filtering
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - FLT-004
+  readiness: merge-candidate
+  slice: basic-filtering
+  ac_count: 3
+  notes: '3 ACs. Trivial alias for --include Tool. Commonly combined with --no-tool-results (AC2). Merge
+    with FLT-006/007/008 into single shortcuts story. The --no-tool-results interaction (AC2) can be an
+    AC in the merged story or remain as a cross-reference to FLT-010.
+
+    '
+- id: FLT-010
+  title: --no-tool-results flag
+  epic: filtering
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - FLT-004
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 4
+  notes: '4 ACs for result suppression, default inclusion, -T combination, and separate-event semantics.
+    User corrected agent''s misunderstanding: this suppresses separate tool_result events, not truncating
+    content within a result (caf2:288). Clear semantics for a distinct behavioral concern. Each AC is
+    specific and testable.
+
+    '
+- id: FLT-011
+  title: Compose multiple filters with AND semantics
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - FLT-001
+  - FLT-002
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 7
+  notes: '7 ACs covering pipeline ordering (search -> range -> include -> exclude -> context), range+filter
+    interaction, OR within include, include-then-exclude composition, implicit timeline activation, context
+    dedup, and search+filter integration. Core architectural story defining the canonical filter pipeline.
+    User defined the ordering explicitly twice in separate sessions (caf2:316, caf2:936). Context dedup
+    (no duplicate events) flagged as critical bug fix (caf2:1079). Comprehensive and well-specified.
+
+    '
+- id: FLT-012
+  title: Handle -M -x Tool interaction correctly
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - FLT-006
+  - FLT-002
+  - FLT-004
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 5
+  notes: '5 ACs covering clean conversation view, tool-only assistant suppression, mixed text+tool assistant
+    handling, equivalence with old --conversation, and display-level suppression of tool announcements.
+    The historical notes about a bug in the previous implementation describe the correct behavior we need
+    to implement: when -x Tool is specified, assistant messages containing only tool_use blocks must be
+    completely suppressed (not shown as [Tools: ...] announcements). For a greenfield build, this is simply
+    a specification of correct filtering behavior, not a bug to fix. All 5 ACs are specific and observable.
+
+    '
+- id: FLT-013
+  title: Filter by Thinking virtual entity
+  epic: filtering
+  theme: local-exploration
+  priority: could
+  depends_on:
+  - PRS-005
+  readiness: needs-beefing-up
+  slice: advanced-display
+  ac_count: 2
+  notes: 'Only 2 ACs. Fundamentally unresolved whether thinking/extended reasoning blocks appear in the
+    JSONL format at all (agent questioned this in b475:1502). Needs format investigation before any implementation.
+    No golden file. ACs are vague ("thinking/reasoning blocks" without specifying what these look like
+    in JSON). Beef up: (1) verify thinking block JSON format, (2) add AC for sessions without thinking
+    content, (3) add AC for interaction with -a (assistant) shortcut.
+
+    '
+- id: FLT-014
+  title: --git as convenience alias for --include Bash(git *)
+  epic: filtering
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - FLT-005
+  - FLT-001
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 3
+  notes: '3 ACs for equivalence with --include pattern, delegation to centralized filtering, and cd-prefix
+    handling. The known limitation with "cd dir && git commit" patterns is documented in AC3 (b475:2351).
+    Although only 3 ACs, each addresses a distinct concern and together they cover the key behaviors.
+    The cd-prefix issue is a design decision to surface, not a missing AC.
+
+    '
+- id: FLT-015
+  title: Timeline shows all events when no filters specified
+  epic: filtering
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: needs-reframing
+  slice: walking-skeleton
+  ac_count: 2
+  notes: 'Only 2 ACs describing a negative constraint (no implicit filtering without explicit filter flags).
+    This is better expressed as a design invariant or principle rather than a standalone user story. Already
+    captured by PRIN-007 (no implicit filtering). Reframe: fold into acceptance criteria of the timeline
+    display story (CLI-002 or DSP-001) as a negative test case, or keep purely as a cross-cutting principle
+    validation rather than a feature story.
+
+    '
+- id: RNG-001
+  title: Select single item by index
+  epic: range-selection
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: range-selection
+  ac_count: 3
+  notes: '3 ACs for valid index, invalid index (0/negative disambiguation), and out-of-bounds. Bare positive
+    integer = specific index (not head), resolved explicitly by user (b475:245-246). Out-of-bounds produces
+    empty output without error. Although only 3 ACs, the semantics are clear and complete for this narrow
+    behavior. The 0-vs-1 indexing question could use an additional AC, but the existing ACs cover the
+    key observable behaviors.
+
+    '
+- id: RNG-002
+  title: Select first N items with +N syntax
+  epic: range-selection
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: range-selection
+  ac_count: 4
+  notes: '4 ACs for +N selection, exceeds-length graceful handling, combined with filters (pipeline ordering),
+    and argparse robustness with filter flags. Pipeline ordering confirmed by user as intentional design
+    (1e83:836). AC4 addresses a real bug discovered during usage. Well-specified.
+
+    '
+- id: RNG-003
+  title: Select last N items with -N syntax
+  epic: range-selection
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: range-selection
+  ac_count: 3
+  notes: '3 ACs for -N selection, exceeds-length graceful handling, and combined with filter. Known gap
+    documented: -N applies before search, so "last N search results" is not possible with this syntax
+    (user identified e583:1601-1700; separate --tail flag proposed). The 3 ACs cover the range-selection
+    behavior well. The gap is a separate concern addressed by CONF-002 (--head/--tail post-filter).
+
+    '
+- id: RNG-004
+  title: Select range with N-M syntax
+  epic: range-selection
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: range-selection
+  ac_count: 5
+  notes: '5 ACs for valid inclusive range, exact items with no gaps, fully out-of-bounds, partially out-of-bounds,
+    and invalid format error message. Gapless indices requirement emerged from a user-reported bug (0841:F004).
+    Error message format confirmed (caf2:F001). Comprehensive coverage.
+
+    '
+- id: RNG-005
+  title: Select from N onwards with N+ syntax
+  epic: range-selection
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: range-selection
+  ac_count: 4
+  notes: '4 ACs for N+ selection, beyond-length empty output, N- alias equivalence, and 1+ = all items.
+    Both N+ and N- syntaxes supported as equivalents. User hesitated about naming/discoverability but
+    kept it (caf2:974). Note the syntactic similarity but semantic difference: +N = head (first N), N+
+    = from N onwards. All 4 ACs are specific and testable.
+
+    '
+- id: RNG-006
+  title: Combine multiple indices and ranges as free positional arguments
+  epic: range-selection
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-005
+  - RNG-001
+  - RNG-002
+  - RNG-003
+  - RNG-004
+  - RNG-005
+  readiness: ready
+  slice: range-selection
+  ac_count: 5
+  notes: '5 ACs for multiple args, mixed types with union semantics, interspersed with flags, independent
+    of display mode, and consistent syntax across features. Depends on all other range stories. User explicitly
+    requested multiple free positional args (b475:239). AC5 (consistent parse_range) ensures a single
+    parsing function for all range-consuming features.
+
+    '
+- id: RNG-007
+  title: Range selection applies to full timeline before filtering
+  epic: range-selection
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  - RNG-001
+  - FLT-001
+  readiness: needs-reframing
+  slice: range-selection
+  ac_count: 4
+  notes: '4 ACs describing pipeline ordering (range before filters) and centralized implementation. This
+    is a design invariant, not a standalone feature. Overlaps significantly with FLT-011 (filter composition)
+    which already specifies the canonical pipeline ordering (search -> range -> include -> exclude ->
+    context). AC3 (centralized at event array level) and AC4 (stable indices) are architectural constraints.
+    Reframe: merge pipeline ordering into FLT-011, keep centralized implementation as an architectural
+    principle (PRIN-002), and fold stable-indices into DSP-004.
+
+    '
+- id: DSP-001
+  title: Compact display mode (one line per event)
+  epic: display-modes
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - FMT-001
+  - FMT-002
+  readiness: needs-splitting
+  slice: compact-timeline
+  ac_count: 8
+  notes: '8 ACs cover single-line enforcement, tool format, multiline collapse (first [...] last), thinking
+    preview, no emojis, no section headers, MCP param newlines, and grep/head/tail workflow support. Very
+    broad scope spanning: (1) basic compact rendering with [seq] prefix, (2) multiline content collapsing
+    rules, (3) negative constraints (no emojis, no headers). Split suggestion: (a) basic compact mode
+    (AC1, AC2, AC8) -- single-line per event with [seq] prefix using same Tool(param) format as truncated
+    mode; (b) compact multiline collapsing (AC3, AC4, AC7) -- first_line [...] last_line pattern for messages,
+    thinking, and MCP params; (c) merge AC5/AC6 into cross-cutting constraints (already covered by FMT-024/FMT-025
+    and PRIN-006). Strong evidence from 7 sessions.
+
+    '
+- id: DSP-002
+  title: Truncated display mode (console-like)
+  epic: display-modes
+  theme: console-replay
+  priority: must
+  depends_on:
+  - FMT-001
+  - FMT-002
+  readiness: needs-splitting
+  slice: truncated-full-modes
+  ac_count: 10
+  notes: '10 ACs. The most heavily evidenced story (20 sources). Covers symbols (>, bullet, hook, asterisk),
+    3-line truncation with TOTAL count, no interactive elements (ctrl+r removed), no seq numbers by default,
+    full assistant text, full bash first line, blank line spacing, 2-space indent before hook, no headers,
+    no emojis. Split suggestion: (a) basic truncated rendering (AC1, AC3, AC4, AC9, AC10) -- symbols,
+    no interactive elements, no seq numbers, no headers, no emojis; (b) truncation rules (AC2, AC5, AC6)
+    -- 3-line limit with TOTAL count, assistant text not truncated, bash command full first line; (c)
+    spacing and indentation (AC7, AC8) -- blank lines between items, 2-space indent before hook symbol.
+    reconstruct.jq is the authoritative format reference.
+
+    '
+- id: DSP-003
+  title: Full display mode (no truncation)
+  epic: display-modes
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - FMT-001
+  - FMT-002
+  - DSP-002
+  readiness: ready
+  slice: truncated-full-modes
+  ac_count: 7
+  notes: '7 ACs for complete tool result display, no truncation indicator, same formatting as truncated
+    mode, no seq numbers by default, no headers, mutual exclusivity with --truncated, and rich-text markdown
+    formatting. Full mode is cleanly defined as "truncated mode minus the truncation." All ACs are specific
+    and observable. Depends on DSP-002 since it reuses the same rendering with truncation disabled.
+
+    '
+- id: DSP-004
+  title: Sequence number display control
+  epic: display-modes
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - DSP-001
+  - DSP-002
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 7
+  notes: '7 ACs covering compact always shows [seq], truncated hides by default, truncated --show-numbers
+    forces display, full hides by default, full --show-numbers forces display, stable numbering across
+    filters, and visible gaps in filtered output. FMT-017 duplicates this story and should be merged into
+    it. The stable-numbering requirement (AC6) is architecturally important: same event always has same
+    number regardless of display mode or active filters.
+
+    '
+- id: DSP-005
+  title: Show separator between non-contiguous sections
+  epic: display-modes
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - DSP-001
+  - DSP-004
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 4
+  notes: '4 ACs for compact mode separator, truncated/full mode separator, context window gaps, and no
+    separator for contiguous output. Follows grep convention (-- separator). FMT-018 and SRC-006 duplicate
+    this story and should be absorbed here. Evidence from 1e83 sessions with confirmed working output
+    showing -- between non-contiguous events. Well-specified.
+
+    '
+- id: CLI-001
+  title: Summary mode (default)
+  epic: cli-interface
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: walking-skeleton
+  ac_count: 5
+  notes: '5 ACs for default behavior (no mode flags = summary), filename header, hierarchical event counts
+    with inline CLI flag comments, sorted tool counts (descending, omit zero), and aligned column positions.
+    Summary serves as self-documenting tutorial for xs CLI flags (e583:70). Well-specified with specific
+    formatting requirements. Core entry point for user experience.
+
+    '
+- id: CLI-002
+  title: Timeline mode (-t/--timeline)
+  epic: cli-interface
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 5
+  notes: '5 ACs for -t chronological display, default compact mode, filter composition, boolean flag (no
+    arguments), and gapless contiguous indices. Key design decision: -t is a simple boolean flag, not
+    a filter parameter -- resolved after user identified the CLI UX problem (b475:618). Clean separation
+    of mode selection from filtering.
+
+    '
+- id: CLI-003
+  title: Git operations mode (-g/--git)
+  epic: cli-interface
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-005
+  - FLT-005
+  readiness: ready
+  slice: basic-filtering
+  ac_count: 4
+  notes: '4 ACs for git-only display, delegation to centralized filtering (not separate code path), cd-prefix
+    matching (git anywhere in command, not just prefix), and filter composition. User explicitly identified
+    --git as a separate implementation when it should be a convenience alias (b475:738). Known cd-prefix
+    limitation documented and should be addressed in the glob pattern design.
+
+    '
+- id: CLI-004
+  title: File changes mode (-f/--files)
+  epic: cli-interface
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-005
+  readiness: needs-beefing-up
+  slice: session-discovery
+  ac_count: 4
+  notes: '4 ACs are high-level. The unique value of --files is its grouped-by-file display format, which
+    cannot be replicated by simple timeline filtering. User reinstated it after deprecation (caf2:709:
+    "remove deprecation, keep unique functionality"). Beef up: (1) specify the grouped-by-file output
+    format with golden file, (2) add AC for file path deduplication across multiple edits to same file,
+    (3) add AC for distinguishing edit vs write vs create operations in the grouping, (4) clarify interaction
+    with range selection.
+
+    '
+- id: CLI-005
+  title: Created files mode (-c/--created)
+  epic: cli-interface
+  theme: local-exploration
+  priority: could
+  depends_on:
+  - PRS-005
+  readiness: needs-beefing-up
+  slice: session-discovery
+  ac_count: 3
+  notes: '3 ACs are vague. Limited evidence from only 3 sources. Format shows [event_index] filename with
+    indented content preview and ellipsis truncation (a40c:1197). Beef up: (1) define how "created" is
+    distinguished from "edited" (first Write to a new path?), (2) specify content preview length/truncation
+    rules, (3) add AC for sessions with no created files, (4) add golden file for the output format.
+
+    '
+- id: CLI-006
+  title: Implicit timeline mode activation
+  epic: cli-interface
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - CLI-002
+  readiness: ready
+  slice: compact-timeline
+  ac_count: 5
+  notes: '5 ACs covering filter-triggered implicit timeline, range-triggered implicit timeline, no-args
+    = summary default, search overrides implicit timeline, and --git triggers implicit timeline. The search-mode
+    override (AC4) was a known bug in the previous implementation where implicit timeline and search produced
+    duplicate output. For a greenfield build, AC4 simply specifies that search is a primary output mode
+    that takes precedence over implicit timeline activation. All 5 ACs describe observable behavior clearly.
+
+    '
+- id: CLI-007
+  title: Support multiple index selection
+  epic: cli-interface
+  theme: local-exploration
+  priority: could
+  depends_on:
+  - RNG-001
+  readiness: needs-reframing
+  slice: range-selection
+  ac_count: 5
+  notes: '5 ACs overlap significantly with RNG-006 (multiple ranges). CLI-007 focuses on CLI argument
+    parsing (positional args, argparse behavior with flags) while RNG-006 focuses on the behavioral outcome
+    (union of selections). Reframe: merge CLI-specific parsing concerns (AC2 flag combination, AC5 argument
+    ordering) into RNG-006 and CLI-008 respectively, then eliminate CLI-007 as a standalone story. The
+    parsing concern is a cross-cutting implementation detail, not a separate user-facing feature.
+
+    '
+- id: CLI-008
+  title: Argument ordering rules and help text conventions
+  epic: cli-interface
+  theme: local-exploration
+  priority: should
+  depends_on: []
+  readiness: needs-splitting
+  slice: compact-timeline
+  ac_count: 6
+  notes: '6 ACs bundle three distinct concerns: (1) argument parsing robustness -- flags before session
+    before ranges (AC1, AC3); (2) help text formatting -- consistent short/long flag ordering (AC2); (3)
+    CLI naming conventions -- uppercase shortcuts -M/-U/-T, lowercase -a exception, xs tool name, no section
+    headers (AC4, AC5, AC6). Split suggestion: (a) argument parsing robustness (AC1, AC3) -- fold into
+    CLI-002 or walking skeleton; (b) help text formatting (AC2) -- defer to implementation polish; (c)
+    naming conventions (AC4, AC5, AC6) -- AC4 is already part of FLT-006/007/008/009 shortcut stories,
+    AC5 is already covered by DSP-001/002/003 (no headers), AC6 is infrastructure setup.
+
+    '
+- id: CLI-009
+  title: Remove deprecated --conversation flag
+  epic: cli-interface
+  theme: local-exploration
+  priority: should
+  depends_on: []
+  readiness: needs-reframing
+  slice: basic-filtering
+  ac_count: 2
+  notes: '2 ACs. This is a non-feature: the flag should not exist. In a greenfield TDD implementation,
+    this is automatically satisfied by never implementing --conversation. AC2 (equivalent behavior via
+    -U -a -x Tool or -M) is already covered by FLT-003, FLT-006, and FLT-012. Reframe: convert to a validation
+    note on FLT-003/FLT-012 documenting the design decision to not include --conversation, rather than
+    maintaining as a standalone story.
+
+    '
+- id: SRC-001
+  title: Basic substring search
+  epic: search
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: search
+  ac_count: 6
+  notes: '6 well-specified ACs covering: basic search, no-match output, case-insensitive matching, non-string
+    content handling, argparse edge case (-- patterns), and pipeline ordering. ACs are observable and
+    in Given/When/Then format. The bugs_found section is provenance metadata for a greenfield build --
+    the ACs already encode the correct behavior (e.g., AC4 handles list content gracefully, AC5 handles
+    -- patterns). Strong story with excellent source evidence.
+
+    '
+- id: SRC-002
+  title: Show lines after match (-A)
+  epic: search
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SRC-001
+  readiness: needs-beefing-up
+  slice: search
+  ac_count: 3
+  notes: '3 ACs covering basic -A usage, filter+context interaction, and boundary handling. Missing: AC
+    for overlapping context windows (deduplication when two matches are close), AC for -A 0 (zero context),
+    AC for -A with no search/filter active (should it be an error or no-op?). The overlap dedup requirement
+    is documented in sources but not captured in an AC here (it is in SRC-004). Should add at least one
+    overlap AC.
+
+    '
+- id: SRC-003
+  title: Show lines before match (-B)
+  epic: search
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SRC-001
+  readiness: needs-beefing-up
+  slice: search
+  ac_count: 3
+  notes: '3 ACs covering basic -B usage, search+range interaction, and boundary handling. Very similar
+    structure to SRC-002. Missing: overlap dedup AC, -B 0 case, interaction with -A (what happens if both
+    -A and -B specified without -C). Could be a merge-candidate with SRC-002 since the logic is symmetric,
+    but they map to distinct CLI flags so keeping separate is reasonable. Needs 1-2 more ACs for edge
+    cases.
+
+    '
+- id: SRC-004
+  title: Show lines before and after match (-C)
+  epic: search
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SRC-001
+  readiness: ready
+  slice: search
+  ac_count: 4
+  notes: '4 ACs covering: basic -C usage, overlap deduplication, filter+context interaction, and -C/-A/-B
+    interaction. Well-structured. AC2 (overlap merge) is the critical correctness AC. AC4 wisely flags
+    the -C + -A/-B interaction as needing a design decision. Ready for TDD as-is.
+
+    '
+- id: SRC-005
+  title: Search results displayed in timeline mode
+  epic: search
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SRC-001
+  readiness: ready
+  slice: search
+  ac_count: 6
+  notes: '6 ACs covering search interaction with -t flag, range, context, --full mode, implicit timeline
+    suppression, and include/exclude pipeline. The core requirement is AC5 (search suppresses implicit
+    timeline to prevent duplicate output). Well-suited for integration-level acceptance tests. The current_behavior
+    section is provenance metadata describing bugs from the old implementation.
+
+    '
+- id: SRC-006
+  title: Visual separators between non-contiguous search/filter results
+  epic: search
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SRC-001
+  - SRC-002
+  readiness: ready
+  slice: search
+  ac_count: 4
+  notes: '4 ACs covering: basic gap separator, context expansion gaps, merged overlap (no separator),
+    and filter results (not just search). Uses -- as separator per grep/rg convention. Cohesive single
+    behavior. Well-specified and testable.
+
+    '
+- id: SRC-007
+  title: Search as step 0 of the filter pipeline
+  epic: search
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - SRC-001
+  - FLT-001
+  - FLT-002
+  - RNG-001
+  readiness: ready
+  slice: search
+  ac_count: 4
+  notes: '4 ACs covering the full pipeline: search+range+include+exclude, search+range, search+include,
+    and search+context ordering. The design_notes section documents the canonical 5-step pipeline and
+    the known gap (tail-of-search-results). This is an integration/orchestration story that ties the pipeline
+    together. Ready for TDD.
+
+    '
+- id: EXP-001
+  title: JSON array output to stdout
+  epic: export
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: export
+  ac_count: 5
+  notes: '5 ACs covering: JSON array output, filter interaction, range interaction, raw passthrough contract,
+    and jq compatibility. The raw passthrough contract (AC4) is the critical design decision -- raw JSONL
+    objects unchanged, not transformed. Strong source evidence with user corrections. Ready for TDD.
+
+    '
+- id: EXP-002
+  title: JSONL output to stdout
+  epic: export
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: export
+  ac_count: 5
+  notes: '5 ACs covering: newline-delimited output, filter interaction, range interaction, raw passthrough
+    contract, and jq line-by-line parsing. Structurally parallel to EXP-001 but for streaming format.
+    Each line independently parseable. Ready for TDD.
+
+    '
+- id: EXP-003
+  title: Export range to JSON file
+  epic: export
+  theme: console-replay
+  priority: should
+  depends_on:
+  - PRS-005
+  - RNG-004
+  readiness: needs-splitting
+  slice: export
+  ac_count: 7
+  notes: "7 ACs but covers multiple distinct behaviors: file output (AC1), stdout with '-' (AC2), include\
+    \ filter (AC3), exclude filter (AC4), combined filters (AC5), range syntax (AC6), and replay format\
+    \ (AC7). The filter semantics (AC3-AC5) duplicate the general filter pipeline from FLT-001/FLT-002.\
+    \ Suggest splitting into: (1) --export-json RANGE OUTPUT basic file/stdout output (AC1, AC2, AC6)\
+    \ (2) --export-json filter interaction (AC3-AC5) -- may be covered by general filter\n    pipeline\
+    \ if --export-json is just another output format\n(3) Export replay format (AC7) -- separate concern\
+    \ about output schema\n"
+- id: EXP-004
+  title: Include sequence numbers in JSON/JSONL export
+  epic: export
+  theme: local-exploration
+  priority: could
+  depends_on:
+  - EXP-001
+  - EXP-002
+  readiness: needs-reframing
+  slice: export
+  ac_count: 1
+  notes: 'Only 1 AC, and it is marked UNRESOLVED in the notes. The story itself acknowledges tension with
+    the raw-passthrough contract (EXP-001-AC4, EXP-002-AC4). Adding a sequence field would modify the
+    raw objects, violating the passthrough contract. Needs reframing: either (a) define an envelope format
+    that wraps raw objects with metadata, or (b) define a separate --annotated-json flag, or (c) defer
+    entirely until the user resolves the tension. As written, this story cannot be implemented without
+    a design decision that contradicts existing accepted requirements.
+
+    '
+- id: SID-001
+  title: Display sidechain events in timeline
+  epic: sidechain-handling
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - PRS-005
+  readiness: ready
+  slice: sidechain
+  ac_count: 4
+  notes: '4 ACs covering: inline display without marking, summary inclusion, compact mode parameter display,
+    and --full mode content visibility. Cohesive story about making sidechain events visible across all
+    display modes. AC3 (compact display) and AC4 (full mode verification) add valuable coverage beyond
+    the basic case.
+
+    '
+- id: SID-002
+  title: Search includes sidechain content
+  epic: sidechain-handling
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SID-001
+  - SRC-001
+  readiness: merge-candidate
+  slice: sidechain
+  ac_count: 2
+  notes: 'Only 2 ACs. AC1 (search finds sidechain content) is a natural consequence of sidechain events
+    being in the timeline (SID-001) and search operating on the timeline (SRC-001). AC2 (list content
+    handling) is already covered by SRC-001-AC4. This story does not introduce any new behavior beyond
+    what SID-001 + SRC-001 already provide. Merge into SID-001 as a verification AC, or simply treat as
+    an integration test that validates SID-001 and SRC-001 compose correctly.
+
+    '
+- id: SID-003
+  title: Filter sidechain events with dedicated flag
+  epic: sidechain-handling
+  theme: local-exploration
+  priority: could
+  depends_on:
+  - SID-001
+  - PRS-005
+  readiness: needs-splitting
+  slice: sidechain
+  ac_count: 3
+  notes: 'The story''s own validation_notes acknowledge it should be split. AC3 (raw JSONL passthrough
+    preserving isSidechain) belongs in the export/parsing stories, not here. AC1 (exclude sidechain) and
+    AC2 (sidechain-only) are speculative future features with no direct user request. Suggest splitting:
+    (1) AC3 -> merge into EXP-001/EXP-002 as verification of raw passthrough (2) AC1+AC2 -> keep as a
+    speculative "could" story for dedicated sidechain filter flag
+
+    '
+- id: SUM-001
+  title: Summary mode shows session statistics
+  epic: summary
+  theme: local-exploration
+  priority: must
+  depends_on:
+  - PRS-005
+  readiness: needs-splitting
+  slice: walking-skeleton
+  ac_count: 7
+  notes: '7 ACs covering: full summary display, hierarchical tree, sort/omit rules, inline parameter hints,
+    graceful timestamp omission, special event counting, and implicit mode activation. This is a large
+    story spanning multiple distinct behaviors: (1) Basic summary with filename + metadata (AC1, AC5)
+    -> walking-skeleton (2) Hierarchical tool breakdown with sort/omit (AC2, AC3) -> summary-mode (3)
+    Inline parameter hints as self-documenting tutorial (AC4) -> summary-mode (4) Special event counting
+    (interruptions, slash commands) (AC6) -> summary-mode (5) Mode activation logic (AC7) -> walking-skeleton
+    (CLI routing) Recommend splitting into basic summary (walking-skeleton) and enhanced summary features
+    (summary-mode slice).
+
+    '
+- id: SUM-002
+  title: Group MCP tools in summary display
+  epic: summary
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SUM-001
+  readiness: ready
+  slice: summary-mode
+  ac_count: 4
+  notes: '4 ACs covering: MCP tool inclusion, server-based grouping hierarchy, inline filter comments,
+    and zero-count omission. Well-scoped single behavior (MCP-specific grouping logic). ACs are testable
+    and observable. Depends on SUM-001''s tool breakdown being in place first.
+
+    '
+- id: SUM-003
+  title: Detect and show git commits in summary
+  epic: summary
+  theme: local-exploration
+  priority: should
+  depends_on:
+  - SUM-001
+  readiness: ready
+  slice: summary-mode
+  ac_count: 4
+  notes: '4 ACs covering: nested Git operations under Bash, detection patterns (including cd && git),
+    Commits sub-level, and zero-count omission. Well-scoped. AC2 is particularly valuable -- it specifies
+    the detection patterns including the tricky "cd dir && git commit" case that was a known bug.
+
+    '
+- id: CRH-001
+  title: Create flag file when compaction occurs
+  epic: context
+  theme: compaction-recovery
+  priority: must
+  depends_on: []
+  readiness: ready
+  slice: compaction-recovery
+  ac_count: 4
+  notes: '4 ACs covering: flag creation path, flag contents, clean exit, and wildcard matcher. Cohesive
+    single behavior (PreCompact hook). ACs are specific and testable. The wildcard matcher (AC4) was a
+    user correction from separate auto/manual entries.
+
+    '
+- id: CRH-002
+  title: Detect compaction flag on tool use
+  epic: context
+  theme: compaction-recovery
+  priority: must
+  depends_on:
+  - CRH-001
+  readiness: ready
+  slice: compaction-recovery
+  ac_count: 4
+  notes: '4 ACs covering: glob search for flag files, session_id extraction, flag deletion after processing,
+    and hook placement directory. Cohesive single behavior (PreToolUse hook flag detection). AC3 (delete
+    after processing) prevents repeated triggers.
+
+    '
+- id: CRH-003
+  title: Block tool use and inject recovery prompt
+  epic: context
+  theme: compaction-recovery
+  priority: must
+  depends_on:
+  - CRH-002
+  readiness: ready
+  slice: compaction-recovery
+  ac_count: 4
+  notes: '4 ACs covering: permissionDecision/deny response format, recovery prompt content, session ID
+    inclusion, and negative AC (do NOT use additionalContext). Well-specified. AC4 is a valuable negative
+    constraint derived from user correction. The correct API (permissionDecision/permissionDecisionReason)
+    was arrived at after investigating multiple alternatives.
+
+    '
+- id: CRH-004
+  title: Handle multiple Claude instances safely
+  epic: context
+  theme: compaction-recovery
+  priority: should
+  depends_on: []
+  readiness: ready
+  slice: compaction-recovery
+  ac_count: 4
+  notes: '4 ACs covering: session_id[:8] in filename, per-session flag isolation, single flag processing
+    per invocation, and full session_id inside JSON. Cohesive concurrency safety story. AC4 clarifies
+    the distinction between filename (8-char prefix for disambiguation) and JSON contents (full UUID for
+    xs commands).
+
+    '
+- id: CRH-005
+  title: xs operations used by recovery prompt
+  epic: context
+  theme: compaction-recovery
+  priority: should
+  depends_on:
+  - CRH-003
+  readiness: needs-reframing
+  slice: compaction-recovery
+  ac_count: 6
+  notes: '6 ACs but they describe xs CLI usage patterns, not observable behaviors of a component under
+    test. The ACs read like a usage manual for xs commands in recovery context, not testable acceptance
+    criteria. AC1 prescribes specific command strings (including --jq and --tail which may not exist).
+    AC6 is about manual fallback (documentation concern, not code behavior). Reframe as: "Recovery prompt
+    includes correct xs command templates" with ACs testing that the generated prompt contains valid,
+    executable xs commands. Or merge into CRH-003 as additional ACs about the prompt content.
+
+    '
+- id: CRH-006
+  title: Deep context recovery methodology
+  epic: context
+  theme: compaction-recovery
+  priority: should
+  depends_on:
+  - CRH-005
+  readiness: needs-reframing
+  slice: compaction-recovery
+  ac_count: 6
+  notes: '6 ACs but they describe a methodology/workflow, not observable software behavior. AC1 (scan
+    timeline first), AC2 (focus on WHY), AC4 (use Task delegation), AC5 (don''t jump to implementation)
+    are human-workflow guidelines, not testable software requirements. AC3 and AC6 are usage guidelines
+    (use xs, not filesystem exploration). This is documentation/runbook content, not a user story with
+    testable ACs. Reframe as a documentation artifact or remove from implementation backlog entirely.
+
+    '
+- id: CRH-007
+  title: Apply lessons from real-world recovery test
+  epic: context
+  theme: compaction-recovery
+  priority: could
+  depends_on:
+  - CRH-006
+  readiness: needs-reframing
+  slice: compaction-recovery
+  ac_count: 6
+  notes: '6 ACs but they describe lessons learned and constraints, not testable behavior. AC1 (recognize
+    unanswered questions), AC2 (targeted recovery preferred), AC3 (plan files prevent full recovery) are
+    human-process observations. AC4 (range+search ordering gap) duplicates the known pipeline gap from
+    SRC-007. AC5 (hooks don''t auto-reload) is a Claude Code platform constraint, not xs behavior. AC6
+    (agent regression after compaction) is an LLM behavior observation. None of these are testable software
+    requirements. Reframe as documentation/lessons-learned artifact.
+
+    '
+- id: GFH-001
+  title: List workflow runs from GitHub Actions
+  epic: fetch
+  theme: github-fetch
+  priority: must
+  depends_on: []
+  readiness: ready
+  slice: fetch-pipeline
+  ac_count: 4
+  notes: '4 ACs covering: server-side success filtering with --limit, dual workflow combination, sort
+    order, and skipped run exclusion. Cohesive and testable. AC1 (server-side filtering) is a critical
+    performance/correctness requirement -- the user was explicit that --limit N means N successful runs.
+
+    '
+- id: GFH-002
+  title: Fetch logs for specific workflow run
+  epic: fetch
+  theme: github-fetch
+  priority: must
+  depends_on:
+  - GFH-001
+  readiness: needs-beefing-up
+  slice: fetch-pipeline
+  ac_count: 3
+  notes: '3 ACs covering: gh run view --log command, error handling for invalid/expired runs, and handoff
+    to extraction. Thin on edge cases. Missing: AC for network failure handling, AC for very large log
+    content (memory), AC for rate limiting from GitHub API. The core behavior is simple (shell out to
+    gh) but error paths need more ACs.
+
+    '
+- id: GFH-003
+  title: Extract JSONL content from Claude execution logs
+  epic: fetch
+  theme: github-fetch
+  priority: must
+  depends_on:
+  - GFH-002
+  readiness: ready
+  slice: fetch-pipeline
+  ac_count: 6
+  notes: '6 ACs covering: start boundary detection, end boundary detection, constant-length prefix stripping,
+    multi-value return (content + metadata), session_id scanning (first 10 lines), and JSONL-only output
+    (no JSON metadata files). Well-specified extraction pipeline. AC3 (fixed-position substring, not regex)
+    captures a performance optimization decision. AC5 (scan first 10 lines) captures a bug fix.
+
+    '
+- id: GFH-004
+  title: Extract issue or PR number from log XML tags
+  epic: fetch
+  theme: github-fetch
+  priority: should
+  depends_on:
+  - GFH-002
+  readiness: ready
+  slice: fetch-pipeline
+  ac_count: 5
+  notes: '5 ACs covering: PR detection (is_pr=true + pr_number), issue detection (is_pr=false + issue_number),
+    no-match handling (no unlinked fallback), negative AC (no title parsing), and single grep invocation.
+    Well-specified. AC3 (no unlinked fallback) and AC4 (no title parsing) are valuable negative constraints
+    from user corrections.
+
+    '
+- id: GFH-005
+  title: Skip already-downloaded workflow runs
+  epic: fetch
+  theme: github-fetch
+  priority: should
+  depends_on:
+  - GFH-001
+  readiness: needs-beefing-up
+  slice: fetch-pipeline
+  ac_count: 3
+  notes: '3 ACs covering: extract run IDs from filenames, parse filename pattern, and skip matching runs.
+    Missing: AC for empty github/ directory (first run), AC for corrupted/partial filenames, AC for cross-script
+    deduplication (files from .py recognized by .sh and vice versa -- this is covered in GFH-010 but should
+    be referenced here). Needs 1-2 more ACs.
+
+    '
+- id: GFH-006
+  title: Set file timestamps to session times
+  epic: fetch
+  theme: github-fetch
+  priority: should
+  depends_on:
+  - GFH-003
+  readiness: ready
+  slice: fetch-pipeline
+  ac_count: 4
+  notes: '4 ACs covering: ctime=start/mtime=end mapping, macOS SetFile for birth time, non-macOS fallback,
+    and duration logging. AC2 captures the platform-specific requirement (macOS needs SetFile because
+    os.utime can''t set creation time). AC3 handles cross-platform gracefully. Testable and well-scoped.
+
+    '
+- id: GFH-007
+  title: Name output files with structured convention
+  epic: fetch
+  theme: github-fetch
+  priority: should
+  depends_on:
+  - GFH-003
+  - GFH-004
+  readiness: ready
+  slice: fetch-pipeline
+  ac_count: 5
+  notes: '5 ACs covering: full filename format, date/time from createdAt, flat directory structure, github/
+    directory location, and raw log fallback location. Strong negative constraints (no subdirectories,
+    no per-type folders). AC1 specifies the exact filename pattern. Well-suited for acceptance testing.
+
+    '
+- id: GFH-008
+  title: Command-line interface for fetch
+  epic: fetch
+  theme: github-fetch
+  priority: must
+  depends_on: []
+  readiness: ready
+  slice: fetch-pipeline
+  ac_count: 6
+  notes: '6 ACs covering: --limit N, --run-id ID, --save-raw-logs, default behavior (no args), skipped
+    run messaging, and success summary output. Comprehensive CLI spec. AC4 (default behavior) ties together
+    multiple stories (GFH-001 listing, GFH-005 dedup). Ready for TDD.
+
+    '
+- id: GFH-009
+  title: Fetch workflow runs by issue or PR number
+  epic: fetch
+  theme: github-fetch
+  priority: could
+  depends_on:
+  - GFH-001
+  - GFH-002
+  readiness: needs-beefing-up
+  slice: fetch-pipeline
+  ac_count: 4
+  notes: '4 ACs but they describe a feature that was planned but never implemented. ACs are somewhat vague
+    -- AC2 ("finds Claude bot''s comment containing workflow run link(s)") does not specify the comment
+    format or parsing strategy in detail. Missing: AC for no comments found, AC for multiple Claude comments
+    on same issue, AC for private repos. The sticky comment format needs to be specified more concretely
+    before this can be implemented. However, as a "could" priority, this is acceptable as a placeholder.
+
+    '
+- id: GFH-010
+  title: Maintain feature parity between fetch_logs.py and fetch_logs.sh
+  epic: fetch
+  theme: github-fetch
+  priority: should
+  depends_on: []
+  readiness: needs-reframing
+  slice: fetch-pipeline
+  ac_count: 3
+  notes: '3 ACs but they describe a process/policy constraint, not a single testable behavior. AC1 ("any
+    feature change to .py must be mirrored in .sh") is a development process rule, not a software requirement.
+    AC2 (identical output) and AC3 (cross-script dedup) are testable but belong as integration test ACs
+    on GFH-005/GFH-007/GFH-008 rather than a standalone story. For a greenfield build, the decision of
+    whether to have both .py and .sh implementations is an architectural choice, not a user story. Reframe
+    as an architectural constraint/principle, or merge AC2/AC3 into relevant stories.
+
+    '
+merge_recommendations:
+- target: FMT-022
+  absorb:
+  - FMT-004
+  - FMT-005
+  - FMT-010
+  rationale: 'FMT-004 (Edit), FMT-005 (Read), and FMT-010 (Task) are all specific instances of the generic
+    ToolName(param) pattern. Their ACs become test cases within FMT-022''s parameter extraction chain.
+
+    '
+- target: DSP-004
+  absorb:
+  - FMT-017
+  rationale: 'Sequence number display rules are inherent properties of display modes, not a separate formatting
+    concern. The rules (hidden in truncated, shown in compact/full, auto-shown when filtering) belong
+    with display mode definitions.
+
+    '
+- target: DSP-005
+  absorb:
+  - FMT-018
+  rationale: 'The -- separator only appears when filtering creates gaps. It is a formatting detail of
+    filtered output, not a standalone behavior.
+
+    '
+- target: output-purity-constraints
+  absorb:
+  - FMT-024
+  - FMT-025
+  rationale: 'Both are negative requirements (no headers, no emojis) that function as cross-cutting output
+    purity constraints. Together they form a single "output format constraints" story or become test assertions
+    in golden file validation.
+
+    '
+split_recommendations:
+- story: PRS-002
+  into:
+  - 'PRS-002a: Substring matching (unique match, various identifier types, no-match error)'
+  - 'PRS-002b: Interactive disambiguation menu (multiple matches)'
+  - 'PRS-002c: Fallback directory search (~/.claude/projects/)'
+- story: PRS-005
+  into:
+  - 'PRS-005a: Basic timeline (events get contiguous sequence numbers, all types included)'
+  - 'PRS-005b: Content block expansion (multi-block messages become separate entries)'
+  - 'PRS-005c: Session time metadata (start, end, duration from timestamps)'
+- story: FMT-020
+  into:
+  - 'FMT-020a: TodoWrite/TodoRead call headers across display modes'
+  - 'FMT-020b: Todo item result rendering (checkbox symbols, priorities)'
+- story: FMT-022
+  into:
+  - 'FMT-022a: Parameter extraction chain (command > file_path > path > pattern > fallback)'
+  - 'FMT-022b: Tool-specific display variants (Grep, WebSearch, MCP tools)'
+beef_up_recommendations:
+- story: PRS-008
+  add:
+  - AC for multiline bash commands
+  - AC for bash with only stderr output
+  - AC for bash with empty output
+  - Remove or separate AC2 (@filename) into its own story
+  - AC for exact XML tag extraction details
+- story: PRS-011
+  add:
+  - AC specifying discovery mechanism (directory scan pattern)
+  - AC for agent events interleaving with main timeline
+  - AC for error handling when agent files are missing/corrupt
+  - Remove AC3 (search in agent files) -- belongs in search epic
+- story: FMT-009
+  add:
+  - AC for full mode empty result display
+  - AC defining 'empty' (null vs empty string vs whitespace)
+- story: FMT-014
+  add:
+  - AC for full mode display
+  - AC for JSONL structure of @ messages
+  - AC for multiple @ references in one message
+  - Fix depends_on to include parsing story for @ extraction
+- story: FMT-011
+  add:
+  - AC for full mode thinking content rendering
+  - AC for empty thinking blocks
+  - Clarify whether content follows 'Thinking...' on same or next line
