@@ -132,7 +132,6 @@ related:
   - SRC-004  # Combined context
   - CLI-002  # CLI flag design
 
-priority: must
 status: mined
 validation_notes: |
   Search is simple substring match, not regex/rg delegation.

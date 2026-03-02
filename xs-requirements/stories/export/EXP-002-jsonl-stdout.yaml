@@ -89,7 +89,6 @@ related:
   - FLT-002  # Exclude filter
   - RNG-001  # Range selection
 
-priority: must
 status: mined
 validation_notes: |
   --jsonl is the streaming counterpart to --json. Both share the raw-passthrough

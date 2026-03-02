@@ -67,6 +67,5 @@ related:
   - FLT-006  # -M shortcut
   - FLT-012  # -M -x Tool interaction
 
-priority: must
 status: mined
 validation_notes: "Message virtual entity replaces deprecated --conversation. Key user requirement for unified filtering design."

@@ -106,7 +106,6 @@ related:
   - DSP-004  # --show-numbers
   - PRIN-001  # Console fidelity
 
-priority: must
 status: mined
 validation_notes: |
   Clear evidence from b475, 1e83, caf2, a40c, 7159, 0841.

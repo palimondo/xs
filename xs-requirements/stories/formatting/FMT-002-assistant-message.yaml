@@ -62,7 +62,6 @@ related:
   - FMT-008  # Multiline truncation (compact mode only)
   - FMT-006  # Thinking blocks (special assistant content)
 
-priority: must
 status: mined
 validation_notes: |
   ⏺ symbol used for ALL assistant output (text, tool calls, tool-only messages).

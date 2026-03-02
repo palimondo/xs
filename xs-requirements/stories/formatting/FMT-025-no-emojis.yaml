@@ -35,7 +35,6 @@ depends_on: []
 related:
   - PRIN-001  # Console fidelity
 
-priority: must
 status: mined
 validation_notes: |
   User corrected agent MULTIPLE times about emojis.

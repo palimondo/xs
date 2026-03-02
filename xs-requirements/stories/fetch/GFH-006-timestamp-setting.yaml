@@ -65,7 +65,6 @@ depends_on:
   - GFH-003
 related: []
 
-priority: should
 status: mined
 validation_notes: |
   Platform-specific: macOS uses SetFile for birth time, Python os.utime for mtime.

@@ -17,11 +17,6 @@ stories:
   new: 4
   total: 25
 
-  by_priority:
-    must: 12
-    should: 11
-    could: 2
-
   by_status:
     mined: 25
     draft: 0
@@ -29,25 +24,21 @@ stories:
 new_stories:
   - id: FMT-022
     title: "Generic Tool Parameter Display"
-    priority: must
     rationale: "Most tools use a generic ToolName(param) format with parameter extraction chain. This was implicit in multiple stories but not explicitly captured. Covers LS, Glob, WebSearch, WebFetch, MCP tools."
     sources: ["b475:98", "b475:996", "b475:992", "b475:1716"]
 
   - id: FMT-023
     title: "Blank Line Spacing Between Messages"
-    priority: must
     rationale: "Spacing rules (blank lines after each message type in truncated mode) were a major source of bugs and corrections. Critical for CC console fidelity. Was scattered across FMT-001, FMT-002, FMT-007 but deserves its own story."
     sources: ["day-021:12005", "06a0:390", "b475:1224"]
 
   - id: FMT-024
     title: "No Section Headers in Output"
-    priority: must
     rationale: "User repeatedly corrected agent to remove === TIMELINE ===, === CONVERSATION ===, etc. headers. This is a cross-cutting constraint that affects all display modes."
     sources: ["b475:1224", "caf2:12", "caf2:66", "b475:2395"]
 
   - id: FMT-025
     title: "No Emojis in Output"
-    priority: must
     rationale: "User corrected agent multiple times about emoji usage. Claude Code uses Unicode symbols (⏺, ⎿, ✻), not emojis. This is a cross-cutting formatting constraint."
     sources: ["b475:966", "b475:981", "b475:1017"]
 

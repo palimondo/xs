@@ -85,7 +85,6 @@ related:
   - SRC-004  # Combined context (step 4)
   - SRC-005  # Display mode interaction
 
-priority: must
 status: mined
 validation_notes: |
   Pipeline ordering stated twice by user (caf2:301-400 and caf2:901-1000).

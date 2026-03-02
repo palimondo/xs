@@ -32,7 +32,6 @@ depends_on:
   - FMT-007  # Tool result formatting
 related: []
 
-priority: should
 status: mined
 validation_notes: |
   Empty tool results must show a placeholder, not blank output.

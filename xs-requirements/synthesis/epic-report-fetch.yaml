@@ -68,7 +68,6 @@ stories:
       title: Fetch workflow runs by issue or PR number
       status: mined
       findings_used: 6
-      priority: could
       rationale: |
         Planned but never implemented feature, mentioned as TODO in 4+ sessions.
         Mechanism: parse Claude bot sticky comments for run links.
@@ -78,7 +77,6 @@ stories:
       title: Maintain feature parity between fetch_logs.py and fetch_logs.sh
       status: mined
       findings_used: 6
-      priority: should
       rationale: |
         User repeatedly insisted both Python and shell versions behave identically.
         Cross-script deduplication verified as working behavior.

@@ -48,7 +48,6 @@ related:
   - PRS-007  # Similar XML parsing for slash commands
   - FMT-013  # Bash command display formatting
 
-priority: should
 status: mined
 validation_notes: |
   Limited evidence in sessions. The ! prefix for bash commands and @ prefix for

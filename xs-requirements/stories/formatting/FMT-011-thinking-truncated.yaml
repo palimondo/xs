@@ -41,7 +41,6 @@ depends_on:
   - FMT-008  # Multiline truncation pattern
 related: []
 
-priority: should
 status: mined
 validation_notes: |
   Compact mode: thinking blocks include first [...] last preview.

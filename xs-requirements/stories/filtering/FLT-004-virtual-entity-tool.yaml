@@ -73,6 +73,5 @@ related:
   - FLT-010  # --no-tool-results
   - FLT-003  # Message virtual entity
 
-priority: must
 status: mined
 validation_notes: "Tool virtual entity is complementary to Message. Takes no parameters. For specific tools, use tool name directly."

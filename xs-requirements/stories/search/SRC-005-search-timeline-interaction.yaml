@@ -81,7 +81,6 @@ related:
   - FLT-002  # Exclude filter
   - RNG-001  # Range selection
 
-priority: should
 status: mined
 validation_notes: |
   Multiple bugs found around search + display mode interaction.

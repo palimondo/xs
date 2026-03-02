@@ -82,7 +82,6 @@ related:
   - GFH-002
   - GFH-003
 
-priority: must
 status: mined
 validation_notes: |
   Early CLI had positional issue number argument (python fetch_logs.py 6).

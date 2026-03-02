@@ -124,6 +124,5 @@ related:
   - SRC-001  # Search
   - CLI-001  # CLI interface
 
-priority: must
 status: mined
 validation_notes: "Pipeline ordering explicitly defined by user twice in separate sessions. Implicit timeline mode confirmed. Context dedup is critical requirement."

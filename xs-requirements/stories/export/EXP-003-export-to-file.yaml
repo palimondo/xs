@@ -160,7 +160,6 @@ related:
   - FLT-002  # Exclude filter
   - RNG-001  # Range selection
 
-priority: should
 status: mined
 validation_notes: |
   Extensively evidenced across b722, day-025, fa1a, 0841/cc2d, a40c, b475.

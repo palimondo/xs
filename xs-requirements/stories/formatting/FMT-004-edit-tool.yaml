@@ -52,7 +52,6 @@ related:
   - FMT-005  # Read tool (same pattern)
   - FMT-007  # Tool results
 
-priority: must
 status: mined
 validation_notes: |
   User explicitly rejected arrow format (Edit: -> file, Write: -> file).

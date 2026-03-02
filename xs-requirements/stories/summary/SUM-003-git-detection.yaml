@@ -88,7 +88,6 @@ related:
   - FLT-001
   - DSP-003
 
-priority: should
 status: mined
 validation_notes: |
   Primary evidence from b475:301-500 (user correcting "Git under Bash" hierarchy,

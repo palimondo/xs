@@ -88,6 +88,5 @@ related:
   - FLT-001  # Include filter
   - FLT-005  # Glob pattern filtering
 
-priority: should
 status: mined
 validation_notes: "--git is a convenience alias, not a separate implementation. The glob pattern must handle 'cd dir && git ...' patterns, not just 'git *' prefix matching (b475:2351). User explicitly approved keeping --git as an alias (caf2:165)."

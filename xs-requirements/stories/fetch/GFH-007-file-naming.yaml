@@ -107,7 +107,6 @@ depends_on:
 related:
   - GFH-005
 
-priority: should
 status: mined
 validation_notes: |
   Naming evolved through multiple iterations. Final format includes run_id for deduplication

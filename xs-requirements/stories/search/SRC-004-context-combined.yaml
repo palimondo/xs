@@ -60,7 +60,6 @@ related:
   - SRC-003  # Before context
   - SRC-006  # Gap separators between non-contiguous results
 
-priority: should
 status: mined
 validation_notes: |
   -C NUM is shorthand for -A NUM -B NUM (grep convention).

@@ -63,7 +63,6 @@ related:
   - RNG-004  # N-M is bounded range; N+ is unbounded variant
   - RNG-002  # +N is head (first N); N+ is from N onwards (different semantics)
 
-priority: must
 status: mined
 validation_notes: |
   User proposed 60+ syntax in caf2:901-1000. Agent noted that 60- syntax

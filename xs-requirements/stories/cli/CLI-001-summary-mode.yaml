@@ -101,6 +101,5 @@ related:
   - SUM-002  # Summary hierarchical counts
   - SUM-003  # Summary inline parameter hints
 
-priority: must
 status: mined
 validation_notes: "Summary view serves double duty: session overview AND self-documenting tutorial for xs CLI flags. User explicitly designed it this way (e583:70)."

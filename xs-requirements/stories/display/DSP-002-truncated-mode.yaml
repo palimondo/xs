@@ -182,7 +182,6 @@ related:
   - PRIN-001  # Console fidelity principle
   - CONF-001  # 1.x vs 2.x format differences
 
-priority: must
 status: mined
 validation_notes: |
   Core requirement with extensive evidence across sessions b475, 0841, 1e83, 943d, day-021, a40c, caf2.

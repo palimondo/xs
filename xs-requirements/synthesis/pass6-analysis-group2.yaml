@@ -9,7 +9,6 @@ stories:
     title: "Filter to include specific tools by name"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: basic-filtering
@@ -24,7 +23,6 @@ stories:
     title: "Filter to exclude specific tools by name"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: basic-filtering
@@ -39,7 +37,6 @@ stories:
     title: "Filter by Message virtual entity"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: basic-filtering
@@ -54,7 +51,6 @@ stories:
     title: "Filter by Tool virtual entity"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: basic-filtering
@@ -69,7 +65,6 @@ stories:
     title: "Support glob patterns in tool filters"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [FLT-001]
     readiness: ready
     slice: basic-filtering
@@ -85,7 +80,6 @@ stories:
     title: "-M shortcut for all messages"
     epic: filtering
     theme: local-exploration
-    priority: should
     depends_on: [FLT-003]
     readiness: merge-candidate
     slice: basic-filtering
@@ -101,7 +95,6 @@ stories:
     title: "-U shortcut for user messages"
     epic: filtering
     theme: local-exploration
-    priority: should
     depends_on: [FLT-003]
     readiness: merge-candidate
     slice: basic-filtering
@@ -116,7 +109,6 @@ stories:
     title: "-a shortcut for assistant messages"
     epic: filtering
     theme: local-exploration
-    priority: should
     depends_on: [FLT-003]
     readiness: merge-candidate
     slice: basic-filtering
@@ -132,7 +124,6 @@ stories:
     title: "-T shortcut for all tools"
     epic: filtering
     theme: local-exploration
-    priority: should
     depends_on: [FLT-004]
     readiness: merge-candidate
     slice: basic-filtering
@@ -147,7 +138,6 @@ stories:
     title: "--no-tool-results flag"
     epic: filtering
     theme: local-exploration
-    priority: should
     depends_on: [FLT-004]
     readiness: ready
     slice: basic-filtering
@@ -162,7 +152,6 @@ stories:
     title: "Compose multiple filters with AND semantics"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [FLT-001, FLT-002]
     readiness: ready
     slice: basic-filtering
@@ -180,7 +169,6 @@ stories:
     title: "Handle -M -x Tool interaction correctly"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [FLT-006, FLT-002, FLT-004]
     readiness: ready
     slice: basic-filtering
@@ -199,7 +187,6 @@ stories:
     title: "Filter by Thinking virtual entity"
     epic: filtering
     theme: local-exploration
-    priority: could
     depends_on: [PRS-005]
     readiness: needs-beefing-up
     slice: advanced-display
@@ -216,7 +203,6 @@ stories:
     title: "--git as convenience alias for --include Bash(git *)"
     epic: filtering
     theme: local-exploration
-    priority: should
     depends_on: [FLT-005, FLT-001]
     readiness: ready
     slice: basic-filtering
@@ -232,7 +218,6 @@ stories:
     title: "Timeline shows all events when no filters specified"
     epic: filtering
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: needs-reframing
     slice: walking-skeleton
@@ -251,7 +236,6 @@ stories:
     title: "Select single item by index"
     epic: range-selection
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: range-selection
@@ -267,7 +251,6 @@ stories:
     title: "Select first N items with +N syntax"
     epic: range-selection
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: range-selection
@@ -282,7 +265,6 @@ stories:
     title: "Select last N items with -N syntax"
     epic: range-selection
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: range-selection
@@ -298,7 +280,6 @@ stories:
     title: "Select range with N-M syntax"
     epic: range-selection
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: range-selection
@@ -313,7 +294,6 @@ stories:
     title: "Select from N onwards with N+ syntax"
     epic: range-selection
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: range-selection
@@ -329,7 +309,6 @@ stories:
     title: "Combine multiple indices and ranges as free positional arguments"
     epic: range-selection
     theme: local-exploration
-    priority: should
     depends_on: [PRS-005, RNG-001, RNG-002, RNG-003, RNG-004, RNG-005]
     readiness: ready
     slice: range-selection
@@ -345,7 +324,6 @@ stories:
     title: "Range selection applies to full timeline before filtering"
     epic: range-selection
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005, RNG-001, FLT-001]
     readiness: needs-reframing
     slice: range-selection
@@ -366,7 +344,6 @@ stories:
     title: "Compact display mode (one line per event)"
     epic: display-modes
     theme: local-exploration
-    priority: must
     depends_on: [FMT-001, FMT-002]
     readiness: needs-splitting
     slice: compact-timeline
@@ -386,7 +363,6 @@ stories:
     title: "Truncated display mode (console-like)"
     epic: display-modes
     theme: console-replay
-    priority: must
     depends_on: [FMT-001, FMT-002]
     readiness: needs-splitting
     slice: truncated-full-modes
@@ -407,7 +383,6 @@ stories:
     title: "Full display mode (no truncation)"
     epic: display-modes
     theme: local-exploration
-    priority: must
     depends_on: [FMT-001, FMT-002, DSP-002]
     readiness: ready
     slice: truncated-full-modes
@@ -423,7 +398,6 @@ stories:
     title: "Sequence number display control"
     epic: display-modes
     theme: local-exploration
-    priority: should
     depends_on: [DSP-001, DSP-002]
     readiness: ready
     slice: compact-timeline
@@ -440,7 +414,6 @@ stories:
     title: "Show separator between non-contiguous sections"
     epic: display-modes
     theme: local-exploration
-    priority: should
     depends_on: [DSP-001, DSP-004]
     readiness: ready
     slice: basic-filtering
@@ -458,7 +431,6 @@ stories:
     title: "Summary mode (default)"
     epic: cli-interface
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: walking-skeleton
@@ -474,7 +446,6 @@ stories:
     title: "Timeline mode (-t/--timeline)"
     epic: cli-interface
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: compact-timeline
@@ -490,7 +461,6 @@ stories:
     title: "Git operations mode (-g/--git)"
     epic: cli-interface
     theme: local-exploration
-    priority: should
     depends_on: [PRS-005, FLT-005]
     readiness: ready
     slice: basic-filtering
@@ -506,7 +476,6 @@ stories:
     title: "File changes mode (-f/--files)"
     epic: cli-interface
     theme: local-exploration
-    priority: should
     depends_on: [PRS-005]
     readiness: needs-beefing-up
     slice: session-discovery
@@ -524,7 +493,6 @@ stories:
     title: "Created files mode (-c/--created)"
     epic: cli-interface
     theme: local-exploration
-    priority: could
     depends_on: [PRS-005]
     readiness: needs-beefing-up
     slice: session-discovery
@@ -540,7 +508,6 @@ stories:
     title: "Implicit timeline mode activation"
     epic: cli-interface
     theme: local-exploration
-    priority: should
     depends_on: [CLI-002]
     readiness: ready
     slice: compact-timeline
@@ -558,7 +525,6 @@ stories:
     title: "Support multiple index selection"
     epic: cli-interface
     theme: local-exploration
-    priority: could
     depends_on: [RNG-001]
     readiness: needs-reframing
     slice: range-selection
@@ -575,7 +541,6 @@ stories:
     title: "Argument ordering rules and help text conventions"
     epic: cli-interface
     theme: local-exploration
-    priority: should
     depends_on: []
     readiness: needs-splitting
     slice: compact-timeline
@@ -595,7 +560,6 @@ stories:
     title: "Remove deprecated --conversation flag"
     epic: cli-interface
     theme: local-exploration
-    priority: should
     depends_on: []
     readiness: needs-reframing
     slice: basic-filtering
@@ -610,10 +574,6 @@ stories:
 
 summary:
   total: 36
-  by_priority:
-    must: 19
-    should: 14
-    could: 3
   by_readiness:
     ready: 22
     needs-beefing-up: 3

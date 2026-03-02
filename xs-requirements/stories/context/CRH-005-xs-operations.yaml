@@ -90,7 +90,6 @@ related:
   - FLT-001
   - RNG-001
 
-priority: should
 status: mined
 validation_notes: |
   Rich evidence from 760a and e583 sessions demonstrating xs CLI in compaction

@@ -54,7 +54,6 @@ related:
   - FMT-001  # User message prefix
   - FMT-019  # Meta/caveat messages (slash commands trigger caveats)
 
-priority: should
 status: mined
 validation_notes: |
   Truncated mode: '> /command is running...' (matching CC console).

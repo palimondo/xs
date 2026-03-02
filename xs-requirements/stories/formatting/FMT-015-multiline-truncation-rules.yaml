@@ -61,7 +61,6 @@ related:
   - FMT-008  # Compact mode truncation (different pattern: first [...] last)
   - PRIN-001  # Console fidelity
 
-priority: must
 status: mined
 validation_notes: |
   Truncated mode truncation:

@@ -61,7 +61,6 @@ related:
   - SRC-006  # Gap separators between non-contiguous results
   - FLT-001  # Include filter (context applies to filter results too)
 
-priority: should
 status: mined
 validation_notes: |
   -A NUM follows grep convention (uppercase, takes numeric argument).

@@ -54,7 +54,6 @@ related:
   - RNG-006  # Multiple indices can be listed
   - CLI-001  # Free positional argument parsing
 
-priority: must
 status: mined
 validation_notes: |
   User explicitly resolved ambiguity: bare positive integer = specific index,

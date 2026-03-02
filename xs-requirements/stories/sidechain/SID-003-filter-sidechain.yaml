@@ -53,7 +53,6 @@ related:
   - FLT-002  # Entity type filtering
   - DSP-003  # JSON/JSONL output modes
 
-priority: could
 status: mined
 validation_notes: |
   No explicit user request for a sidechain filter flag was found in the extracted

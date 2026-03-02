@@ -68,7 +68,6 @@ related:
   - GFH-005
   - GFH-008
 
-priority: could
 status: mined
 validation_notes: |
   This was a planned but never-implemented feature in the original fetch_logs tools.

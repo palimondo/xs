@@ -8,7 +8,6 @@ stories:
     title: "Basic substring search"
     epic: search
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: search
@@ -25,7 +24,6 @@ stories:
     title: "Show lines after match (-A)"
     epic: search
     theme: local-exploration
-    priority: should
     depends_on: [SRC-001]
     readiness: needs-beefing-up
     slice: search
@@ -41,7 +39,6 @@ stories:
     title: "Show lines before match (-B)"
     epic: search
     theme: local-exploration
-    priority: should
     depends_on: [SRC-001]
     readiness: needs-beefing-up
     slice: search
@@ -57,7 +54,6 @@ stories:
     title: "Show lines before and after match (-C)"
     epic: search
     theme: local-exploration
-    priority: should
     depends_on: [SRC-001]
     readiness: ready
     slice: search
@@ -72,7 +68,6 @@ stories:
     title: "Search results displayed in timeline mode"
     epic: search
     theme: local-exploration
-    priority: should
     depends_on: [SRC-001]
     readiness: ready
     slice: search
@@ -88,7 +83,6 @@ stories:
     title: "Visual separators between non-contiguous search/filter results"
     epic: search
     theme: local-exploration
-    priority: should
     depends_on: [SRC-001, SRC-002]
     readiness: ready
     slice: search
@@ -102,7 +96,6 @@ stories:
     title: "Search as step 0 of the filter pipeline"
     epic: search
     theme: local-exploration
-    priority: must
     depends_on: [SRC-001, FLT-001, FLT-002, RNG-001]
     readiness: ready
     slice: search
@@ -118,7 +111,6 @@ stories:
     title: "JSON array output to stdout"
     epic: export
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: export
@@ -133,7 +125,6 @@ stories:
     title: "JSONL output to stdout"
     epic: export
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: export
@@ -147,7 +138,6 @@ stories:
     title: "Export range to JSON file"
     epic: export
     theme: console-replay
-    priority: should
     depends_on: [PRS-005, RNG-004]
     readiness: needs-splitting
     slice: export
@@ -166,7 +156,6 @@ stories:
     title: "Include sequence numbers in JSON/JSONL export"
     epic: export
     theme: local-exploration
-    priority: could
     depends_on: [EXP-001, EXP-002]
     readiness: needs-reframing
     slice: export
@@ -185,7 +174,6 @@ stories:
     title: "Display sidechain events in timeline"
     epic: sidechain-handling
     theme: local-exploration
-    priority: should
     depends_on: [PRS-005]
     readiness: ready
     slice: sidechain
@@ -200,7 +188,6 @@ stories:
     title: "Search includes sidechain content"
     epic: sidechain-handling
     theme: local-exploration
-    priority: should
     depends_on: [SID-001, SRC-001]
     readiness: merge-candidate
     slice: sidechain
@@ -217,7 +204,6 @@ stories:
     title: "Filter sidechain events with dedicated flag"
     epic: sidechain-handling
     theme: local-exploration
-    priority: could
     depends_on: [SID-001, PRS-005]
     readiness: needs-splitting
     slice: sidechain
@@ -235,7 +221,6 @@ stories:
     title: "Summary mode shows session statistics"
     epic: summary
     theme: local-exploration
-    priority: must
     depends_on: [PRS-005]
     readiness: needs-splitting
     slice: walking-skeleton
@@ -256,7 +241,6 @@ stories:
     title: "Group MCP tools in summary display"
     epic: summary
     theme: local-exploration
-    priority: should
     depends_on: [SUM-001]
     readiness: ready
     slice: summary-mode
@@ -271,7 +255,6 @@ stories:
     title: "Detect and show git commits in summary"
     epic: summary
     theme: local-exploration
-    priority: should
     depends_on: [SUM-001]
     readiness: ready
     slice: summary-mode
@@ -287,7 +270,6 @@ stories:
     title: "Create flag file when compaction occurs"
     epic: context
     theme: compaction-recovery
-    priority: must
     depends_on: []
     readiness: ready
     slice: compaction-recovery
@@ -301,7 +283,6 @@ stories:
     title: "Detect compaction flag on tool use"
     epic: context
     theme: compaction-recovery
-    priority: must
     depends_on: [CRH-001]
     readiness: ready
     slice: compaction-recovery
@@ -315,7 +296,6 @@ stories:
     title: "Block tool use and inject recovery prompt"
     epic: context
     theme: compaction-recovery
-    priority: must
     depends_on: [CRH-002]
     readiness: ready
     slice: compaction-recovery
@@ -331,7 +311,6 @@ stories:
     title: "Handle multiple Claude instances safely"
     epic: context
     theme: compaction-recovery
-    priority: should
     depends_on: []
     readiness: ready
     slice: compaction-recovery
@@ -346,7 +325,6 @@ stories:
     title: "xs operations used by recovery prompt"
     epic: context
     theme: compaction-recovery
-    priority: should
     depends_on: [CRH-003]
     readiness: needs-reframing
     slice: compaction-recovery
@@ -365,7 +343,6 @@ stories:
     title: "Deep context recovery methodology"
     epic: context
     theme: compaction-recovery
-    priority: should
     depends_on: [CRH-005]
     readiness: needs-reframing
     slice: compaction-recovery
@@ -382,7 +359,6 @@ stories:
     title: "Apply lessons from real-world recovery test"
     epic: context
     theme: compaction-recovery
-    priority: could
     depends_on: [CRH-006]
     readiness: needs-reframing
     slice: compaction-recovery
@@ -401,7 +377,6 @@ stories:
     title: "List workflow runs from GitHub Actions"
     epic: fetch
     theme: github-fetch
-    priority: must
     depends_on: []
     readiness: ready
     slice: fetch-pipeline
@@ -416,7 +391,6 @@ stories:
     title: "Fetch logs for specific workflow run"
     epic: fetch
     theme: github-fetch
-    priority: must
     depends_on: [GFH-001]
     readiness: needs-beefing-up
     slice: fetch-pipeline
@@ -431,7 +405,6 @@ stories:
     title: "Extract JSONL content from Claude execution logs"
     epic: fetch
     theme: github-fetch
-    priority: must
     depends_on: [GFH-002]
     readiness: ready
     slice: fetch-pipeline
@@ -447,7 +420,6 @@ stories:
     title: "Extract issue or PR number from log XML tags"
     epic: fetch
     theme: github-fetch
-    priority: should
     depends_on: [GFH-002]
     readiness: ready
     slice: fetch-pipeline
@@ -462,7 +434,6 @@ stories:
     title: "Skip already-downloaded workflow runs"
     epic: fetch
     theme: github-fetch
-    priority: should
     depends_on: [GFH-001]
     readiness: needs-beefing-up
     slice: fetch-pipeline
@@ -478,7 +449,6 @@ stories:
     title: "Set file timestamps to session times"
     epic: fetch
     theme: github-fetch
-    priority: should
     depends_on: [GFH-003]
     readiness: ready
     slice: fetch-pipeline
@@ -493,7 +463,6 @@ stories:
     title: "Name output files with structured convention"
     epic: fetch
     theme: github-fetch
-    priority: should
     depends_on: [GFH-003, GFH-004]
     readiness: ready
     slice: fetch-pipeline
@@ -508,7 +477,6 @@ stories:
     title: "Command-line interface for fetch"
     epic: fetch
     theme: github-fetch
-    priority: must
     depends_on: []
     readiness: ready
     slice: fetch-pipeline
@@ -523,7 +491,6 @@ stories:
     title: "Fetch workflow runs by issue or PR number"
     epic: fetch
     theme: github-fetch
-    priority: could
     depends_on: [GFH-001, GFH-002]
     readiness: needs-beefing-up
     slice: fetch-pipeline
@@ -541,7 +508,6 @@ stories:
     title: "Maintain feature parity between fetch_logs.py and fetch_logs.sh"
     epic: fetch
     theme: github-fetch
-    priority: should
     depends_on: []
     readiness: needs-reframing
     slice: fetch-pipeline
@@ -558,10 +524,6 @@ stories:
 
 summary:
   total: 34
-  by_priority:
-    must: 14
-    should: 16
-    could: 4
   by_readiness:
     ready: 21
     needs-beefing-up: 4

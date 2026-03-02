@@ -48,6 +48,5 @@ related:
   - FLT-006  # -M shortcut
   - FLT-008  # -a shortcut
 
-priority: should
 status: mined
 validation_notes: "Confirmed working in user test. Uppercase -U consistent with naming convention."

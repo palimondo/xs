@@ -64,7 +64,6 @@ related:
   - EXP-001  # Export modes
   - DSP-005  # JSON/JSONL display modes
 
-priority: must
 status: mined
 validation_notes: |
   The parser must retain raw JSONL objects alongside the parsed/structured

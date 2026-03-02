@@ -56,7 +56,6 @@ depends_on:
 related:
   - PRIN-001  # Console fidelity
 
-priority: must
 status: mined
 validation_notes: |
   Truncated mode uses blank lines between all message types for readability.

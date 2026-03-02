@@ -53,7 +53,6 @@ related:
   - FMT-015  # Truncation rules for truncated mode
   - FMT-011  # Thinking truncation
 
-priority: should
 status: mined
 validation_notes: |
   Pattern: first_line [...] last_line for ALL multiline content in compact mode.

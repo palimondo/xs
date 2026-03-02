@@ -71,7 +71,6 @@ related:
   - GFH-002
   - GFH-005
 
-priority: must
 status: mined
 validation_notes: |
   Workflow names hardcoded: claude.yml, claude-code-review.yml.

@@ -81,7 +81,6 @@ related:
   - FLT-015  # Potential --tail post-filter flag (unresolved)
   - PRIN-001  # Console fidelity requires stable addressing
 
-priority: must
 status: mined
 validation_notes: |
   The pipeline ordering was explicitly confirmed by the user in 1e83:801-900

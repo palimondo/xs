@@ -78,7 +78,6 @@ related:
   - CLI-001  # CLI argument ordering and parsing
   - FLT-001  # Interaction with filter flags
 
-priority: should
 status: mined
 validation_notes: |
   Multiple range arguments were explicitly requested by user in b475:201-300.

@@ -86,6 +86,5 @@ related:
   - RNG-001  # Range selection (triggers implicit timeline)
   - SRC-001  # Search mode (overrides implicit timeline)
 
-priority: should
 status: mined
 validation_notes: "User explicitly requested implicit timeline at caf2:305. The key subtlety is that --search mode must NOT be overridden by implicit timeline (caf2:892 bug). The rule is: no args = summary, search = search mode, any filter/range without search = implicit timeline."

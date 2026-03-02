@@ -71,7 +71,6 @@ related:
   - FMT-008  # Multiline truncation rules
   - FMT-016  # Indentation consistency
 
-priority: must
 status: mined
 validation_notes: |
   Tool results use ⎿ prefix with 2-space indent before it.

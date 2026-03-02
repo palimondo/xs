@@ -66,7 +66,6 @@ related:
   - FMT-018  # Discontinuous separator (complements line numbers)
   - RNG-001  # Range selection
 
-priority: must
 status: mined
 validation_notes: |
   Sequence number rules clearly defined by user at b475:1330:

@@ -70,7 +70,6 @@ related:
   - FMT-005  # Read tool (specific handler)
   - FMT-020  # Todo tools (special handling)
 
-priority: must
 status: mined
 validation_notes: |
   Generic tool display: ToolName(primary_param) with parameter extraction chain.

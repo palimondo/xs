@@ -104,6 +104,5 @@ related:
   - FLT-002  # Exclude filter
   - RNG-001  # Range selection
 
-priority: must
 status: mined
 validation_notes: "Key design decision: -t is a boolean flag, not a filter parameter. This was resolved after the user identified the CLI UX problem (b475:618). Range and filters are independent of timeline mode."

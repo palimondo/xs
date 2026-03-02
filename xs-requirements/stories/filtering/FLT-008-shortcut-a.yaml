@@ -53,6 +53,5 @@ related:
   - FLT-006  # -M shortcut
   - FLT-007  # -U shortcut
 
-priority: should
 status: mined
 validation_notes: "Lowercase -a deliberately chosen because uppercase -A reserved for grep-style context. User explicitly discussed this."

@@ -59,7 +59,6 @@ related:
   - FMT-013  # Local bash commands (special user message type)
   - FMT-014  # File references (special user message type)
 
-priority: must
 status: mined
 validation_notes: |
   User messages use > prefix consistently across all display modes.

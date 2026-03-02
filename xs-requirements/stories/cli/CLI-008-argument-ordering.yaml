@@ -132,6 +132,5 @@ related:
   - FLT-009  # -T shortcut
   - SRC-001  # -S/--search flag
 
-priority: should
 status: mined
 validation_notes: "Argument ordering constraint discovered through user bug report (1e83:781). Short flag naming conventions evolved through discussion (caf2:794). The xs abbreviation was user-requested (e583:60). Section headers were explicitly rejected (caf2:12)."

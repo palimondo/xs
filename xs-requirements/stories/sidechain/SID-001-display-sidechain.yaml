@@ -79,7 +79,6 @@ related:
   - FMT-001  # General formatting
   - DSP-001  # Display modes
 
-priority: should
 status: mined
 validation_notes: |
   The investigation in session e583 went through three phases:

@@ -80,6 +80,5 @@ related:
   - FLT-011
   - FLT-012
 
-priority: must
 status: mined
 validation_notes: "Include/exclude duality is a strong user requirement. Semantics: include first (whitelist), then exclude (blacklist from whitelist)."

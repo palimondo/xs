@@ -104,7 +104,6 @@ related:
   - DSP-005  # Discontinuous separator related to sequence number gaps
   - RNG-001  # Range selection uses sequence numbers
 
-priority: should
 status: mined
 validation_notes: |
   Evidence from b475, a40c, caf2, 0841, e583.

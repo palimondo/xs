@@ -52,7 +52,6 @@ stories:
     - id: RNG-006
       title: Combine multiple indices and ranges as free positional arguments
       status: mined
-      priority: should
       sources_count: 6
       acceptance_criteria_count: 5
       rationale: |
@@ -64,7 +63,6 @@ stories:
     - id: RNG-007
       title: Range selection applies to full timeline before filtering
       status: mined
-      priority: must
       sources_count: 8
       acceptance_criteria_count: 4
       rationale: |

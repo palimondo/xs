@@ -101,7 +101,6 @@ depends_on:
 related:
   - GFH-007
 
-priority: should
 status: mined
 validation_notes: |
   XML tags are in the "FINAL PROMPT" section of GHA logs, early in the log file.

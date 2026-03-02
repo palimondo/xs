@@ -54,7 +54,6 @@ depends_on:
 related:
   - CRH-005
 
-priority: must
 status: mined
 validation_notes: |
   Multiple format options were investigated:

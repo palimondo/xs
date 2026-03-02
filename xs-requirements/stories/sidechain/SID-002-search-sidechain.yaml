@@ -51,7 +51,6 @@ related:
   - FLT-001  # General filtering
   - PRS-005  # JSONL parsing of sidechain metadata
 
-priority: should
 status: mined
 validation_notes: |
   Two key findings:

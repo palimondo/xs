@@ -40,6 +40,5 @@ depends_on:
 related:
   - FLT-011  # Filter composition
 
-priority: must
 status: mined
 validation_notes: "User explicitly called out implicit filtering as a serious issue. Without explicit filter flags, no events should be hidden."

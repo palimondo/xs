@@ -61,7 +61,6 @@ related:
   - SRC-006  # Gap separators between non-contiguous results
   - RNG-001  # Range selection (search + range interaction)
 
-priority: should
 status: mined
 validation_notes: |
   -B NUM follows grep convention (uppercase, takes numeric argument).

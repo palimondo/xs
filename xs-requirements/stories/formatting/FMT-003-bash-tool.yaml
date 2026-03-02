@@ -57,7 +57,6 @@ related:
   - FMT-007  # Tool results
   - FMT-016  # Indentation consistency
 
-priority: must
 status: mined
 validation_notes: |
   User explicitly rejected 'Bash: $ command' format (1e83:348).

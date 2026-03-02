@@ -38,7 +38,6 @@ depends_on:
 related:
   - FMT-017  # Sequence numbers (both indicate discontinuity)
 
-priority: should
 status: mined
 validation_notes: |
   Grep-style '--' separator for non-contiguous event ranges.

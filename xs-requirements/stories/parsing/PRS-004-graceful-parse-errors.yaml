@@ -48,7 +48,6 @@ related:
   - PRIN-003  # Graceful degradation principle
   - PRS-003   # Multi-line parsing is where errors can occur
 
-priority: should
 status: mined
 validation_notes: |
   Limited direct evidence in sessions for parse error recovery as a distinct

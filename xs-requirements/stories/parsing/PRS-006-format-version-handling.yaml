@@ -73,7 +73,6 @@ related:
   - CONF-001  # Format version conflict
   - FMT-001   # Formatting may differ between versions
 
-priority: must
 status: mined
 validation_notes: |
   User explicitly required "full backwards/forwards compatibility" for format

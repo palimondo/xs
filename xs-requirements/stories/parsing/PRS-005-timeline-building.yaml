@@ -121,7 +121,6 @@ related:
   - DSP-001  # Display modes render timeline events
   - SUM-001  # Summary aggregates timeline statistics
 
-priority: must
 status: mined
 validation_notes: |
   The unified timeline is the central data structure of xs. Key requirements

@@ -70,7 +70,6 @@ related:
   - FLT-001
   - RNG-001
 
-priority: could
 status: mined
 validation_notes: |
   Derived from session 84db auto-compaction at event 919 plus multiple

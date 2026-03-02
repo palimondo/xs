@@ -273,7 +273,6 @@ related:
   - PRIN-001  # Console fidelity principle
   - FMT-005   # Other tool formats
 
-priority: must  # must | should | could
 status: draft   # draft | mined | reviewed | validated
 validation_notes: null
 ```
@@ -666,9 +665,8 @@ user inspection and orchestrator consumption. Do not delete after synthesis.
 **Method**:
 1. Identify walking skeleton (minimal end-to-end)
 2. Group stories by dependency
-3. Apply priority (must/should/could)
-4. Map to spec files
-5. Create implementation roadmap
+3. Map to spec files
+4. Create implementation roadmap
 
 **Output**: Prioritized backlog with phases
 

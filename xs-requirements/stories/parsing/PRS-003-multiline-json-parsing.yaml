@@ -68,7 +68,6 @@ related:
   - PRS-004  # Error handling during parsing
   - PRS-006  # Format versions may affect JSON structure
 
-priority: must
 status: mined
 validation_notes: |
   This is a critical technical requirement. Claude Code session files use

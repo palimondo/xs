@@ -49,7 +49,6 @@ related:
   - FLT-001  # Filtering creates discontinuous output
   - RNG-001  # Range selection can create gaps
 
-priority: should
 status: mined
 validation_notes: |
   Evidence from 1e83 sessions (L601-700, L701-800).

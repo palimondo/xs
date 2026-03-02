@@ -86,6 +86,5 @@ related:
   - FLT-011  # Filter composition
   - FLT-003  # Message virtual entity
 
-priority: must
 status: mined
 validation_notes: "Known bug documented in multiple sessions. Fix requires passing exclude filters to display function to suppress tool announcements."

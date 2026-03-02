@@ -96,10 +96,6 @@ counts:
       draft: 0
       reviewed: 0
       validated: 0
-    by_priority:
-      must: 51
-      should: 48
-      could: 9
   principles:
     total: 13
     status: fresh  # re-derived from stories, completeness-checked against drafts

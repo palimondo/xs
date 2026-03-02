@@ -46,7 +46,6 @@ related:
   - CRH-001
   - CRH-002
 
-priority: should
 status: mined
 validation_notes: |
   Flag file naming pattern confirmed in 760a:101-200 via user's ls command.

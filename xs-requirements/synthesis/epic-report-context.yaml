@@ -21,49 +21,42 @@ stories:
   - id: CRH-001
     title: Create flag file when compaction occurs
     status: mined
-    priority: must
     sources_count: 6
     key_finding: "Wildcard matcher for both auto and manual compaction (e583:1701-1785)"
 
   - id: CRH-002
     title: Detect compaction flag on tool use
     status: mined
-    priority: must
     sources_count: 4
     key_finding: "Hook placement must be in project's .claude/hooks/ (e583:1301-1400)"
 
   - id: CRH-003
     title: Block tool use and inject recovery prompt
     status: mined
-    priority: must
     sources_count: 6
     key_finding: "permissionDecision/deny is correct API; decision/block caused 400 errors (760a:401-500, e583:1701-1785)"
 
   - id: CRH-004
     title: Handle multiple Claude instances safely
     status: mined
-    priority: should
     sources_count: 3
     key_finding: "session_id[:8] in filename; full session_id in JSON contents (760a:101-200)"
 
   - id: CRH-005
     title: xs operations used by recovery prompt
     status: mined
-    priority: should
     sources_count: 13
     key_finding: "Rich CLI usage evidence: -S, -i, --full, event index, --jq/--tail requested (760a, e583)"
 
   - id: CRH-006
     title: Deep context recovery methodology
     status: mined
-    priority: should
     sources_count: 8
     key_finding: "xs scout workflow via Task delegation; xs for past sessions, native tools for current (e583:501-600, 760a:401-500)"
 
   - id: CRH-007
     title: Apply lessons from real-world recovery test
     status: mined
-    priority: could
     sources_count: 7
     key_finding: "Pipeline ordering gap: tail applies before search, blocking 'last N results' pattern (e583:1601-1700)"
 

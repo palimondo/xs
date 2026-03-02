@@ -95,7 +95,6 @@ related:
   - FLT-002  # Exclude filter
   - RNG-001  # Range selection
 
-priority: must
 status: mined
 validation_notes: |
   Strong evidence from multiple sessions (a40c, b475, e583, caf2).

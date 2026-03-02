@@ -38,7 +38,6 @@ depends_on: []
 related:
   - PRIN-001  # Console fidelity (CC console has no such headers)
 
-priority: must
 status: mined
 validation_notes: |
   User repeatedly requested removal of all === SECTION === headers.

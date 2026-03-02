@@ -49,7 +49,6 @@ related:
   - CRH-003
   - CRH-004
 
-priority: must
 status: mined
 validation_notes: |
   Confirmed via 760a:201-300 that session_id from flag file is used to invoke xs.

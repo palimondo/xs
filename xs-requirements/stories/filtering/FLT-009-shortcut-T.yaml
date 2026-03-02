@@ -52,6 +52,5 @@ depends_on:
 related:
   - FLT-010  # --no-tool-results
 
-priority: should
 status: mined
 validation_notes: "Confirmed working in agent testing. Commonly combined with --no-tool-results for compact tool listing."

@@ -61,6 +61,5 @@ related:
   - FLT-008  # -a shortcut
   - FLT-012  # -M -x Tool interaction
 
-priority: should
 status: mined
 validation_notes: "Uppercase -M chosen because lowercase -a/-b/-c are free (grep uses capitals -A/-B/-C for context)."

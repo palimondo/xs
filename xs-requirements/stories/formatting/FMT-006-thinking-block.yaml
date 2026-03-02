@@ -48,7 +48,6 @@ related:
   - PRIN-001  # Console fidelity
   - FMT-011  # Thinking in truncated mode (content display)
 
-priority: should
 status: mined
 validation_notes: |
   User explicitly corrected format from '⏺ <thinking>' to '✻ Thinking...' (1e83:292).

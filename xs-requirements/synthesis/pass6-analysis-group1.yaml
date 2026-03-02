@@ -9,7 +9,6 @@ stories:
     title: "Load session file by path"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: must
     depends_on: []
     readiness: ready
     slice: walking-skeleton
@@ -24,7 +23,6 @@ stories:
     title: "Discover session by substring match"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: must
     depends_on: [PRS-001]
     readiness: needs-splitting
     slice: session-discovery
@@ -42,7 +40,6 @@ stories:
     title: "Parse multi-line JSON objects in JSONL"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: must
     depends_on: [PRS-001]
     readiness: ready
     slice: walking-skeleton
@@ -57,7 +54,6 @@ stories:
     title: "Continue processing despite parse errors"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: should
     depends_on: [PRS-001]
     readiness: ready
     slice: walking-skeleton
@@ -73,7 +69,6 @@ stories:
     title: "Build unified chronological timeline"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: must
     depends_on: [PRS-001, PRS-003]
     readiness: needs-splitting
     slice: walking-skeleton
@@ -92,7 +87,6 @@ stories:
     title: "Handle Claude Code format versions (1.x vs 2.x)"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: must
     depends_on: [PRS-001]
     readiness: ready
     slice: walking-skeleton
@@ -107,7 +101,6 @@ stories:
     title: "Parse slash commands from XML tags"
     epic: jsonl-parsing
     theme: console-replay
-    priority: should
     depends_on: [PRS-001]
     readiness: ready
     slice: advanced-display
@@ -122,7 +115,6 @@ stories:
     title: "Extract bash content from XML tags"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: should
     depends_on: [PRS-001]
     readiness: needs-beefing-up
     slice: advanced-display
@@ -140,7 +132,6 @@ stories:
     title: "Detect user interruptions in session"
     epic: jsonl-parsing
     theme: console-replay
-    priority: could
     depends_on: [PRS-001]
     readiness: ready
     slice: advanced-display
@@ -156,7 +147,6 @@ stories:
     title: "Track isMeta and caveat message flags"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: should
     depends_on: [PRS-001]
     readiness: ready
     slice: advanced-display
@@ -172,7 +162,6 @@ stories:
     title: "Load and parse agent transcript files"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: should
     depends_on: [PRS-001]
     readiness: needs-beefing-up
     slice: session-discovery
@@ -191,7 +180,6 @@ stories:
     title: "Preserve raw JSONL objects for JSON/JSONL export"
     epic: jsonl-parsing
     theme: local-exploration
-    priority: must
     depends_on: [PRS-001, PRS-005]
     readiness: ready
     slice: export
@@ -207,7 +195,6 @@ stories:
     title: "Extract content blocks from message objects"
     epic: jsonl-parsing
     theme: console-replay
-    priority: must
     depends_on: [PRS-001, PRS-003]
     readiness: ready
     slice: walking-skeleton
@@ -225,7 +212,6 @@ stories:
     title: "Format user messages with > prefix"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: compact-timeline
@@ -240,7 +226,6 @@ stories:
     title: "Format assistant text messages with play button symbol"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: compact-timeline
@@ -256,7 +241,6 @@ stories:
     title: "Format Bash tool calls with command"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: compact-timeline
@@ -273,7 +257,6 @@ stories:
     title: "Format Edit tool calls with file path"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: merge-candidate
     slice: compact-timeline
@@ -290,7 +273,6 @@ stories:
     title: "Format Read tool calls with file path"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: merge-candidate
     slice: compact-timeline
@@ -305,7 +287,6 @@ stories:
     title: "Format thinking blocks with teardrop-spoked asterisk"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-005]
     readiness: ready
     slice: truncated-full-modes
@@ -322,7 +303,6 @@ stories:
     title: "Format tool results with indentation prefix and indentation"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: ready
     slice: compact-timeline
@@ -338,7 +318,6 @@ stories:
     title: "Truncate multiline content with first [...] last pattern"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-005]
     readiness: ready
     slice: compact-timeline
@@ -353,7 +332,6 @@ stories:
     title: "Show (No content) for empty tool results"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [FMT-007]
     readiness: needs-beefing-up
     slice: compact-timeline
@@ -369,7 +347,6 @@ stories:
     title: "Format Task tool calls (subagents)"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-005]
     readiness: merge-candidate
     slice: compact-timeline
@@ -385,7 +362,6 @@ stories:
     title: "Display thinking blocks with content preview"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [FMT-006, FMT-008]
     readiness: needs-beefing-up
     slice: truncated-full-modes
@@ -403,7 +379,6 @@ stories:
     title: "Format slash commands as user messages with running indicator"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-007]
     readiness: ready
     slice: advanced-display
@@ -420,7 +395,6 @@ stories:
     title: "Display local bash commands with ! prefix"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-008]
     readiness: ready
     slice: advanced-display
@@ -436,7 +410,6 @@ stories:
     title: "Display file references with @ prefix"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: []
     readiness: needs-beefing-up
     slice: advanced-display
@@ -454,7 +427,6 @@ stories:
     title: "Apply consistent multi-line truncation rules in truncated mode"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [FMT-007]
     readiness: ready
     slice: truncated-full-modes
@@ -470,7 +442,6 @@ stories:
     title: "Use 2-space indentation consistently"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: []
     readiness: ready
     slice: compact-timeline
@@ -486,7 +457,6 @@ stories:
     title: "Display sequence numbers with clear rules per display mode"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [DSP-004]
     readiness: merge-candidate
     slice: compact-timeline
@@ -503,7 +473,6 @@ stories:
     title: "Show -- separator for discontinuous sections"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [DSP-005]
     readiness: merge-candidate
     slice: basic-filtering
@@ -520,7 +489,6 @@ stories:
     title: "Handle isMeta and caveat messages"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-010]
     readiness: ready
     slice: advanced-display
@@ -536,7 +504,6 @@ stories:
     title: "Format TodoWrite and TodoRead with special display"
     epic: console-formatting
     theme: console-replay
-    priority: should
     depends_on: [PRS-005, FMT-007]
     readiness: needs-splitting
     slice: advanced-display
@@ -554,7 +521,6 @@ stories:
     title: "Display user interruption indicator in timeline"
     epic: console-formatting
     theme: console-replay
-    priority: could
     depends_on: [PRS-009, FMT-007]
     readiness: ready
     slice: advanced-display
@@ -570,7 +536,6 @@ stories:
     title: "Display generic tool calls with appropriate parameter extraction"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [PRS-005]
     readiness: needs-splitting
     slice: compact-timeline
@@ -590,7 +555,6 @@ stories:
     title: "Insert blank lines between messages in truncated mode"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: [FMT-001, FMT-002, FMT-007]
     readiness: ready
     slice: truncated-full-modes
@@ -606,7 +570,6 @@ stories:
     title: "No section headers (=== TIMELINE ===) in output"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: []
     readiness: merge-candidate
     slice: compact-timeline
@@ -623,7 +586,6 @@ stories:
     title: "Prohibit emoji usage in all display modes"
     epic: console-formatting
     theme: console-replay
-    priority: must
     depends_on: []
     readiness: merge-candidate
     slice: compact-timeline
@@ -638,10 +600,6 @@ stories:
 
 summary:
   total: 38
-  by_priority:
-    must: 20
-    should: 16
-    could: 2
   by_readiness:
     ready: 22
     needs-beefing-up: 5

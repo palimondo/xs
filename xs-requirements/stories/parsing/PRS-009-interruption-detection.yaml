@@ -83,7 +83,6 @@ related:
   - FMT-015  # Interruption display formatting
   - PRS-005  # Timeline building includes interruption events
 
-priority: could
 status: mined
 validation_notes: |
   Two distinct patterns for interruptions in JSONL:

@@ -34,7 +34,6 @@ related:
   - FMT-013  # Local bash commands (! is another special type)
   - FMT-012  # Slash commands (/ is another special type)
 
-priority: should
 status: mined
 validation_notes: |
   @filename is a special user message type in Claude Code.

@@ -10,10 +10,6 @@ timestamp: 2026-02-17T23:00:00Z
 stories_populated: 7
 stories_original: 5
 stories_new: 2
-stories_by_priority:
-  must: 2   # SRC-001, SRC-007
-  should: 5 # SRC-002, SRC-003, SRC-004, SRC-005, SRC-006
-  could: 0
 stories_status: mined  # all 7 stories now have sources and acceptance criteria
 
 ## Stories
@@ -21,7 +17,6 @@ stories_status: mined  # all 7 stories now have sources and acceptance criteria
 original:
   - id: SRC-001
     title: Basic substring search
-    priority: must
     status: mined
     sources_count: 10
     acceptance_criteria_count: 6
@@ -30,7 +25,6 @@ original:
 
   - id: SRC-002
     title: Show lines after match (-A)
-    priority: should
     status: mined
     sources_count: 5
     acceptance_criteria_count: 3
@@ -38,7 +32,6 @@ original:
 
   - id: SRC-003
     title: Show lines before match (-B)
-    priority: should
     status: mined
     sources_count: 5
     acceptance_criteria_count: 3
@@ -46,7 +39,6 @@ original:
 
   - id: SRC-004
     title: Show lines before and after match (-C)
-    priority: should
     status: mined
     sources_count: 4
     acceptance_criteria_count: 4
@@ -54,7 +46,6 @@ original:
 
   - id: SRC-005
     title: Search results and display mode interaction
-    priority: should
     status: mined
     sources_count: 5
     acceptance_criteria_count: 6
@@ -63,7 +54,6 @@ original:
 new:
   - id: SRC-006
     title: Visual separators between non-contiguous results
-    priority: should
     status: mined
     sources_count: 3
     acceptance_criteria_count: 4
@@ -71,7 +61,6 @@ new:
 
   - id: SRC-007
     title: Search position in filter pipeline
-    priority: must
     status: mined
     sources_count: 6
     acceptance_criteria_count: 4

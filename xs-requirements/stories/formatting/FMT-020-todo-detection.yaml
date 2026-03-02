@@ -72,7 +72,6 @@ depends_on:
 related:
   - FMT-003  # Bash tool (TodoWrite is exception to generic format)
 
-priority: should
 status: mined
 validation_notes: |
   TodoWrite/TodoRead have SPECIAL display:

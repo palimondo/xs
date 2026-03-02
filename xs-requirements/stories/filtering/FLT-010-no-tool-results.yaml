@@ -78,6 +78,5 @@ depends_on:
 related:
   - FLT-009  # -T shortcut
 
-priority: should
 status: mined
 validation_notes: "User corrected agent's misunderstanding: this suppresses separate tool_result events, not truncating content within a result. Key for JSON replay use case."

@@ -93,6 +93,5 @@ related:
   - CLI-002  # Timeline mode (ranges imply timeline)
   - CLI-006  # Implicit timeline activation
 
-priority: could
 status: mined
 validation_notes: "Range syntax was iteratively designed through multiple user corrections (b475:224-245). The +N head syntax was specifically requested by the user to resolve ambiguity between 'index N' and 'first N items'. Argument ordering (flags before session before ranges) is a known constraint (1e83:836)."

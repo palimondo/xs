@@ -73,7 +73,6 @@ related:
   - PRS-003  # Multi-line JSON parsing (the actual parse logic)
   - PRS-006  # Format version handling
 
-priority: must
 status: mined
 validation_notes: |
   Core entry point for all xs functionality. Session file loading is the foundation

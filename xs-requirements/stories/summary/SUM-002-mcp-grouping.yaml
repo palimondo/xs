@@ -74,7 +74,6 @@ related:
   - FLT-001
   - PRS-005
 
-priority: should
 status: mined
 validation_notes: |
   MCP tool handling evolved from being explicitly excluded (bug in day-025/caf2 era)

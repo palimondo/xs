@@ -55,6 +55,5 @@ depends_on:
 related:
   - CLI-004  # File changes mode (related file operation view)
 
-priority: could
 status: mined
 validation_notes: "--created was one of the original CLI modes from the first version of explore_session.py (day-025:3473). Output format shows event index plus filename plus indented content preview (a40c:1197). Limited evidence for detailed requirements; may need further investigation during golden file assembly."

@@ -74,7 +74,6 @@ related:
   - PRS-007  # Slash commands are preceded by caveat messages
   - CRH-001  # Compaction recovery uses isCompactSummary
 
-priority: should
 status: mined
 validation_notes: |
   Three boolean flags on user messages are relevant for parsing:

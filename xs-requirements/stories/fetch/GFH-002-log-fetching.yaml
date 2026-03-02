@@ -52,7 +52,6 @@ related:
   - GFH-003
   - GFH-004
 
-priority: must
 status: mined
 validation_notes: |
   Uses `gh run view --log` command exclusively.

@@ -101,6 +101,5 @@ related:
   - FLT-005
   - FLT-011
 
-priority: must
 status: mined
 validation_notes: "Strong evidence from multiple sessions. Comma-separated format from Claude Code allowedTools syntax."

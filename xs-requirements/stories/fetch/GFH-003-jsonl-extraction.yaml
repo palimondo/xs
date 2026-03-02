@@ -112,7 +112,6 @@ related:
   - GFH-006
   - GFH-007
 
-priority: must
 status: mined
 validation_notes: |
   Uses optimized AWK script for single-pass extraction (~2-3ms for 6K lines).

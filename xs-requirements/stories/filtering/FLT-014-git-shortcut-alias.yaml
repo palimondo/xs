@@ -67,6 +67,5 @@ depends_on:
 related:
   - CLI-001  # CLI interface
 
-priority: should
 status: mined
 validation_notes: "User explicitly required --git to use centralized filtering, not separate code. Known issue with cd-prefixed git commands."

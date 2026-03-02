@@ -79,7 +79,6 @@ related:
   - RNG-005  # N+ is open-ended variant
   - PRS-005  # Timeline must have gapless indices
 
-priority: must
 status: mined
 validation_notes: |
   Range syntax N-M was one of the earliest features (0841:801-900).

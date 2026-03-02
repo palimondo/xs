@@ -141,7 +141,6 @@ related:
   - DSP-005  # Discontinuous separator
   - PRIN-001  # Console fidelity principle
 
-priority: must
 status: mined
 validation_notes: |
   Strong evidence across multiple sessions (0841, b475, 1e83, a40c, caf2, cc2d).

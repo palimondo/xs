@@ -142,6 +142,5 @@ depends_on:
 related:
   - FLT-002
 
-priority: must
 status: mined
 validation_notes: "Very strong evidence. Glob syntax from Claude Code's allowed-tools. Uses fnmatch, not regex. User corrected agent on this."

@@ -65,7 +65,6 @@ related:
   - GFH-007
   - GFH-008
 
-priority: should
 status: mined
 validation_notes: |
   User was insistent on parity across sessions.

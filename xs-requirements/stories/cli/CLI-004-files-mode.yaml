@@ -70,6 +70,5 @@ related:
   - CLI-003  # Git mode (similar convenience shortcut pattern)
   - FLT-001  # Include filter (--files was briefly equivalent to -i "Edit,Write,MultiEdit")
 
-priority: should
 status: mined
 validation_notes: "--files was deprecated then reinstated by user at caf2:709. User values its unique grouped-by-file display format that cannot be replicated by simple timeline filtering. It was accidentally discovered during exploration (b475:214), suggesting it should be more prominent in summary hints."

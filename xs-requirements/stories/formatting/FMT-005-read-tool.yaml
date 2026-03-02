@@ -41,7 +41,6 @@ related:
   - FMT-004  # Edit tool (same pattern)
   - FMT-007  # Tool results
 
-priority: must
 status: mined
 validation_notes: |
   User rejected 'Read: ← file' arrow format (1e83:348).

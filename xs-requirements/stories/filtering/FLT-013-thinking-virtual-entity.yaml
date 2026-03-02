@@ -41,6 +41,5 @@ related:
   - FLT-003  # Message virtual entity
   - FLT-004  # Tool virtual entity
 
-priority: could
 status: mined
 validation_notes: "Unresolved - user requested it but agent questioned whether thinking blocks appear in JSONL. Needs format investigation."

@@ -39,7 +39,6 @@ depends_on:
 related:
   - EXP-003  # Export to file (may also need sequence numbers)
 
-priority: could
 status: draft
 validation_notes: |
   PROPOSED NEW STORY based on unresolved discussion in e583:1587-1595.

@@ -48,7 +48,6 @@ depends_on:
 related:
   - FMT-001  # User message formatting (next user message often contains reason)
 
-priority: could
 status: mined
 validation_notes: |
   Two types of interrupted messages in JSONL:

@@ -50,9 +50,6 @@ stories:
 
 story_counts:
   total: 13
-  must: 7
-  should: 4
-  could: 1
   new_in_synthesis: 2  # PRS-012, PRS-013
 
 search_methodology: |

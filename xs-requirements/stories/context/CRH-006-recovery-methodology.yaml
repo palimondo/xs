@@ -70,7 +70,6 @@ depends_on:
 related:
   - CRH-007
 
-priority: should
 status: mined
 validation_notes: |
   Documented from multiple sessions showing the xs scout workflow in practice.

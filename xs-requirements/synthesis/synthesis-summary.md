@@ -137,13 +137,10 @@ All 108 stories have been populated with sources and acceptance criteria by epic
 
 ### Pass 3: Golden File Assembly
 1. **Start with console-formatting** (25 stories, most complex formatting) — gather existing golden outputs from `specs/golden_outputs/` and organize by format version
-2. **Focus on must-priority stories first** — approximately 45 stories need golden files
 3. **Use real session data** from `bookminder-sessions/` for stories without existing golden files
 4. **Resolve CONF-001 (1.x vs 2.x)** before golden file assembly if possible, since it determines whether one or two sets of golden files are needed per formatting story
-5. **CONF-002 (sequence numbers in export)** can be deferred to Pass 5 since EXP-004 is only "could" priority
 6. **Link golden files to specific acceptance criteria** in story YAML files
 
 ### Pass 5: Conflict Resolution (4 conflicts pending)
 - CONF-001 and CONF-004 should be resolved with user input before implementation begins
-- CONF-002 can be resolved during implementation (low priority story)
 - CONF-003 may need real-world testing to determine best option

@@ -64,7 +64,6 @@ related:
   - FLT-001  # Range applies before filters (pipeline ordering)
   - e583-L1601-1700  # Known gap: --tail proposed for post-filter tail
 
-priority: must
 status: mined
 validation_notes: |
   -N for tail was among the earliest range syntax features implemented

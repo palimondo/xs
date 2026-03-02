@@ -54,7 +54,6 @@ related:
   - CRH-002
   - CRH-004
 
-priority: must
 status: mined
 validation_notes: |
   Confirmed via 760a session that precompact hook fires successfully.

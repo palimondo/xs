@@ -53,7 +53,6 @@ related:
   - FMT-012  # Slash commands (caveats precede custom slash commands)
   - FMT-001  # User message formatting (meta messages are NOT regular user input)
 
-priority: should
 status: mined
 validation_notes: |
   isMeta:true field in JSONL marks protocol/metadata messages.

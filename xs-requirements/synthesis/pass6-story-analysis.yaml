@@ -13,10 +13,6 @@ meta:
     ac_counts_match_source: true
     no_duplicates: true
 summary:
-  by_priority:
-    must: 51
-    should: 48
-    could: 9
   by_readiness:
     ready: 64
     needs-beefing-up: 13
@@ -42,7 +38,6 @@ stories:
   title: Load session file by path
   epic: jsonl-parsing
   theme: local-exploration
-  priority: must
   depends_on: []
   readiness: ready
   slice: walking-skeleton
@@ -56,7 +51,6 @@ stories:
   title: Discover session by substring match
   epic: jsonl-parsing
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-001
   readiness: needs-splitting
@@ -72,7 +66,6 @@ stories:
   title: Parse multi-line JSON objects in JSONL
   epic: jsonl-parsing
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-001
   readiness: ready
@@ -87,7 +80,6 @@ stories:
   title: Continue processing despite parse errors
   epic: jsonl-parsing
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-001
   readiness: ready
@@ -102,7 +94,6 @@ stories:
   title: Build unified chronological timeline
   epic: jsonl-parsing
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-001
   - PRS-003
@@ -121,7 +112,6 @@ stories:
   title: Handle Claude Code format versions (1.x vs 2.x)
   epic: jsonl-parsing
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-001
   readiness: ready
@@ -136,7 +126,6 @@ stories:
   title: Parse slash commands from XML tags
   epic: jsonl-parsing
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-001
   readiness: ready
@@ -151,7 +140,6 @@ stories:
   title: Extract bash content from XML tags
   epic: jsonl-parsing
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-001
   readiness: needs-beefing-up
@@ -168,7 +156,6 @@ stories:
   title: Detect user interruptions in session
   epic: jsonl-parsing
   theme: console-replay
-  priority: could
   depends_on:
   - PRS-001
   readiness: ready
@@ -184,7 +171,6 @@ stories:
   title: Track isMeta and caveat message flags
   epic: jsonl-parsing
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-001
   readiness: ready
@@ -200,7 +186,6 @@ stories:
   title: Load and parse agent transcript files
   epic: jsonl-parsing
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-001
   readiness: needs-beefing-up
@@ -218,7 +203,6 @@ stories:
   title: Preserve raw JSONL objects for JSON/JSONL export
   epic: jsonl-parsing
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-001
   - PRS-005
@@ -235,7 +219,6 @@ stories:
   title: Extract content blocks from message objects
   epic: jsonl-parsing
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-001
   - PRS-003
@@ -252,7 +235,6 @@ stories:
   title: Format user messages with > prefix
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -267,7 +249,6 @@ stories:
   title: Format assistant text messages with play button symbol
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -283,7 +264,6 @@ stories:
   title: Format Bash tool calls with command
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -300,7 +280,6 @@ stories:
   title: Format Edit tool calls with file path
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: merge-candidate
@@ -316,7 +295,6 @@ stories:
   title: Format Read tool calls with file path
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: merge-candidate
@@ -331,7 +309,6 @@ stories:
   title: Format thinking blocks with teardrop-spoked asterisk
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-005
   readiness: ready
@@ -347,7 +324,6 @@ stories:
   title: Format tool results with indentation prefix and indentation
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -363,7 +339,6 @@ stories:
   title: Truncate multiline content with first [...] last pattern
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-005
   readiness: ready
@@ -378,7 +353,6 @@ stories:
   title: Show (No content) for empty tool results
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - FMT-007
   readiness: needs-beefing-up
@@ -394,7 +368,6 @@ stories:
   title: Format Task tool calls (subagents)
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-005
   readiness: merge-candidate
@@ -409,7 +382,6 @@ stories:
   title: Display thinking blocks with content preview
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - FMT-006
   - FMT-008
@@ -428,7 +400,6 @@ stories:
   title: Format slash commands as user messages with running indicator
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-007
   readiness: ready
@@ -444,7 +415,6 @@ stories:
   title: Display local bash commands with ! prefix
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-008
   readiness: ready
@@ -460,7 +430,6 @@ stories:
   title: Display file references with @ prefix
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on: []
   readiness: needs-beefing-up
   slice: advanced-display
@@ -476,7 +445,6 @@ stories:
   title: Apply consistent multi-line truncation rules in truncated mode
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - FMT-007
   readiness: ready
@@ -492,7 +460,6 @@ stories:
   title: Use 2-space indentation consistently
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on: []
   readiness: ready
   slice: compact-timeline
@@ -507,7 +474,6 @@ stories:
   title: Display sequence numbers with clear rules per display mode
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - DSP-004
   readiness: merge-candidate
@@ -524,7 +490,6 @@ stories:
   title: Show -- separator for discontinuous sections
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - DSP-005
   readiness: merge-candidate
@@ -540,7 +505,6 @@ stories:
   title: Handle isMeta and caveat messages
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-010
   readiness: ready
@@ -556,7 +520,6 @@ stories:
   title: Format TodoWrite and TodoRead with special display
   epic: console-formatting
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-005
   - FMT-007
@@ -574,7 +537,6 @@ stories:
   title: Display user interruption indicator in timeline
   epic: console-formatting
   theme: console-replay
-  priority: could
   depends_on:
   - PRS-009
   - FMT-007
@@ -591,7 +553,6 @@ stories:
   title: Display generic tool calls with appropriate parameter extraction
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - PRS-005
   readiness: needs-splitting
@@ -610,7 +571,6 @@ stories:
   title: Insert blank lines between messages in truncated mode
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on:
   - FMT-001
   - FMT-002
@@ -628,7 +588,6 @@ stories:
   title: No section headers (=== TIMELINE ===) in output
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on: []
   readiness: merge-candidate
   slice: compact-timeline
@@ -643,7 +602,6 @@ stories:
   title: Prohibit emoji usage in all display modes
   epic: console-formatting
   theme: console-replay
-  priority: must
   depends_on: []
   readiness: merge-candidate
   slice: compact-timeline
@@ -659,7 +617,6 @@ stories:
   title: Filter to include specific tools by name
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -675,7 +632,6 @@ stories:
   title: Filter to exclude specific tools by name
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -691,7 +647,6 @@ stories:
   title: Filter by Message virtual entity
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -707,7 +662,6 @@ stories:
   title: Filter by Tool virtual entity
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -722,7 +676,6 @@ stories:
   title: Support glob patterns in tool filters
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - FLT-001
   readiness: ready
@@ -738,7 +691,6 @@ stories:
   title: -M shortcut for all messages
   epic: filtering
   theme: local-exploration
-  priority: should
   depends_on:
   - FLT-003
   readiness: merge-candidate
@@ -755,7 +707,6 @@ stories:
   title: -U shortcut for user messages
   epic: filtering
   theme: local-exploration
-  priority: should
   depends_on:
   - FLT-003
   readiness: merge-candidate
@@ -771,7 +722,6 @@ stories:
   title: -a shortcut for assistant messages
   epic: filtering
   theme: local-exploration
-  priority: should
   depends_on:
   - FLT-003
   readiness: merge-candidate
@@ -787,7 +737,6 @@ stories:
   title: -T shortcut for all tools
   epic: filtering
   theme: local-exploration
-  priority: should
   depends_on:
   - FLT-004
   readiness: merge-candidate
@@ -802,7 +751,6 @@ stories:
   title: --no-tool-results flag
   epic: filtering
   theme: local-exploration
-  priority: should
   depends_on:
   - FLT-004
   readiness: ready
@@ -818,7 +766,6 @@ stories:
   title: Compose multiple filters with AND semantics
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - FLT-001
   - FLT-002
@@ -836,7 +783,6 @@ stories:
   title: Handle -M -x Tool interaction correctly
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - FLT-006
   - FLT-002
@@ -856,7 +802,6 @@ stories:
   title: Filter by Thinking virtual entity
   epic: filtering
   theme: local-exploration
-  priority: could
   depends_on:
   - PRS-005
   readiness: needs-beefing-up
@@ -873,7 +818,6 @@ stories:
   title: --git as convenience alias for --include Bash(git *)
   epic: filtering
   theme: local-exploration
-  priority: should
   depends_on:
   - FLT-005
   - FLT-001
@@ -890,7 +834,6 @@ stories:
   title: Timeline shows all events when no filters specified
   epic: filtering
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: needs-reframing
@@ -907,7 +850,6 @@ stories:
   title: Select single item by index
   epic: range-selection
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -924,7 +866,6 @@ stories:
   title: Select first N items with +N syntax
   epic: range-selection
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -939,7 +880,6 @@ stories:
   title: Select last N items with -N syntax
   epic: range-selection
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -955,7 +895,6 @@ stories:
   title: Select range with N-M syntax
   epic: range-selection
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -970,7 +909,6 @@ stories:
   title: Select from N onwards with N+ syntax
   epic: range-selection
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -986,7 +924,6 @@ stories:
   title: Combine multiple indices and ranges as free positional arguments
   epic: range-selection
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-005
   - RNG-001
@@ -1007,7 +944,6 @@ stories:
   title: Range selection applies to full timeline before filtering
   epic: range-selection
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   - RNG-001
@@ -1027,7 +963,6 @@ stories:
   title: Compact display mode (one line per event)
   epic: display-modes
   theme: local-exploration
-  priority: must
   depends_on:
   - FMT-001
   - FMT-002
@@ -1048,7 +983,6 @@ stories:
   title: Truncated display mode (console-like)
   epic: display-modes
   theme: console-replay
-  priority: must
   depends_on:
   - FMT-001
   - FMT-002
@@ -1069,7 +1003,6 @@ stories:
   title: Full display mode (no truncation)
   epic: display-modes
   theme: local-exploration
-  priority: must
   depends_on:
   - FMT-001
   - FMT-002
@@ -1087,7 +1020,6 @@ stories:
   title: Sequence number display control
   epic: display-modes
   theme: local-exploration
-  priority: should
   depends_on:
   - DSP-001
   - DSP-002
@@ -1105,7 +1037,6 @@ stories:
   title: Show separator between non-contiguous sections
   epic: display-modes
   theme: local-exploration
-  priority: should
   depends_on:
   - DSP-001
   - DSP-004
@@ -1122,7 +1053,6 @@ stories:
   title: Summary mode (default)
   epic: cli-interface
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -1138,7 +1068,6 @@ stories:
   title: Timeline mode (-t/--timeline)
   epic: cli-interface
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -1154,7 +1083,6 @@ stories:
   title: Git operations mode (-g/--git)
   epic: cli-interface
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-005
   - FLT-005
@@ -1171,7 +1099,6 @@ stories:
   title: File changes mode (-f/--files)
   epic: cli-interface
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-005
   readiness: needs-beefing-up
@@ -1189,7 +1116,6 @@ stories:
   title: Created files mode (-c/--created)
   epic: cli-interface
   theme: local-exploration
-  priority: could
   depends_on:
   - PRS-005
   readiness: needs-beefing-up
@@ -1205,7 +1131,6 @@ stories:
   title: Implicit timeline mode activation
   epic: cli-interface
   theme: local-exploration
-  priority: should
   depends_on:
   - CLI-002
   readiness: ready
@@ -1222,7 +1147,6 @@ stories:
   title: Support multiple index selection
   epic: cli-interface
   theme: local-exploration
-  priority: could
   depends_on:
   - RNG-001
   readiness: needs-reframing
@@ -1239,7 +1163,6 @@ stories:
   title: Argument ordering rules and help text conventions
   epic: cli-interface
   theme: local-exploration
-  priority: should
   depends_on: []
   readiness: needs-splitting
   slice: compact-timeline
@@ -1257,7 +1180,6 @@ stories:
   title: Remove deprecated --conversation flag
   epic: cli-interface
   theme: local-exploration
-  priority: should
   depends_on: []
   readiness: needs-reframing
   slice: basic-filtering
@@ -1273,7 +1195,6 @@ stories:
   title: Basic substring search
   epic: search
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -1290,7 +1211,6 @@ stories:
   title: Show lines after match (-A)
   epic: search
   theme: local-exploration
-  priority: should
   depends_on:
   - SRC-001
   readiness: needs-beefing-up
@@ -1307,7 +1227,6 @@ stories:
   title: Show lines before match (-B)
   epic: search
   theme: local-exploration
-  priority: should
   depends_on:
   - SRC-001
   readiness: needs-beefing-up
@@ -1324,7 +1243,6 @@ stories:
   title: Show lines before and after match (-C)
   epic: search
   theme: local-exploration
-  priority: should
   depends_on:
   - SRC-001
   readiness: ready
@@ -1339,7 +1257,6 @@ stories:
   title: Search results displayed in timeline mode
   epic: search
   theme: local-exploration
-  priority: should
   depends_on:
   - SRC-001
   readiness: ready
@@ -1355,7 +1272,6 @@ stories:
   title: Visual separators between non-contiguous search/filter results
   epic: search
   theme: local-exploration
-  priority: should
   depends_on:
   - SRC-001
   - SRC-002
@@ -1371,7 +1287,6 @@ stories:
   title: Search as step 0 of the filter pipeline
   epic: search
   theme: local-exploration
-  priority: must
   depends_on:
   - SRC-001
   - FLT-001
@@ -1390,7 +1305,6 @@ stories:
   title: JSON array output to stdout
   epic: export
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -1405,7 +1319,6 @@ stories:
   title: JSONL output to stdout
   epic: export
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: ready
@@ -1420,7 +1333,6 @@ stories:
   title: Export range to JSON file
   epic: export
   theme: console-replay
-  priority: should
   depends_on:
   - PRS-005
   - RNG-004
@@ -1438,7 +1350,6 @@ stories:
   title: Include sequence numbers in JSON/JSONL export
   epic: export
   theme: local-exploration
-  priority: could
   depends_on:
   - EXP-001
   - EXP-002
@@ -1457,7 +1368,6 @@ stories:
   title: Display sidechain events in timeline
   epic: sidechain-handling
   theme: local-exploration
-  priority: should
   depends_on:
   - PRS-005
   readiness: ready
@@ -1473,7 +1383,6 @@ stories:
   title: Search includes sidechain content
   epic: sidechain-handling
   theme: local-exploration
-  priority: should
   depends_on:
   - SID-001
   - SRC-001
@@ -1491,7 +1400,6 @@ stories:
   title: Filter sidechain events with dedicated flag
   epic: sidechain-handling
   theme: local-exploration
-  priority: could
   depends_on:
   - SID-001
   - PRS-005
@@ -1509,7 +1417,6 @@ stories:
   title: Summary mode shows session statistics
   epic: summary
   theme: local-exploration
-  priority: must
   depends_on:
   - PRS-005
   readiness: needs-splitting
@@ -1529,7 +1436,6 @@ stories:
   title: Group MCP tools in summary display
   epic: summary
   theme: local-exploration
-  priority: should
   depends_on:
   - SUM-001
   readiness: ready
@@ -1544,7 +1450,6 @@ stories:
   title: Detect and show git commits in summary
   epic: summary
   theme: local-exploration
-  priority: should
   depends_on:
   - SUM-001
   readiness: ready
@@ -1559,7 +1464,6 @@ stories:
   title: Create flag file when compaction occurs
   epic: context
   theme: compaction-recovery
-  priority: must
   depends_on: []
   readiness: ready
   slice: compaction-recovery
@@ -1573,7 +1477,6 @@ stories:
   title: Detect compaction flag on tool use
   epic: context
   theme: compaction-recovery
-  priority: must
   depends_on:
   - CRH-001
   readiness: ready
@@ -1588,7 +1491,6 @@ stories:
   title: Block tool use and inject recovery prompt
   epic: context
   theme: compaction-recovery
-  priority: must
   depends_on:
   - CRH-002
   readiness: ready
@@ -1604,7 +1506,6 @@ stories:
   title: Handle multiple Claude instances safely
   epic: context
   theme: compaction-recovery
-  priority: should
   depends_on: []
   readiness: ready
   slice: compaction-recovery
@@ -1619,7 +1520,6 @@ stories:
   title: xs operations used by recovery prompt
   epic: context
   theme: compaction-recovery
-  priority: should
   depends_on:
   - CRH-003
   readiness: needs-reframing
@@ -1637,7 +1537,6 @@ stories:
   title: Deep context recovery methodology
   epic: context
   theme: compaction-recovery
-  priority: should
   depends_on:
   - CRH-005
   readiness: needs-reframing
@@ -1654,7 +1553,6 @@ stories:
   title: Apply lessons from real-world recovery test
   epic: context
   theme: compaction-recovery
-  priority: could
   depends_on:
   - CRH-006
   readiness: needs-reframing
@@ -1672,7 +1570,6 @@ stories:
   title: List workflow runs from GitHub Actions
   epic: fetch
   theme: github-fetch
-  priority: must
   depends_on: []
   readiness: ready
   slice: fetch-pipeline
@@ -1686,7 +1583,6 @@ stories:
   title: Fetch logs for specific workflow run
   epic: fetch
   theme: github-fetch
-  priority: must
   depends_on:
   - GFH-001
   readiness: needs-beefing-up
@@ -1702,7 +1598,6 @@ stories:
   title: Extract JSONL content from Claude execution logs
   epic: fetch
   theme: github-fetch
-  priority: must
   depends_on:
   - GFH-002
   readiness: ready
@@ -1718,7 +1613,6 @@ stories:
   title: Extract issue or PR number from log XML tags
   epic: fetch
   theme: github-fetch
-  priority: should
   depends_on:
   - GFH-002
   readiness: ready
@@ -1734,7 +1628,6 @@ stories:
   title: Skip already-downloaded workflow runs
   epic: fetch
   theme: github-fetch
-  priority: should
   depends_on:
   - GFH-001
   readiness: needs-beefing-up
@@ -1750,7 +1643,6 @@ stories:
   title: Set file timestamps to session times
   epic: fetch
   theme: github-fetch
-  priority: should
   depends_on:
   - GFH-003
   readiness: ready
@@ -1765,7 +1657,6 @@ stories:
   title: Name output files with structured convention
   epic: fetch
   theme: github-fetch
-  priority: should
   depends_on:
   - GFH-003
   - GFH-004
@@ -1781,7 +1672,6 @@ stories:
   title: Command-line interface for fetch
   epic: fetch
   theme: github-fetch
-  priority: must
   depends_on: []
   readiness: ready
   slice: fetch-pipeline
@@ -1795,7 +1685,6 @@ stories:
   title: Fetch workflow runs by issue or PR number
   epic: fetch
   theme: github-fetch
-  priority: could
   depends_on:
   - GFH-001
   - GFH-002
@@ -1813,7 +1702,6 @@ stories:
   title: Maintain feature parity between fetch_logs.py and fetch_logs.sh
   epic: fetch
   theme: github-fetch
-  priority: should
   depends_on: []
   readiness: needs-reframing
   slice: fetch-pipeline

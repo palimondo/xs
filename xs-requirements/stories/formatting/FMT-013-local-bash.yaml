@@ -42,7 +42,6 @@ related:
   - FMT-003  # Bash tool (Claude's bash calls use ⏺)
   - FMT-007  # Tool results (output uses ⎿ prefix)
 
-priority: should
 status: mined
 validation_notes: |
   Local user bash commands use ! prefix (distinct from Claude's ⏺ Bash() calls).

@@ -49,7 +49,6 @@ related:
   - PRIN-001  # Console fidelity
   - FMT-007  # Tool result formatting
 
-priority: must
 status: mined
 validation_notes: |
   Tool result indentation: 2 spaces + ⎿ + spaces + content.

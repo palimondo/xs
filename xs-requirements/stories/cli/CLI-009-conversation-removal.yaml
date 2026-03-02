@@ -67,6 +67,5 @@ related:
   - FLT-003  # Virtual entity Message
   - FLT-006  # -M shortcut
 
-priority: should
 status: mined
 validation_notes: "User explicitly approved removal at caf2:709 ('Yes to all: 1. remove'). The equivalent behavior is achieved by combining filter flags. --conversation was broken before removal (caf2:133 showed 'Invalid range format: conversation' error). The xs recreation should NOT include this flag."

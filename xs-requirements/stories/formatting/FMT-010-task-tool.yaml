@@ -36,7 +36,6 @@ depends_on:
 related:
   - FMT-003  # Bash tool (same pattern)
 
-priority: should
 status: mined
 validation_notes: |
   Task tool uses generic ToolName(param) format with quoted argument.

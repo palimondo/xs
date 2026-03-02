@@ -46,7 +46,6 @@ depends_on:
 related:
   - GFH-007
 
-priority: should
 status: mined
 validation_notes: |
   Deduplication uses run ID embedded in filename (e.g., _run-16433029102_).

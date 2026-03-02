@@ -84,7 +84,6 @@ related:
   - PRS-010  # Meta/caveat messages precede custom slash commands
   - PRS-008  # Bash content extraction (similar XML parsing)
 
-priority: should
 status: mined
 validation_notes: |
   Slash commands in JSONL are user messages with content containing XML tags:

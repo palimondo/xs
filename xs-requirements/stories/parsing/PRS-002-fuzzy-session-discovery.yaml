@@ -98,7 +98,6 @@ related:
   - CLI-001  # CLI interface for session argument
   - GFH-001  # GitHub fetch produces session files with naming convention
 
-priority: must
 status: mined
 validation_notes: |
   The user explicitly rejected type-specific branching (issue/pr parsing) in favor

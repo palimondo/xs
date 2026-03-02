@@ -80,7 +80,6 @@ related:
   - FMT-001  # Text formatting
   - FMT-004  # Tool use formatting
 
-priority: must
 status: mined
 validation_notes: |
   Content blocks are the fundamental units within JSONL message objects.

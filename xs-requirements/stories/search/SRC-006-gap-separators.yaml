@@ -55,7 +55,6 @@ related:
   - SRC-004  # Combined context
   - FMT-001  # Output formatting conventions
 
-priority: should
 status: mined
 validation_notes: |
   Uses -- as separator (grep/rg convention).

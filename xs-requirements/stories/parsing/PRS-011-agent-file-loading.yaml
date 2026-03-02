@@ -75,7 +75,6 @@ related:
   - SID-001  # Display sidechain events
   - SID-002  # Search includes sidechain content
 
-priority: should
 status: mined
 validation_notes: |
   Required for sidechain stories to work. Evidence from e583 session
